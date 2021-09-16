@@ -1,0 +1,10 @@
+
+<div>
+Lista de personas
+</div>
+
+{% if persons %}
+    {% for person in persons %}
+       <ul> {{person.name}} {{person.lastname}} </ul>
+    {% endfor %}
+{% endif %}

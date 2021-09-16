@@ -18,3 +18,20 @@ python3 manage.py startapp persons
 
 #probar usando oauth como autenticación.
 #https://django-oauth-toolkit.readthedocs.io/
+
+---
+
+generar las tablas para el modelo de una app.
+
+(.venv) pablo@xiaomi:/src/github/facu-infor/ttps/ttps_test$ python3 manage.py makemigrations persons
+Migrations for 'persons':
+  persons/migrations/0001_initial.py
+    - Create model IdentificationType
+    - Create model Person
+    - Create model Identification
+(.venv) pablo@xiaomi:/src/github/facu-infor/ttps/ttps_test$ python3 manage.py migrate
+Operations to perform:
+  Apply all migrations: admin, auth, contenttypes, persons, sessions
+Running migrations:
+  Applying persons.0001_initial... OK
+(.venv) pablo@xiaomi:/src/github/facu-infor/ttps/ttps_test$ 
