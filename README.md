@@ -12,3 +12,9 @@ pip install django
 cd ttps_test
 ttps_test$ python3 manage.py runserver
 
+#crear el login. ej
+python3 manage.py startapp persons
+
+
+#probar usando oauth como autenticación.
+#https://django-oauth-toolkit.readthedocs.io/
