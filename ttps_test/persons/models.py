@@ -30,6 +30,7 @@ class Person(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     name = models.CharField(max_length=1024)
     lastname = models.CharField(max_length=1024)
+    birthdate = models.DateField(null=True)
 
     def __str__(self):
         ids = [s.__str__() for s in self.identifications.all()]

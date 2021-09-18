@@ -16,6 +16,12 @@ ttps_test$ python3 manage.py runserver
 python3 manage.py startapp persons
 
 
+
+buen ejemplo del tema de uuids como claves primarias.
+https://tech.serhatteker.com/post/2020-01/uuid-primary-key/
+
+
+
 #probar usando oauth como autenticación.
 #https://django-oauth-toolkit.readthedocs.io/
 
@@ -60,3 +66,5 @@ employee_expenses = Employee.objects.get(name='John Doe').expenses.all()
 employee_expenses = Expense.objects.filter(employee__name="John Doe")
 
 el __ desreferencia el objeto employee
+
+https://docs.djangoproject.com/en/3.2/topics/db/queries/#backwards-related-objects
