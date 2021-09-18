@@ -8,6 +8,9 @@ from django.db import models
 # Create your models here.
 
 """
+Ejemplo con relación.
+
+
 class IdentificationType(models.Model):
     id_type = models.CharField(max_length=256)
 
@@ -31,7 +34,8 @@ class Person(models.Model):
     lastname = models.CharField(max_length=1024)
 
     def __str__(self):
-        return f"{self.name} {self.lastname}"
+        ids = [s.__str__() for s in self.identification_set.all()]
+        return f"{ids} {self.name} {self.lastname}"
 
 
 class Identification(models.Model):
