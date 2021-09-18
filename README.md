@@ -35,3 +35,28 @@ Operations to perform:
 Running migrations:
   Applying persons.0001_initial... OK
 (.venv) pablo@xiaomi:/src/github/facu-infor/ttps/ttps_test$ 
+
+
+muy buena referencia a como manejar las relaciones en las consultas.
+https://stackoverflow.com/questions/7495126/django-model-foreignkeys-question
+
+dado:
+class Employees(models.Model):
+    ...
+
+class Expenses(models.Model):
+    ...
+    employee = models.ForeignKey(Employees)
+
+
+1 -
+employee = Employee.objects.get(name='John Doe')
+employee_expenses = employee.expenses.all()
+
+2- 
+employee_expenses = Employee.objects.get(name='John Doe').expenses.all()
+
+3-
+employee_expenses = Expense.objects.filter(employee__name="John Doe")
+
+el __ desreferencia el objeto employee
