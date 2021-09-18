@@ -23,6 +23,17 @@ class Identification(models.Model):
 
 """
 
+
+
+class Person(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    name = models.CharField(max_length=1024)
+    lastname = models.CharField(max_length=1024)
+
+    def __str__(self):
+        return f"{self.name} {self.lastname}"
+
+
 class Identification(models.Model):
 
     class IdentificationTypes(models.TextChoices):
@@ -33,14 +44,7 @@ class Identification(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     type = models.CharField(default=IdentificationTypes.DNI, choices=IdentificationTypes.choices, max_length=256)
     number = models.CharField(max_length=256)
+    person = models.ForeignKey(Person, on_delete=models.CASCADE)
 
     def __str__(self):
-        return f"{self.type} {self.number}"
-
-class Person(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    name = models.CharField(max_length=1024)
-    lastname = models.CharField(max_length=1024)
-
-    def __str__(self):
-        return f"{self.name} {self.lastname}"
+        return f"{self.type} {self.number}"        
