@@ -1,26 +1,27 @@
 """
 preguntas generales:
 - que significan los distintos colores que se indican en la planilla?
-- los contactos iniciales- son empleados? médicos derivantes?, otros clientes del laboratorio?.
+- los contactos iniciales- que tipo de personas son? puede ser cualquiera?, son empleados? médicos derivantes?, otros clientes del laboratorio?.
 - los contactos? idem que la pregunta anterior
 - quien realiza el diagnóstico presuntivo? el médico derivante?
 
 laboratorio:
 - los laboratorios siempre deben tener resultado? - que pasa con exoma? (la linea verde) - mariana bun
 - en la columna estado se refleja un "estado parcial" de mariana bun. eso es estado del laboratorio?.
-
+- el consentimiento es por todo el laboratorio?
+- como es el tema de pagos? se puede pagar todo particular y despues la obra social reintegra? lo reintegra el laboratorio?.
 - los laboratorios siempre deben tener médico derivante?
 - pueden existir mas de una extracción? por ejemplo si una muestra sale mal, o indica resultados erróneos?. en ese caso sería otro laboratorio?
 
+presupuestos:
 - el presupuesto es por el laboratorio completo? o sea el monto de extracción y monto total?. 
 - el monto total = monto extracción + lab = monto presupuesto?
 - puede variar el presupuesto enviado del monto final total?
-- el consentimiento es por todo el laboratorio?
-- como es el tema de pagos? se puede pagar todo particular y despues la obra social reintegra? lo reintegra el laboratorio?.
 
 obras sociales:
 - siempre debe haber alguna factura para la obra social?
-- la obra solcial siempre abona/no abona el total de la factura?
+- la obra solcial siempre abona/no abona el total de la factura?, puede abonar fracciones de la factura?
+- la factura para la obra social es por el monto abonado por la OS o por el monto total?.
 - las obras sociales pueden abonar el costo extraccionista y no el monto total? o vice versa.?.
 
 """

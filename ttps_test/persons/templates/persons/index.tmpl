@@ -5,7 +5,13 @@ Lista de personas
 
 {% if persons %}
     {% for person in persons %}
-       <ul> {{person.name}} {{person.lastname}} </ul>
+       <ul>
+            <div>{{person.name}} {{person.lastname}}</div>
+            {% for i in person.identifications.all %}
+                {{i.type}} - {{i.number}}
+            {% endfor %}
+            <a href='{% url 'detail' person.id %}'> detalle </a>  
+       </ul>
     {% endfor %}
 {% endif %}
 
