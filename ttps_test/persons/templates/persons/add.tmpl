@@ -1,0 +1,10 @@
+
+<form action="{% url 'persons:add' %}" method="post">
+{% csrf_token %}
+    <fieldset>
+        Dni: <input type="text" name="dni"/>
+        Nombre:<input type="text" name="name"/>
+        Apellido: <input type="text" name="lastname"/>
+    </fieldset>
+    <input type="submit" value="Agregar"/>
+</form>

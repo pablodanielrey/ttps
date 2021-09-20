@@ -2,11 +2,11 @@ import logging
 logging.getLogger().setLevel(logging.DEBUG)
 
 from django.shortcuts import render
-from django.http import HttpResponse, Http404
+from django.http import HttpResponse, Http404, HttpResponseRedirect
 from django.template import loader
+from django.urls import reverse
 
-
-from .models import Person
+from .models import Person, Identification
 
 # Create your views here.
 
@@ -29,3 +29,22 @@ def detail(request, person_id):
     }
     logging.debug(context)
     return render(request, 'persons/detail.tmpl', context)
+
+
+
+def create_person(dni, name, lastname):
+    person = Person(name=name, lastname=lastname)
+    person.save()
+    i = Identification(type=Identification.IdentificationTypes.DNI, number=dni, person=person)
+    i.save()
+    return person
+
+def add(request):
+    try:
+        dni = request.POST['dni']
+        name = request.POST['name']
+        lastname = request.POST['lastname']
+        person = create_person(dni, name, lastname)
+        return HttpResponseRedirect(reverse('persons:detail', args=(person.id,)))
+    except KeyError:
+        return render(request, 'persons/add.tmpl')
