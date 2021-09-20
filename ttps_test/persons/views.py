@@ -2,7 +2,7 @@ import logging
 logging.getLogger().setLevel(logging.DEBUG)
 
 from django.shortcuts import render
-from django.http import HttpResponse
+from django.http import HttpResponse, Http404
 from django.template import loader
 
 
@@ -21,8 +21,11 @@ def index(request):
 
 def detail(request, person_id):
     logging.debug(f'buscando persona con id : {person_id}')
+    person = Person.objects.filter(id=person_id).first()
+    if not person:
+        raise Http404('Persona no encontrada')
     context = {
-        'person': Person.objects.filter(id=person_id).first()
+        'person': person
     }
     logging.debug(context)
     return render(request, 'persons/detail.tmpl', context)
