@@ -10,7 +10,7 @@ Lista de personas
             {% for i in person.identifications.all %}
                 {{i.type}} - {{i.number}}
             {% endfor %}
-            <a href='{% url 'detail' person.id %}'> detalle </a>  
+            <a href='{% url 'persons:detail' person.id %}'> detalle </a>  
        </ul>
     {% endfor %}
 {% endif %}
