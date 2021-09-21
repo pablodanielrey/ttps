@@ -32,19 +32,13 @@ def detail(request, person_id):
 
 
 
-def create_person(dni, name, lastname):
-    person = Person(name=name, lastname=lastname)
-    person.save()
-    i = Identification(type=Identification.IdentificationTypes.DNI, number=dni, person=person)
-    i.save()
-    return person
 
 def add(request):
     try:
         dni = request.POST['dni']
         name = request.POST['name']
         lastname = request.POST['lastname']
-        person = create_person(dni, name, lastname)
+        person = Person.objects.create_person(dni, name, lastname)
         return HttpResponseRedirect(reverse('persons:detail', args=(person.id,)))
     except KeyError:
         return render(request, 'persons/add.tmpl')

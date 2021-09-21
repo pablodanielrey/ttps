@@ -1,7 +1,7 @@
 
 import uuid
 
-from django.db import models
+from django.db import models, transaction
 
 
 
@@ -26,7 +26,28 @@ class Identification(models.Model):
 
 """
 
+class PersonsManager(models.Manager):
+
+    def create_person(self, dni, name, lastname):
+        with transaction.atomic():
+            person = Person(name=name, lastname=lastname)
+            person.save()
+            ident = Identification(type=Identification.IdentificationTypes.DNI, number=dni, person=person)
+            ident.save()
+        return person
+
+    """
+    def create_person(self, dni, name, lastname):
+        person = Person(name=name, lastname=lastname)
+        person.save()
+        i = Identification(type=Identification.IdentificationTypes.DNI, number=dni, person=person)
+        i.save()
+        return person
+    """
+
 class Person(models.Model):
+    objects = PersonsManager()
+
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     name = models.CharField(max_length=1024)
     lastname = models.CharField(max_length=1024)
