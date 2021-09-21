@@ -1,10 +1,15 @@
+<html>
+<head>
 {% load static %}
 <link rel="stylesheet" type="text/css" href="{% static 'persons/style.css' %}">
+</head>
+<body>
 
+    {{person.name}}
+    {{person.lastname}}
+    {% for i in person.identifications.all %}
+        {{i.type}}
+        {{i.number}}
+    {% endfor %}
 
-{{person.name}}
-{{person.lastname}}
-{% for i in person.identifications.all %}
-    {{i.type}}
-    {{i.number}}
-{% endfor %}
+</body>
