@@ -1,0 +1,41 @@
+
+
+@startuml ejemplo1
+
+class SocialSecurityInvoice {
+}
+
+class Extraction {
+}
+
+class LabResult {
+}
+
+class LabQuote {
+
+}
+
+class LabType {
+
+}
+
+class Lab {
+
+}
+
+class LabStatus {
+
+}
+
+Lab -- SocialSecurityInvoice
+Lab -- Extraction
+Lab -- LabResult
+Lab -- LabStatus
+Lab -- LabType
+Lab -- Person : patient
+Lab -- Person : medic
+
+
+@enduml
+
+
