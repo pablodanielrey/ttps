@@ -21,6 +21,7 @@ from persons import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('login/', include('login.urls')),
     path('persons/', include('persons.urls')),
     path('api/', include('api.urls'))
 

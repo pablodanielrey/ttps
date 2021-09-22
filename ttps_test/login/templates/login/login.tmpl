@@ -1,0 +1,17 @@
+<html>
+<head>
+</head>
+<body>
+
+
+    <form action="{% url 'login:login' %}" method="post">
+    {% csrf_token %}
+        <fieldset>
+            usuario: <input type="text" name="username"/>
+            clave: <input type="text" name="password"/>
+        </fieldset>
+        <input type="submit" value="Ingresar"/>
+    </form>
+
+</body>
+</html>
