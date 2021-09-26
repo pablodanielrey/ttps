@@ -9,6 +9,9 @@
         <fieldset>
             usuario: <input type="text" name="username"/>
             clave: <input type="text" name="password"/>
+            
+            <!-- para oauth -->
+            <input type="hidden" name="next" value="{{ next }}" />
         </fieldset>
         <input type="submit" value="Ingresar"/>
     </form>
