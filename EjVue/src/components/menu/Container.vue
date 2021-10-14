@@ -39,6 +39,7 @@ body {
 html {
   position: relative;
   height: 100%;
+  min-height: 100%;
   overflow-x: hidden !important;
 }
 small,
@@ -79,14 +80,6 @@ strong {
 .label-padding-tab {
   display: inline-block;
   width: 250px;
-}
-
-.footer {
-  margin-top: 10px;
-  height: 50px;
-  line-height: 50px;
-  color: white;
-  background-color: #ececec;
 }
 
 .fade-enter-active,
