@@ -13,15 +13,7 @@
     
     <form method='post' class='formulario'> 
         {% csrf_token %}
-        <fieldset class='campos'>
-            Nombre: <input type='text' name='nombre'/>
-            Apellido: <input type='text' name='apellido'/>
-            Email: <input type='email' name='email'/>
-            Dni: <input type='text' name='dni'/>
-            Fecha de Nacimiento: <input type='date' name='fecha_nacimiento'/>
-            Teléfono <input type='text' name='telefono'/>
-            Historia Clínica: <input type='area' name='historia_clinica'/>
-        </fieldset>
+        {{ form }}
         <div class='comandos'>
             <input type='submit' value='Agregar'/>
         </div>
