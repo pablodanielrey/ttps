@@ -1,7 +1,7 @@
 from django.db import models
 
 import uuid
-
+""""
 from personas.models import Persona, ObraSocial
     
 class Diagnostico(models.Model):
@@ -38,3 +38,4 @@ class EstadosEstudio(models.Model):
     persona = models.ForeignKey(Persona, on_delete=models.SET_NULL)
     
 
+"""
