@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+{% load static %}
+<html>
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <title>Agregar Persona</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <link rel='stylesheet' type='text/css' media='screen' href="{% static 'personas.css' %}">
+    <!-- <script src='main.js'></script> -->
+</head>
+<body>
+    
+    <form method='post' class='formulario'> 
+        {% csrf_token %}
+        <fieldset class='campos'>
+            Nombre: <input type='text' name='nombre'/>
+            Apellido: <input type='text' name='apellido'/>
+            Email: <input type='email' name='email'/>
+            Dni: <input type='text' name='dni'/>
+            Fecha de Nacimiento: <input type='date' name='fecha_nacimiento'/>
+            Teléfono <input type='text' name='telefono'/>
+            Historia Clínica: <input type='area' name='historia_clinica'/>
+        </fieldset>
+        <div class='comandos'>
+            <input type='submit' value='Agregar'/>
+        </div>
+    </form>
+
+    <div class='messages'>
+    {% if messages %}
+        {% for message in messages %}
+            <div {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</div>
+        {% endfor %}
+    {% endif %}
+    </div>
+    
+</body>
+</html>
