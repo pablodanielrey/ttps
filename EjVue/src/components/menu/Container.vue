@@ -33,14 +33,13 @@ export default {
 body {
   font-family: "Roboto" !important;
   background-color: #ebebeb !important;
-  overflow-x: hidden !important;
+  
   height: auto;
 }
 html {
-  position: relative;
-  height: 100%;
   min-height: 100%;
-  overflow-x: hidden !important;
+  position: relative;
+
 }
 small,
 p,

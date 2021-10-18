@@ -2,12 +2,10 @@
 <div>
   <b-navbar type="dark" variant="dark">
     <b-navbar-nav>
-      <b-nav-item @click="home()">Home</b-nav-item>   
-
-      <b-nav-item-dropdown text="User" right>
-        <b-dropdown-item  :to="{ name: 'perfil' }">Mi cuenta</b-dropdown-item>      
-      </b-nav-item-dropdown>
-      
+      <b-nav-item @click="home()">Home</b-nav-item>     
+        <b-nav-item :to="{ name: 'perfil' }">Mi cuenta</b-nav-item>      
+   
+      <b-nav-item  :to="{ name: 'newPaciente' }">Crear Paciente</b-nav-item>
         <b-navbar-nav class="">          
           <b-nav-item-dropdown right>
             <template #button-content>
@@ -22,6 +20,7 @@
               :to="{ name: 'Registrarse' }"
               >Crear cuenta</b-dropdown-item
             >
+            
         
           </b-nav-item-dropdown>
         </b-navbar-nav>

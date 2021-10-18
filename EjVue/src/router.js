@@ -4,6 +4,7 @@ import Perfil from '@/components/Usuario/Perfil.vue'
 import container from '@/components/menu/Container.vue'
 import home from '@/components/Home/Home.vue'
 import Login from '@/components/Inicio/Login.vue'
+import newPaciente from '@/components/Paciente/newPaciente.vue'
 
 Vue.use(Router)
 const router = new Router({
@@ -25,8 +26,13 @@ const router = new Router({
         path: '/perfil',
          name: 'perfil',
         component: Perfil,   
-        props: true
-      
+        props: true      
+       },
+       {
+        path: '/nuevoPaciente',
+         name: 'newPaciente',
+        component: newPaciente,   
+        props: true      
        },
     ]
     },
