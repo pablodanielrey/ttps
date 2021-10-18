@@ -1,0 +1,23 @@
+FROM debian:buster
+
+RUN apt-get update && apt-get install -y curl
+
+RUN curl -fsSL https://deb.nodesource.com/setup_16.x | bash -
+RUN apt-get update && apt-get install -y \
+  nodejs \
+  && apt-get clean \
+  && rm -rf /var/lib/apt/lists/*  
+
+
+ENV TZ=America/Argentina/Buenos_Aires
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+
+RUN /usr/sbin/adduser --disabled-password --home /src --shell /bin/bash --gecos a usuario
+
+USER usuario
+WORKDIR /src
+# RUN mkdir /src
+COPY laboratorio /src
+
+# ENTRYPOINT ["/entrypoint.sh"]
+CMD ["node"]

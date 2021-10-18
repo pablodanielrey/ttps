@@ -1,13 +1,14 @@
 version: "3.5"
 services:
   node:
-    image: node
+    build:
+      context: .
     stdin_open: true
     tty: true
     restart: "no"
     expose: 
       - 8080
     volumes:
-      - ./:/mnt
+      - ./:/src
     network_mode: "host"
     entrypoint: "/bin/bash"
