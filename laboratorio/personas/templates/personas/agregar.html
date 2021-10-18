@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+{% load static %}
+<html>
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <title>Agregar Persona</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <link rel='stylesheet' type='text/css' media='screen' href="{% static 'personas.css' %}">
+    <!-- <script src='main.js'></script> -->
+</head>
+<body>
+    
+    <form method='post' class='formulario'> 
+        {% csrf_token %}
+        {{ form }}
+        <div class='comandos'>
+            <input type='submit' value='Agregar'/>
+        </div>
+    </form>
+
+    <div class='messages'>
+    {% if messages %}
+        {% for message in messages %}
+            <div {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</div>
+        {% endfor %}
+    {% endif %}
+    </div>
+    
+</body>
+</html>

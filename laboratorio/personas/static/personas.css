@@ -1,0 +1,22 @@
+.formulario {
+    display: grid;
+    grid-template-rows: auto;
+    grid-template-columns: repeat(1, 25%);
+
+}
+
+.campos {
+    display: grid;
+    grid-template-rows: auto;
+    grid-template-columns: repeat(1);
+}
+
+.comandos {
+    display: grid;
+    grid-template-rows: repeat(1);
+    grid-template-columns: repeat(5);
+}
+
+.messages {
+    display: grid;
+}
