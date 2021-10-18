@@ -1,0 +1,13 @@
+version: "3.5"
+services:
+  node:
+    image: node
+    stdin_open: true
+    tty: true
+    restart: "no"
+    expose: 
+      - 8080
+    volumes:
+      - ./:/mnt
+    network_mode: "host"
+    entrypoint: "/bin/bash"
