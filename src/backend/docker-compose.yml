@@ -1,0 +1,10 @@
+version: "3.5"
+services:
+  backend:
+    build:
+      context: .
+    restart: "no"
+    expose: 
+      - 8000
+    network_mode: "host"
+    
