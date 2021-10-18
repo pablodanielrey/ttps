@@ -1,26 +1,29 @@
-from django.forms.forms import Form
+
 from django.http.request import HttpRequest
 from django.shortcuts import render
-from django.forms import ModelForm
 
-from django.contrib import messages
-
+from django.contrib.auth import models as auth_models
 from . import models
 
-import logging
-# Create your views here.
+"""
+    Las vistas de rest framework
+"""
+from rest_framework import serializers, viewsets
 
-class FormularioPersona(ModelForm):
+class SerializadorDeUsuario(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = auth_models.User
+        fields = ['first_name', 'last_name', 'username', 'email']
+class SerializadorDePersona(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = models.Persona
-        fields = ['usuario', 'dni', 'telefono', 'fecha_nacimiento', 'historia_clinica']
+        fields = ['usuario','dni','fecha_nacimiento','telefono','historia_clinica']
 
-def agregar_persona(request:HttpRequest):
-    if request.method == 'POST':
-        datos = FormularioPersona(request.POST)
-        logging.debug(datos)
-        messages.success(request, 'Paciente agregado correctamente')
 
-    return render(request, 'personas/agregar.html', {
-        'form': FormularioPersona()
-    })
+class VistaUsuario(viewsets.ModelViewSet):
+    queryset = auth_models.User.objects.all()
+    serializer_class = SerializadorDeUsuario
+
+class VistaPersona(viewsets.ModelViewSet):
+    queryset = models.Persona.objects.all()
+    serializer_class = SerializadorDePersona
