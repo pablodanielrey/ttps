@@ -278,11 +278,11 @@ export default {
   },
   methods: {
     async crearPaciente() {
-      PacientesService.obtenerPacientes();
       let result = await this.$refs.detailsPaciente.validate();
       console.log(result)
-
       console.log(this.paciente)
+      let r = await PacientesService.crearPaciente(this.paciente)
+      console.log(r)
     }
   },
   computed: {},
