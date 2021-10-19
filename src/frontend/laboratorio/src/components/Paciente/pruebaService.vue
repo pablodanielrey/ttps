@@ -1,5 +1,5 @@
 <template>
-  <button v-on:click="buscar">buscar</button>
+    <button v-on:click="buscar">buscar</button>
 </template>
 
 <script>

@@ -251,6 +251,9 @@
 
 
 <script>
+
+import PacientesService from '@/services/PacientesService'
+
 import { VueEditor } from "vue2-editor";
 export default {
   components: {
@@ -274,7 +277,8 @@ export default {
     };
   },
   methods: {
-    async crearPaciente(){
+    async crearPaciente() {
+      PacientesService.obtenerPacientes();
       let result = await this.$refs.detailsPaciente.validate();
       console.log(result)
 
