@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p>entra</p>
+    <button v-on:click='getPacientes'>buscar</button>
   </div>
 </template>
 
