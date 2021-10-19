@@ -1,9 +1,11 @@
 <template>
   <b-container>
     <br />
+     <button v-on:click="obtenerPacientes">buscar</button>
+
     <h4>Listado de estudios</h4>
 
-    <b-col lg="4" class="my-1">
+    <!-- <b-col lg="4" class="my-1">
       <b-input-group size="sm">
         <b-form-input
           id="filter-input"
@@ -16,8 +18,8 @@
           <b-button :disabled="!filter" @click="filter = ''">Clear</b-button>
         </b-input-group-append>
       </b-input-group>
-    </b-col>
-    <b-table
+    </b-col> -->
+    <!-- <b-table
       :items="items"
       :fields="fields"
       :filter="filter"
@@ -74,7 +76,7 @@
         ></b-pagination>
       </b-col>
       <br />
-    </b-row>
+    </b-row> -->
   </b-container>
 </template>
 
@@ -104,12 +106,15 @@ export default {
       items: [],
     };
   },
-  mounted() {
-    this.items = PacientesService().obtenerPacientes()
-    this.totalRows = this.items.length
-  },
+  // mounted() {
+  //   this.totalRows = this.items.length
+  // },
   created() {},
   methods: {
+    obtenerPacientes() {
+      var pacientesService = PacientesService()
+      this.items = pacientesService.obtenerPacientes()
+    },
     onFiltered(filteredItems) {
       // Trigger pagination to update the number of buttons/pages due to filtering
       this.totalRows = filteredItems.length;

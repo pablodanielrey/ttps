@@ -5,13 +5,16 @@ Vue.use(Router)
 
 import Paciente from '@/components/Paciente/nuevoPaciente.vue'
 import ListaPacientes from '@/components/Paciente/listaPacientes.vue'
+import Buscar from '@/components/Paciente/pruebaService.vue'
 
 // lo siguiente necesita que vue tenga el compilador de templates.
 // const Foo = { template: '<div>superrr fooooo</div>' }
 
 const routes = [
+    { path: '/buscar', componentes: Buscar },
     { path: '/paciente', component: Paciente },
-    { path: '/lista', componentes: ListaPacientes }
+    { path: '/lista', componentes: ListaPacientes },
+   
 ]
 
 const router = new Router({
