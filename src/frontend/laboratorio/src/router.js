@@ -11,9 +11,9 @@ import Buscar from '@/components/Paciente/pruebaService.vue'
 // const Foo = { template: '<div>superrr fooooo</div>' }
 
 const routes = [
-    { path: '/buscar', componentes: Buscar },
+    { path: '/buscar', component: Buscar },
     { path: '/paciente', component: Paciente },
-    { path: '/lista', componentes: ListaPacientes },
+    { path: '/lista', component: ListaPacientes },
    
 ]
 

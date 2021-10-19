@@ -4,7 +4,7 @@
 
 <script>
 
-// import PacienteService from '@/services/PacientesService'
+import PacienteService from '@/services/PacientesService'
 
 export default {
     name: 'Buscar',
@@ -15,7 +15,7 @@ export default {
     },
     methods: {
         buscar: function() {
-            console.log('buscando')
+            PacienteService.obtenerPacientes()
         }
     }
     
