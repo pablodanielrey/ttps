@@ -1,14 +1,19 @@
 
 import { createRouter, createWebHistory } from 'vue-router'
-// import nuevoPaciente from '@/components/Paciente/nuevoPaciente'
+
+
+const Prueba = {
+    template: "<div>prueba</div>"
+}
 
 const routes = [
-    // {path:'/', component: nuevoPaciente}
+    { path:'/', component: Prueba }
 ]
 
 const router = createRouter({
     history: createWebHistory(process.env.BASE_URL),
     routes
 })
+
 
 export default router
