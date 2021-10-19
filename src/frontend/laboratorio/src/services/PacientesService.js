@@ -8,7 +8,7 @@ export default {
         return Api().get(API_URL + API_USER + "personas/", credentials)
     },
     obtenerPaciente(id) {
-        return Api().get(API_URL + API_USER + "personas/" + id, credentials)
+        return Api().get(API_URL + API_USER + "personas/" + id)
     },
     crearPaciente(paciente) {
         return Api().post(API_URL + API_USER + "personas/", paciente);
