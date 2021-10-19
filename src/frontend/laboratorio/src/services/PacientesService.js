@@ -1,12 +1,10 @@
-import Api from '@/services/Api'
-const API_USER = "";
-const API_URL = "/";
+
+import Api from "@/services/Api"
+
 
 export default {
-
-    getPacientes(credentials) {    
-        return Api().get(API_URL + API_USER + "personas", credentials)
-    },
- 
-  
+    obtenerPacientes() {
+        console.log("/personas")
+        return Api().get( "/personas")
+    }
 }
