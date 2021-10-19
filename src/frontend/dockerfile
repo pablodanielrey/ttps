@@ -11,12 +11,22 @@ FROM node:lts-buster
 
 ENV TZ=America/Argentina/Buenos_Aires
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
-
-RUN npm update -g \
-  && npm install -g vue \
-  && npm install -g @vue/cli
 RUN mkdir /src && chown node:node /src
+
+RUN npm update -g
+  # && npm install -g vue@2
+  # && npm install -g @vue/cli
+
 USER node
+# configuro para que no tire error en las instalaciones globales de los paquetes.
+# y manejar el usuario node
+RUN mkdir /home/node/.npm-global \
+  && npm config set prefix /home/node/.npm-global 
+
+ENV PATH=/home/node/.npm-global/bin::/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+
+RUN npm install -g vue@2 @vue/cli
+
 WORKDIR /src
 
 # COPY laboratorio /src
