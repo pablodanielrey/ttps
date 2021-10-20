@@ -224,7 +224,7 @@
               >
                 <vue-editor
                   :state="errors[0] ? false : valid ? true : null"
-                  v-model="paciente.historia"
+                  v-model="paciente.historia_clinica"
                 ></vue-editor>
                 <b-form-invalid-feedback
                   v-for="error in errors"
