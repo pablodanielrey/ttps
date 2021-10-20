@@ -4,8 +4,8 @@ const API_USER = ''
 const API_URL = '/api/'
 
 export default {
-    obtenerPacientes(credentials) {
-        return Api().get(API_URL + API_USER + "personas/", credentials)
+    obtenerPacientes() {
+        return Api().get(API_URL + API_USER + "personas/")
     },
     obtenerPaciente(id) {
         return Api().get(API_URL + API_USER + "personas/" + id)

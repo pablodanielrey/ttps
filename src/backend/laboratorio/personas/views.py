@@ -27,5 +27,3 @@ class VistaUsuario(viewsets.ModelViewSet):
 class VistaPersona(viewsets.ModelViewSet):
     queryset = models.Persona.objects.all()
     serializer_class = SerializadorDePersona
-    authentication_classes = []
-    authentication_classes = []

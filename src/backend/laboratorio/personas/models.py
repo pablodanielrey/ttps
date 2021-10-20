@@ -22,7 +22,7 @@ class ObraSocial(models.Model):
 class Persona(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     
-    usuario = models.ForeignKey(User, on_delete=CASCADE)
+    usuario = models.ForeignKey(User, on_delete=CASCADE, null=True)
 
     @property
     def nombre(self):
@@ -51,7 +51,7 @@ class Persona(models.Model):
     dni = models.CharField(max_length=50)
     fecha_nacimiento = models.DateField(null=True)
     telefono = models.CharField(max_length=50)
-    historia_clinica = models.CharField(max_length=9216)
+    historia_clinica = models.CharField(max_length=9216, null=True)
 
     def __str__(self):
         return f"{self.usuario.__str__()} {self.nombre} {self.apellido} {self.dni}"

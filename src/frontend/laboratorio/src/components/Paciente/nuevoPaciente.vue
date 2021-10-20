@@ -53,7 +53,7 @@
               >
                 <b-form-input
                   placeholder="Apellido del paciente"
-                  v-model="paciente.apellidos"
+                  v-model="paciente.apellido"
                   :state="errors[0] ? false : valid ? true : null"
                 ></b-form-input>
                 <b-form-invalid-feedback
@@ -103,7 +103,7 @@
                 <b-form-input
                   locale="es-AR"
                   type="date"
-                  v-model="paciente.nacimiento"
+                  v-model="paciente.fecha_nacimiento"
                   :state="errors[0] ? false : valid ? true : null"
                 ></b-form-input>
                 <b-form-invalid-feedback
@@ -264,7 +264,7 @@ export default {
   data() {
     return {
       alerts: [],
-      paciente: [],
+      paciente: {},
       selectedOS: null,
       optionsOS: [
         { value: null, text: "Seleccione una obra social" },

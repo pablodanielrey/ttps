@@ -6,5 +6,7 @@ services:
     restart: "no"
     expose: 
       - 8000
+    volumes:
+      - ./laboratorio:/src      
     network_mode: "host"
     
