@@ -20,7 +20,7 @@ from rest_framework import serializers, viewsets
 class SerializadorDeObraSocial(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = models.ObraSocial
-        fields = ['nombre','telefono','email']
+        fields = ['id','nombre','telefono','email']
 
 class SerializadorDeUsuario(serializers.HyperlinkedModelSerializer):
     class Meta:

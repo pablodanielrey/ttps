@@ -173,7 +173,7 @@
             <b-form-group id="os-label" label="Obra Social:" label-for="os">
               <ValidationProvider :name="'os '" v-slot="{ errors, valid }">
                 <b-form-select
-                  :options="optionsOS"
+                  :options="formatear_obras_sociales"
                   v-model="paciente.obra_social"
                   :state="errors[0] ? false : valid ? true : null"
                 ></b-form-select>
@@ -265,28 +265,19 @@ export default {
   data() {
     return {
       alerts: [],
-      paciente: {},
-      selectedOS: null,
-      optionsOS: [
-        { value: null, text: "Seleccione una obra social" },
-        { value: "Osde", text: "Osde" },
-        { value: "Medife", text: "Medife" },
-        { value: "Ioma", text: "Ioma" },
-        { value: "Galeno", text: "Galeno" },
-        { value: "Swiss Medical", text: "Swiss Medical" },
-      ],
+      paciente: {}
     };
   },
   methods: {
     async crearPaciente() {
       try {
-           let result = await this.$refs.detailsPaciente.validate();
-      console.log(result)
-      console.log(this.paciente)
-      let r = await PacientesService.crearPaciente(this.paciente)
-      console.log(r)
+          let result = await this.$refs.detailsPaciente.validate();
+          console.log(result)
+          console.log(this.paciente)
+          let r = await PacientesService.crearPaciente(this.paciente)
+          console.log(r)
       } catch (err) {
-        console.log(err)
+          console.log(err)
       }
    
     },
@@ -294,26 +285,42 @@ export default {
       try {
         const response = await ObrasSocialesService.obtenerObrasSociales();
         console.log(response)
+        this.obras_sociales = response.data
       } catch (err) {
         console.log(err)
       }
     }
   },
-  computed: {},
-    mounted() {
+  computed: {
+    formatear_obras_sociales() {
+      let mc = this.obras_sociales.map((e) => ({
+        value: e.id,
+        text: e.nombre,
+      }));
+      mc.push({
+        value: { email: null },
+        text: "-Seleccione el usuario o empresa-",
+        disabled: true,
+      });
+
+      return mc;      
+    }
+  },
+
+  mounted() {
     axios
       .all([
         this.obtenerObrasSociales(),
-     
+      
       ])
       .then(() => {
 
-       })
+        })
       .catch((err) => {
         console.log(err);
       });
-     
-  },
-};
+      
+    },
+  };
 </script>
 
