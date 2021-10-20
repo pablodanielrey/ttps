@@ -9,6 +9,7 @@ router = routers.DefaultRouter()
 router.register('usuarios', views.VistaUsuario)
 router.register('personas', views.VistaPersona)
 router.register('obrasSociales', views.VistaObraSocial)
+router.register('obraSocialPersona', views.VistaObraSocialPersona)
 
 
 urlpatterns = router.urls

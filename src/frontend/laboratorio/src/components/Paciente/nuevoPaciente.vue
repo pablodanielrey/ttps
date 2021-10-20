@@ -174,7 +174,7 @@
               <ValidationProvider :name="'os '" v-slot="{ errors, valid }">
                 <b-form-select
                   :options="optionsOS"
-                  v-model="selectedOS"
+                  v-model="paciente.obra_social"
                   :state="errors[0] ? false : valid ? true : null"
                 ></b-form-select>
                 <b-form-invalid-feedback
@@ -200,7 +200,7 @@
                 <b-form-input
                   placeholder="Numero de afiliado"
                   type="number"
-                  v-model="paciente.numeroOS"
+                  v-model="paciente.numero_afiliado"
                   :state="errors[0] ? false : valid ? true : null"
                 ></b-form-input>
                 <b-form-invalid-feedback
