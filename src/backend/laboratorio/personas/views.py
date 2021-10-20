@@ -32,6 +32,7 @@ class SerializadorDeObraSocialPersona(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = models.ObraSocialPersona
         fields = ['obra_social','numero_afiliado']
+        
 class SerializadorDePersona(serializers.HyperlinkedModelSerializer):
     obra_social = SerializadorDeObraSocialPersona(required=False, many=True)
     class Meta:
