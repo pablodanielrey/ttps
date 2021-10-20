@@ -1,11 +1,9 @@
 <template>
   <b-container>
     <br />
-     <button v-on:click="obtenerPacientes">buscar</button>
-
     <h4>Listado de estudios</h4>
 
-    <!-- <b-col lg="4" class="my-1">
+   <b-col lg="4" class="my-1">
       <b-input-group size="sm">
         <b-form-input
           id="filter-input"
@@ -15,11 +13,11 @@
         ></b-form-input>
 
         <b-input-group-append>
-          <b-button :disabled="!filter" @click="filter = ''">Clear</b-button>
+          <b-button :disabled="!filter" @click="filter = ''">Buscar</b-button>
         </b-input-group-append>
       </b-input-group>
-    </b-col> -->
-    <!-- <b-table
+    </b-col> 
+     <b-table
       :items="items"
       :fields="fields"
       :filter="filter"
@@ -34,8 +32,7 @@
 
         <b-button
           title="Descargar factura"
-          variant="outline-primary"
-          v-if="row.item.estado == 'Esperando comprobante pago'"
+          variant="outline-primary"      
         >
           <b-icon icon="arrow-down-circle" aria-hidden="true"></b-icon
         ></b-button>
@@ -76,7 +73,7 @@
         ></b-pagination>
       </b-col>
       <br />
-    </b-row> -->
+    </b-row> 
   </b-container>
 </template>
 
@@ -84,7 +81,7 @@
 <script>
 
 import PacientesService from '@/services/PacientesService.js'
-
+import axios from "axios";
 export default {
   name: "ListaPacientes",
 
@@ -93,33 +90,57 @@ export default {
 
   data() {
     return {
-      perPage: 5,
-      pageOptions: [5, 10, 15],
+      
+      perPage: 4,
+      pageOptions: [4, 10, 15],
       filter: null,
       currentPage: 1,
       totalRows: 1,
       fields: [
-        "dni",
-        "fecha_nacimiento",
-        "telefono"
+         { key: "apellido", label: "Apellido", class: "text-center p2" },
+       { key: "nombre", label: "Nombre", class: "text-center p2" },
+       { key: "dni", label: "DNI", class: "text-center p2" },
+       { key: "fecha_nacimiento", label: "Fecha Nacimiento", class: "text-center p2" },
+       { key: "telefono", label: "Telefono", class: "text-center p2" },
+       { key: "acciones", label: "Acciones", class: "text-center p2" },
       ],
       items: [],
     };
   },
-  // mounted() {
-  //   this.totalRows = this.items.length
-  // },
-  created() {},
+
+
+  created() {
+     
+  },
   methods: {
-    obtenerPacientes() {
-      var pacientesService = PacientesService()
-      this.items = pacientesService.obtenerPacientes()
+   async obtenerPacientes() {
+     try {
+       let response = await PacientesService.obtenerPacientes()
+      this.items = response.data
+      console.log(response)
+     } catch (err) {
+        console.log(err)
+     }
+      
     },
     onFiltered(filteredItems) {
-      // Trigger pagination to update the number of buttons/pages due to filtering
       this.totalRows = filteredItems.length;
       this.currentPage = 1;
     },
+  },
+  mounted() {
+    axios
+      .all([
+        this.obtenerPacientes(),
+     
+      ])
+      .then(() => {   
+        this.totalRows = this.items.length
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+     
   },
 };
 </script>

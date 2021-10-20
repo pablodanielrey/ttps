@@ -253,7 +253,8 @@
 <script>
 
 import PacientesService from '@/services/PacientesService'
-
+import ObrasSocialesService from '@/services/ObrasSocialesService'
+import axios from "axios";
 import { VueEditor } from "vue2-editor";
 export default {
   components: {
@@ -278,14 +279,41 @@ export default {
   },
   methods: {
     async crearPaciente() {
-      let result = await this.$refs.detailsPaciente.validate();
+      try {
+           let result = await this.$refs.detailsPaciente.validate();
       console.log(result)
       console.log(this.paciente)
       let r = await PacientesService.crearPaciente(this.paciente)
       console.log(r)
+      } catch (err) {
+        console.log(err)
+      }
+   
+    },
+    async obtenerObrasSociales(){
+      try {
+        const response = await ObrasSocialesService.obtenerObrasSociales();
+        console.log(response)
+      } catch (err) {
+        console.log(err)
+      }
     }
   },
   computed: {},
+    mounted() {
+    axios
+      .all([
+        this.obtenerObrasSociales(),
+     
+      ])
+      .then(() => {
+
+       })
+      .catch((err) => {
+        console.log(err);
+      });
+     
+  },
 };
 </script>
 
