@@ -17,7 +17,7 @@ class SerializadorDeUsuario(serializers.HyperlinkedModelSerializer):
 class SerializadorDePersona(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = models.Persona
-        fields = ['usuario','dni','fecha_nacimiento','telefono','historia_clinica']
+        fields = ['nombre','apellido','email','dni','fecha_nacimiento','telefono','historia_clinica']
 
 
 class VistaUsuario(viewsets.ModelViewSet):
