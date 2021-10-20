@@ -5,7 +5,7 @@ Vue.use(Router)
 
 import Paciente from '@/components/Paciente/nuevoPaciente.vue'
 import ListaPacientes from '@/components/Paciente/listaPacientes.vue'
-import NuevaObraSocial from '@/components/Paciente/nuevaObraSocial.vue'
+import NuevaObraSocial from '@/components/ObraSocial/nuevaObraSocial.vue'
 
 // lo siguiente necesita que vue tenga el compilador de templates.
 // const Foo = { template: '<div>superrr fooooo</div>' }

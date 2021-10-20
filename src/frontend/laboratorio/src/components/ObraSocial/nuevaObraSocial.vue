@@ -112,7 +112,7 @@
 
 <script>
 
-import PacientesService from '@/services/PacientesService'
+import ObrasSocialesService from '@/services/ObrasSocialesService'
 
 export default {
   components: {
@@ -130,7 +130,7 @@ export default {
       let result = await this.$refs.detalleObraSocial.validate();
       console.log(result)
       console.log(this.obraSocial)
-      let r = await PacientesService.crearObraSocial(this.obraSocial)
+      let r = await ObrasSocialesService.crearObraSocial(this.obraSocial)
       console.log(r)
     }
   },

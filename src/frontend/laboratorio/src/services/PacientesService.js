@@ -12,9 +12,6 @@ export default {
     },
     crearPaciente(paciente) {
         return Api().post(API_URL + API_USER + "personas/", paciente);
-    },
-    crearObraSocial(obraSocial) {
-        return Api().post(API_URL + API_USER + "obrasSociales/", obraSocial);
     }
     
 }
