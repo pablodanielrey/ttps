@@ -6,6 +6,12 @@
       </b-col>
     </b-row>
 
+    <b-row class="pb-2">
+      <b-col class="text-center pt-3">
+        <p class="h5"><strong>Usuario Logueado:</strong>{{ usuario }}</p>
+      </b-col>
+    </b-row>
+
     <ValidationObserver ref="detailsPaciente">
       <b-form-group>
         <b-alert
@@ -252,6 +258,7 @@
 
 <script>
 
+import LoginService from '@/services/LoginService'
 import PacientesService from '@/services/PacientesService'
 import ObrasSocialesService from '@/services/ObrasSocialesService'
 import axios from "axios";
@@ -305,6 +312,9 @@ export default {
     }
   },
   computed: {
+    usuario: function () {
+      return LoginService.getApiToken().usuario;
+    }
   },
 
   mounted() {

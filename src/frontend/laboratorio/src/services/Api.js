@@ -1,14 +1,17 @@
 import axios from 'axios'
 
+import LoginService from '@/services/LoginService'
+
 export default () => {
 
+    let credenciales = LoginService.getApiToken();
     let instance = axios.create({
         baseURL: process.env.VUE_APP_API_URL,
         headers: {
         },
         auth: {
-            'username': 'admin',
-            'password': 'nimdanimda'
+            'username': credenciales.usuario,
+            'password': credenciales.clave
         }
     })
 
