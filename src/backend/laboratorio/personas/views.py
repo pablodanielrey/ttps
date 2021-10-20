@@ -69,7 +69,7 @@ class VistaPersona(viewsets.ModelViewSet):
 
         if 'obra_social' in datos_persona:
             ob = datos_persona['obra_social']
-            obraSocial = models.ObraSocial.objects.get(nombre=ob)
+            obraSocial = models.ObraSocial.objects.get(id=ob)
 
             pacienteObraSocial = models.ObraSocialPersona(
                 persona=persona,

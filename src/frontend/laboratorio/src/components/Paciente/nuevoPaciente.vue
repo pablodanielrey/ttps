@@ -173,7 +173,7 @@
             <b-form-group id="os-label" label="Obra Social:" label-for="os">
               <ValidationProvider :name="'os '" v-slot="{ errors, valid }">
                 <b-form-select
-                  :options="formatear_obras_sociales"
+                  :options="obras_sociales"
                   v-model="paciente.obra_social"
                   :state="errors[0] ? false : valid ? true : null"
                 ></b-form-select>
@@ -265,7 +265,8 @@ export default {
   data() {
     return {
       alerts: [],
-      paciente: {}
+      paciente: {},
+      obras_sociales: []
     };
   },
   methods: {
@@ -285,26 +286,25 @@ export default {
       try {
         const response = await ObrasSocialesService.obtenerObrasSociales();
         console.log(response)
-        this.obras_sociales = response.data
+        this.obras_sociales = response.data.map((e) => ({
+          value: e.id,
+          text: e.nombre,
+        }))
+        this.obras_sociales.push({
+          value: { email: null },
+          text: "-Seleccione el usuario o empresa-",
+          disabled: true,
+        })
+
+        console.log('formateo de las obras sociales finalizado')
+        console.log(this.obras_sociales)
+
       } catch (err) {
         console.log(err)
       }
     }
   },
   computed: {
-    formatear_obras_sociales() {
-      let mc = this.obras_sociales.map((e) => ({
-        value: e.id,
-        text: e.nombre,
-      }));
-      mc.push({
-        value: { email: null },
-        text: "-Seleccione el usuario o empresa-",
-        disabled: true,
-      });
-
-      return mc;      
-    }
   },
 
   mounted() {
