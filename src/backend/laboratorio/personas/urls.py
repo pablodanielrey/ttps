@@ -8,6 +8,7 @@ from . import views
 router = routers.DefaultRouter()
 router.register('usuarios', views.VistaUsuario)
 router.register('personas', views.VistaPersona)
+router.register('obrasSociales', views.VistaObraSocial)
 
 
 urlpatterns = router.urls

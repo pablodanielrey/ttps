@@ -6,18 +6,11 @@ from django.db.models.deletion import CASCADE
 import uuid
 
 
-
-
-# Create your models here.
-
-"""
 class ObraSocial(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     nombre = models.CharField(max_length=1024)
     email = models.CharField(max_length=1024)
     telefono = models.CharField(max_length=50)
-
-"""
 
 class Persona(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)

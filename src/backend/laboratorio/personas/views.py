@@ -19,6 +19,11 @@ class SerializadorDePersona(serializers.HyperlinkedModelSerializer):
         model = models.Persona
         fields = ['nombre','apellido','email','dni','fecha_nacimiento','telefono','historia_clinica']
 
+class SerializadorDeObraSocial(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = models.ObraSocial
+        fields = ['nombre','telefono','email']
+
 
 class VistaUsuario(viewsets.ModelViewSet):
     queryset = auth_models.User.objects.all()
@@ -27,3 +32,8 @@ class VistaUsuario(viewsets.ModelViewSet):
 class VistaPersona(viewsets.ModelViewSet):
     queryset = models.Persona.objects.all()
     serializer_class = SerializadorDePersona
+
+
+class VistaObraSocial(viewsets.ModelViewSet):
+    queryset = models.ObraSocial.objects.all()
+    serializer_class = SerializadorDeObraSocial
