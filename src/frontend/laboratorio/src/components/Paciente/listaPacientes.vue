@@ -1,7 +1,7 @@
 <template>
   <b-container>
     <br />
-    <h4>Listado de estudios</h4>
+    <h4>Listado de Pacientes</h4>
 
    <b-col lg="4" class="my-1">
       <b-input-group size="sm">
