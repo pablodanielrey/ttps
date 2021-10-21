@@ -17,9 +17,8 @@ class Estudio(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     persona = models.ForeignKey(Persona, on_delete=models.CASCADE, related_name='estudios')
     medico_derivante = models.ForeignKey(Persona, on_delete=models.CASCADE, related_name='estudios_derivados')
-    fecha_alta = models.DateField()
     diagnostico = models.ForeignKey(Diagnostico, on_delete=models.CASCADE, related_name='estudios')
-    historia_clinica = models.CharField(max_length=9216)
+    fecha_alta = models.DateField()
     presupuesto = models.FloatField()
     
 

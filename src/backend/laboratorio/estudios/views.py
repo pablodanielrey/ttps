@@ -11,6 +11,8 @@ from . import models
 from rest_framework import serializers, viewsets
 
 
+from personas.views import SerializadorDePersona
+
 class SerializadorTipoEstudio(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = models.TipoEstudio
@@ -31,3 +33,17 @@ class SerializadorDiagnostico(serializers.HyperlinkedModelSerializer):
 class VistaDiagnostico(viewsets.ModelViewSet):
     queryset = models.Diagnostico.objects.all()
     serializer_class = SerializadorDiagnostico
+
+
+class SerializadorEstudios(serializers.HyperlinkedModelSerializer):
+
+    persona = SerializadorDePersona(many=True)
+    medico_derivante = SerializadorDePersona(many=True)
+    diagnostico = SerializadorDiagnostico(many=True)
+    class Meta:
+        model = models.Estudio
+        fields = ['id', 'fecha_alta', 'presupuesto', 'diagnostico', 'persona', 'medico_derivante']
+
+class VistaEstudios(viewsets.ModelViewSet):
+    queryset = models.Estudio.objects.all()
+    serializer_class = SerializadorEstudios
