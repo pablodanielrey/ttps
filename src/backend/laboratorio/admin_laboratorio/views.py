@@ -375,4 +375,20 @@ class InitSite(APIView):
                 d = models.Diagnostico(nombre=p)
                 d.save()
 
+        tipos_estudio = [
+            'Exoma',
+            'Genoma mitocondrial completo',
+            'Carrier de enfermedades monogénicas recesivas',
+            'Cariotipo',
+            'Array CGH'
+        ]
+
+        for te in tipos_estudio:
+            try:
+                models.TipoEstudio.objects.get(nombre=te)
+            except models.TipoEstudio.DoesNotExist as e:
+                logging.debug(f'agregando tipo de estudio {te}')
+                t = models.TipoEstudio(nombre=te)
+                t.save()
+
         return Response({'status':'sistema inicializado'})
