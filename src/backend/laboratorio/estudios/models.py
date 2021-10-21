@@ -1,18 +1,21 @@
 from django.db import models
 
 import uuid
-""""
-from personas.models import Persona, ObraSocial
-    
+
 class Diagnostico(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     nombre = models.CharField(max_length=1024)
 
 
+""""
+from personas.models import Persona, ObraSocial
+    
+
 class TipoEstudio(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     nombre = models.CharField(max_length=1024)
     consentimineto = models.CharField(max_length=9216)
+
     
     
 class EstadoEstudio(models.Model):
