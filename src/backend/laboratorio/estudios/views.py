@@ -37,8 +37,8 @@ class VistaDiagnostico(viewsets.ModelViewSet):
 
 class SerializadorEstudios(serializers.HyperlinkedModelSerializer):
 
-    persona = SerializadorDePersona()
-    medico_derivante = SerializadorDePersona()
+    #persona = SerializadorDePersona()
+    #medico_derivante = SerializadorDePersona()
     diagnostico = SerializadorDiagnostico()
     class Meta:
         model = models.Estudio
