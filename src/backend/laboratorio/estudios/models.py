@@ -1,6 +1,7 @@
 from django.db import models
 
 import uuid
+import datetime
 
 from personas.models import Persona, ObraSocial
 
@@ -18,7 +19,7 @@ class Estudio(models.Model):
     persona = models.ForeignKey(Persona, on_delete=models.CASCADE, related_name='estudios')
     medico_derivante = models.ForeignKey(Persona, on_delete=models.CASCADE, related_name='estudios_derivados')
     diagnostico = models.ForeignKey(Diagnostico, on_delete=models.CASCADE, related_name='estudios')
-    fecha_alta = models.DateField()
+    fecha_alta = models.DateField(default=datetime.date.today)
     presupuesto = models.FloatField()
     
 
@@ -27,9 +28,6 @@ class Estudio(models.Model):
 class EstadoEstudio(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     nombre = models.CharField(max_length=1024)
-
-
-
 
 class EstadosEstudio(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)

@@ -6,7 +6,8 @@ from rest_framework import authentication, permissions
 
 import logging
 
-from estudios import models
+from estudios import models as estudio_models
+from personas import models as persona_models
 
 
 class InitSite(APIView):
@@ -369,10 +370,10 @@ class InitSite(APIView):
 
         for p in patologias:
             try:
-                models.Diagnostico.objects.get(nombre=p)
-            except models.Diagnostico.DoesNotExist as e:
+                estudio_models.Diagnostico.objects.get(nombre=p)
+            except estudio_models.Diagnostico.DoesNotExist as e:
                 logging.debug(f'agregando patología {p}')
-                d = models.Diagnostico(nombre=p)
+                d = estudio_models.Diagnostico(nombre=p)
                 d.save()
 
         tipos_estudio = [
@@ -385,10 +386,28 @@ class InitSite(APIView):
 
         for te in tipos_estudio:
             try:
-                models.TipoEstudio.objects.get(nombre=te)
-            except models.TipoEstudio.DoesNotExist as e:
+                estudio_models.TipoEstudio.objects.get(nombre=te)
+            except estudio_models.TipoEstudio.DoesNotExist as e:
                 logging.debug(f'agregando tipo de estudio {te}')
-                t = models.TipoEstudio(nombre=te)
+                t = estudio_models.TipoEstudio(nombre=te)
                 t.save()
+
+
+        """
+            Inicializo datos de ejemplo de una persona y un estudio
+        """
+        persona_models.ObraSocial(nombre='Osde', telefono='221-4237467', email='consutlas@osde.com.ar').save()
+        persona_models.ObraSocial(nombre='IOMA', telefono='221-4237467', email='consutlas@ioma.gov.ar').save()
+
+        p1 = persona_models.Persona(nombre='Pablo', apellido='R', dni='1', email='pablo@supermail.com', telefono='221-1112233', fecha_nacimiento='1980-12-01')
+        p1.save()
+        persona_models.Persona(nombre='Leonardo', apellido='B', dni='2211', email='leo@supermail.com', telefono='221-1112233', fecha_nacimiento='1981-02-03').save()
+        persona_models.Persona(nombre='Nico', apellido='G', dni='2222211', email='nico@supermail.com', telefono='221-1112233', fecha_nacimiento='2004-05-04').save()
+
+        mm = persona_models.Persona(nombre='Medi', apellido='Cote', dni='2212211', email='m@hotmail.com', telefono='221-1112233', fecha_nacimiento='1995-06-02')
+        mm.save()
+
+        diagnostico = estudio_models.Diagnostico.objects.all().first()
+        estudio_models.Estudio(persona=p1, medico_derivante=mm, presupuesto=100.2, diagnostico=diagnostico).save()
 
         return Response({'status':'sistema inicializado'})
