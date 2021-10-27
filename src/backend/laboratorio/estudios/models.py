@@ -70,7 +70,15 @@ class EsperandoRetiroDeExtaccion(EstadoEstudio):
 class EsperandoLotaDeMuestraParaProcesamientoBiotecnologico(EstadoEstudio):
     numero_de_lote = models.CharField(max_length=500, null=True)
 
+class EsperandoInterpretacionDeResultados(EstadoEstudio):
+    resultado_url = models.URLField()
+    fecha_informe = models.DateField()
+    medico_informante = models.ForeignKey(Persona, on_delete=models.CASCADE)
+    informe = models.TextField()
+   
 
+class EsperandoEntregaAMedicoDerivante(EstadoEstudio):
+    fecha_de_entrega = models.DateTimeField(null=True)
 
 
 
@@ -92,16 +100,6 @@ class EsperandoPresupuesto:
         pe = PresupuestoEstudio(estado=ee, presupuesto=self.presupuesto)
         pe.save()
 
-"""
-
-
-class EstadoEsperandoFactura:
-
-    def __init__(self, request):
-        pass
-
-
-"""
 
 
 import json
