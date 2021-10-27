@@ -386,10 +386,10 @@ class InitSite(APIView):
 
         for te in tipos_estudio:
             try:
-                estudio_models.TipoEstudio.objects.get(nombre=te)
-            except estudio_models.TipoEstudio.DoesNotExist as e:
+                estudio_models.TiposDeEstudio.objects.get(nombre=te)
+            except estudio_models.TiposDeEstudio.DoesNotExist as e:
                 logging.debug(f'agregando tipo de estudio {te}')
-                t = estudio_models.TipoEstudio(nombre=te)
+                t = estudio_models.TiposDeEstudio(nombre=te)
                 t.save()
 
 
@@ -407,7 +407,12 @@ class InitSite(APIView):
         mm = persona_models.Persona(nombre='Medi', apellido='Cote', dni='2212211', email='m@hotmail.com', telefono='221-1112233', fecha_nacimiento='1995-06-02')
         mm.save()
 
+        tipoe = estudio_models.TiposDeEstudio.objects.all().first()
         diagnostico = estudio_models.Diagnostico.objects.all().first()
-        estudio_models.Estudio(persona=p1, medico_derivante=mm, presupuesto=100.2, diagnostico=diagnostico).save()
+        estudio = estudio_models.Estudio(paciente=p1,  tipo=tipoe, medico_derivante=mm, diagnostico=diagnostico)
+        estudio.save()
+        
+        estadoEstudio = estudio_models.EsperandoPresupuesto(estudio, {'presupuesto': 103.4})
+        estadoEstudio.save()
 
         return Response({'status':'sistema inicializado'})
