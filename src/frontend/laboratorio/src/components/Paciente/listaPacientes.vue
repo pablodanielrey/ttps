@@ -26,33 +26,10 @@
       @filtered="onFiltered"
     >
       <template v-slot:cell(acciones)="row">
-        <b-button title="Cambiar estado" variant="outline-success">
+        <b-button title="Editar paciente" variant="outline-success"  @click="editarPaciente(row.item)">
           <b-icon icon="arrow-clockwise" aria-hidden="true"></b-icon
         ></b-button>
 
-        <b-button
-          title="Descargar factura"
-          variant="outline-primary"      
-        >
-          <b-icon icon="arrow-down-circle" aria-hidden="true"></b-icon
-        ></b-button>
-
-        <b-button
-          v-if="row.item.estado == 'Enviar consentimiento informado'"
-          title="Descargar consentimiento"
-          variant="outline-primary"
-        >
-          <b-icon icon="arrow-down-circle" aria-hidden="true"></b-icon
-        ></b-button>
-        <b-button
-          v-if="
-            row.item.estado == 'Esperando seleccion de turno para la extraccion'
-          "
-          title="Seleccionar turno"
-          variant="outline-info"
-        >
-          <b-icon icon="calendar2-check" aria-hidden="true"></b-icon
-        ></b-button>
       </template>
     </b-table>
 
@@ -110,7 +87,7 @@ export default {
 
 
   created() {
-     
+     console.log(this.paciente)
   },
   methods: {
    async obtenerPacientes() {
@@ -127,6 +104,10 @@ export default {
       this.totalRows = filteredItems.length;
       this.currentPage = 1;
     },
+    editarPaciente(paciente){
+      console.log(paciente)
+      this.$router.push({ name: 'paciente', params: { paciente:paciente} })
+    }
   },
   mounted() {
     axios

@@ -1,5 +1,13 @@
 <template>
   <b-container>
+    <div v-if="loading">
+      <b-spinner      
+      
+      >
+      </b-spinner>
+      
+    </div>
+    <div v-else>
     <b-row class="pb-2">
       <b-col class="text-center pt-3">
         <p class="h3 text-center"><strong> Crear un nuevo paciente</strong></p>
@@ -121,7 +129,7 @@
               </ValidationProvider>
             </b-form-group>
           </b-col>
-          <b-col lg="2" md="2">
+          <b-col lg="4" md="4">
             <b-form-group
               id="telefono-label"
               label="Telefono:"
@@ -179,7 +187,7 @@
             <b-form-group id="os-label" label="Obra Social:" label-for="os">
               <ValidationProvider :name="'os '" v-slot="{ errors, valid }">
                 <b-form-select
-                  :options="obras_sociales"
+                  :options="getObrasSociales"
                   v-model="paciente.obra_social"
                   :state="errors[0] ? false : valid ? true : null"
                 ></b-form-select>
@@ -252,7 +260,9 @@
         </b-button>
       </b-col>
     </b-row>
+    </div> 
   </b-container>
+ 
 </template>
 
 
@@ -268,22 +278,37 @@ export default {
     VueEditor,
   },
 
-  props: {},
+  props: {
+    paciente:{
+      type:Object,
+       default: function () {
+        return   {
+          nombre: '',
+          apellido: '',
+          dni:null,
+          obra_social:null
+      }
+      }
+    }
+  },
+  created(){
+    console.log(this.paciente)
+  },
   data() {
     return {
       alerts: [],
-      paciente: {},
+     loading:true,
       obras_sociales: []
     };
   },
+ 
   methods: {
     async crearPaciente() {
       try {
           let result = await this.$refs.detailsPaciente.validate();
-          console.log(result)
-          console.log(this.paciente)
+            console.log(result)
           let r = await PacientesService.crearPaciente(this.paciente)
-          console.log(r)
+         console.log(r)
       } catch (err) {
           console.log(err)
       }
@@ -291,20 +316,8 @@ export default {
     },
     async obtenerObrasSociales(){
       try {
-        const response = await ObrasSocialesService.obtenerObrasSociales();
-        console.log(response)
-        this.obras_sociales = response.data.map((e) => ({
-          value: e.id,
-          text: e.nombre,
-        }))
-        this.obras_sociales.push({
-          value: { email: null },
-          text: "-Seleccione el usuario o empresa-",
-          disabled: true,
-        })
-
-        console.log('formateo de las obras sociales finalizado')
-        console.log(this.obras_sociales)
+        const response = await ObrasSocialesService.obtenerObrasSociales();       
+        this.obras_sociales = response.data   
 
       } catch (err) {
         console.log(err)
@@ -314,17 +327,28 @@ export default {
   computed: {
     usuario: function () {
       return LoginService.getApiToken().usuario;
+    },
+    getObrasSociales(){
+        let obras_sociales= this.obras_sociales.map((e) => ({
+          value: e.id,
+          text: e.nombre,
+        }))
+        obras_sociales.push({
+          value:  null ,
+          text: "-Seleccione la obra social -",
+          disabled: true,
+        })
+        return obras_sociales
     }
   },
 
   mounted() {
     axios
       .all([
-        this.obtenerObrasSociales(),
-      
+        this.obtenerObrasSociales(),      
       ])
       .then(() => {
-
+        this.loading=false
         })
       .catch((err) => {
         console.log(err);
