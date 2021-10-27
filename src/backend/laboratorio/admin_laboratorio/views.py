@@ -409,6 +409,10 @@ class InitSite(APIView):
 
         tipoe = estudio_models.TiposDeEstudio.objects.all().first()
         diagnostico = estudio_models.Diagnostico.objects.all().first()
-        estudio_models.Estudio(paciente=p1,  tipo=tipoe, medico_derivante=mm, presupuesto=100.2, diagnostico=diagnostico).save()
+        estudio = estudio_models.Estudio(paciente=p1,  tipo=tipoe, medico_derivante=mm, diagnostico=diagnostico)
+        estudio.save()
+        
+        estadoEstudio = estudio_models.EsperandoPresupuesto(estudio, {'presupuesto': 103.4})
+        estadoEstudio.save()
 
         return Response({'status':'sistema inicializado'})
