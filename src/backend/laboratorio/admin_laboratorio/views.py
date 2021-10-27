@@ -50,12 +50,12 @@ def generar_estudio_de_muestra():
     estudio_models.EsperandoTomaDeMuestra(persona=empleado, estudio=estudio, expirado=True).save()
     
     estudio_models.EsperandoSeleccionDeTurnoParaExtraccion(persona=empleado, estudio=estudio, turno=datetime.datetime.utcnow()).save()
-    estudio_models.EsperandoTomaDeMuestra(persona=empleado, estudio=estudio, fecha_de_muestra=datetime.datetime.utcnow(), mililitros=145, freezer=10, expirado=False).save()
+    estudio_models.EsperandoTomaDeMuestra(persona=empleado, estudio=estudio, fecha_muestra=datetime.datetime.utcnow(), mililitros=145, freezer=10, expirado=False).save()
     estudio_models.EsperandoRetiroDeExtaccion(persona=empleado, estudio=estudio, extracionista='pepe se la lleva a la muestra', fecha_retiro=datetime.datetime.utcnow()).save()
     
-    estudio_models.EsperandoLotaDeMuestraParaProcesamientoBiotecnologico(persona=empleado, estudio=estudio,numero_de_lote='2ef').save()
+    estudio_models.EsperandoLotaDeMuestraParaProcesamientoBiotecnologico(persona=empleado, estudio=estudio,numero_lote='2ef').save()
     estudio_models.EsperandoInterpretacionDeResultados(persona=empleado, estudio=estudio, resultado_url='https://www.google.com/informe.pdf', fecha_informe=datetime.datetime.utcnow(), medico_informante=mm, informe='estas recontra bien. andate de vacaciones').save()
-    estudio_models.EsperandoEntregaAMedicoDerivante(persona=empleado, estudio=estudio, fecha_de_entrega=datetime.datetime.utcnow()).save()
+    estudio_models.EsperandoEntregaAMedicoDerivante(persona=empleado, estudio=estudio, fecha_entrega=datetime.datetime.utcnow()).save()
 
 
 class InitSite(APIView):

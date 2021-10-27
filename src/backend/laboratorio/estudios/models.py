@@ -134,3 +134,7 @@ class EstadosEstudio(models.Model):
     
 
 """
+
+"""
+    SELECCION DE TURNOS
+"""
