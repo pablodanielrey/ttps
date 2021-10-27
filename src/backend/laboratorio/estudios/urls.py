@@ -11,7 +11,7 @@ router.register('diagnosticos', views.VistaDiagnostico)
 router.register('estudios', views.VistaEstudios)
 router.register('estadoEstudio', views.VistaEstadoEstudio)
 
-router.register('presupuestoEstudio', views.VistaPresupuestoEstudio)
+#router.register('presupuestoEstudio', views.VistaPresupuestoEstudio)
 
 
 urlpatterns = router.urls

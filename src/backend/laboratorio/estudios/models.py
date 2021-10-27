@@ -23,17 +23,28 @@ class Estudio(models.Model):
     fecha_alta = models.DateField(default=datetime.date.today)
 
 
-class EstadoEstudio(models.Model):
+
+
+from polymorphic.models import PolymorphicModel
+
+class EstadoEstudio(PolymorphicModel):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     estudio = models.ForeignKey(Estudio, on_delete=models.CASCADE, related_name='estados')
-    nombre = models.CharField(max_length=1024)
     fecha = models.DateTimeField(auto_now=True)
 
+class EsperandoPresupuesto(EstadoEstudio):
+    presupuesto = models.FloatField()
+
+
+class EsperandoFactura(EstadoEstudio):
+    fecha_factura = models.DateField(auto_now=True)
+    numero = models.CharField(max_length=255)
+    monto = models.FloatField()
+    obra_social = models.ForeignKey(ObraSocial, on_delete=models.CASCADE, null=True)
 
 
 
-
-
+"""
 class PresupuestoEstudio(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     estado = models.ForeignKey(EstadoEstudio, on_delete=models.CASCADE)
@@ -51,7 +62,7 @@ class EsperandoPresupuesto:
         pe = PresupuestoEstudio(estado=ee, presupuesto=self.presupuesto)
         pe.save()
 
-
+"""
 
 
 class EstadoEsperandoFactura:

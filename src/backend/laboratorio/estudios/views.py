@@ -13,7 +13,7 @@ from rest_framework import serializers, viewsets
 from rest_framework.response import Response
 
 
-from personas.views import SerializadorDePersona
+from personas.views import SerializadorDeObraSocial, SerializadorDePersona
 
 class SerializadorTiposDeEstudio(serializers.HyperlinkedModelSerializer):
     class Meta:
@@ -40,17 +40,42 @@ class VistaDiagnostico(viewsets.ModelViewSet):
     //////////// ESTADO DE ESTUDIOS ///////////////////
 """
 
+from rest_polymorphic.serializers import PolymorphicSerializer
 
-class SerializadorEstadoEstudio(serializers.HyperlinkedModelSerializer):
+
+class SerializadorEstadoEstudio(serializers.ModelSerializer):
     class Meta:
         model = models.EstadoEstudio
-        fields = ['id','nombre','fecha','estudio']
+        fields = ['id','fecha']
+
+class SerializadorEsperandoPresupuesto(serializers.ModelSerializer):
+    class Meta:
+        model = models.EsperandoPresupuesto
+        fields = ['id','fecha','presupuesto']
+
+
+class SerializadorEsperandoFactura(serializers.ModelSerializer):
+
+    obra_social = SerializadorDeObraSocial()
+    class Meta:
+        model = models.EsperandoFactura
+        fields = ['id','fecha','numero','fecha_factura','monto','obra_social']
+
+
+
+class SerializadorEstadoEstudioPolimorfico(PolymorphicSerializer):
+    model_serializer_mapping = {
+        models.EstadoEstudio: SerializadorEstadoEstudio,
+        models.EsperandoPresupuesto: SerializadorEsperandoPresupuesto,
+        models.EsperandoFactura: SerializadorEsperandoFactura
+    }
 
 class VistaEstadoEstudio(viewsets.ModelViewSet):
     queryset = models.EstadoEstudio.objects.all()
-    serializer_class = SerializadorEstadoEstudio
+    serializer_class = SerializadorEstadoEstudioPolimorfico
 
 
+"""
 
 class SerializadorPresupuestoEstudio(serializers.HyperlinkedModelSerializer):
 
@@ -63,6 +88,7 @@ class VistaPresupuestoEstudio(viewsets.ModelViewSet):
     queryset = models.PresupuestoEstudio.objects.all()
     serializer_class = SerializadorPresupuestoEstudio
 
+"""
 
 """
     ///////////////////////////////////////////////
@@ -72,9 +98,9 @@ class SerializadorEstudios(serializers.HyperlinkedModelSerializer):
 
     #persona = SerializadorDePersona()
     #medico_derivante = SerializadorDePersona()
-    #tipo = SerializadorTiposDeEstudio()
-    #diagnostico = SerializadorDiagnostico()
-    estados = SerializadorEstadoEstudio(many=True)
+    tipo = SerializadorTiposDeEstudio()
+    diagnostico = SerializadorDiagnostico()
+    estados = SerializadorEstadoEstudioPolimorfico(many=True)
 
     class Meta:
         model = models.Estudio
