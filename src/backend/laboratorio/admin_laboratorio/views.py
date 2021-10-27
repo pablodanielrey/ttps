@@ -412,7 +412,18 @@ class InitSite(APIView):
         estudio = estudio_models.Estudio(paciente=p1,  tipo=tipoe, medico_derivante=mm, diagnostico=diagnostico)
         estudio.save()
         
-        estadoEstudio = estudio_models.EsperandoPresupuesto(estudio, {'presupuesto': 103.4})
+        estadoEstudio = estudio_models.EsperandoPresupuesto(estudio=estudio,presupuesto=103.4)
         estadoEstudio.save()
 
+        e2 = estudio_models.EsperandoFactura(estudio=estudio, monto=102.2, numero='12dm3391nd32d')
+        e2.save()
+
+        ob_social = persona_models.ObraSocial.objects.all().first()
+        e4 = estudio_models.EsperandoFactura(estudio=estudio, monto=112, numero='12391nd32d', obra_social=ob_social)
+        e4.save()
+
+        """
+        estadoEstudio = estudio_models.EsperandoPresupuesto(estudio, {'presupuesto': 103.4})
+        estadoEstudio.save()
+        """
         return Response({'status':'sistema inicializado'})
