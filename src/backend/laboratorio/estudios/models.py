@@ -43,6 +43,9 @@ class EsperandoFactura(EstadoEstudio):
     obra_social = models.ForeignKey(ObraSocial, on_delete=models.CASCADE, null=True)
 
 
+class EsperandoComprobanteDePago(EstadoEstudio):
+    comprobante = models.BinaryField()
+
 
 """
 class PresupuestoEstudio(models.Model):
