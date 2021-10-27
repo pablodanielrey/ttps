@@ -87,7 +87,7 @@ export default {
 
 
   created() {
-     console.log(this.paciente)
+ 
   },
   methods: {
    async obtenerPacientes() {

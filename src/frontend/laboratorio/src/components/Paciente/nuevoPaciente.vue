@@ -1,8 +1,7 @@
 <template>
   <b-container>
     <div v-if="loading">
-      <b-spinner      
-      
+      <b-spinner   
       >
       </b-spinner>
       

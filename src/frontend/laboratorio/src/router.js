@@ -13,7 +13,7 @@ import NuevaObraSocial from '@/components/ObraSocial/nuevaObraSocial.vue'
 
 const routes = [
     { path: '/login', component: Login },
-    { path: '/paciente', component: Paciente,  name:'paciente'},
+    { path: '/paciente', component: Paciente,  name:'paciente' } ,
     { path: '/lista', component: ListaPacientes },
     { path: '/obraSocial', component: NuevaObraSocial },
    
