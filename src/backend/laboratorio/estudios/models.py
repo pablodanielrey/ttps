@@ -3,6 +3,8 @@ from django.db import models
 import uuid
 import datetime
 
+from django.db.models.fields import related
+
 from personas.models import Persona, ObraSocial
 
 class Diagnostico(models.Model):
@@ -31,6 +33,7 @@ class EstadoEstudio(PolymorphicModel):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     estudio = models.ForeignKey(Estudio, on_delete=models.CASCADE, related_name='estados')
     fecha = models.DateTimeField(auto_now=True)
+    persona = models.ForeignKey(Persona, on_delete=models.CASCADE)
 
 class EsperandoPresupuesto(EstadoEstudio):
     presupuesto = models.FloatField()
@@ -42,9 +45,33 @@ class EsperandoFactura(EstadoEstudio):
     monto = models.FloatField()
     obra_social = models.ForeignKey(ObraSocial, on_delete=models.CASCADE, null=True)
 
-
 class EsperandoComprobanteDePago(EstadoEstudio):
-    comprobante = models.BinaryField()
+    comprobante = models.TextField(null=True)
+
+class AnuladorPorFaltaDePago(EstadoEstudio):
+    fecha_procesado = models.DateTimeField(auto_now=True)
+
+class EsperandoConsentimientoInformado(EstadoEstudio):
+    consentimiento = models.TextField(null=True)
+
+class EsperandoSelecciónDeTurnoParaExtracción(EstadoEstudio):
+    turno = models.DateTimeField(null=True)
+
+class EsperandoTomaDeMuestra(EstadoEstudio):
+    fecha_de_muestra = models.DateTimeField(null=True)
+    mililitros = models.IntegerField(null=True)
+    freezer = models.IntegerField(null=True)
+    expirado = models.BooleanField(default=False)
+
+class EsperandoRetiroDeExtaccion(EstadoEstudio):
+    extaccionista = models.CharField(max_length=1024, null=True)
+    fecha_retiro = models.DateTimeField(null=True)
+
+class EsperandoLotaDeMuestraParaProcesamientoBiotecnologico(EstadoEstudio):
+    numero_de_lote = models.CharField(max_length=500, null=True)
+
+
+
 
 
 """
