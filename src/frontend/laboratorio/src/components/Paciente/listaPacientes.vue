@@ -29,6 +29,7 @@
         <b-button title="Editar paciente" variant="outline-success"  @click="editarPaciente(row.item)">
           <b-icon icon="arrow-clockwise" aria-hidden="true"></b-icon
         ></b-button>
+        
 
       </template>
     </b-table>
@@ -94,7 +95,7 @@ export default {
      try {
        let response = await PacientesService.obtenerPacientes()
       this.items = response.data
-      console.log(response)
+      
      } catch (err) {
         console.log(err)
      }
@@ -106,7 +107,7 @@ export default {
     },
     editarPaciente(paciente){
       console.log(paciente)
-      this.$router.push({ name: 'paciente', params: { paciente:paciente} })
+      this.$router.push({ name: 'paciente', params: { paciente:paciente,editar:true} })
     }
   },
   mounted() {

@@ -141,7 +141,7 @@
                 v-slot="{ errors, valid }"
               >
                 <b-form-input
-                  type="number"
+                  
                   placeholder="Telefono"
                   v-model="paciente.telefono"
                   :state="errors[0] ? false : valid ? true : null"
@@ -200,6 +200,7 @@
               </ValidationProvider>
             </b-form-group>
           </b-col>
+     
 
           <b-col lg="3" md="3">
             <b-form-group
@@ -255,8 +256,11 @@
 
     <b-row class="pb-2">
       <b-col class="text-center pt-3">
-        <b-button variant="success" @click="crearPaciente()"
+        <b-button v-if="!this.editar"  variant="success" @click="crearPaciente()"
           >Crear Paciente
+        </b-button>
+         <b-button v-if="this.editar" variant="success" @click="editarPaciente()"
+          >Editar Paciente
         </b-button>
       </b-col>
     </b-row>
@@ -286,9 +290,17 @@ export default {
           nombre: '',
           apellido: '',
           dni:null,
-          obra_social:null
+          obra_social:null,     
+          email: null,
+          fecha_nacimiento:null,
+          historia_clinica: null,
+          telefono: null,
       }
       }
+    },
+    editar:{
+      type:Boolean,
+      return:false
     }
   },
   created(){
@@ -303,7 +315,11 @@ export default {
   },
  
   methods: {
+    async editarPaciente(){
+      console.log("edit")
+    },
     async crearPaciente() {
+      
       try {
           let result = await this.$refs.detailsPaciente.validate();
             console.log(result)

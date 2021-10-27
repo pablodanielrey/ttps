@@ -15,6 +15,7 @@
     "vee-validate": "^2.2.15",
     "vue": "^2.6.11",
     "vue-router": "^3.5.2",
+    "vue-select": "^3.16.0",
     "vue2-editor": "^2.10.3"
   },
   "devDependencies": {
