@@ -6,7 +6,7 @@ from . import views
 
 
 router = routers.DefaultRouter()
-router.register('tiposEstudio', views.VistaTipoEstudio)
+router.register('tiposEstudio', views.VistaTiposDeEstudio)
 router.register('diagnosticos', views.VistaDiagnostico)
 router.register('estudios', views.VistaEstudios)
 

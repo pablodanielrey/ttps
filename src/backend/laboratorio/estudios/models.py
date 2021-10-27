@@ -9,14 +9,15 @@ class Diagnostico(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     nombre = models.CharField(max_length=1024)
 
-class TipoEstudio(models.Model):
+class TiposDeEstudio(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     nombre = models.CharField(max_length=1024)
     consentimiento = models.CharField(max_length=9216, null=True)
 
 class Estudio(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    persona = models.ForeignKey(Persona, on_delete=models.CASCADE, related_name='estudios')
+    tipo = models.ForeignKey(TiposDeEstudio, on_delete=models.CASCADE)
+    paciente = models.ForeignKey(Persona, on_delete=models.CASCADE, related_name='estudios')
     medico_derivante = models.ForeignKey(Persona, on_delete=models.CASCADE, related_name='estudios_derivados')
     diagnostico = models.ForeignKey(Diagnostico, on_delete=models.CASCADE, related_name='estudios')
     fecha_alta = models.DateField(default=datetime.date.today)
