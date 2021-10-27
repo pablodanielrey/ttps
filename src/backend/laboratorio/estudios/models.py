@@ -27,6 +27,11 @@ class EstadoEstudio(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     estudio = models.ForeignKey(Estudio, on_delete=models.CASCADE, related_name='estados')
     nombre = models.CharField(max_length=1024)
+    fecha = models.DateTimeField(auto_now=True)
+
+
+
+
 
 
 class PresupuestoEstudio(models.Model):

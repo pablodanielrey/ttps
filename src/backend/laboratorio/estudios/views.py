@@ -44,7 +44,7 @@ class VistaDiagnostico(viewsets.ModelViewSet):
 class SerializadorEstadoEstudio(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = models.EstadoEstudio
-        fields = ['id','nombre','estudio']
+        fields = ['id','nombre','fecha','estudio']
 
 class VistaEstadoEstudio(viewsets.ModelViewSet):
     queryset = models.EstadoEstudio.objects.all()
