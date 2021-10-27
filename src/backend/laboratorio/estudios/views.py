@@ -61,13 +61,68 @@ class SerializadorEsperandoFactura(serializers.ModelSerializer):
         model = models.EsperandoFactura
         fields = ['id','fecha','numero','fecha_factura','monto','obra_social']
 
+class SerializadorEsperandoComprobanteDePago(serializers.ModelSerializer):
+    class Meta:
+        model = models.EsperandoComprobanteDePago
+        fields = ['id','fecha','comprobante']
+
+class SerializadorAnuladorPorFaltaDePago(serializers.ModelSerializer):
+    class Meta:
+        model = models.AnuladorPorFaltaDePago
+        fields = ['id','fecha','fecha_procesado']
+
+
+class SerializadorEsperandoConsentimientoInformado(serializers.ModelSerializer):
+    class Meta:
+        model = models.EsperandoConsentimientoInformado
+        fields = ['id','fecha','consentimiento']
+
+class SerializadorEsperandoSeleccionDeTurnoParaExtraccion(serializers.ModelSerializer):
+    class Meta:
+        model = models.EsperandoSeleccionDeTurnoParaExtraccion
+        fields = ['id','fecha','turno']
+
+class SerializadorEsperandoTomaDeMuestra(serializers.ModelSerializer):
+    class Meta:
+        model = models.EsperandoTomaDeMuestra
+        fields = ['id','fecha','fecha_muestra','mililitros','freezer','expirado']
+
+class SerializadorEsperandoRetiroDeExtaccion(serializers.ModelSerializer):
+    class Meta:
+        model = models.EsperandoRetiroDeExtaccion
+        fields = ['id','fecha','extracionista','fecha_retiro']
+
+class SerializadorEsperandoLotaDeMuestraParaProcesamientoBiotecnologico(serializers.ModelSerializer):
+    class Meta:
+        model = models.EsperandoLotaDeMuestraParaProcesamientoBiotecnologico
+        fields = ['id','fecha','numero_lote']
+
+class SerializadorEsperandoInterpretacionDeResultados(serializers.ModelSerializer):
+    class Meta:
+        model = models.EsperandoInterpretacionDeResultados
+        fields = ['id','fecha','resultado_url','fecha_informe','medico_informante','informe']
+
+class SerializadorEsperandoEntregaAMedicoDerivante(serializers.ModelSerializer):
+    class Meta:
+        model = models.EsperandoEntregaAMedicoDerivante
+        fields = ['id','fecha','fecha_entrega']
+
 
 
 class SerializadorEstadoEstudioPolimorfico(PolymorphicSerializer):
     model_serializer_mapping = {
         models.EstadoEstudio: SerializadorEstadoEstudio,
         models.EsperandoPresupuesto: SerializadorEsperandoPresupuesto,
-        models.EsperandoFactura: SerializadorEsperandoFactura
+        models.EsperandoFactura: SerializadorEsperandoFactura,
+        models.EsperandoComprobanteDePago: SerializadorEsperandoComprobanteDePago,
+        models.AnuladorPorFaltaDePago: SerializadorAnuladorPorFaltaDePago,
+        models.EsperandoConsentimientoInformado: SerializadorEsperandoConsentimientoInformado,
+        models.EsperandoSeleccionDeTurnoParaExtraccion: SerializadorEsperandoSeleccionDeTurnoParaExtraccion,
+        models.EsperandoTomaDeMuestra: SerializadorEsperandoTomaDeMuestra,
+        models.EsperandoRetiroDeExtaccion: SerializadorEsperandoRetiroDeExtaccion,
+        models.EsperandoLotaDeMuestraParaProcesamientoBiotecnologico: SerializadorEsperandoLotaDeMuestraParaProcesamientoBiotecnologico,
+        models.EsperandoInterpretacionDeResultados: SerializadorEsperandoInterpretacionDeResultados,
+        models.EsperandoEntregaAMedicoDerivante: SerializadorEsperandoEntregaAMedicoDerivante
     }
 
 class VistaEstadoEstudio(viewsets.ModelViewSet):

@@ -33,7 +33,7 @@ class EstadoEstudio(PolymorphicModel):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     estudio = models.ForeignKey(Estudio, on_delete=models.CASCADE, related_name='estados')
     fecha = models.DateTimeField(auto_now=True)
-    persona = models.ForeignKey(Persona, on_delete=models.CASCADE)
+    persona = models.ForeignKey(Persona, on_delete=models.CASCADE, null=True)
 
 class EsperandoPresupuesto(EstadoEstudio):
     presupuesto = models.FloatField()
@@ -54,21 +54,21 @@ class AnuladorPorFaltaDePago(EstadoEstudio):
 class EsperandoConsentimientoInformado(EstadoEstudio):
     consentimiento = models.TextField(null=True)
 
-class EsperandoSelecciónDeTurnoParaExtracción(EstadoEstudio):
+class EsperandoSeleccionDeTurnoParaExtraccion(EstadoEstudio):
     turno = models.DateTimeField(null=True)
 
 class EsperandoTomaDeMuestra(EstadoEstudio):
-    fecha_de_muestra = models.DateTimeField(null=True)
+    fecha_muestra = models.DateTimeField(null=True)
     mililitros = models.IntegerField(null=True)
-    freezer = models.IntegerField(null=True)
+    freezer = models.CharField(max_length=500,null=True)
     expirado = models.BooleanField(default=False)
 
 class EsperandoRetiroDeExtaccion(EstadoEstudio):
-    extaccionista = models.CharField(max_length=1024, null=True)
+    extracionista = models.CharField(max_length=1024, null=True)
     fecha_retiro = models.DateTimeField(null=True)
 
 class EsperandoLotaDeMuestraParaProcesamientoBiotecnologico(EstadoEstudio):
-    numero_de_lote = models.CharField(max_length=500, null=True)
+    numero_lote = models.CharField(max_length=500, null=True)
 
 class EsperandoInterpretacionDeResultados(EstadoEstudio):
     resultado_url = models.URLField()
@@ -78,7 +78,7 @@ class EsperandoInterpretacionDeResultados(EstadoEstudio):
    
 
 class EsperandoEntregaAMedicoDerivante(EstadoEstudio):
-    fecha_de_entrega = models.DateTimeField(null=True)
+    fecha_entrega = models.DateTimeField(null=True)
 
 
 
