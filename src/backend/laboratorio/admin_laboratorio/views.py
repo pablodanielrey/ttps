@@ -6,19 +6,52 @@ from rest_framework import authentication, permissions
 
 import logging
 import datetime
+from zoneinfo import ZoneInfo
 
 from estudios import models as estudio_models
 from personas import models as persona_models
 
 def generar_turnos():
- 
+
+    estudio_models.ParametroDeTurnos.objects.all().delete()
+
     # hoy = datetime.datetime.combine(datetime.date.today(), datetime.time(0))
     # manana = datetime.timedelta(hours = 24) + hoy
 
-    if estudio_models.ParametroDeTurnos.objects.count() <= 0:
-        pt = estudio_models.ParametroDeTurnos()
+
+    hoy = datetime.datetime.combine(datetime.date.today(), datetime.time(0)).replace(tzinfo=ZoneInfo('America/Argentina/Buenos_Aires'))
+    hace_una_semana = hoy - datetime.timedelta(days=7)
+    en_una_semana = hoy + datetime.timedelta(days=7)
+
+    rangos_de_prueba = [
+        {
+            'fecha': hoy,
+            'frecuencia': 10,
+            'rangos': [(7,12),(13,19)]
+        },
+        {
+            'fecha': hace_una_semana,
+            'frecuencia': 5,
+            'rangos': [(9,13)]
+        },
+        {
+            'fecha': en_una_semana,
+            'frecuencia': 65,
+            'rangos': [(9,12),(14,18)]
+        }
+    ]
+
+
+    for r in rangos_de_prueba:
+        fecha_valido = r['fecha']
+        frecuencia = r['frecuencia']
+        logging.debug(f'generando rango a partir de : {fecha_valido} con la frecuencia: {frecuencia}')
+        pt = estudio_models.ParametroDeTurnos(fecha_valido=fecha_valido, frecuencia=frecuencia)
         pt.save()
-        estudio_models.RangoDeTurnos(parametros=pt).save()
+        for rinicio, rfin in r['rangos']:
+            r = estudio_models.RangoDeTurnos(parametros=pt, hora_inicio=rinicio, hora_fin=rfin)
+            r.save()
+
 
 
 def generar_estudio_de_muestra():
@@ -40,8 +73,8 @@ def generar_estudio_de_muestra():
     estudio.save()
 
     estudio_models.EsperandoPresupuesto(persona=empleado, estudio=estudio, presupuesto=10.3).save()
-    estudio_models.EsperandoFactura(persona=empleado, estudio=estudio, numero='dsaasd324324', monto=10.5).save()
-    estudio_models.EsperandoFactura(persona=empleado, estudio=estudio, numero='dsaasd324325', monto=11.5, obra_social=ob_social).save()
+    #estudio_models.EsperandoFactura(persona=empleado, estudio=estudio, numero='dsaasd324324', monto=10.5).save()
+    #estudio_models.EsperandoFactura(persona=empleado, estudio=estudio, numero='dsaasd324325', monto=11.5, obra_social=ob_social).save()
     estudio_models.EsperandoComprobanteDePago(persona=empleado, estudio=estudio, comprobante='base64-del-comprobante').save()
     estudio_models.AnuladorPorFaltaDePago(persona=empleado, estudio=estudio).save()
 
@@ -52,7 +85,7 @@ def generar_estudio_de_muestra():
     estudio.save()
 
     estudio_models.EsperandoPresupuesto(persona=empleado, estudio=estudio, presupuesto=10.3).save()
-    estudio_models.EsperandoFactura(persona=empleado, estudio=estudio, numero='dsaasd324325', monto=11.5, obra_social=ob_social).save()
+    #estudio_models.EsperandoFactura(persona=empleado, estudio=estudio, numero='dsaasd324325', monto=11.5, obra_social=ob_social).save()
     estudio_models.EsperandoComprobanteDePago(persona=empleado, estudio=estudio, comprobante='base64-del-comprobante').save()
     estudio_models.EsperandoConsentimientoInformado(persona=empleado, estudio=estudio, consentimiento='base64-del-consntimiento').save()
 

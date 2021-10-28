@@ -189,6 +189,14 @@ class VistaEstudios(viewsets.ModelViewSet):
         return Response(serializer.data)
 
 
+
+"""
+    Turnos
+"""
+
+
+
+
 class SerializadorRangoTurnos(serializers.ModelSerializer):
     class Meta:
         model = models.RangoDeTurnos
@@ -214,8 +222,8 @@ class VistaListaTurnos(viewsets.ViewSet):
 
     def list(self, request, *args, **kwargs):
 
-        inicio = datetime.datetime.utcnow().replace(tzinfo=ZoneInfo("America/Argentina/Buenos_Aires"))
-        fin = datetime.timedelta(days=4) + inicio
+        inicio = datetime.datetime.utcnow().replace(tzinfo=ZoneInfo("America/Argentina/Buenos_Aires"))  - datetime.timedelta(days=10)
+        fin = inicio + datetime.timedelta(days=20)
 
         logging.debug(f'buscando turnos entre {inicio} y {fin}')
 
