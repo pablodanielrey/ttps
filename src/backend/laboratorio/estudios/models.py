@@ -138,3 +138,23 @@ class EstadosEstudio(models.Model):
 """
     SELECCION DE TURNOS
 """
+
+
+class ParametroDeTurnos(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    fecha_valido = models.DateTimeField(auto_now=True)
+    frecuencia = models.IntegerField(default=15)
+
+class RangoDeTurnos(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    parametros = models.ForeignKey(ParametroDeTurnos, on_delete=models.CASCADE, related_name='rangos')
+    hora_inicio = models.IntegerField(default=9)
+    hora_fin = models.IntegerField(default=13)
+
+class ModeloTurnos:
+
+    def obtener_turnos(desde:datetime.datetime, hasta:datetime.datetime):
+        """ 
+            genera los turnos entre las fechas determinadas, a partir de los parámetros definidos dentro de la base.
+        """
+        

@@ -10,6 +10,16 @@ import datetime
 from estudios import models as estudio_models
 from personas import models as persona_models
 
+def generar_turnos():
+ 
+    # hoy = datetime.datetime.combine(datetime.date.today(), datetime.time(0))
+    # manana = datetime.timedelta(hours = 24) + hoy
+
+    if estudio_models.ParametroDeTurnos.objects.count() <= 0:
+        pt = estudio_models.ParametroDeTurnos()
+        pt.save()
+        estudio_models.RangoDeTurnos(parametros=pt).save()
+
 
 def generar_estudio_de_muestra():
 
@@ -455,6 +465,7 @@ class InitSite(APIView):
         mm = persona_models.Persona(nombre='Medi', apellido='Cote', dni='2212211', email='m@hotmail.com', telefono='221-1112233', fecha_nacimiento='1995-06-02')
         mm.save()
 
+        generar_turnos()
 
         generar_estudio_de_muestra()
 

@@ -13,5 +13,6 @@ router.register('estadoEstudio', views.VistaEstadoEstudio)
 
 #router.register('presupuestoEstudio', views.VistaPresupuestoEstudio)
 
+router.register('parametroTurnos', views.VistaPrametroTurnos)
 
 urlpatterns = router.urls

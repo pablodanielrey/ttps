@@ -185,3 +185,21 @@ class VistaEstudios(viewsets.ModelViewSet):
 
         serializer = SerializadorEstudios(estudio, context={'request': request})
         return Response(serializer.data)
+
+
+class SerializadorRangoTurnos(serializers.ModelSerializer):
+    class Meta:
+        model = models.RangoDeTurnos
+        fields = ['id', 'hora_inicio', 'hora_fin']
+
+class SerializadorParametroTurnos(serializers.ModelSerializer):
+
+    rangos = SerializadorRangoTurnos(many=True)
+    class Meta:
+        model = models.ParametroDeTurnos
+        fields = ['id','fecha_valido','frecuencia','rangos']
+
+
+class VistaPrametroTurnos(viewsets.ModelViewSet):
+    queryset = models.ParametroDeTurnos.objects.all()
+    serializer_class = SerializadorParametroTurnos
