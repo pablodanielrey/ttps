@@ -163,35 +163,77 @@ class ModeloTurnos:
         """ 
             genera los turnos entre las fechas determinadas, a partir de los parámetros definidos dentro de la base.
         """
+        turnos = []
+
+        """ selecciono la fecha/hora inicial de todo el rango de turnos """
         inicio = ParametroDeTurnos.objects.filter(fecha_valido__lte=desde).order_by('fecha_valido').last()
         if not inicio:
             inicio = ParametroDeTurnos.objects.order_by('fecha_valido').first()
         fecha_inicial = inicio.fecha_valido
+        fecha_turnos_desde = fecha_inicial if fecha_inicial > desde else desde
+
+        turno_actual = hasta
+        un_dia = datetime.timedelta(days=1)
+
+        """ obtengo todos los parámetros definidos entre las fechas que me interesa obtener los turnos """
         parametros = ParametroDeTurnos.objects.filter(fecha_valido__gte=fecha_inicial, fecha_valido__lte=hasta).order_by('-fecha_valido').all()
-
-        zdesde = desde.replace(minute=0,second=0,microsecond=0)
-        zhasta = hasta.replace(minute=0,second=0,microsecond=0)
-
-        ddia = datetime.timedelta(days=1)
-        fecha_turno = zhasta
-        turnos = []
         for parametro in parametros:
-            fecha_valido = parametro.fecha_valido
-            while fecha_turno >= fecha_valido:
-                freq = datetime.timedelta(minutes=parametro.frecuencia)
-                rangos = parametro.rangos.order_by('-hora_inicio').all()
-                for rango in rangos:
+            frecuencia = datetime.timedelta(minutes=parametro.frecuencia)
+            rangos:RangoDeTurnos = parametro.rangos.order_by('hora_inicio').all()
+            a_partir_de = parametro.fecha_valido
+            while fecha_turnos_desde <= turno_actual and a_partir_de <= turno_actual:
+                turnos_del_dia = _generar_turnos_para_dia(turno_actual, frecuencia, rangos)
+                turnos.extend(turnos_del_dia)
+                turno_actual -= un_dia
 
-                    """ la ultima hora posible de turno es la ultima del rango - la frecuencia """
-                    hora_turno = fecha_turno.replace(hour=rango.hora_fin, minute=0, second=0, microsecond=0) - freq
-                    hora_inicio_rango = fecha_turno.replace(hour=rango.hora_inicio, minute=0, second=0, microsecond=0)
-                    
-                    """ genero todos los turnos hasta el inicio del rango """
-                    while hora_turno >= hora_inicio_rango:
-                        if hora_turno <= zdesde:
-                            return turnos
-                        turnos.append(hora_turno)
-                        hora_turno = hora_turno - freq
-                fecha_turno = fecha_turno - ddia
-                        
         return turnos
+
+
+def _generar_turnos_para_dia(fecha, frecuencia, rangos):
+    turnos = []
+    for rango in rangos:
+        hora_de_turno = fecha.replace(hour=rango.hora_inicio, minute=0, second=0, microsecond=0)
+        hora_de_fin = fecha.replace(hour=rango.hora_fin, minute=0, second=0, microsecond=0)
+        nuevo_turno = hora_de_turno + frecuencia
+        while nuevo_turno <= hora_de_fin:
+            turnos.append(hora_de_turno)
+            hora_de_turno = nuevo_turno
+            nuevo_turno += frecuencia
+    return turnos
+
+
+
+
+
+
+
+
+
+    """
+    zdesde = desde.replace(minute=0,second=0,microsecond=0)
+    zhasta = hasta.replace(minute=0,second=0,microsecond=0)
+
+    ddia = datetime.timedelta(days=1)
+    fecha_turno = zhasta
+    turnos = []
+    for parametro in parametros:
+        fecha_valido = parametro.fecha_valido
+        while fecha_turno >= fecha_valido:
+            freq = datetime.timedelta(minutes=parametro.frecuencia)
+            rangos = parametro.rangos.order_by('hora_inicio').all()
+            for rango in rangos:
+
+                hora_turno = fecha_turno.replace(hour=rango.hora_inicio, minute=0, second=0, microsecond=0)
+                hora_fin_rango = fecha_turno.replace(hour=rango.hora_fin, minute=0, second=0, microsecond=0)
+                
+                duracion_turno = hora_turno + freq
+                while duracion_turno <= hora_fin_rango:
+                    if duracion_turno <= zdesde:
+                        return turnos
+                    turnos.append(hora_turno)
+                    hora_turno = duracion_turno
+                    duracion_turno += freq
+            fecha_turno = fecha_turno - ddia
+                    
+    return turnos
+    """

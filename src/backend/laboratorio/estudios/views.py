@@ -222,8 +222,8 @@ class VistaListaTurnos(viewsets.ViewSet):
 
     def list(self, request, *args, **kwargs):
 
-        inicio = datetime.datetime.utcnow().replace(tzinfo=ZoneInfo("America/Argentina/Buenos_Aires"))  - datetime.timedelta(days=10)
-        fin = inicio + datetime.timedelta(days=20)
+        inicio = datetime.datetime.utcnow().replace(tzinfo=ZoneInfo("America/Argentina/Buenos_Aires"))
+        fin = inicio + datetime.timedelta(days=7)
 
         logging.debug(f'buscando turnos entre {inicio} y {fin}')
 
