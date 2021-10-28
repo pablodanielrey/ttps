@@ -8,7 +8,9 @@ import App from './App.vue'
 import vSelect from "vue-select";
 import "vue-select/dist/vue-select.css";
 Vue.component("v-select", vSelect);
-
+import VueCrontab from 'vue-crontab'
+ 
+Vue.use(VueCrontab)
 Vue.config.productionTip = false
 
 new Vue({

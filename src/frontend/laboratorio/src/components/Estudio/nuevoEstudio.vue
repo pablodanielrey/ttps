@@ -158,7 +158,7 @@
             </b-col>
           </b-row>
         </b-card>
-          <b-card header="Historia clinica">
+          <b-card header="Diagnostico presuntivo">
         <b-row>
           <b-col>
             <b-form-group id="historiaclinica-label" label-for="observaciones">
