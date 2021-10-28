@@ -3,13 +3,15 @@ from django.shortcuts import render
 
 
 import logging
+import datetime
+from zoneinfo import ZoneInfo
 
 from . import models
 
 """
     Las vistas de rest framework
 """
-from rest_framework import serializers, viewsets
+from rest_framework import serializers, views, viewsets
 from rest_framework.response import Response
 
 
@@ -203,3 +205,20 @@ class SerializadorParametroTurnos(serializers.ModelSerializer):
 class VistaPrametroTurnos(viewsets.ModelViewSet):
     queryset = models.ParametroDeTurnos.objects.all()
     serializer_class = SerializadorParametroTurnos
+
+
+
+class VistaListaTurnos(viewsets.ViewSet):
+
+    queryset = models.ParametroDeTurnos.objects.none()
+
+    def list(self, request, *args, **kwargs):
+
+        inicio = datetime.datetime.utcnow().replace(tzinfo=ZoneInfo("America/Argentina/Buenos_Aires"))
+        fin = datetime.timedelta(days=4) + inicio
+
+        logging.debug(f'buscando turnos entre {inicio} y {fin}')
+
+        turnos = models.ModeloTurnos().obtener_turnos(inicio,fin)
+
+        return Response(turnos)

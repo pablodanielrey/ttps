@@ -153,8 +153,31 @@ class RangoDeTurnos(models.Model):
 
 class ModeloTurnos:
 
-    def obtener_turnos(desde:datetime.datetime, hasta:datetime.datetime):
+    def obtener_turnos_hoy(self):
+        hoy = datetime.datetime.combine(datetime.date.today(), datetime.time(0))
+        manana = datetime.timedelta(hours = 24) + hoy
+        return self.obtener_turnos(hoy,manana)
+
+    def obtener_turnos(self, desde:datetime.datetime, hasta:datetime.datetime):
         """ 
             genera los turnos entre las fechas determinadas, a partir de los parámetros definidos dentro de la base.
         """
-        
+        inicio = ParametroDeTurnos.objects.filter(fecha_valido__lte=desde).order_by('fecha_valido').last()
+        fecha_inicial = inicio.fecha_valido
+        parametros = ParametroDeTurnos.objects.filter(fecha_valido__gte=fecha_inicial, fecha_valido__lte=hasta).order_by('-fecha_valido').all()
+
+        zdesde = desde.replace(minute=0,second=0,microsecond=0)
+        zhasta = hasta.replace(minute=0,second=0,microsecond=0)
+
+        hora_fin = zhasta
+        turnos = []
+        for parametro in parametros:
+            fecha_valido = parametro.fecha_valido
+            freq = datetime.timedelta(minutes=parametro.frecuencia)
+            while hora_fin >= fecha_valido:
+                turno = hora_fin - freq
+                turnos.append(turno)
+                hora_fin = turno
+            if hora_fin < zdesde:
+                break
+        return turnos
