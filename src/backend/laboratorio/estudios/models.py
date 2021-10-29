@@ -182,24 +182,24 @@ class ModeloTurnos:
             rangos:RangoDeTurnos = parametro.rangos.order_by('hora_inicio').all()
             a_partir_de = parametro.fecha_valido
             while fecha_turnos_desde <= turno_actual and a_partir_de <= turno_actual:
-                turnos_del_dia = _generar_turnos_para_dia(turno_actual, frecuencia, rangos)
+                turnos_del_dia = self._generar_turnos_para_dia(turno_actual, frecuencia, rangos)
                 turnos.extend(turnos_del_dia)
                 turno_actual -= un_dia
 
         return turnos
 
 
-def _generar_turnos_para_dia(fecha, frecuencia, rangos):
-    turnos = []
-    for rango in rangos:
-        hora_de_turno = fecha.replace(hour=rango.hora_inicio, minute=0, second=0, microsecond=0)
-        hora_de_fin = fecha.replace(hour=rango.hora_fin, minute=0, second=0, microsecond=0)
-        nuevo_turno = hora_de_turno + frecuencia
-        while nuevo_turno <= hora_de_fin:
-            turnos.append(hora_de_turno)
-            hora_de_turno = nuevo_turno
-            nuevo_turno += frecuencia
-    return turnos
+    def _generar_turnos_para_dia(self, fecha, frecuencia, rangos):
+        turnos = []
+        for rango in rangos:
+            hora_de_turno = fecha.replace(hour=rango.hora_inicio, minute=0, second=0, microsecond=0)
+            hora_de_fin = fecha.replace(hour=rango.hora_fin, minute=0, second=0, microsecond=0)
+            nuevo_turno = hora_de_turno + frecuencia
+            while nuevo_turno <= hora_de_fin:
+                turnos.append(hora_de_turno)
+                hora_de_turno = nuevo_turno
+                nuevo_turno += frecuencia
+        return turnos
 
 
 
