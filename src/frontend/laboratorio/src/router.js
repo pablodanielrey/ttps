@@ -14,7 +14,7 @@ import EsperandoFactura from '@/components/EstadosEstudio/esperandoFactura.vue'
 import EsperandoComprobantePago from '@/components/EstadosEstudio/esperandoComprobantePago.vue'
 import EnviarConsentimientoInformado from '@/components/EstadosEstudio/enviarConsentimientoInformado.vue'
 import EsperandoConsentimientoInformado from '@/components/EstadosEstudio/esperandoConsentimientoInformado.vue'
-
+import EsperandoSeleccionDeTurnoExtraccion from '@/components/EstadosEstudio/esperandoSeleccionDeTurnoExtraccion.vue'
 // lo siguiente necesita que vue tenga el compilador de templates.
 // const Foo = { template: '<div>superrr fooooo</div>' }
 
@@ -28,6 +28,7 @@ const routes = [
     { path: '/esperandoComprobantePago', component: EsperandoComprobantePago },
     { path: '/enviarConsentimientoInformado', component: EnviarConsentimientoInformado },
     { path: '/esperandoConsentimientoInformado', component: EsperandoConsentimientoInformado },
+    { path: '/esperandoSeleccionDeTurnoExtraccion', component: EsperandoSeleccionDeTurnoExtraccion },
 
 
 ]
