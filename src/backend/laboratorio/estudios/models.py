@@ -206,7 +206,7 @@ class ModeloTurnos:
                 turnos.extend(turnos_del_dia)
                 turno_actual -= un_dia
 
-        return self._completar_datos_turnos(turnos)
+        return turnos
 
     def _generar_turnos_para_dia(self, fecha, frecuencia, rangos):
         turnos = []
@@ -215,10 +215,18 @@ class ModeloTurnos:
             hora_de_fin = fecha.replace(hour=rango.hora_fin, minute=0, second=0, microsecond=0)
             nuevo_turno = hora_de_turno + frecuencia
             while nuevo_turno <= hora_de_fin:
-                turnos.append(hora_de_turno)
+                turnos.append(self._formatear_turno(hora_de_turno, nuevo_turno))
                 hora_de_turno = nuevo_turno
                 nuevo_turno += frecuencia
         return turnos
+
+    def _formatear_turno(self, hora_turno, fin_turno):
+        return {
+            'inicio': hora_turno,
+            'fin': fin_turno
+        }
+
+
 
     def _completar_datos_turnos(self, turnos):
         return [{
