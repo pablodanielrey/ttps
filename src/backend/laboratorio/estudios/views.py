@@ -195,14 +195,8 @@ class VistaEstudios(viewsets.ModelViewSet):
 """
 
 
-class SerializadorFechasSinTurno(serializers.ModelSerializer):
-    class Meta:
-        model = models.FechasSinTurno
-        fields = ['id','fecha']
 
-class VistaFechasSinTurno(viewsets.ViewSet):
-    queryset = models.FechasSinTurno.objects.all()
-    serializer_class = SerializadorFechasSinTurno
+
 
 class SerializadorRangoTurnos(serializers.ModelSerializer):
     class Meta:
@@ -217,10 +211,19 @@ class SerializadorParametroTurnos(serializers.ModelSerializer):
         fields = ['id','fecha_valido','frecuencia','rangos']
 
 
-class VistaPrametroTurnos(viewsets.ModelViewSet):
+class VistaParametroTurnos(viewsets.ModelViewSet):
     queryset = models.ParametroDeTurnos.objects.all()
     serializer_class = SerializadorParametroTurnos
 
+
+class SerializadorFechasSinTurno(serializers.ModelSerializer):
+    class Meta:
+        model = models.FechasSinTurno
+        fields = ['id','fecha']
+
+class VistaFechasSinTurno(viewsets.ViewSet):
+    queryset = models.FechasSinTurno.objects.all()
+    serializer_class = SerializadorFechasSinTurno
 
 
 class VistaListaTurnos(viewsets.ViewSet):
