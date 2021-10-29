@@ -152,6 +152,11 @@ class RangoDeTurnos(models.Model):
     hora_inicio = models.IntegerField(default=9)
     hora_fin = models.IntegerField(default=13)
 
+class FechasSinTurno(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    fecha = models.DateField()
+
+
 class ModeloTurnos:
 
     def obtener_turnos_hoy(self):
@@ -172,6 +177,8 @@ class ModeloTurnos:
         fecha_inicial = inicio.fecha_valido
         fecha_turnos_desde = fecha_inicial if fecha_inicial > desde else desde
 
+        fechas_sin_turnos = [f.fecha for f in FechasSinTurno.objects.all()]
+
         turno_actual = hasta
         un_dia = datetime.timedelta(days=1)
 
@@ -181,13 +188,25 @@ class ModeloTurnos:
             frecuencia = datetime.timedelta(minutes=parametro.frecuencia)
             rangos:RangoDeTurnos = parametro.rangos.order_by('hora_inicio').all()
             a_partir_de = parametro.fecha_valido
+
+            """ genero las fechas para el rango dado """
             while fecha_turnos_desde <= turno_actual and a_partir_de <= turno_actual:
+                fecha_de_turno = turno_actual.date()
+                if fecha_de_turno in fechas_sin_turnos:
+                    turno_actual -= un_dia
+                    continue
+                if fecha_de_turno.weekday() >= 5:
+                    """ 
+                        asumo que los días laborables son de lunes-viernes
+                        0 - lunes ..... 6 - domingo
+                    """
+                    turno_actual -= un_dia
+                    continue
                 turnos_del_dia = self._generar_turnos_para_dia(turno_actual, frecuencia, rangos)
                 turnos.extend(turnos_del_dia)
                 turno_actual -= un_dia
 
-        return turnos
-
+        return self._completar_datos_turnos(turnos)
 
     def _generar_turnos_para_dia(self, fecha, frecuencia, rangos):
         turnos = []
@@ -201,13 +220,16 @@ class ModeloTurnos:
                 nuevo_turno += frecuencia
         return turnos
 
+    def _completar_datos_turnos(self, turnos):
+        return [{
+            'hora':hora_de_turno,
+            'fecha':hora_de_turno.date(),
+            'día':self._dia_de_la_semana(hora_de_turno.date())
+        } for hora_de_turno in turnos]
 
-
-
-
-
-
-
+    def _dia_de_la_semana(self, fecha):
+        dia = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo']
+        return dia[fecha.weekday()]
 
     """
     zdesde = desde.replace(minute=0,second=0,microsecond=0)

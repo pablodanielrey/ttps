@@ -52,6 +52,10 @@ def generar_turnos():
             r = estudio_models.RangoDeTurnos(parametros=pt, hora_inicio=rinicio, hora_fin=rfin)
             r.save()
 
+    estudio_models.FechasSinTurno.objects.all().delete()
+    for feriado in [datetime.date(2021,10,28), datetime.date(2021,11,1), datetime.date(2021,11,3)]:
+        estudio_models.FechasSinTurno(fecha=feriado).save()
+
 
 
 def generar_estudio_de_muestra():
