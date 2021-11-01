@@ -41,7 +41,8 @@
                   v-slot="{ errors, valid }"
                 >
                   <v-select
-                   @input="cambiarPaciente()"
+                  
+                    @input="cambiarPaciente()"
                     placeholder="Seleccione un paciente  "
                     v-model="estudio.paciente"
                     :options="getOptionsPacientes"
@@ -52,6 +53,12 @@
                     lenguage="en-US"
                     :state="errors[0] ? false : valid ? true : null"
                   ></v-select>
+                     <p
+                      style="color: red; font-size: 10px"
+                      v-if="estudio.paciente == '' "
+                    >
+                      Se debe seleccionar un paciente
+                    </p>
                   <b-form-invalid-feedback
                     v-for="error in errors"
                     :key="error.key"
@@ -94,7 +101,7 @@
                 label="Tipo de Estudio:"
                 label-for="estudio"
               >
-                <ValidationProvider :name="'os '" v-slot="{ errors, valid }">
+                <ValidationProvider :name="'os '" v-slot="{ errors, valid }"  :rules="'required'">
                   <b-form-select
                     :options="getTipoEstudios"
                     v-model="estudio.tipo_estudio"
@@ -150,7 +157,8 @@
                     @change="obtenerPDF($event, file1)"
                     accept="application/pdf"
                     placeholder="Seleccione el presupuesto..."
-                    drop-placeholder="Drop file here..."
+                    drop-placeholder="Drop file here..."                   
+                     browse-text="Buscar"
                   ></b-form-file>
                   <b-form-invalid-feedback
                     v-for="error in errors"
@@ -195,7 +203,7 @@
         <b-col class="text-center pt-3">
           <b-button variant="success" @click="crearEstudio()"
             >Crear Estudio
-          </b-button>
+          </b-button>          
         </b-col>
       </b-row>
     </div>
@@ -237,18 +245,17 @@ export default {
   },
 
   methods: {
-    cambiarPaciente(){
-      console.log(this.estudio)
+    cambiarPaciente() {
+      console.log(this.estudio);
     },
     async crearEstudio() {
       try {
         let result = await this.$refs.detailsEstudio.validate();
-        console.log(this.estudio)
-        if (result){
+        console.log(this.estudio);
+        if (result) {
           let r = await EstudiosService.crearEstudio(this.estudio);
-          console.log(r)
+          console.log(r);
         }
-    
       } catch (err) {
         console.log(err);
       }
@@ -273,24 +280,23 @@ export default {
       try {
         let response = await EstudiosService.obtenerEstudios();
         this.estudios = response.data;
-        console.log(this.estudios);
       } catch (err) {
         console.log(err);
       }
     },
 
-    obtenerPDF(event, file1) {
-      const file = event.target.files[0];
-      file1.url = URL.createObjectURL(file);
-      this.createBase64(file, file1);
+    obtenerPDF(event) {
+     const file = event.target.files[0];
+        this.createBase64(file);
+        console.log( this.estudio)
     },
-    createBase64(file, file1) {
+    createBase64(file) {
       const reader = new FileReader();
       reader.onload = (e) => {
-        file1.base64 = e.target.result;
+        this.estudio.presupuesto=  e.target.result;
       };
       reader.readAsDataURL(file);
-    },
+    },   
   },
   computed: {
     usuario: function () {
@@ -309,10 +315,9 @@ export default {
       return estudios;
     },
     getOptionsPacientes() {
-
       let pacientes = this.pacientes.map((e) => ({
         id: e.id,
-        label: e.nombre + " " + e.apellido,      
+        label: e.nombre + " " + e.apellido,
       }));
       return pacientes;
     },
