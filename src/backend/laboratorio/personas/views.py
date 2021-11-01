@@ -37,7 +37,7 @@ class SerializadorDePersona(serializers.HyperlinkedModelSerializer):
     obra_social = SerializadorDeObraSocialPersona(required=False, many=True)
     class Meta:
         model = models.Persona
-        fields = ['nombre','apellido','email','dni','fecha_nacimiento','telefono','historia_clinica','obra_social']
+        fields = ['id','nombre','apellido','email','dni','fecha_nacimiento','telefono','historia_clinica','obra_social']
 
 
 class VistaUsuario(viewsets.ModelViewSet):
