@@ -312,15 +312,7 @@ export default {
 
       let pacientes = this.pacientes.map((e) => ({
         id: e.id,
-        label: e.nombre + " " + e.apellido,
-        apellido: e.apellido,
-        dni: e.dni,
-        email: e.email,
-        fecha_nacimiento: e.fecha_nacimiento,
-        historia_clinica: e.historia_clinica,
-        nombre: e.nombre,
-        obra_social: e.obra_social,
-        telefono: e.telefono,
+        label: e.nombre + " " + e.apellido,      
       }));
       return pacientes;
     },
