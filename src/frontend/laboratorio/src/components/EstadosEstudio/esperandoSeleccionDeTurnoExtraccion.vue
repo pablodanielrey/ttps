@@ -8,8 +8,7 @@
         :disable-views="['years']"
         :editable-events="{
           title: true,
-          drag: false,
-          resize: true,
+
           delete: true,
           create: true,
         }"
@@ -18,11 +17,20 @@
         :time-step="15"
         :drag-to-create-threshold="0"
         :disable-days="this.turnos"
+        :snap-to-time="this.tiempoTurnos"
         active-view="year"
         locale="es"
-       :events="getPacientes"
-       @event-create="logEvents('event-create', $event)"
-        @event-duration-change="logEvents('event-duration-change', $event)"
+        :events="getPacientes"     
+         @cell-contextmenu="logEvents('cell-contextmenu', $event)"
+         @cell-focus="logEvents('cell-focus', $event)"
+         @event-focus="logEvents('event-focus', $event)"
+         @event-title-change="logEvents('event-title-change', $event)"
+         @event-content-change="logEvents('event-content-change', $event)"
+         @event-duration-change="logEvents('event-duration-change', $event)"
+         @event-drop="logEvents('event-drop', $event)"
+         @event-create="logEvents('event-create', $event)"
+         @event-drag-create="logEvents('event-drag-create', $event)"
+         @event-delete="logEvents('event-delete', $event)"
       />
     </div>
   </b-container>
@@ -43,6 +51,7 @@ export default {
   created() {},
   data() {
     return {
+      tiempoTurnos: 15,
       loading: true,
       value: "",
       context: null,
@@ -55,7 +64,6 @@ export default {
       try {
         let response = await TurnosService.obtenerTurnos();
         this.turnos = response.data;
-        console.log(this.turnos);
       } catch (err) {
         console.log(err);
       }
@@ -63,20 +71,22 @@ export default {
     onContext(ctx) {
       this.context = ctx;
     },
-    logEvents(e, c){
-console.log(e,c)
-    }
+    logEvents(e, c) {
+      console.log(e, c);
+    },
+ 
+    
   },
   computed: {
-        getPacientes(){
-        let pacientes= this.turnos.map((e) => ({
-          start:new Date( e.inicio),
-          end: new Date(e.fin),
-          title:"test"
-        }))
-      
-        return pacientes
-    }
+    getPacientes() {
+      let pacientes = this.turnos.map((e) => ({
+        start: new Date(e.inicio),
+        end: new Date(e.fin),
+        title: "test",
+      }));
+
+      return pacientes;
+    },
   },
 
   mounted() {

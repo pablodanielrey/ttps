@@ -29,7 +29,7 @@
         </b-form-group>
         <b-card header="Datos Estudio">
           <b-row>
-                 <b-col lg="5" md="5" sm="10">
+            <b-col lg="5" md="5" sm="10">
               <b-form-group
                 id="paciente-label"
                 label="Paciente:"
@@ -41,14 +41,15 @@
                   v-slot="{ errors, valid }"
                 >
                   <v-select
+                   @input="cambiarPaciente()"
                     placeholder="Seleccione un paciente  "
                     v-model="estudio.paciente"
                     :options="getOptionsPacientes"
                     :value="pacienteSelected"
-                    :sercheable="true"     
+                    :sercheable="true"
                     responsive="sm"
                     size="sm"
-                    lenguage="en-US"               
+                    lenguage="en-US"
                     :state="errors[0] ? false : valid ? true : null"
                   ></v-select>
                   <b-form-invalid-feedback
@@ -85,7 +86,7 @@
                 </ValidationProvider>
               </b-form-group>
             </b-col>
-          </b-row>                
+          </b-row>
           <b-row>
             <b-col lg="5" md="5">
               <b-form-group
@@ -108,7 +109,7 @@
                 </ValidationProvider>
               </b-form-group>
             </b-col>
-             <b-col lg="3" md="2">
+            <b-col lg="3" md="2">
               <b-form-group
                 id="nacimiento-label"
                 label="Fecha Alta :"
@@ -137,13 +138,17 @@
           </b-row>
           <b-row>
             <b-col lg="5" md="5">
-              <b-form-group id="pdf-label" label="Presupuesto del estudio:" label-for="pdf">
+              <b-form-group
+                id="pdf-label"
+                label="Presupuesto del estudio:"
+                label-for="pdf"
+              >
                 <ValidationProvider :name="'pdf '" v-slot="{ errors }">
                   <b-form-file
                     v-model="file1"
                     :state="Boolean(file1)"
-                     @change="obtenerPDF($event,file1)"
-                     accept="application/pdf"
+                    @change="obtenerPDF($event, file1)"
+                    accept="application/pdf"
                     placeholder="Seleccione el presupuesto..."
                     drop-placeholder="Drop file here..."
                   ></b-form-file>
@@ -158,29 +163,32 @@
             </b-col>
           </b-row>
         </b-card>
-          <b-card header="Diagnostico presuntivo">
-        <b-row>
-          <b-col>
-            <b-form-group id="historiaclinica-label" label-for="observaciones">
-              <ValidationProvider
-                :name="'historiaclinica '"
-                v-slot="{ errors, valid }"
+        <b-card header="Diagnostico presuntivo">
+          <b-row>
+            <b-col>
+              <b-form-group
+                id="historiaclinica-label"
+                label-for="observaciones"
               >
-                <vue-editor
-                  :state="errors[0] ? false : valid ? true : null"
-                  v-model="estudio.historia_clinica"
-                ></vue-editor>
-                <b-form-invalid-feedback
-                  v-for="error in errors"
-                  :key="error.key"
+                <ValidationProvider
+                  :name="'historiaclinica '"
+                  v-slot="{ errors, valid }"
                 >
-                  {{ error }}
-                </b-form-invalid-feedback>
-              </ValidationProvider>
-            </b-form-group>
-          </b-col>
-        </b-row>
-      </b-card>
+                  <vue-editor
+                    :state="errors[0] ? false : valid ? true : null"
+                    v-model="estudio.diagnostico"
+                  ></vue-editor>
+                  <b-form-invalid-feedback
+                    v-for="error in errors"
+                    :key="error.key"
+                  >
+                    {{ error }}
+                  </b-form-invalid-feedback>
+                </ValidationProvider>
+              </b-form-group>
+            </b-col>
+          </b-row>
+        </b-card>
       </ValidationObserver>
 
       <b-row class="pb-2">
@@ -199,23 +207,20 @@
 import LoginService from "@/services/LoginService";
 import ObrasSocialesService from "@/services/ObrasSocialesService";
 import axios from "axios";
-import PacientesService from '@/services/PacientesService.js'
-import EstudiosService from '@/services/EstudiosService.js'
+import PacientesService from "@/services/PacientesService.js";
+import EstudiosService from "@/services/EstudiosService.js";
 import { VueEditor } from "vue2-editor";
 
 export default {
-  components: {VueEditor},
+  components: { VueEditor },
 
-  props: {   
-  },
-  created() {
-    console.log(this.paciente);
-  },
+  props: {},
+  created() {},
   data() {
     return {
-      pacienteSelected:null,
-      estudios:[],
-      pacientes:[],
+      pacienteSelected: null,
+      estudios: [],
+      pacientes: [],
       file1: [],
       alerts: [],
       loading: true,
@@ -225,18 +230,28 @@ export default {
         tipo_estudio: null,
         fecha_alta: null,
         diagnostico_presuntivo: null,
-        historia_clinica: null,
+        diagnostico: null,
         presupuesto: null,
       },
     };
   },
 
   methods: {
-    async editarPaciente() {
-      console.log("edit");
+    cambiarPaciente(){
+      console.log(this.estudio)
     },
     async crearEstudio() {
-      console.log(this.file1)
+      try {
+        let result = await this.$refs.detailsEstudio.validate();
+        console.log(this.estudio)
+        if (result){
+          let r = await EstudiosService.crearEstudio(this.estudio);
+          console.log(r)
+        }
+    
+      } catch (err) {
+        console.log(err);
+      }
     },
     async obtenerObrasSociales() {
       try {
@@ -247,37 +262,35 @@ export default {
       }
     },
     async obtenerPacientes() {
-     try {
-       let response = await PacientesService.obtenerPacientes()
-      this.pacientes = response.data
-    
-     } catch (err) {
-        console.log(err)
-     }      
+      try {
+        let response = await PacientesService.obtenerPacientes();
+        this.pacientes = response.data;
+      } catch (err) {
+        console.log(err);
+      }
     },
     async obtenerEstudios() {
-     try {
-       let response = await EstudiosService.obtenerEstudios()
-      this.estudios = response.data
-    
-     } catch (err) {
-        console.log(err)
-     }      
-    },
-    
-    obtenerPDF(event,file1) {
-      const file= event.target.files[0]
-      file1.url= URL.createObjectURL(file)
-      this.createBase64(file,file1)
-    },
-    createBase64(file,file1){
-      const reader = new FileReader();
-      reader.onload = (e) =>{
-        file1.base64 = e.target.result
+      try {
+        let response = await EstudiosService.obtenerEstudios();
+        this.estudios = response.data;
+        console.log(this.estudios);
+      } catch (err) {
+        console.log(err);
       }
-      reader.readAsDataURL(file)
-    }
+    },
 
+    obtenerPDF(event, file1) {
+      const file = event.target.files[0];
+      file1.url = URL.createObjectURL(file);
+      this.createBase64(file, file1);
+    },
+    createBase64(file, file1) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        file1.base64 = e.target.result;
+      };
+      reader.readAsDataURL(file);
+    },
   },
   computed: {
     usuario: function () {
@@ -295,21 +308,31 @@ export default {
       });
       return estudios;
     },
-    getOptionsPacientes(){
-      console.log(this.pacientes)
-        let pacientes = this.pacientes.map((e) => ({
+    getOptionsPacientes() {
+
+      let pacientes = this.pacientes.map((e) => ({
         id: e.id,
-        label: e.nombre + ' ' + e.apellido,
+        label: e.nombre + " " + e.apellido,
+        apellido: e.apellido,
+        dni: e.dni,
+        email: e.email,
+        fecha_nacimiento: e.fecha_nacimiento,
+        historia_clinica: e.historia_clinica,
+        nombre: e.nombre,
+        obra_social: e.obra_social,
+        telefono: e.telefono,
       }));
-    
       return pacientes;
     },
-    
   },
 
   mounted() {
     axios
-      .all([this.obtenerObrasSociales(),this.obtenerPacientes(),this.obtenerEstudios()])
+      .all([
+        this.obtenerObrasSociales(),
+        this.obtenerPacientes(),
+        this.obtenerEstudios(),
+      ])
       .then(() => {
         this.loading = false;
       })

@@ -57,7 +57,7 @@ class VistaPersona(viewsets.ModelViewSet):
 
         logging.debug(datos_persona)
 
-        persona = models.Persona(
+        persona = models.Persona(           
             nombre=datos_persona['nombre'],
             apellido=datos_persona['apellido'],
             dni=datos_persona['dni'],
