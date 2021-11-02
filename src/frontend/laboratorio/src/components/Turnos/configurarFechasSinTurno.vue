@@ -1,7 +1,9 @@
 <template>
     <b-container>
+        <b-container>
         <div>
-        Fecha
+            Fecha
+        </div>
         <vue-cal
             class="vuecal--date-picker"
             xsmall
@@ -14,7 +16,7 @@
         </vue-cal>
 
         <button>agregar</button>
-        </div>
+        </b-container>
 
         
         <div>
