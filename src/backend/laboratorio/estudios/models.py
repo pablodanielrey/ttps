@@ -161,7 +161,8 @@ class ModeloTurnos:
     def obtener_turnos_hoy(self):
         hoy = datetime.datetime.combine(datetime.date.today(), datetime.time(0))
         manana = datetime.timedelta(hours = 24) + hoy
-        return self.obtener_turnos(hoy,manana)
+        al_infinito_y_mas_alla = hoy + datetime.timedelta(days=30)
+        return self.obtener_turnos(hoy,al_infinito_y_mas_alla)
 
     def obtener_turnos(self, desde:datetime.datetime, hasta:datetime.datetime):
         """ 
