@@ -15,6 +15,11 @@ import EsperandoComprobantePago from '@/components/EstadosEstudio/esperandoCompr
 import EnviarConsentimientoInformado from '@/components/EstadosEstudio/enviarConsentimientoInformado.vue'
 import EsperandoConsentimientoInformado from '@/components/EstadosEstudio/esperandoConsentimientoInformado.vue'
 import EsperandoSeleccionDeTurnoExtraccion from '@/components/EstadosEstudio/esperandoSeleccionDeTurnoExtraccion.vue'
+
+
+// configurador
+import ConfigurarTurnos from '@/components/Turnos/configurarTurnos.vue'
+
 // lo siguiente necesita que vue tenga el compilador de templates.
 // const Foo = { template: '<div>superrr fooooo</div>' }
 
@@ -30,7 +35,7 @@ const routes = [
     { path: '/esperandoConsentimientoInformado', component: EsperandoConsentimientoInformado },
     { path: '/esperandoSeleccionDeTurnoExtraccion', component: EsperandoSeleccionDeTurnoExtraccion },
 
-
+    { path: '/configurarTurnos', component: ConfigurarTurnos }
 ]
 
 const router = new Router({
