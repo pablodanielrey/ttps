@@ -25,20 +25,20 @@ def generar_turnos():
 
     rangos_de_prueba = [
         {
-            'fecha': hoy,
-            'frecuencia': 10,
-            'rangos': [(7,12),(13,19)]
-        },
-        {
             'fecha': hace_una_semana,
-            'frecuencia': 5,
-            'rangos': [(9,13)]
+            'frecuencia': 15,
+            'rangos': [(7,12),(14,19)]
         },
-        {
-            'fecha': en_una_semana,
-            'frecuencia': 65,
-            'rangos': [(9,12),(14,18)]
-        }
+        # {
+        #     'fecha': hace_una_semana,
+        #     'frecuencia': 5,
+        #     'rangos': [(9,13)]
+        # },
+        # {
+        #     'fecha': en_una_semana,
+        #     'frecuencia': 65,
+        #     'rangos': [(9,12),(14,18)]
+        # }
     ]
 
 
