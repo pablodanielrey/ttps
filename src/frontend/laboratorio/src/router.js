@@ -19,6 +19,7 @@ import EsperandoSeleccionDeTurnoExtraccion from '@/components/EstadosEstudio/esp
 
 // configurador
 import ConfigurarTurnos from '@/components/Turnos/configurarTurnos.vue'
+import ConfigurarFechasSinTurno from '@/components/Turnos/configurarFechasSinTurno.vue'
 
 // lo siguiente necesita que vue tenga el compilador de templates.
 // const Foo = { template: '<div>superrr fooooo</div>' }
@@ -35,7 +36,8 @@ const routes = [
     { path: '/esperandoConsentimientoInformado', component: EsperandoConsentimientoInformado },
     { path: '/esperandoSeleccionDeTurnoExtraccion', component: EsperandoSeleccionDeTurnoExtraccion },
 
-    { path: '/configurarTurnos', component: ConfigurarTurnos }
+    { path: '/configurarTurnos', component: ConfigurarTurnos },
+    { path: '/configurarFechasSinTurnos', component: ConfigurarFechasSinTurno },
 ]
 
 const router = new Router({

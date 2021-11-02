@@ -1,7 +1,7 @@
 <template>
     <b-container>
         <div>
-        A Partir de:
+        Fecha
         <vue-cal
             class="vuecal--date-picker"
             xsmall
@@ -12,19 +12,11 @@
             :disable-views="['week']"
             style="width: 210px;height: 230px">
         </vue-cal>
+
+        <button>agregar</button>
         </div>
 
-        <b-container>
-            Hora Inicio
-            <input name='hora_inicio'/>
-            Hora Fin
-            <input name='hora_fin'/>
-            Frecuencia
-            <input name='frecuencia'/>
-            <button>agregar</button>
-        </b-container>
-
-
+        
         <div>
             <b-table striped hover :items="items"></b-table>
         </div>
@@ -43,8 +35,8 @@ export default {
 data() {
       return {
         items: [
-          { hora_inicio: "09:00", hora_fin: '13:00', frecuencia: '15 min' },
-          { hora_inicio: "14:00", hora_fin: '17:00', frecuencia: '20 min' },
+          { Fecha: "02/12/2021", eliminar:'X' },
+          { Fecha: "03/11/2021", eliminar:'X' },
         ]
       }
     }
