@@ -6,6 +6,8 @@ Vue.use(Router)
 import Login from '@/components/Login/Login.vue'
 import Paciente from '@/components/Paciente/nuevoPaciente.vue'
 import ListaPacientes from '@/components/Paciente/listaPacientes.vue'
+import ListaEstudios from '@/components/Estudio/listaEstudios.vue'
+
 import NuevaObraSocial from '@/components/ObraSocial/nuevaObraSocial.vue'
 import NuevoEstudio from '@/components/Estudio/nuevoEstudio.vue'
 
@@ -32,6 +34,7 @@ const routes = [
     { path: '/lista', component: ListaPacientes },
     { path: '/obraSocial', component: NuevaObraSocial },
     { path: '/estudio', component: NuevoEstudio },
+    { path: '/listaEstudios', component: ListaEstudios },
     { path: '/esperandoFactura', component: EsperandoFactura },
     { path: '/esperandoComprobantePago', component: EsperandoComprobantePago },
     { path: '/enviarConsentimientoInformado', component: EnviarConsentimientoInformado },

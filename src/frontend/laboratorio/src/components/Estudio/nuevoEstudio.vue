@@ -303,7 +303,18 @@ export default {
         console.log(this.estudio);
         if (result) {
           let r = await EstudiosService.crearEstudio(this.estudio);
-          console.log(r);
+          console.log(r.status);
+           if (r.status == 200) {
+            this.$root.$bvToast.toast(
+              "Se creo con exito el estudio",
+              {
+                title: "Atencion!",
+                toaster: "b-toaster-top-center",
+                solid: true,
+                variant: "success",
+              }
+            );
+           }
         }
       } catch (err) {
         console.log(err);

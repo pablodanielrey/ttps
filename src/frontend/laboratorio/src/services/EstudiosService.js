@@ -16,6 +16,9 @@ export default {
     obtenerDiagnosticos() {
         return Api().get(API_URL + API_USER + "diagnosticos/")
     },
+    obtenerListaEstudios() {
+        return Api().get(API_URL + API_USER + "estudios/")
+    },
     
   
     
