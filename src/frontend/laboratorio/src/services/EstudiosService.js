@@ -12,8 +12,11 @@ export default {
     },
     crearEstudio(estudio){
         return Api().post(API_URL + API_USER + "estudios/", estudio);
-
-    }
+    },
+    obtenerDiagnosticos() {
+        return Api().get(API_URL + API_USER + "diagnosticos/")
+    },
+    
   
     
 }

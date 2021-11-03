@@ -2,11 +2,14 @@ from django.db.models.query import QuerySet
 from django.shortcuts import render
 
 
+
 import logging
 import datetime
 from zoneinfo import ZoneInfo
 
 from . import models
+from personas import models as personas_models
+from estudios import models as estudio_models
 
 """
     Las vistas de rest framework
@@ -152,9 +155,8 @@ class VistaPresupuestoEstudio(viewsets.ModelViewSet):
 """
 
 class SerializadorEstudios(serializers.HyperlinkedModelSerializer):
-
-    #persona = SerializadorDePersona()
-    #medico_derivante = SerializadorDePersona()
+    persona = SerializadorDePersona()
+    medico_derivante = SerializadorDePersona()
     tipo = SerializadorTiposDeEstudio()
     diagnostico = SerializadorDiagnostico()
     estados = SerializadorEstadoEstudioPolimorfico(many=True)
@@ -174,11 +176,16 @@ class VistaEstudios(viewsets.ModelViewSet):
 
         datos = request.data
         logging.debug(datos)
+        paciente = personas_models.Persona.objects.get(id=datos['paciente']['id'])
+        diagnostico = estudio_models.Diagnostico.objects.get(id=datos['diagnostico']['id'])
+        tipo = estudio_models.TiposDeEstudio.objects.get(id=datos['tipo_estudio'])
+        estudio = estudio_models.Estudio(
+            paciente=paciente,
+            medico_derivante=paciente,
+            diagnostico=diagnostico,
+            tipo=tipo,
+            fecha_alta=datos['fecha_alta']
 
-        estudio = models.Estudio(
-            paciente=datos['paciente'],
-            medico_derivante=datos['medico_derivante'],
-            diagnostico=datos['diagnostico']
         )
         estudio.save()
 

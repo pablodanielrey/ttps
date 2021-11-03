@@ -41,7 +41,6 @@
                   v-slot="{ errors, valid }"
                 >
                   <v-select
-                  
                     @input="cambiarPaciente()"
                     placeholder="Seleccione un paciente  "
                     v-model="estudio.paciente"
@@ -53,12 +52,12 @@
                     lenguage="en-US"
                     :state="errors[0] ? false : valid ? true : null"
                   ></v-select>
-                     <p
-                      style="color: red; font-size: 10px"
-                      v-if="estudio.paciente == '' || estudio.paciente== null "
-                    >
-                      Se debe seleccionar un paciente
-                    </p>
+                  <p
+                    style="color: red; font-size: 10px"
+                    v-if="estudio.paciente == '' || estudio.paciente == null"
+                  >
+                    Se debe seleccionar un paciente
+                  </p>
                   <b-form-invalid-feedback
                     v-for="error in errors"
                     :key="error.key"
@@ -101,7 +100,11 @@
                 label="Tipo de Estudio:"
                 label-for="estudio"
               >
-                <ValidationProvider :name="'os '" v-slot="{ errors, valid }"  :rules="'required'">
+                <ValidationProvider
+                  :name="'os '"
+                  v-slot="{ errors, valid }"
+                  :rules="'required'"
+                >
                   <b-form-select
                     :options="getTipoEstudios"
                     v-model="estudio.tipo_estudio"
@@ -157,9 +160,50 @@
                     @change="obtenerPDF($event, file1)"
                     accept="application/pdf"
                     placeholder="Seleccione el presupuesto..."
-                    drop-placeholder="Drop file here..."                   
-                     browse-text="Buscar"
+                    drop-placeholder="Drop file here..."
+                    browse-text="Buscar"
                   ></b-form-file>
+                  <b-form-invalid-feedback
+                    v-for="error in errors"
+                    :key="error.key"
+                  >
+                    {{ error }}
+                  </b-form-invalid-feedback>
+                </ValidationProvider>
+              </b-form-group>
+            </b-col>
+
+            <b-col lg="5" md="5" sm="10">
+              <b-form-group
+                id="diagnostico-label"
+                label="Diagnostico:"
+                label-for="diagnostico"
+              >
+                <ValidationProvider
+                  :name="'diagnostico '"
+                  :rules="'required'"
+                  v-slot="{ errors, valid }"
+                >
+                  <v-select
+                    @input="cambiarDiagnostico()"
+                    placeholder="Seleccione un diagnostico  "
+                    v-model="estudio.diagnostico"
+                    :options="getOptionsDiagnosticos"
+                    :value="diagnosticoSelected"
+                    :sercheable="true"
+                    responsive="sm"
+                    size="sm"
+                    lenguage="en-US"
+                    :state="errors[0] ? false : valid ? true : null"
+                  ></v-select>
+                  <p
+                    style="color: red; font-size: 10px"
+                    v-if="
+                      estudio.diagnostico == '' || estudio.diagnostico == null
+                    "
+                  >
+                    Se debe seleccionar un diagnostico
+                  </p>
                   <b-form-invalid-feedback
                     v-for="error in errors"
                     :key="error.key"
@@ -171,7 +215,7 @@
             </b-col>
           </b-row>
         </b-card>
-        <b-card header="Diagnostico presuntivo">
+        <b-card header="Historia clinica">
           <b-row>
             <b-col>
               <b-form-group
@@ -184,7 +228,7 @@
                 >
                   <vue-editor
                     :state="errors[0] ? false : valid ? true : null"
-                    v-model="estudio.diagnostico"
+                    v-model="estudio.historiaclinica"
                   ></vue-editor>
                   <b-form-invalid-feedback
                     v-for="error in errors"
@@ -203,7 +247,7 @@
         <b-col class="text-center pt-3">
           <b-button variant="success" @click="crearEstudio()"
             >Crear Estudio
-          </b-button>          
+          </b-button>
         </b-col>
       </b-row>
     </div>
@@ -227,8 +271,10 @@ export default {
   data() {
     return {
       pacienteSelected: null,
+      diagnosticoSelected:null,
       estudios: [],
       pacientes: [],
+      diagnosticosLista: [],
       file1: [],
       alerts: [],
       loading: true,
@@ -246,6 +292,9 @@ export default {
 
   methods: {
     cambiarPaciente() {
+      console.log(this.estudio);
+    },
+    cambiarDiagnostico() {
       console.log(this.estudio);
     },
     async crearEstudio() {
@@ -284,19 +333,27 @@ export default {
         console.log(err);
       }
     },
+    async obtenerDiagnosticos() {
+      try {
+        let response = await EstudiosService.obtenerDiagnosticos();
+        this.diagnosticosLista = response.data;
+      } catch (err) {
+        console.log(err);
+      }
+    },
 
     obtenerPDF(event) {
-     const file = event.target.files[0];
-        this.createBase64(file);
-        console.log( this.estudio)
+      const file = event.target.files[0];
+      this.createBase64(file);
+      console.log(this.estudio);
     },
     createBase64(file) {
       const reader = new FileReader();
       reader.onload = (e) => {
-        this.estudio.presupuesto=  e.target.result;
+        this.estudio.presupuesto = e.target.result;
       };
       reader.readAsDataURL(file);
-    },   
+    },
   },
   computed: {
     usuario: function () {
@@ -321,6 +378,13 @@ export default {
       }));
       return pacientes;
     },
+    getOptionsDiagnosticos() {
+      let diagnosticosLista = this.diagnosticosLista.map((e) => ({
+        id: e.id,
+        label: e.nombre,
+      }));
+      return diagnosticosLista;
+    },
   },
 
   mounted() {
@@ -329,6 +393,7 @@ export default {
         this.obtenerObrasSociales(),
         this.obtenerPacientes(),
         this.obtenerEstudios(),
+        this.obtenerDiagnosticos(),
       ])
       .then(() => {
         this.loading = false;
