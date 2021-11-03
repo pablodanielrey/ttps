@@ -155,7 +155,7 @@ class VistaPresupuestoEstudio(viewsets.ModelViewSet):
 """
 
 class SerializadorEstudios(serializers.HyperlinkedModelSerializer):
-    persona = SerializadorDePersona()
+    paciente = SerializadorDePersona()
     medico_derivante = SerializadorDePersona()
     tipo = SerializadorTiposDeEstudio()
     diagnostico = SerializadorDiagnostico()
@@ -189,7 +189,8 @@ class VistaEstudios(viewsets.ModelViewSet):
         )
         estudio.save()
 
-        ep = models.EsperandoPresupuesto(estudio, datos)
+        presupuesto = datos['presupuesto']
+        ep = models.EsperandoPresupuesto(estudio=estudio, presupuesto=presupuesto)
         ep.save()
 
         serializer = SerializadorEstudios(estudio, context={'request': request})
