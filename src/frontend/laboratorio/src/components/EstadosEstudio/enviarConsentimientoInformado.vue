@@ -1,6 +1,7 @@
 <template>
   <b-container>
     <div>
+            <b-card header="Descargar consentimiento ">
       <b-button
         title="Bajar consentimiento informado"
         variant="outline-success"
@@ -9,7 +10,7 @@
         <b-icon icon="download" aria-hidden="true"></b-icon
       ></b-button>
       <br>
-    
+            </b-card>
     </div>
   </b-container>
 </template>

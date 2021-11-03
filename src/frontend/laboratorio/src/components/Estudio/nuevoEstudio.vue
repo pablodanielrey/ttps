@@ -55,7 +55,7 @@
                   ></v-select>
                      <p
                       style="color: red; font-size: 10px"
-                      v-if="estudio.paciente == '' "
+                      v-if="estudio.paciente == '' || estudio.paciente== null "
                     >
                       Se debe seleccionar un paciente
                     </p>

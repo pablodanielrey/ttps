@@ -15,6 +15,8 @@ import EsperandoComprobantePago from '@/components/EstadosEstudio/esperandoCompr
 import EnviarConsentimientoInformado from '@/components/EstadosEstudio/enviarConsentimientoInformado.vue'
 import EsperandoConsentimientoInformado from '@/components/EstadosEstudio/esperandoConsentimientoInformado.vue'
 import EsperandoSeleccionDeTurnoExtraccion from '@/components/EstadosEstudio/esperandoSeleccionDeTurnoExtraccion.vue'
+import EsperandoTomaDeMuestra from '@/components/EstadosEstudio/esperandoTomaDeMuestra.vue'
+import EsperandoRetiroExtraccion from '@/components/EstadosEstudio/esperandoRetiroExtraccion.vue'
 
 
 // configurador
@@ -35,6 +37,10 @@ const routes = [
     { path: '/enviarConsentimientoInformado', component: EnviarConsentimientoInformado },
     { path: '/esperandoConsentimientoInformado', component: EsperandoConsentimientoInformado },
     { path: '/esperandoSeleccionDeTurnoExtraccion', component: EsperandoSeleccionDeTurnoExtraccion },
+    { path: '/esperandoTomaDeMuestra', component: EsperandoTomaDeMuestra },
+    { path: '/esperandoRetiroExtraccion', component: EsperandoRetiroExtraccion },
+
+
 
     { path: '/configurarTurnos', component: ConfigurarTurnos },
     { path: '/configurarFechasSinTurnos', component: ConfigurarFechasSinTurno },

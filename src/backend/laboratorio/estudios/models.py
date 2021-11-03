@@ -41,7 +41,7 @@ class EsperandoPresupuesto(EstadoEstudio):
 class EsperandoFactura(EstadoEstudio):
     factura = models.TextField(null=True)    
     fecha_factura = models.DateField(auto_now=True)
-    numero = models.CharField(max_length=255)
+    numero = models.CharField(max_length=255,null=True)
     monto = models.FloatField(null=True)
     obra_social = models.ForeignKey(ObraSocial, on_delete=models.CASCADE, null=True)
     
