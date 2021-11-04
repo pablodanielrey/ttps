@@ -39,7 +39,7 @@ const routes = [
     { path: '/esperandoComprobantePago', component: EsperandoComprobantePago },
     { path: '/enviarConsentimientoInformado', component: EnviarConsentimientoInformado },
     { path: '/esperandoConsentimientoInformado', component: EsperandoConsentimientoInformado },
-    { path: '/esperandoSeleccionDeTurnoExtraccion', component: EsperandoSeleccionDeTurnoExtraccion },
+    { path: '/esperandoSeleccionDeTurnoExtraccion', component: EsperandoSeleccionDeTurnoExtraccion, name:'seleccionTurno',props:true },
     { path: '/esperandoTomaDeMuestra', component: EsperandoTomaDeMuestra },
     { path: '/esperandoRetiroExtraccion', component: EsperandoRetiroExtraccion },
 

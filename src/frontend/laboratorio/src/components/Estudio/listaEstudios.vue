@@ -3,7 +3,7 @@
     <br />
     <h4>Listado de Estudios</h4>
 
-   <b-col lg="4" class="my-1">
+    <b-col lg="4" class="my-1">
       <b-input-group size="sm">
         <b-form-input
           id="filter-input"
@@ -16,8 +16,8 @@
           <b-button :disabled="!filter" @click="filter = ''">Buscar</b-button>
         </b-input-group-append>
       </b-input-group>
-    </b-col> 
-     <b-table
+    </b-col>
+    <b-table
       :items="items"
       :fields="fields"
       :filter="filter"
@@ -26,17 +26,26 @@
       @filtered="onFiltered"
     >
       <template v-slot:cell(acciones)="row">
-       
         <div v-if="row.item.estados[0] != null">
-        <b-button  title="Descargar Presupuesto" variant="outline-success"  download="presupuesto.pdf" :href="row.item.estados[0].presupuesto">  <b-icon icon="download" aria-hidden="true"></b-icon
-        ></b-button >
+          <b-button
+            title="Descargar Presupuesto"
+            variant="outline-success"
+            download="presupuesto.pdf"
+            :href="row.item.estados[0].presupuesto"
+          >
+            <b-icon icon="download" aria-hidden="true"></b-icon
+          ></b-button>
+             <b-button   
+             @click="seleccionTurno(row.item.id)"        
+          >
+          seleccionar turno
+          ></b-button>
         </div>
-
       </template>
     </b-table>
 
     <b-row>
-      <b-col  md="1" >
+      <b-col md="1">
         <b-form-select
           id="per-page-select"
           v-model="perPage"
@@ -52,14 +61,13 @@
         ></b-pagination>
       </b-col>
       <br />
-    </b-row> 
+    </b-row>
   </b-container>
 </template>
 
 
 <script>
-
-import EstudiosService from '@/services/EstudiosService.js'
+import EstudiosService from "@/services/EstudiosService.js";
 import axios from "axios";
 export default {
   name: "ListaPacientes",
@@ -69,61 +77,65 @@ export default {
 
   data() {
     return {
-      
       perPage: 4,
       pageOptions: [4, 10, 15],
       filter: null,
       currentPage: 1,
       totalRows: 1,
       fields: [
-         { key: "paciente.nombre", label: "Paciente", class: "text-center p2" },
-       { key: "medico_derivante.apellido", label: "Medico derivante", class: "text-center p2" },
-       { key: "diagnostico.nombre", label: "Diagnostico", class: "text-center p2" },
-       { key: "tipo.nombre", label: "Tipo Estudio", class: "text-center p2" },
-       { key: "estados[0].resourcetype", label: "Estado", class: "text-center p2" },
-       { key: "acciones", label: "Acciones", class: "text-center p2" },
+        { key: "paciente.nombre", label: "Paciente", class: "text-center p2" },
+        {
+          key: "medico_derivante.apellido",
+          label: "Medico derivante",
+          class: "text-center p2",
+        },
+        {
+          key: "diagnostico.nombre",
+          label: "Diagnostico",
+          class: "text-center p2",
+        },
+        { key: "tipo.nombre", label: "Tipo Estudio", class: "text-center p2" },
+        {
+          key: "estados[0].resourcetype",
+          label: "Estado",
+          class: "text-center p2",
+        },
+        { key: "acciones", label: "Acciones", class: "text-center p2" },
       ],
       items: [],
     };
   },
 
-
   created() {
-     console.log(this.paciente)
+    console.log(this.paciente);
   },
   methods: {
-   async obtenerListaEstudios() {
-     try {
-       let response = await EstudiosService.obtenerListaEstudios()
-      this.items = response.data
-      console.log(this.items)
-     } catch (err) {
-        console.log(err)
-     }
-      
+    async obtenerListaEstudios() {
+      try {
+        let response = await EstudiosService.obtenerListaEstudios();
+        this.items = response.data;
+        console.log(this.items);
+      } catch (err) {
+        console.log(err);
+      }
     },
     onFiltered(filteredItems) {
       this.totalRows = filteredItems.length;
       this.currentPage = 1;
     },
-    descargarComprobante(estudio){
-        console.log(estudio[0].presupuesto)
-      
+    seleccionTurno(estudio){
+         this.$router.push({ name: 'seleccionTurno', params: { estudio:estudio} })
     }
   },
   mounted() {
     axios
-      .all([
-        this.obtenerListaEstudios(),
-     
-      ])
-      .then(() => {   
-        this.totalRows = this.items.length
+      .all([this.obtenerListaEstudios()])
+      .then(() => {
+        this.totalRows = this.items.length;
       })
       .catch((err) => {
         console.log(err);
       });
-     
   },
 };
 </script>

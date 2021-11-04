@@ -20,7 +20,11 @@
           class="vuecal--full-height-delete"
         />
       </div>
-      <b-modal ref="my-modal" :title="selectedEvent.title">
+      <b-modal 
+      ref="my-modal" 
+      :title="selectedEvent.title"
+      @ok="confirmarTurno(selectedEvent.start,selectedEvent.end)"
+      >
         <div>
           <p v-if="selectedEvent.start != null">
             Turno seleccionado {{ selectedEvent.start.format("DD/MM/YYYY") }}
@@ -35,29 +39,7 @@
           <li v-if="selectedEvent.end != null">
             Fin: {{ selectedEvent.end && selectedEvent.end.formatTime() }}
           </li>
-        </ul>
-        <b-col lg="9" md="9" sm="10">
-          <b-form-group
-            id="paciente-label"
-            label="Paciente:"
-            label-for="Paciente"
-          >
-            <v-select
-              @input="cambiarPaciente()"
-              placeholder="Seleccione un paciente  "
-              v-model="paciente"
-              :options="getOptionsPacientes"
-              :value="pacienteSelected"
-              :sercheable="true"
-              responsive="sm"
-              size="sm"
-              lenguage="en-US"
-            ></v-select>
-            <p style="color: red; font-size: 10px" v-if="paciente == ''">
-              Se debe seleccionar un paciente
-            </p>
-          </b-form-group>
-        </b-col>
+        </ul>     
       </b-modal>
     </div>
   </b-container>
@@ -70,13 +52,18 @@ import axios from "axios";
 import VueCal from "vue-cal";
 import "vue-cal/dist/vuecal.css";
 import "vue-cal/dist/i18n/es.js";
-import PacientesService from "@/services/PacientesService.js";
 
 export default {
   components: { VueCal },
 
-  props: {},
-  created() {},
+  props: {
+     estudio:{
+      type:String,
+      
+    }
+  },
+   created(){
+  },
   data() {
     return {
       tiempoTurnos: 15,
@@ -97,7 +84,6 @@ export default {
       try {
         let response = await TurnosService.obtenerTurnos();
         this.turnos = response.data;
-        console.log(this.turnos);
       } catch (err) {
         console.log(err);
       }
@@ -112,14 +98,12 @@ export default {
     cambiarPaciente() {
       console.log(this.paciente);
     },
-    async obtenerPacientes() {
-      try {
-        let response = await PacientesService.obtenerPacientes();
-        this.pacientes = response.data;
-      } catch (err) {
-        console.log(err);
-      }
-    },
+    confirmarTurno(inicio,fin){
+      console.log(inicio.format('YYYY-MM-DD HH:m') )
+      console.log(fin.toLocaleString('en-es'))
+      console.log(this.estudio)
+    }
+ 
   },
   computed: {
     getOptionsPacientes() {
@@ -143,7 +127,7 @@ export default {
 
   mounted() {
     axios
-      .all([this.obtenerTurnos(), this.obtenerPacientes()])
+      .all([this.obtenerTurnos()])
       .then(() => {
         this.loading = false;
       })
