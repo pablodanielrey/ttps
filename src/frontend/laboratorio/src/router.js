@@ -20,6 +20,9 @@ import EsperandoSeleccionDeTurnoExtraccion from '@/components/EstadosEstudio/esp
 import EsperandoTomaDeMuestra from '@/components/EstadosEstudio/esperandoTomaDeMuestra.vue'
 import EsperandoRetiroExtraccion from '@/components/EstadosEstudio/esperandoRetiroExtraccion.vue'
 
+// lotes
+import CrearLote from '@/components/Lotes/crearLote.vue'
+import CargarResultadoLote from '@/components/Lotes/cargarResultadoLote.vue'
 
 // configurador
 import ConfigurarTurnos from '@/components/Turnos/configurarTurnos.vue'
@@ -43,7 +46,8 @@ const routes = [
     { path: '/esperandoTomaDeMuestra', component: EsperandoTomaDeMuestra },
     { path: '/esperandoRetiroExtraccion', component: EsperandoRetiroExtraccion },
 
-
+    { path: '/crearLote', component: CrearLote },
+    { path: '/cargarResultadoLote', component: CargarResultadoLote },
 
     { path: '/configurarTurnos', component: ConfigurarTurnos },
     { path: '/configurarFechasSinTurnos', component: ConfigurarFechasSinTurno },
