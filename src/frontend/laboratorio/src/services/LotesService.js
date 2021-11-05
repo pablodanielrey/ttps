@@ -5,11 +5,6 @@ const API_URL = '/lotes_api/'
 export default {
     obtenerEstudios() {
         return Api().get(API_URL + "estudios/")
-        // return new Promise(() => {
-        //     return {
-
-        //     };
-        // })
     },
 
     obtenerLotes() {
