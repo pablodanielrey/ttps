@@ -41,7 +41,8 @@ INSTALLED_APPS = [
     'corsheaders',
     'rest_framework',
     'personas',
-    'estudios'
+    'estudios',
+    'lotes'
 ]
 
 MIDDLEWARE = [

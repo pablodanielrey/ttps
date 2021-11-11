@@ -11,47 +11,40 @@ from zoneinfo import ZoneInfo
 from estudios import models as estudio_models
 from personas import models as persona_models
 
-def generar_turnos():
+
+def generar_fecha_now():
+    return datetime.datetime.now(tz=ZoneInfo('America/Argentina/Buenos_Aires'))
+
+def generar_parametros_de_turnos_por_defecto():
 
     estudio_models.ParametroDeTurnos.objects.all().delete()
 
-    # hoy = datetime.datetime.combine(datetime.date.today(), datetime.time(0))
-    # manana = datetime.timedelta(hours = 24) + hoy
-
-
+    # inicializo los parámetros de los turnos a una semana antes como ejemplo.
     hoy = datetime.datetime.combine(datetime.date.today(), datetime.time(0)).replace(tzinfo=ZoneInfo('America/Argentina/Buenos_Aires'))
     hace_una_semana = hoy - datetime.timedelta(days=7)
-    en_una_semana = hoy + datetime.timedelta(days=7)
 
     rangos_de_prueba = [
         {
             'fecha': hace_una_semana,
             'frecuencia': 15,
             'rangos': [(7,12),(14,19)]
-        },
-        # {
-        #     'fecha': hace_una_semana,
-        #     'frecuencia': 5,
-        #     'rangos': [(9,13)]
-        # },
-        # {
-        #     'fecha': en_una_semana,
-        #     'frecuencia': 65,
-        #     'rangos': [(9,12),(14,18)]
-        # }
+        }
     ]
 
 
     for r in rangos_de_prueba:
         fecha_valido = r['fecha']
         frecuencia = r['frecuencia']
-        logging.debug(f'generando rango a partir de : {fecha_valido} con la frecuencia: {frecuencia}')
-        pt = estudio_models.ParametroDeTurnos(fecha_valido=fecha_valido, frecuencia=frecuencia)
+        pt = estudio_models.ParametroDeTurnos(fecha_valido=fecha_valido)
         pt.save()
         for rinicio, rfin in r['rangos']:
-            r = estudio_models.RangoDeTurnos(parametros=pt, hora_inicio=rinicio, hora_fin=rfin)
+            logging.debug(f'generando rango a partir de : {fecha_valido} de : {rinicio} hasta: {rfin} con la frecuencia: {frecuencia}')
+            r = estudio_models.RangoDeTurnos(parametros=pt, hora_inicio=rinicio, hora_fin=rfin, frecuencia=frecuencia)
             r.save()
 
+
+
+def generar_fechas_feriados():
     estudio_models.FechasSinTurno.objects.all().delete()
     for feriado in [datetime.date(2021,10,28), datetime.date(2021,11,1), datetime.date(2021,11,3)]:
         estudio_models.FechasSinTurno(fecha=feriado).save()
@@ -93,16 +86,17 @@ def generar_estudio_de_muestra():
     estudio_models.EsperandoComprobanteDePago(persona=empleado, estudio=estudio, comprobante='base64-del-comprobante').save()
     estudio_models.EsperandoConsentimientoInformado(persona=empleado, estudio=estudio, consentimiento='base64-del-consntimiento').save()
 
-    estudio_models.EsperandoSeleccionDeTurnoParaExtraccion(persona=empleado, estudio=estudio, turno=datetime.datetime.utcnow()).save()
+    estudio_models.EsperandoSeleccionDeTurnoParaExtraccion(persona=empleado, estudio=estudio, turno=generar_fecha_now()).save()
     estudio_models.EsperandoTomaDeMuestra(persona=empleado, estudio=estudio, expirado=True).save()
     
-    estudio_models.EsperandoSeleccionDeTurnoParaExtraccion(persona=empleado, estudio=estudio, turno=datetime.datetime.utcnow()).save()
-    estudio_models.EsperandoTomaDeMuestra(persona=empleado, estudio=estudio, fecha_muestra=datetime.datetime.utcnow(), mililitros=145, freezer=10, expirado=False).save()
-    estudio_models.EsperandoRetiroDeExtaccion(persona=empleado, estudio=estudio, extracionista='pepe se la lleva a la muestra', fecha_retiro=datetime.datetime.utcnow()).save()
+    estudio_models.EsperandoSeleccionDeTurnoParaExtraccion(persona=empleado, estudio=estudio, turno=generar_fecha_now()).save()
+    estudio_models.EsperandoTomaDeMuestra(persona=empleado, estudio=estudio, fecha_muestra=generar_fecha_now(), mililitros=145, freezer=10, expirado=False).save()
+    estudio_models.EsperandoRetiroDeExtaccion(persona=empleado, estudio=estudio, extracionista='pepe se la lleva a la muestra', fecha_retiro=generar_fecha_now()).save()
     
-    estudio_models.EsperandoLotaDeMuestraParaProcesamientoBiotecnologico(persona=empleado, estudio=estudio,numero_lote='2ef').save()
-    estudio_models.EsperandoInterpretacionDeResultados(persona=empleado, estudio=estudio, resultado_url='https://www.google.com/informe.pdf', fecha_informe=datetime.datetime.utcnow(), medico_informante=mm, informe='estas recontra bien. andate de vacaciones').save()
-    estudio_models.EsperandoEntregaAMedicoDerivante(persona=empleado, estudio=estudio, fecha_entrega=datetime.datetime.utcnow()).save()
+    estudio_models.EsperandoLoteDeMuestraParaProcesamientoBiotecnologico(persona=empleado, estudio=estudio,numero_lote='2ef').save()
+    estudio_models.EsperandoProcesamientoDeLoteBiotecnologico(persona=empleado, estudio=estudio, resultado_url='https://www.google.com/informe.pdf', fecha_resultado=generar_fecha_now()).save()
+    estudio_models.EsperandoInterpretacionDeResultados(persona=empleado, estudio=estudio, fecha_informe=generar_fecha_now(), medico_informante=mm, informe='estas recontra bien. andate de vacaciones').save()
+    estudio_models.EsperandoEntregaAMedicoDerivante(persona=empleado, estudio=estudio, fecha_entrega=generar_fecha_now()).save()
 
 
 class InitSite(APIView):
@@ -487,7 +481,16 @@ class InitSite(APIView):
                 t = estudio_models.TiposDeEstudio(nombre=te)
                 t.save()
 
+        generar_parametros_de_turnos_por_defecto()
 
+        return Response({'status':'sistema inicializado'})
+
+
+class Ejemplos(APIView):
+    
+    permission_classes= [permissions.IsAdminUser]
+
+    def get(self, request, format=None):
         """
             Inicializo datos de ejemplo de una persona y un estudio
         """
@@ -502,8 +505,11 @@ class InitSite(APIView):
         mm = persona_models.Persona(nombre='Medi', apellido='Cote', dni='2212211', email='m@hotmail.com', telefono='221-1112233', fecha_nacimiento='1995-06-02')
         mm.save()
 
-        generar_turnos()
-
         generar_estudio_de_muestra()
 
-        return Response({'status':'sistema inicializado'})
+        return Response({'status':'ejemplos generados'})
+
+    def delete(self, request, format=None):
+
+        return Response({'status':'ejemplos eliminados'})
+
