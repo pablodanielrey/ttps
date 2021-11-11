@@ -97,9 +97,9 @@ class SerializadorEsperandoRetiroDeExtaccion(serializers.ModelSerializer):
         model = models.EsperandoRetiroDeExtaccion
         fields = ['id','fecha','extracionista','fecha_retiro']
 
-class SerializadorEsperandoLotaDeMuestraParaProcesamientoBiotecnologico(serializers.ModelSerializer):
+class SerializadorEsperandoLoteDeMuestraParaProcesamientoBiotecnologico(serializers.ModelSerializer):
     class Meta:
-        model = models.EsperandoLotaDeMuestraParaProcesamientoBiotecnologico
+        model = models.EsperandoLoteDeMuestraParaProcesamientoBiotecnologico
         fields = ['id','fecha','numero_lote']
 
 class SerializadorEsperandoInterpretacionDeResultados(serializers.ModelSerializer):
@@ -125,7 +125,7 @@ class SerializadorEstadoEstudioPolimorfico(PolymorphicSerializer):
         models.EsperandoSeleccionDeTurnoParaExtraccion: SerializadorEsperandoSeleccionDeTurnoParaExtraccion,
         models.EsperandoTomaDeMuestra: SerializadorEsperandoTomaDeMuestra,
         models.EsperandoRetiroDeExtaccion: SerializadorEsperandoRetiroDeExtaccion,
-        models.EsperandoLotaDeMuestraParaProcesamientoBiotecnologico: SerializadorEsperandoLotaDeMuestraParaProcesamientoBiotecnologico,
+        models.EsperandoLoteDeMuestraParaProcesamientoBiotecnologico: SerializadorEsperandoLoteDeMuestraParaProcesamientoBiotecnologico,
         models.EsperandoInterpretacionDeResultados: SerializadorEsperandoInterpretacionDeResultados,
         models.EsperandoEntregaAMedicoDerivante: SerializadorEsperandoEntregaAMedicoDerivante
     }

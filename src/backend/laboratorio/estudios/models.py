@@ -68,7 +68,7 @@ class EsperandoRetiroDeExtaccion(EstadoEstudio):
     extracionista = models.CharField(max_length=1024, null=True)
     fecha_retiro = models.DateTimeField(null=True)
 
-class EsperandoLotaDeMuestraParaProcesamientoBiotecnologico(EstadoEstudio):
+class EsperandoLoteDeMuestraParaProcesamientoBiotecnologico(EstadoEstudio):
     numero_lote = models.CharField(max_length=500, null=True)
 
 class EsperandoInterpretacionDeResultados(EstadoEstudio):
