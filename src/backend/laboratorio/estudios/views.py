@@ -102,10 +102,16 @@ class SerializadorEsperandoLoteDeMuestraParaProcesamientoBiotecnologico(serializ
         model = models.EsperandoLoteDeMuestraParaProcesamientoBiotecnologico
         fields = ['id','fecha','numero_lote']
 
+class SerializadorEsperandoProcesamientoDeLoteBiotecnologico(serializers.ModelSerializer):
+    class Meta:
+        model = models.EsperandoProcesamientoDeLoteBiotecnologico
+        fields = ['id','fecha','resultado_url','fecha_resultado']
+
+
 class SerializadorEsperandoInterpretacionDeResultados(serializers.ModelSerializer):
     class Meta:
         model = models.EsperandoInterpretacionDeResultados
-        fields = ['id','fecha','resultado_url','fecha_informe','medico_informante','informe']
+        fields = ['id','fecha','fecha_informe','medico_informante','informe']
 
 class SerializadorEsperandoEntregaAMedicoDerivante(serializers.ModelSerializer):
     class Meta:
@@ -126,6 +132,7 @@ class SerializadorEstadoEstudioPolimorfico(PolymorphicSerializer):
         models.EsperandoTomaDeMuestra: SerializadorEsperandoTomaDeMuestra,
         models.EsperandoRetiroDeExtaccion: SerializadorEsperandoRetiroDeExtaccion,
         models.EsperandoLoteDeMuestraParaProcesamientoBiotecnologico: SerializadorEsperandoLoteDeMuestraParaProcesamientoBiotecnologico,
+        models.EsperandoProcesamientoDeLoteBiotecnologico: SerializadorEsperandoProcesamientoDeLoteBiotecnologico,
         models.EsperandoInterpretacionDeResultados: SerializadorEsperandoInterpretacionDeResultados,
         models.EsperandoEntregaAMedicoDerivante: SerializadorEsperandoEntregaAMedicoDerivante
     }
@@ -209,14 +216,14 @@ class VistaEstudios(viewsets.ModelViewSet):
 class SerializadorRangoTurnos(serializers.ModelSerializer):
     class Meta:
         model = models.RangoDeTurnos
-        fields = ['id', 'hora_inicio', 'hora_fin']
+        fields = ['id', 'hora_inicio', 'hora_fin', 'frecuencia']
 
 class SerializadorParametroTurnos(serializers.ModelSerializer):
 
     rangos = SerializadorRangoTurnos(many=True)
     class Meta:
         model = models.ParametroDeTurnos
-        fields = ['id','fecha_valido','frecuencia','rangos']
+        fields = ['id','fecha_valido','rangos']
 
 
 class VistaParametroTurnos(viewsets.ModelViewSet):

@@ -69,10 +69,13 @@ class EsperandoRetiroDeExtaccion(EstadoEstudio):
     fecha_retiro = models.DateTimeField(null=True)
 
 class EsperandoLoteDeMuestraParaProcesamientoBiotecnologico(EstadoEstudio):
-    numero_lote = models.CharField(max_length=500, null=True)
+    numero_lote=models.CharField(max_length=500,null=True)
+
+class EsperandoProcesamientoDeLoteBiotecnologico(EstadoEstudio):
+    fecha_resultado = models.DateField(null=True)
+    resultado_url = models.URLField(null=True)
 
 class EsperandoInterpretacionDeResultados(EstadoEstudio):
-    resultado_url = models.URLField()
     fecha_informe = models.DateField()
     medico_informante = models.ForeignKey(Persona, on_delete=models.CASCADE)
     informe = models.TextField()
@@ -143,13 +146,13 @@ class EstadosEstudio(models.Model):
 class ParametroDeTurnos(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     fecha_valido = models.DateTimeField()
-    frecuencia = models.IntegerField(default=15)
 
 class RangoDeTurnos(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     parametros = models.ForeignKey(ParametroDeTurnos, on_delete=models.CASCADE, related_name='rangos')
-    hora_inicio = models.IntegerField(default=9)
-    hora_fin = models.IntegerField(default=13)
+    hora_inicio = models.IntegerField()
+    hora_fin = models.IntegerField()
+    frecuencia = models.IntegerField(default=15)
 
 class FechasSinTurno(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
@@ -185,7 +188,6 @@ class ModeloTurnos:
         """ obtengo todos los parámetros definidos entre las fechas que me interesa obtener los turnos """
         parametros = ParametroDeTurnos.objects.filter(fecha_valido__gte=fecha_inicial, fecha_valido__lte=hasta).order_by('-fecha_valido').all()
         for parametro in parametros:
-            frecuencia = datetime.timedelta(minutes=parametro.frecuencia)
             rangos:RangoDeTurnos = parametro.rangos.order_by('hora_inicio').all()
             a_partir_de = parametro.fecha_valido
 
@@ -202,15 +204,16 @@ class ModeloTurnos:
                     """
                     turno_actual -= un_dia
                     continue
-                turnos_del_dia = self._generar_turnos_para_dia(turno_actual, frecuencia, rangos)
+                turnos_del_dia = self._generar_turnos_para_dia(turno_actual, rangos)
                 turnos.extend(turnos_del_dia)
                 turno_actual -= un_dia
 
         return turnos
 
-    def _generar_turnos_para_dia(self, fecha, frecuencia, rangos):
+    def _generar_turnos_para_dia(self, fecha, rangos):
         turnos = []
         for rango in rangos:
+            frecuencia = datetime.timedelta(minutes=rango.frecuencia)
             hora_de_turno = fecha.replace(hour=rango.hora_inicio, minute=0, second=0, microsecond=0)
             hora_de_fin = fecha.replace(hour=rango.hora_fin, minute=0, second=0, microsecond=0)
             nuevo_turno = hora_de_turno + frecuencia
@@ -238,32 +241,4 @@ class ModeloTurnos:
     def _dia_de_la_semana(self, fecha):
         dia = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo']
         return dia[fecha.weekday()]
-
-    """
-    zdesde = desde.replace(minute=0,second=0,microsecond=0)
-    zhasta = hasta.replace(minute=0,second=0,microsecond=0)
-
-    ddia = datetime.timedelta(days=1)
-    fecha_turno = zhasta
-    turnos = []
-    for parametro in parametros:
-        fecha_valido = parametro.fecha_valido
-        while fecha_turno >= fecha_valido:
-            freq = datetime.timedelta(minutes=parametro.frecuencia)
-            rangos = parametro.rangos.order_by('hora_inicio').all()
-            for rango in rangos:
-
-                hora_turno = fecha_turno.replace(hour=rango.hora_inicio, minute=0, second=0, microsecond=0)
-                hora_fin_rango = fecha_turno.replace(hour=rango.hora_fin, minute=0, second=0, microsecond=0)
-                
-                duracion_turno = hora_turno + freq
-                while duracion_turno <= hora_fin_rango:
-                    if duracion_turno <= zdesde:
-                        return turnos
-                    turnos.append(hora_turno)
-                    hora_turno = duracion_turno
-                    duracion_turno += freq
-            fecha_turno = fecha_turno - ddia
-                    
-    return turnos
-    """
+        
