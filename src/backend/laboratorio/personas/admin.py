@@ -1,7 +1,8 @@
 from django.contrib import admin
 
 # Register your models here.
-from .models import Persona, ObraSocial
+from . import models
 
-admin.site.register(Persona)
-admin.site.register(ObraSocial)
+admin.site.register(models.Persona)
+admin.site.register(models.ObraSocialPersona)
+admin.site.register(models.ObraSocial)

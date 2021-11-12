@@ -12,6 +12,9 @@ class ObraSocial(models.Model):
     email = models.CharField(max_length=1024)
     telefono = models.CharField(max_length=50)
 
+    def __str__(self):
+        return f"{self.nombre} {self.email} {self.telefono}"
+
 class Persona(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     nombre = models.CharField(max_length=500)
@@ -23,7 +26,8 @@ class Persona(models.Model):
     historia_clinica = models.CharField(max_length=9216, null=True)
 
     def __str__(self):
-        return f"{self.nombre} {self.apellido} {self.dni}"
+        obs = " | ".join([ f"{obp.numero_afiliado} {obp.obra_social.__str__()}" for obp in self.obra_social.all() ])
+        return f"{self.nombre} {self.apellido} {self.dni} obra social : {obs}"
 
 
 class ObraSocialPersona(models.Model):
