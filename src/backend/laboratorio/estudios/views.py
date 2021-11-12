@@ -59,13 +59,6 @@ class SerializadorEsperandoPresupuesto(serializers.ModelSerializer):
         fields = ['id','fecha','presupuesto']
 
 
-class SerializadorEsperandoFactura(serializers.ModelSerializer):
-
-    obra_social = SerializadorDeObraSocial()
-    class Meta:
-        model = models.EsperandoFactura
-        fields = ['id','fecha','numero','fecha_factura','monto','obra_social']
-
 class SerializadorEsperandoComprobanteDePago(serializers.ModelSerializer):
     class Meta:
         model = models.EsperandoComprobanteDePago
@@ -124,7 +117,6 @@ class SerializadorEstadoEstudioPolimorfico(PolymorphicSerializer):
     model_serializer_mapping = {
         models.EstadoEstudio: SerializadorEstadoEstudio,
         models.EsperandoPresupuesto: SerializadorEsperandoPresupuesto,
-        models.EsperandoFactura: SerializadorEsperandoFactura,
         models.EsperandoComprobanteDePago: SerializadorEsperandoComprobanteDePago,
         models.AnuladorPorFaltaDePago: SerializadorAnuladorPorFaltaDePago,
         models.EsperandoConsentimientoInformado: SerializadorEsperandoConsentimientoInformado,
@@ -141,21 +133,6 @@ class VistaEstadoEstudio(viewsets.ModelViewSet):
     queryset = models.EstadoEstudio.objects.all()
     serializer_class = SerializadorEstadoEstudioPolimorfico
 
-
-"""
-
-class SerializadorPresupuestoEstudio(serializers.HyperlinkedModelSerializer):
-
-    estado = SerializadorEstadoEstudio()
-    class Meta:
-        model = models.PresupuestoEstudio
-        fields = ['id', 'estado', 'presupuesto']
-
-class VistaPresupuestoEstudio(viewsets.ModelViewSet):
-    queryset = models.PresupuestoEstudio.objects.all()
-    serializer_class = SerializadorPresupuestoEstudio
-
-"""
 
 """
     ///////////////////////////////////////////////

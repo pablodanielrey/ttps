@@ -11,6 +11,9 @@ class Diagnostico(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     nombre = models.CharField(max_length=1024)
 
+    def __str__(self):
+        return self.nombre
+
 class TiposDeEstudio(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     nombre = models.CharField(max_length=1024)
@@ -36,15 +39,7 @@ class EstadoEstudio(PolymorphicModel):
     persona = models.ForeignKey(Persona, on_delete=models.CASCADE, null=True)
 
 class EsperandoPresupuesto(EstadoEstudio):
-    presupuesto = models.TextField(null=True)
-
-class EsperandoFactura(EstadoEstudio):
-    factura = models.TextField(null=True)    
-    fecha_factura = models.DateField(auto_now=True)
-    numero = models.CharField(max_length=255,null=True)
-    monto = models.FloatField(null=True)
-    obra_social = models.ForeignKey(ObraSocial, on_delete=models.CASCADE, null=True)
-    
+    presupuesto = models.TextField(null=True)   
 
 class EsperandoComprobanteDePago(EstadoEstudio):
     comprobante = models.TextField(null=True)
@@ -147,6 +142,10 @@ class ParametroDeTurnos(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     fecha_valido = models.DateTimeField()
 
+    def __str__(self):
+        rangos = " | ".join([r.__str__() for r in self.rangos.all() ])
+        return f"desde : {self.fecha_valido} rangos: [ {rangos} ]" 
+
 class RangoDeTurnos(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     parametros = models.ForeignKey(ParametroDeTurnos, on_delete=models.CASCADE, related_name='rangos')
@@ -154,9 +153,15 @@ class RangoDeTurnos(models.Model):
     hora_fin = models.IntegerField()
     frecuencia = models.IntegerField(default=15)
 
+    def __str__(self):
+        return f"inicio:{self.hora_inicio} - fin:{self.hora_fin} - freq:{self.frecuencia}"
+
 class FechasSinTurno(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     fecha = models.DateField()
+
+    def __str__(self):
+        return self.fecha
 
 
 class ModeloTurnos:
