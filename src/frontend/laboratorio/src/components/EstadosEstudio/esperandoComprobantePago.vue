@@ -1,7 +1,7 @@
 <template>
   <b-container>
     <div>
-      <b-card header="Comprobante de pago">
+      <b-card header="Estudio esperando que se ingrese el comprobante pago">
         <b-row>
           <b-col lg="5" md="5" class="text-center pt-3">
             <b-form-group
@@ -28,16 +28,17 @@
             </b-form-group>
           </b-col>
         </b-row>
-        <b-row class="pb-2">
-          <b-col class="text-center pt-3">
-            <b-button variant="success">Subir </b-button>
-          </b-col>
-        </b-row>
+       
         <div>
           <div class="counter">
             Quedan {{ counter }} dias para subir el comprobante de pago
           </div>
         </div>
+         <b-row class="pb-2">
+          <b-col class="text-center pt-3">
+            <b-button variant="success">Guardar </b-button>
+          </b-col>
+        </b-row>
       </b-card>
     </div>
   </b-container>

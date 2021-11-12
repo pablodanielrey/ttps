@@ -1,7 +1,7 @@
 <template>
   <b-container>
     <div>
-            <b-card header="Descargar consentimiento ">
+            <b-card header="Descargar resultado en formato pdf de estudio para entregarlo a medico derivante">
       <b-button
         title="Bajar consentimiento informado"
         variant="outline-success"

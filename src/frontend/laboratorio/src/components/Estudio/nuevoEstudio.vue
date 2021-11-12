@@ -10,11 +10,11 @@
         </b-col>
       </b-row>
 
-      <b-row class="pb-2">
+<!--       <b-row class="pb-2">
         <b-col class="text-center pt-3">
           <p class="h5"><strong>Usuario Logueado:</strong>{{ usuario }}</p>
         </b-col>
-      </b-row>
+      </b-row> -->
 
       <ValidationObserver ref="detailsEstudio">
         <b-form-group>
@@ -101,7 +101,7 @@
                 label-for="estudio"
               >
                 <ValidationProvider
-                  :name="'os '"
+                  :name="'Tipo de estudio '"
                   v-slot="{ errors, valid }"
                   :rules="'required'"
                 >
@@ -151,12 +151,12 @@
               <b-form-group
                 id="pdf-label"
                 label="Presupuesto del estudio:"
-                label-for="pdf"
+                label-for="Presupuesto del estdio"
               >
-                <ValidationProvider :name="'pdf '" v-slot="{ errors }">
+                <ValidationProvider :rules="'required'" :name="'Presupuesto del estdio '" v-slot="{ errors }">
                   <b-form-file
                     v-model="file1"
-                    :state="Boolean(file1)"
+                     :state="errors[0] ? false : valid ? true : null"
                     @change="obtenerPDF($event, file1)"
                     accept="application/pdf"
                     placeholder="Seleccione el presupuesto..."

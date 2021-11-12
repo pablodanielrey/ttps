@@ -11,7 +11,7 @@
           >{{ alert.message }}</b-alert
         >
       </b-form-group>
-      <b-card header="Horarios de atencion">
+      <b-card header="Horarios de atencion-Rango de horario">
         <b-row>
           <b-col lg="3" md="5" sm="10">
             <b-form-group

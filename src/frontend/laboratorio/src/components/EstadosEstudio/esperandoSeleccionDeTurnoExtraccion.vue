@@ -1,6 +1,8 @@
 <template>
   <b-container>
     <div>
+      <h3>Seleccion de turno para un paciente </h3>
+      <h5>Paciente: {{estudio.paciente.apellido}} {{estudio.paciente.nombre}}</h5>
       <div v-if="loading">
         <b-spinner> </b-spinner>
       </div>
@@ -58,7 +60,7 @@ export default {
 
   props: {
      estudio:{
-      type:String,
+      type:Object,
       
     }
   },
@@ -94,14 +96,15 @@ export default {
       this.$refs["my-modal"].show();
       // Prevent navigating to narrower view (default vue-cal behavior).
       e.stopPropagation();
-    },
-    cambiarPaciente() {
-      console.log(this.paciente);
-    },
+    },   
     confirmarTurno(inicio,fin){
-      console.log(inicio.format('YYYY-MM-DD HH:m') )
-      console.log(fin.toLocaleString('en-es'))
-      console.log(this.estudio)
+
+      let turnoEstudio={
+        inicio:inicio.format('YYYY-MM-DD HH:m'),
+        fin: fin.toLocaleString('en-es'),
+        idEstudio:this.estudio.id
+      }
+      console.log(turnoEstudio)
     }
  
   },

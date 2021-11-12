@@ -10,6 +10,7 @@ import ListaEstudios from '@/components/Estudio/listaEstudios.vue'
 
 import NuevaObraSocial from '@/components/ObraSocial/nuevaObraSocial.vue'
 import NuevoEstudio from '@/components/Estudio/nuevoEstudio.vue'
+import DetalleDeUnEstudio from '@/components/Estudio/detalleDeUnEstudio.vue'
 
 //estados de estudios
 import EsperandoFactura from '@/components/EstadosEstudio/esperandoFactura.vue'
@@ -19,6 +20,8 @@ import EsperandoConsentimientoInformado from '@/components/EstadosEstudio/espera
 import EsperandoSeleccionDeTurnoExtraccion from '@/components/EstadosEstudio/esperandoSeleccionDeTurnoExtraccion.vue'
 import EsperandoTomaDeMuestra from '@/components/EstadosEstudio/esperandoTomaDeMuestra.vue'
 import EsperandoRetiroExtraccion from '@/components/EstadosEstudio/esperandoRetiroExtraccion.vue'
+
+
 
 // lotes
 import CrearLote from '@/components/Lotes/crearLote.vue'
@@ -51,6 +54,8 @@ const routes = [
 
     { path: '/configurarTurnos', component: ConfigurarTurnos },
     { path: '/configurarFechasSinTurnos', component: ConfigurarFechasSinTurno },
+
+    { path: '/detalleDeEstudio', component: DetalleDeUnEstudio, name:'detalleDeEstudio',props: true  },
 ]
 
 const router = new Router({

@@ -3,13 +3,13 @@
     <br />
     <h4>Listado de Estudios</h4>
 
-    <b-col lg="4" class="my-1">
+    <b-col lg="6" class="my-1">
       <b-input-group size="sm">
         <b-form-input
           id="filter-input"
           v-model="filter"
           type="search"
-          placeholder="Buscar en el listado"
+          placeholder="Buscar por nombre de paciente,medico derivante u diagnostico"
         ></b-form-input>
 
         <b-input-group-append>
@@ -24,23 +24,21 @@
       :current-page="currentPage"
       :per-page="perPage"
       @filtered="onFiltered"
-    >
+    >   
       <template v-slot:cell(acciones)="row">
-        <div v-if="row.item.estados[0] != null">
+      
           <b-button
             title="Descargar Presupuesto"
-            variant="outline-success"
+            variant="outline-primary"
             download="presupuesto.pdf"
-            :href="row.item.estados[0].presupuesto"
+            
           >
             <b-icon icon="download" aria-hidden="true"></b-icon
           ></b-button>
-             <b-button   
-             @click="seleccionTurno(row.item.id)"        
-          >
-          seleccionar turno
-          ></b-button>
-        </div>
+           <b-button @click="detalleEstudio(row.item)">
+            Detalle
+          </b-button> 
+
       </template>
     </b-table>
 
@@ -77,13 +75,15 @@ export default {
 
   data() {
     return {
+
       perPage: 4,
       pageOptions: [4, 10, 15],
       filter: null,
       currentPage: 1,
       totalRows: 1,
       fields: [
-        { key: "paciente.nombre", label: "Paciente", class: "text-center p2" },
+        { key: "paciente.nombre", label: "Nombre", class: "text-center p2" },
+          { key: "paciente.apellido", label: "Apellido", class: "text-center p2" },
         {
           key: "medico_derivante.apellido",
           label: "Medico derivante",
@@ -95,11 +95,7 @@ export default {
           class: "text-center p2",
         },
         { key: "tipo.nombre", label: "Tipo Estudio", class: "text-center p2" },
-        {
-          key: "estados[0].resourcetype",
-          label: "Estado",
-          class: "text-center p2",
-        },
+        
         { key: "acciones", label: "Acciones", class: "text-center p2" },
       ],
       items: [],
@@ -123,9 +119,16 @@ export default {
       this.totalRows = filteredItems.length;
       this.currentPage = 1;
     },
-    seleccionTurno(estudio){
-         this.$router.push({ name: 'seleccionTurno', params: { estudio:estudio} })
+    detalleEstudio(estudio) {
+   
+      console.log(estudio)
+      this.$router.push({
+        name: "detalleDeEstudio",
+        params: {
+        estudio: estudio
     }
+      }); 
+    },
   },
   mounted() {
     axios

@@ -2,12 +2,12 @@
   <b-container>
     <div>
       <ValidationObserver ref="detailsExtraccion">
-        <b-card header="Retiro de extraccion">           
+        <b-card header="Ingrese quien realizo el retiro de extraccion">           
           <b-row>           
             <b-col lg="7" md="7" sm="10">
               <b-form-group
                 id="retiro-label"
-                label="Nombre del retirante de la muestra:"
+                label="Nombre de la persona que retiro la muestra:"
                 label-for="retiro"
               >
                 <ValidationProvider
@@ -30,16 +30,11 @@
               </b-form-group>
             </b-col>
           </b-row>
-          <b-row>
-            <b-col class="text-center pt-3">
-              <b-button
-                title="Siguiente estado"
-                variant="outline-success"
-                @click="siguienteEstado()"
-              >
-                Enviar</b-button>
-            </b-col>
-          </b-row>
+             <b-row class="pb-2">
+          <b-col class="text-center pt-3">
+            <b-button variant="success">Guardar </b-button>
+          </b-col>
+        </b-row>
         </b-card>
       </ValidationObserver>
     </div>

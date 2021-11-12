@@ -10,16 +10,16 @@
     <div v-else>
     <b-row class="pb-2">
       <b-col class="text-center pt-3">
-        <p class="h3 text-center"><strong> Crear un nuevo paciente</strong></p>
+        <p class="h3 text-center"><strong> Editar  paciente</strong></p>
       </b-col>
     </b-row>
 
-    <b-row class="pb-2">
+<!--     <b-row class="pb-2">
       <b-col class="text-center pt-3">
         <p class="h5"><strong>Usuario Logueado:</strong>{{ usuario }}</p>
       </b-col>
     </b-row>
-
+ -->
     <ValidationObserver ref="detailsPaciente">
       <b-form-group>
         <b-alert

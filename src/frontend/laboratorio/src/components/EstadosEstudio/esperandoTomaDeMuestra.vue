@@ -2,9 +2,9 @@
   <b-container>
     <div>
       <ValidationObserver ref="detailMuestra">
-        <b-card header="Datos de la toma de muestra">
+        <b-card header="Ingrese los datos de la toma de muestra">
             <div class="counter">
-            Quedan 20 dias para subir el comprobante de pago
+            Quedan 20 dias para cargar los datos de la toma de muestra
           </div><br>
           <b-row>
             <b-col lg="3" md="3" sm="10">
@@ -61,16 +61,11 @@
               </b-form-group>
             </b-col>
           </b-row>
-          <b-row>
-            <b-col class="text-center pt-3">
-              <b-button
-                title="Siguiente estado"
-                variant="outline-success"
-                @click="siguienteEstado()"
-              >
-                Enviar</b-button>
-            </b-col>
-          </b-row>
+         <b-row class="pb-2">
+          <b-col class="text-center pt-3">
+            <b-button variant="success">Guardar </b-button>
+          </b-col>
+        </b-row>
         </b-card>
       </ValidationObserver>
     </div>

@@ -1,6 +1,8 @@
 <template>
   <b-container>
-    <b-card header="Fechas en las que no se daran turnos">
+    <b-card header="Fechas de excepcion de turnos, no se daran turnos en estos dias">
+        <b-alert show variant="danger">Atención! la fecha que quiere agregar 10-12-21 a excepcion ya tiene turnos asignados, 
+          por favor cancele los turnos para esa fecha y vuelva a intentar </b-alert>
       <b-row>
         <b-col>
           <vue-cal

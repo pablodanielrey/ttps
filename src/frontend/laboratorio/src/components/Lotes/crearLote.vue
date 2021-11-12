@@ -1,58 +1,117 @@
 <template>
   <b-container>
-    <br />
-    <h4>Listado de Estudios</h4>
 
-    <b-table striped hover :items="items"></b-table>
+ <b-card header=" Listado de Estudios esperando Lote para procesamiento biotecnológico">
+    <b-table
+      :items="items"
+      :fields="fields"
+      :filter="filter"
+      :current-page="currentPage"
+      :per-page="perPage"
+      @filtered="onFiltered"
+      selectable
+    >
+      <template v-slot:cell(acciones)>
+        <b-button
+          title="Descargar Presupuesto"
+          variant="outline-success"
+          download="presupuesto.pdf"
+        >
+          <b-icon icon="eye" aria-hidden="true"></b-icon
+        ></b-button>
+        <!-- <b-button @click="seleccionTurno(row.item.id)">
+            seleccionar turno
+          </b-button> -->
+      </template>
+    </b-table>
 
-    <b-button>Crear Lote</b-button>
+ <b-row class="pb-2">
+      <b-col class="text-center pt-3">
+        <b-button   variant="success"
+          >Crear Lote
+        </b-button>
+  
+      </b-col>
+    </b-row>
+     </b-card>
   </b-container>
 </template>
 
 
 <script>
-import LotesService from "@/services/LotesService.js";
+import EstudiosService from "@/services/EstudiosService.js";
 import axios from "axios";
 export default {
-  name: "CrearLote",
+  name: "ListaPacientes",
 
   components: {},
   props: {},
 
   data() {
     return {
-        items: [],
+      perPage: 10,
+      pageOptions: [4, 10, 15],
+      filter: null,
+      currentPage: 1,
+      totalRows: 1,
+      fields: [
+        { key: "paciente.nombre", label: "Nombre", class: "text-center p2" },
+        {
+          key: "paciente.apellido",
+          label: "Apellido",
+          class: "text-center p2",
+        },
+        {
+          key: "medico_derivante.apellido",
+          label: "Medico derivante",
+          class: "text-center p2",
+        },
+        {
+          key: "diagnostico.nombre",
+          label: "Diagnostico",
+          class: "text-center p2",
+        },
+        { key: "tipo.nombre", label: "Tipo Estudio", class: "text-center p2" },
+
+        { key: "fecha_alta", label: "Fecha Extraccion", class: "text-center p2" },
+      ],
+      items: [],
     };
   },
 
   created() {
     console.log(this.paciente);
   },
-
   methods: {
-    formatear_lista(e) {
-        return {
-            'fecha': e.fecha_alta,
-            'paciente': e.paciente.nombre,
-            'tipo': e.tipo.nombre,
-            'médico': e.medico_derivante.nombre
-        }
-    },
     async obtenerListaEstudios() {
       try {
-        let response = await LotesService.obtenerListaEstudios();
-        this.items = response.data.map(this.formatear_lista).slice(0,10);
-        console.log(this.items);
+        let response = await EstudiosService.obtenerListaEstudios();
+        this.items = response.data;
+        this.items.sort(function (a, b) {
+          if (a.fecha_alta < b.fecha_alta){
+            return -1
+          }
+          if (a.fecha_alta > b.fecha_alta){
+            return 1
+          }
+          
+          
+        });
       } catch (err) {
         console.log(err);
       }
-    }
+    },
+    onFiltered(filteredItems) {
+      this.totalRows = filteredItems.length;
+      this.currentPage = 1;
+    },
+    seleccionTurno(estudio) {
+      this.$router.push({
+        name: "seleccionTurno",
+        params: { estudio: estudio },
+      });
+    },
   },
-
-  computed: {
-      
-  },
-
   mounted() {
     axios
       .all([this.obtenerListaEstudios()])
@@ -63,7 +122,6 @@ export default {
         console.log(err);
       });
   },
-
 };
 </script>
 

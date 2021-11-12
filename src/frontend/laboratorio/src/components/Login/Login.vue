@@ -13,6 +13,7 @@
       <p class="title h3 mt-2 text-center">Iniciar Sesion</p>
     </div>
     <hr />
+      <b-alert show variant="danger">Usuario o contraseña incorrectos,por favor vuelva a ingresar los datos</b-alert>
     <b-alert show variant="danger" v-if="error">{{ error }}</b-alert>
 
     <b-form @submit.prevent="login">

@@ -1,24 +1,39 @@
 <template>
-<b-container>
+  <b-container>
     <br />
-  
- <b-card header=" Listado de Lotes">
-    <b-table striped hover :items="items" :fields="fields">
-          <template v-slot:cell(acciones)="item">
+    <h4>Listado de Estudios esperando interpretacion de resultados e informes</h4>
+
+    <b-col lg="4" class="my-1">
+      <b-input-group size="sm">
+        <b-form-input
+          id="filter-input"
+          v-model="filter"
+          type="search"
+          placeholder="Buscar en el listado"
+        ></b-form-input>
+
+        <b-input-group-append>
+          <b-button :disabled="!filter" @click="filter = ''">Buscar</b-button>
+        </b-input-group-append>
+      </b-input-group>
+    </b-col>
+    <b-table
+      :items="items"
+      :fields="fields"
+      :filter="filter"
+      :current-page="currentPage"
+      :per-page="perPage"
+      @filtered="onFiltered"
+    >   
+      <template v-slot:cell(acciones)>
       
           <b-button
-            title="Ver estudios"
+            title="Descargar Presupuesto"
             variant="outline-primary"
-            @click="verEstudios(item.item)"
+            
+            @click="cargarResultado"
           >
-           Estudios
-          </b-button>
-             <b-button
-            title="URL"
-            variant="outline-success"
-               @click="cargarResultado()"
-          >
-           Cargar Resultado
+            Ingresar Resultado
           </b-button>
           <!-- <b-button @click="seleccionTurno(row.item.id)">
             seleccionar turno
@@ -26,40 +41,33 @@
 
       </template>
     </b-table>
-    <div>
-    <b-row class="pb-2">
-      <b-col class="text-center pt-3">
+
+    <b-row>
+      <b-col md="1">
+        <b-form-select
+          id="per-page-select"
+          v-model="perPage"
+          :options="pageOptions"
+          size="sm"
+        ></b-form-select>
+      </b-col>
+      <b-col class="text-center">
         <b-pagination
           v-model="currentPage"
           :total-rows="totalRows"
           :per-page="perPage"
         ></b-pagination>
       </b-col>
-      </b-row>
-    </div>
- </b-card>
-     <b-modal 
-     size="xl"
-      ref="my-modal" 
-      title="Estudios del lote 1" 
-      ok-only     
-      >
-         <b-table
-      :items="itemsEst"
-      :fields="fieldsEst"
-   
-    >   
+      <br />
+    </b-row>
 
-    </b-table>
 
-          
-      </b-modal>
-           <b-modal 
-     size="xl"
-      ref="modalResultado" 
-      title="Cargar resultados del lote" 
-      ok-only     
-      >
+                <b-modal 
+          size="xl"
+            ref="modalResultado" 
+            title="Cargar resultados del Estudio" 
+            ok-only     
+            >
   <ValidationObserver ref="detailsEstudio">
         <b-form-group>
           <b-alert
@@ -98,31 +106,7 @@
               </b-form-group>
             </b-col>
           
-            <b-col lg="5" md="5" sm="10">
-              <b-form-group
-                id="medico-label"
-                label="Medico Informante:"
-                label-for="Medico Informante"
-              >
-                <ValidationProvider
-                  :name="'Medico '"
-                  :rules="'required'"
-                  v-slot="{ errors, valid }"
-                >
-                  <b-form-input
-                    placeholder="medico Informante"
-                   
-                    :state="errors[0] ? false : valid ? true : null"
-                  ></b-form-input>
-                  <b-form-invalid-feedback
-                    v-for="error in errors"
-                    :key="error.key"
-                  >
-                    {{ error }}
-                  </b-form-invalid-feedback>
-                </ValidationProvider>
-              </b-form-group>
-            </b-col>
+    
           </b-row>
           <b-row>
        
@@ -184,103 +168,88 @@
 
           
       </b-modal>
-</b-container>
+  </b-container>
 </template>
 
+
 <script>
-import LotesService from "@/services/LotesService.js";
+import EstudiosService from "@/services/EstudiosService.js";
 import axios from "axios";
 import { VueEditor } from "vue2-editor";
-
-
 export default {
-    name: "CargarResultadoLote",
+  name: "ListaPacientes",
 
- components: { VueEditor },
-    props: {},
+  components: {VueEditor},
+  props: {},
 
-    data() {
-
-        return {
-              perPage: 4,
-              itemsEst: [],
-              fieldsEst: [
-        { key: "nombre", label: "Nombre", class: "text-center p2" },
-       
-        {
-          key: "medico_derivante",
-          label: "Medico derivante",
-          class: "text-center p2",
-        },     
-        { key: "tipo", label: "Tipo Estudio", class: "text-center p2" },
-        
-        
-      ],
+  data() {
+    return {
+      perPage: 4,
       pageOptions: [4, 10, 15],
       filter: null,
       currentPage: 1,
       totalRows: 1,
-            items: [],
-            fields: [
-        { key: "id", label: "Numero", class: "text-center p2" },
-        
-        { key: "fecha", label: "Fecha Creacion", class: "text-center p2" },
+      fields: [
+        { key: "paciente.nombre", label: "Nombre", class: "text-center p2" },
+          { key: "paciente.apellido", label: "Apellido", class: "text-center p2" },
+        {
+          key: "medico_derivante.apellido",
+          label: "Medico derivante",
+          class: "text-center p2",
+        },
+        {
+          key: "diagnostico.nombre",
+          label: "Diagnostico",
+          class: "text-center p2",
+        },
+        { key: "tipo.nombre", label: "Tipo Estudio", class: "text-center p2" },
         
         { key: "acciones", label: "Acciones", class: "text-center p2" },
       ],
-        };
-    },
+      items: [],
+    };
+  },
 
-    created() {
-     
+  created() {
+    console.log(this.paciente);
+  },
+  methods: {
+    async obtenerListaEstudios() {
+      try {
+        let response = await EstudiosService.obtenerListaEstudios();
+        this.items = response.data;
+        console.log(this.items);
+      } catch (err) {
+        console.log(err);
+      }
     },
-
-    methods: {
-        verEstudios(item){
-            console.log(item)
-            this.itemsEst=item.estudios
-                  this.$refs["my-modal"].show();
-        },
-        cargarResultado(){
+     cargarResultado(){
                    this.$refs["modalResultado"].show();
         },
-        formatear_lista(e) {
-            return {
-              id: e.id,
-              numero: e.numero,
-              fecha:e.fecha,
-              estudios: e.estudios.reduce((a,) => 1+a, 0)
-            };
-        },
-        async obtenerLotes() {
-            try {
-                let response = await LotesService.obtenerLotes();
-                console.log(response);
-                this.items = response
-  
-            } catch (err) {
-                console.log(err);
-            }
-        }
+    onFiltered(filteredItems) {
+      this.totalRows = filteredItems.length;
+      this.currentPage = 1;
     },
-
-    computed: {
-
+    seleccionTurno(estudio) {
+      this.$router.push({
+        name: "seleccionTurno",
+        params: { estudio: estudio },
+      });
     },
-
-    mounted() {
-        axios
-            .all([this.obtenerLotes()])
-            .then(() => {
-                this.totalRows = this.items.length;
-            })
-            .catch((err) => {
-                console.log(err);
-            });
-    },
-
+  },
+  mounted() {
+    axios
+      .all([this.obtenerListaEstudios()])
+      .then(() => {
+        this.totalRows = this.items.length;
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  },
 };
 </script>
+
 
 <style>
 </style>
