@@ -215,7 +215,7 @@
             </b-col>
           </b-row>
         </b-card>
-        <b-card header="Historia clinica">
+  <!--       <b-card header="Historia clinica">
           <b-row>
             <b-col>
               <b-form-group
@@ -240,7 +240,7 @@
               </b-form-group>
             </b-col>
           </b-row>
-        </b-card>
+        </b-card> -->
       </ValidationObserver>
 
       <b-row class="pb-2">
@@ -261,10 +261,10 @@ import ObrasSocialesService from "@/services/ObrasSocialesService";
 import axios from "axios";
 import PacientesService from "@/services/PacientesService.js";
 import EstudiosService from "@/services/EstudiosService.js";
-import { VueEditor } from "vue2-editor";
+/* import { VueEditor } from "vue2-editor"; */
 
 export default {
-  components: { VueEditor },
+  components: { /* VueEditor */ },
 
   props: {},
   created() {},
@@ -314,6 +314,9 @@ export default {
                 variant: "success",
               }
             );
+            this.$router.push({
+                name: "listaEstudios"      
+            }); 
            }
         }
       } catch (err) {

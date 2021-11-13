@@ -2,6 +2,8 @@ import Vue from 'vue'
 import Router from 'vue-router'
 
 Vue.use(Router)
+//home
+import container from '@/components/Home/Container.vue'
 
 import Login from '@/components/Login/Login.vue'
 import Paciente from '@/components/Paciente/nuevoPaciente.vue'
@@ -34,35 +36,44 @@ import ConfigurarFechasSinTurno from '@/components/Turnos/configurarFechasSinTur
 // lo siguiente necesita que vue tenga el compilador de templates.
 // const Foo = { template: '<div>superrr fooooo</div>' }
 
-const routes = [
-    { path: '/login', component: Login },
-    { path: '/paciente', component: Paciente, name: 'paciente', props: true },
-    { path: '/lista', component: ListaPacientes },
-    { path: '/obraSocial', component: NuevaObraSocial },
-    { path: '/estudio', component: NuevoEstudio },
-    { path: '/listaEstudios', component: ListaEstudios },
-    { path: '/esperandoFactura', component: EsperandoFactura },
-    { path: '/esperandoComprobantePago', component: EsperandoComprobantePago },
-    { path: '/enviarConsentimientoInformado', component: EnviarConsentimientoInformado },
-    { path: '/esperandoConsentimientoInformado', component: EsperandoConsentimientoInformado },
-    { path: '/esperandoSeleccionDeTurnoExtraccion', component: EsperandoSeleccionDeTurnoExtraccion, name:'seleccionTurno',props:true },
-    { path: '/esperandoTomaDeMuestra', component: EsperandoTomaDeMuestra },
-    { path: '/esperandoRetiroExtraccion', component: EsperandoRetiroExtraccion },
-
-    { path: '/crearLote', component: CrearLote },
-    { path: '/cargarResultadoLote', component: CargarResultadoLote },
-
-    { path: '/configurarTurnos', component: ConfigurarTurnos },
-    { path: '/configurarFechasSinTurnos', component: ConfigurarFechasSinTurno },
-
-    { path: '/detalleDeEstudio', component: DetalleDeUnEstudio, name:'detalleDeEstudio',props: true  },
-]
-
 const router = new Router({
     mode: 'history',
     base: process.env.BASE_URL,
-    routes: routes
+    routes: [{
+        path: '/',
+        component: container ,
+        meta: { 
+        requireAuth: false
+        },
+        children: [    
+            { path: '/paciente', component: Paciente, name: 'paciente', props: true },
+            { path: '/lista', component: ListaPacientes  ,name:'listaPacientes'},
+            { path: '/obraSocial', component: NuevaObraSocial },
+            { path: '/estudio', component: NuevoEstudio , name:'nuevoEstudio'},
+            { path: '/listaEstudios', component: ListaEstudios, name:'listaEstudios' },
+            { path: '/esperandoFactura', component: EsperandoFactura },
+            { path: '/esperandoComprobantePago', component: EsperandoComprobantePago , name:'esperandoComprobantePago' },
+            { path: '/enviarConsentimientoInformado', component: EnviarConsentimientoInformado },
+            { path: '/esperandoConsentimientoInformado', component: EsperandoConsentimientoInformado },
+            { path: '/esperandoSeleccionDeTurnoExtraccion', component: EsperandoSeleccionDeTurnoExtraccion, name:'seleccionTurno',props:true },
+            { path: '/esperandoTomaDeMuestra', component: EsperandoTomaDeMuestra },
+            { path: '/esperandoRetiroExtraccion', component: EsperandoRetiroExtraccion },
+
+            { path: '/crearLote', component: CrearLote },
+            { path: '/cargarResultadoLote', component: CargarResultadoLote },
+
+            { path: '/configurarTurnos', component: ConfigurarTurnos },
+            { path: '/configurarFechasSinTurnos', component: ConfigurarFechasSinTurno },
+
+            { path: '/detalleDeEstudio', component: DetalleDeUnEstudio, name:'detalleDeEstudio',props: true  }
+        ]
+    },
+    {
+     path: '/login', component: Login },
+    ],
 })
+
+
 
 
 export default router

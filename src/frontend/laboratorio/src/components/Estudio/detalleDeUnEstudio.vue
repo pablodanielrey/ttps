@@ -1,17 +1,26 @@
 <template>
   <b-container class="bv-example-row">
+    <br />
     <b-card header="Detalle de un estudio">
       <b-row>
-        <b-col><strong> Paciente: </strong> {{ estudio.paciente.apellido }} {{ estudio.paciente.nombre }} <br /></b-col>
-        <b-col> <strong> Fecha de alta: </strong>{{estudio.fecha_alta}} <br /></b-col>
+        <b-col
+          ><strong> Paciente: </strong> {{ estudio.paciente.apellido }}
+          {{ estudio.paciente.nombre }} <br
+        /></b-col>
+        <b-col>
+          <strong> Fecha de alta: </strong>{{ estudio.fecha_alta }} <br
+        /></b-col>
       </b-row>
       <b-row>
         <b-col>
-          <strong> Medico Derivante: </strong> {{ estudio.medico_derivante.apellido }} {{ estudio.medico_derivante.nombre }}  <br
+          <strong> Medico Derivante: </strong>
+          {{ estudio.medico_derivante.apellido }}
+          {{ estudio.medico_derivante.nombre }} <br
         /></b-col>
 
         <b-col>
-          <strong> Diagnostico Presuntivo: </strong>{{ estudio.diagnostico.nombre }}  <br
+          <strong> Diagnostico Presuntivo: </strong
+          >{{ estudio.diagnostico.nombre }} <br
         /></b-col>
       </b-row>
       <b-row>
@@ -36,7 +45,11 @@
           /></b-button>
         </b-col>
         <b-col lg="3" md="3" sm="10">
-          <b-button variant="outline-primary" title="Ingresar comprobnate pago">
+          <b-button
+            variant="outline-primary"
+            @click="ingresarComprobante()"
+            title="Ingresar comprobante de  pago"
+          >
             Ingresar comprobante</b-button
           >
         </b-col>
@@ -53,7 +66,6 @@
           <b-button
             title="Enviar consentimiento informado"
             variant="outline-primary"
-      
           >
             Enviar Consentimiento</b-button
           >
@@ -65,7 +77,7 @@
           <b-button
             title="Bajar consentimiento informado"
             variant="outline-primary"
-         @click="seleccionarTurno()"
+            @click="seleccionarTurno()"
           >
             Seleccionar turno</b-button
           >
@@ -77,7 +89,6 @@
             sm="10"
             title="Bajar consentimiento informado"
             variant="outline-primary"
-           
           >
             Ingresar muestra</b-button
           >
@@ -232,85 +243,82 @@
 <script>
 import { VueEditor } from "vue2-editor";
 
-
 export default {
-    name: "detalleDeEstudio",
+  name: "detalleDeEstudio",
 
- components: { VueEditor },
- props:{
-   estudio:{
+  components: { VueEditor },
+  props: {
+    estudio: {
       type: Object,
-
     },
- },
-    data() {
-
-        return {
-              perPage: 4,
-              itemsEst: [],
-              alerts:[],
-              fieldsEst: [
+  },
+  data() {
+    return {
+      perPage: 4,
+      itemsEst: [],
+      alerts: [],
+      fieldsEst: [
         { key: "nombre", label: "Nombre", class: "text-center p2" },
-       
+
         {
           key: "medico_derivante",
           label: "Medico derivante",
           class: "text-center p2",
-        },     
+        },
         { key: "tipo", label: "Tipo Estudio", class: "text-center p2" },
-        
-        
       ],
       pageOptions: [4, 10, 15],
       filter: null,
       currentPage: 1,
       totalRows: 1,
-            items: [],
-            fields: [
+      items: [],
+      fields: [
         { key: "id", label: "Numero", class: "text-center p2" },
-        
+
         { key: "fecha", label: "Fecha Creacion", class: "text-center p2" },
-        
+
         { key: "acciones", label: "Acciones", class: "text-center p2" },
       ],
-        };
-    },
+    };
+  },
 
-    created() {
-     console.log(this.estudio)
-    },
+  created() {
+    console.log(this.estudio);
+  },
 
-    methods: {
-      seleccionarTurno(){
-        console.log("Turno")
-        console.log(this.estudio)
-        this.$router.push({
+  methods: {
+    ingresarComprobante() {
+      console.log(this.estudio);
+      this.$router.push({
+        name: "esperandoComprobantePago",
+        params: {
+          estudio: this.estudio,
+        },
+      });
+    },
+    seleccionarTurno() {
+      console.log("Turno");
+      console.log(this.estudio);
+      this.$router.push({
         name: "seleccionTurno",
         params: {
-        estudio: this.estudio
-    }
-      }); 
-      },
-        verEstudios(item){
-            console.log(item)
-            this.itemsEst=item.estudios
-                  this.$refs["my-modal"].show();
+          estudio: this.estudio,
         },
-        cargarResultado(){
-                   this.$refs["modalResultado"].show();
-        },
-     
-      
+      });
     },
-
-    computed: {
-
+    verEstudios(item) {
+      console.log(item);
+      this.itemsEst = item.estudios;
+      this.$refs["my-modal"].show();
     },
-
-    mounted() {
-     
+    cargarResultado() {
+      this.$refs["modalResultado"].show();
     },
+  },
 
+  computed: {},
+
+  mounted() {},
 };
 </script>
 

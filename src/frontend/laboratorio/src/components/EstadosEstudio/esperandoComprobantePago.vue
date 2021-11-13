@@ -49,7 +49,11 @@
 export default {
   components: {},
 
-  props: {},
+  props: {
+   estudio: {
+      type: Object,
+    },
+},
   created() {
     let result = this.$crontab.addJob({
       name: "counter",
@@ -59,6 +63,7 @@ export default {
       job: this.countUp,
     });
     console.log(result);
+    console.log(this.estudio)
   },
   data() {
     return {

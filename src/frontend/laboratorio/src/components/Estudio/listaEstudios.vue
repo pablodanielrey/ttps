@@ -68,7 +68,7 @@
 import EstudiosService from "@/services/EstudiosService.js";
 import axios from "axios";
 export default {
-  name: "ListaPacientes",
+  name: "listaEstudios",
 
   components: {},
   props: {},
@@ -103,7 +103,7 @@ export default {
   },
 
   created() {
-    console.log(this.paciente);
+ 
   },
   methods: {
     async obtenerListaEstudios() {
