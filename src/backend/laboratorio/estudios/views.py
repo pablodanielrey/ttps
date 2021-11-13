@@ -180,6 +180,29 @@ class VistaEstudios(viewsets.ModelViewSet):
         serializer = SerializadorEstudios(estudio, context={'request': request})
         return Response(serializer.data)
 
+    def modify(self, request, *args, **kwargs):
+
+        estudio_id = request.data['estudio_id']
+        estudio = models.Estudio.objects.get(estudio_id)
+
+        """
+        ultimo_estado = estudio.estados.all('fecha').last()
+        switch ultimo_estado.nombre:
+            'EspernadoComprobante':
+                comprobante_b64 = request.data['comprobante']
+                ultimo_estado.comprobante = comprobante_b64
+                ultimo_estado.save()
+            
+            'EsperandoPresupeusto':
+                comprobante_b64 = request.data['presupuesto']
+                ultimo_estado.presupuesto = comprobante_b64
+                ultimo_estado.fecha = request.data['fecha']
+                ultimo_estado.save()
+
+        """
+        serializer = SerializadorEstudios(estudio, context={'request': request})
+        return Response(serializer.data)
+        
 
 
 """
@@ -224,11 +247,29 @@ class VistaListaTurnos(viewsets.ViewSet):
 
     def list(self, request, *args, **kwargs):
 
-        inicio = datetime.datetime.utcnow().replace(tzinfo=ZoneInfo("America/Argentina/Buenos_Aires"))
-        fin = inicio + datetime.timedelta(days=15)
+        inicio = datetime.datetime.now().replace(tzinfo=ZoneInfo("America/Argentina/Buenos_Aires"))
+        inicio = inicio.replace(hour=0)
+        fin = inicio + datetime.timedelta(days=4)
 
         logging.debug(f'buscando turnos entre {inicio} y {fin}')
 
         turnos = models.ModeloTurnos().obtener_turnos(inicio,fin)
+
+        return Response(turnos)
+
+
+class VistaListaTurnosConfirmados(viewsets.ViewSet):
+
+    queryset = models.ParametroDeTurnos.objects.none()
+
+    def list(self, request, *args, **kwargs):
+
+        inicio = datetime.datetime.now().replace(tzinfo=ZoneInfo("America/Argentina/Buenos_Aires"))
+        inicio = inicio - datetime.timedelta(days=3)
+        fin = inicio + datetime.timedelta(days=15)
+
+        logging.debug(f'buscando turnos entre {inicio} y {fin}')
+
+        turnos = models.ModeloTurnos().obtener_confirmados(inicio,fin)
 
         return Response(turnos)

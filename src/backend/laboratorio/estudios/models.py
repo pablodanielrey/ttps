@@ -164,6 +164,18 @@ class FechasSinTurno(models.Model):
         return self.fecha
 
 
+class TurnoConfirmado(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    persona = models.ForeignKey(Persona, on_delete=models.CASCADE)
+    inicio = models.DateTimeField()
+    fin = models.DateTimeField()
+
+# from dataclasses import dataclass
+# @dataclass
+# class Turno:
+#     inicio: datetime.datetime
+#     fin: datetime.datetime
+
 class ModeloTurnos:
 
     def obtener_turnos_hoy(self):
@@ -172,10 +184,34 @@ class ModeloTurnos:
         al_infinito_y_mas_alla = hoy + datetime.timedelta(days=30)
         return self.obtener_turnos(hoy,al_infinito_y_mas_alla)
 
+    def obtener_turnos_confirmados(self, desde:datetime.datetime, hasta:datetime.datetime):
+        confirmados = TurnoConfirmado.objects.filter(inicio__range=[desde, hasta])
+        return confirmados
+
+    def _eliminar_turnos_confirmados(self, turnos_confirmados, turnos):
+        """ 
+            TODO: totalmente ineficiente!!! se debe reemplazar por las clases correctas
+            dataclasess, estructuras estilo set, binary search ,etc
+            lo dejo para llegar con el tiempo y despues analizar
+        """ 
+        def _chequear_que_no_solapa(turno, turno_confirmado):
+            return turno['inicio'] > turno_confirmado.fin or turno['fin'] < turno_confirmado.inicio  
+    
+        def _eliminar_turnos_solapados(turno_confirmado, turnos):
+            return [t for t in turnos if _chequear_que_no_solapa(t, turno_confirmado) ]                    
+        
+        turnos_filtrados = []
+        turnos_filtrados.extend(turnos)
+        for turno_confirmado in turnos_confirmados:
+            turnos_filtrados = _eliminar_turnos_solapados(turno_confirmado, turnos_filtrados)
+        return turnos_filtrados
+
     def obtener_turnos(self, desde:datetime.datetime, hasta:datetime.datetime):
         """ 
             genera los turnos entre las fechas determinadas, a partir de los parámetros definidos dentro de la base.
         """
+        turnos_confirmados = self.obtener_turnos_confirmados(desde, hasta)
+
         turnos = []
 
         """ selecciono la fecha/hora inicial de todo el rango de turnos """
@@ -210,10 +246,15 @@ class ModeloTurnos:
                     turno_actual -= un_dia
                     continue
                 turnos_del_dia = self._generar_turnos_para_dia(turno_actual, rangos)
-                turnos.extend(turnos_del_dia)
+
+                """ TODO: ver si no es mejor resolverlo de otra forma """
+                #turnos_del_dia_filtrados = turnos_del_dia
+                turnos_del_dia_filtrados = self._eliminar_turnos_confirmados(turnos_confirmados, turnos_del_dia)
+
+                turnos.extend(turnos_del_dia_filtrados)
                 turno_actual -= un_dia
 
-        return turnos
+        return sorted(turnos, key=lambda x: x['inicio'])
 
     def _generar_turnos_para_dia(self, fecha, rangos):
         turnos = []
@@ -233,7 +274,7 @@ class ModeloTurnos:
             'inicio': hora_turno,
             'fin': fin_turno
         }
-
+        #return Turno(inicio=hora_turno, fin=hora_turno)
 
 
     def _completar_datos_turnos(self, turnos):
