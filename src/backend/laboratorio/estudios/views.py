@@ -258,18 +258,29 @@ class VistaListaTurnos(viewsets.ViewSet):
         return Response(turnos)
 
 
+
+
+class SerializadorTurnosConfirmados(serializers.ModelSerializer):
+    persona = SerializadorDePersona()
+    class Meta:
+        model = models.TurnoConfirmado
+        fields = ['id','pesona','inicio','fin']
+
 class VistaListaTurnosConfirmados(viewsets.ViewSet):
 
-    queryset = models.ParametroDeTurnos.objects.none()
+    queryset = models.TurnoConfirmado.objects.all()
+    serializer_class = SerializadorTurnosConfirmados
 
+    """
     def list(self, request, *args, **kwargs):
-
+        super(VistaListaTurnosConfirmados).list()
         inicio = datetime.datetime.now().replace(tzinfo=ZoneInfo("America/Argentina/Buenos_Aires"))
         inicio = inicio - datetime.timedelta(days=3)
         fin = inicio + datetime.timedelta(days=15)
 
         logging.debug(f'buscando turnos entre {inicio} y {fin}')
 
-        turnos = models.ModeloTurnos().obtener_confirmados(inicio,fin)
+        turnos = models.ModeloTurnos().obtener_turnos_confirmados(inicio,fin)
 
         return Response(turnos)
+    """

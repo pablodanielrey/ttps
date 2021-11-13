@@ -15,8 +15,9 @@ router.register('estadoEstudio', views.VistaEstadoEstudio)
 
 router.register('fechasSinTurnos', views.VistaFechasSinTurno)
 router.register('parametroTurnos', views.VistaParametroTurnos)
+router.register('listaTurnosConfirmados', views.VistaListaTurnosConfirmados)
 router.register('listaTurnos', views.VistaListaTurnos, basename='Turnos')
-router.register('turnosConfirmados', views.VistaListaTurnosConfirmados, basename='TurnosConfirmados')
+
 
 
 urlpatterns = router.urls
