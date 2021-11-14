@@ -3,9 +3,10 @@
     <div>
       <ValidationObserver ref="detailMuestra">
         <b-card header="Ingrese los datos de la toma de muestra">
-            <div class="counter">
+          <div class="counter">
             Quedan 20 dias para cargar los datos de la toma de muestra
-          </div><br>
+          </div>
+          <br />
           <b-row>
             <b-col lg="3" md="3" sm="10">
               <b-form-group
@@ -21,7 +22,10 @@
                   <b-form-input
                     placeholder="Ingrese los mililitros"
                     v-model="mililitros"
-                   type="range" min="5" max="12.5" step="0.5"
+                    type="range"
+                    min="5"
+                    max="12.5"
+                    step="0.1"
                     :state="errors[0] ? false : valid ? true : null"
                   ></b-form-input>
                   <b-form-invalid-feedback
@@ -32,7 +36,7 @@
                   </b-form-invalid-feedback>
                 </ValidationProvider>
               </b-form-group>
-                 <div class="mt-2">Cantidad: {{ mililitros }}</div>
+              <div class="mt-2">Cantidad: {{ mililitros }}</div>
             </b-col>
             <b-col lg="3" md="3" sm="10">
               <b-form-group
@@ -46,7 +50,8 @@
                   v-slot="{ errors, valid }"
                 >
                   <b-form-input
-                  type="number"
+                    type="number"
+                    min="1"
                     placeholder="Ingrese el freezer"
                     v-model="freezer"
                     :state="errors[0] ? false : valid ? true : null"
@@ -61,11 +66,13 @@
               </b-form-group>
             </b-col>
           </b-row>
-         <b-row class="pb-2">
-          <b-col class="text-center pt-3">
-            <b-button variant="success">Guardar </b-button>
-          </b-col>
-        </b-row>
+          <b-row class="pb-2">
+            <b-col class="text-center pt-3">
+              <b-button variant="success" @click="guardarDatos()"
+                >Guardar
+              </b-button>
+            </b-col>
+          </b-row>
         </b-card>
       </ValidationObserver>
     </div>
@@ -77,7 +84,11 @@
 export default {
   components: {},
 
-  props: {},
+  props: {
+    idEstudio: {
+      type: String,
+    },
+  },
   created() {},
   data() {
     return {
@@ -86,7 +97,16 @@ export default {
     };
   },
 
-  methods: {},
+  methods: {
+    guardarDatos() {
+        let datosMuestra={
+          idEstudio:this.idEstudio,
+          freezer:this.freezer,
+          mililitros:this.mililitros
+        }
+        console.log(datosMuestra)
+    },
+  },
   computed: {},
 
   mounted() {},

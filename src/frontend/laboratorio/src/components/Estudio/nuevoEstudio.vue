@@ -10,7 +10,7 @@
         </b-col>
       </b-row>
 
-<!--       <b-row class="pb-2">
+      <!--       <b-row class="pb-2">
         <b-col class="text-center pt-3">
           <p class="h5"><strong>Usuario Logueado:</strong>{{ usuario }}</p>
         </b-col>
@@ -153,10 +153,14 @@
                 label="Presupuesto del estudio:"
                 label-for="Presupuesto del estdio"
               >
-                <ValidationProvider :rules="'required'" :name="'Presupuesto del estdio '" v-slot="{ errors }">
+                <ValidationProvider
+                  :rules="'required'"
+                  :name="'Presupuesto del estdio '"
+                  v-slot="{ errors }"
+                >
                   <b-form-file
                     v-model="file1"
-                     :state="errors[0] ? false : valid ? true : null"
+                    :state="errors[0] ? false : valid ? true : null"
                     @change="obtenerPDF($event, file1)"
                     accept="application/pdf"
                     placeholder="Seleccione el presupuesto..."
@@ -215,7 +219,7 @@
             </b-col>
           </b-row>
         </b-card>
-  <!--       <b-card header="Historia clinica">
+        <b-card header="Historia clinica">
           <b-row>
             <b-col>
               <b-form-group
@@ -228,7 +232,7 @@
                 >
                   <vue-editor
                     :state="errors[0] ? false : valid ? true : null"
-                    v-model="estudio.historiaclinica"
+                    v-model="historiaClinicaPaciente"
                   ></vue-editor>
                   <b-form-invalid-feedback
                     v-for="error in errors"
@@ -240,7 +244,7 @@
               </b-form-group>
             </b-col>
           </b-row>
-        </b-card> -->
+        </b-card>
       </ValidationObserver>
 
       <b-row class="pb-2">
@@ -261,23 +265,25 @@ import ObrasSocialesService from "@/services/ObrasSocialesService";
 import axios from "axios";
 import PacientesService from "@/services/PacientesService.js";
 import EstudiosService from "@/services/EstudiosService.js";
-/* import { VueEditor } from "vue2-editor"; */
+import { VueEditor } from "vue2-editor";
 
 export default {
-  components: { /* VueEditor */ },
+  components: { VueEditor },
 
   props: {},
   created() {},
   data() {
     return {
+      valid: null,
       pacienteSelected: null,
-      diagnosticoSelected:null,
+      diagnosticoSelected: null,
       estudios: [],
       pacientes: [],
       diagnosticosLista: [],
       file1: [],
       alerts: [],
       loading: true,
+      historiaClinicaPaciente: null,
       estudio: {
         paciente: "",
         medico_derivante: "",
@@ -292,7 +298,8 @@ export default {
 
   methods: {
     cambiarPaciente() {
-      console.log(this.estudio);
+    
+       this.obtenerHistoriaClinicaPaciente()
     },
     cambiarDiagnostico() {
       console.log(this.estudio);
@@ -304,20 +311,17 @@ export default {
         if (result) {
           let r = await EstudiosService.crearEstudio(this.estudio);
           console.log(r.status);
-           if (r.status == 200) {
-            this.$root.$bvToast.toast(
-              "Se creo con exito el estudio",
-              {
-                title: "Atencion!",
-                toaster: "b-toaster-top-center",
-                solid: true,
-                variant: "success",
-              }
-            );
+          if (r.status == 200) {
+            this.$root.$bvToast.toast("Se creo con exito el estudio", {
+              title: "Atencion!",
+              toaster: "b-toaster-top-center",
+              solid: true,
+              variant: "success",
+            });
             this.$router.push({
-                name: "listaEstudios"      
-            }); 
-           }
+              name: "listaEstudios",
+            });
+          }
         }
       } catch (err) {
         console.log(err);
@@ -335,6 +339,16 @@ export default {
       try {
         let response = await PacientesService.obtenerPacientes();
         this.pacientes = response.data;
+      } catch (err) {
+        console.log(err);
+      }
+    },
+    async obtenerHistoriaClinicaPaciente() {
+      console.log(this.estudio.paciente.id);
+      try {
+         let response = await PacientesService.obtenerPaciente(this.estudio.paciente.id);
+        this.historiaClinicaPaciente = response.data.historia_clinica; 
+        console.log( response.data)
       } catch (err) {
         console.log(err);
       }
@@ -408,6 +422,7 @@ export default {
         this.obtenerPacientes(),
         this.obtenerEstudios(),
         this.obtenerDiagnosticos(),
+       
       ])
       .then(() => {
         this.loading = false;

@@ -8,7 +8,7 @@ export default {
     },
     getApiToken() {
         let credenciales = JSON.parse(window.localStorage.getItem('credenciales'));
-        console.log(credenciales)
+       
         return credenciales
     }
 }

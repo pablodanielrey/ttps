@@ -12,6 +12,11 @@
         <b-dropdown-item :to="{ name: 'listaEstudios' }">Listar</b-dropdown-item>
         <b-dropdown-item :to="{ name: 'nuevoEstudio' }">Nuevo</b-dropdown-item>
       </b-nav-item-dropdown>
+  
+     <b-nav-item-dropdown text="Lotes" right>
+        <b-dropdown-item :to="{ name: 'cargarResultadoLote' }">Listar</b-dropdown-item>
+        <b-dropdown-item :to="{ name: 'crearLote' }">Nuevo</b-dropdown-item>
+      </b-nav-item-dropdown>
     </b-navbar-nav>
   </b-navbar>
   <br>

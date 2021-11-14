@@ -61,6 +61,7 @@ class SerializadorEsperandoPresupuesto(serializers.ModelSerializer):
 
 class SerializadorEsperandoComprobanteDePago(serializers.ModelSerializer):
     class Meta:
+        logging.debug("comprobante")
         model = models.EsperandoComprobanteDePago
         fields = ['id','fecha','comprobante']
 
@@ -246,7 +247,11 @@ class VistaListaTurnos(viewsets.ViewSet):
     queryset = models.ParametroDeTurnos.objects.none()
 
     def list(self, request, *args, **kwargs):
-
+        datos_rango = request
+        logging.debug(f'entra aca')
+        logging.debug(request)
+        inicio= self.request.query_params.get('inicio')
+        
         inicio = datetime.datetime.now().replace(tzinfo=ZoneInfo("America/Argentina/Buenos_Aires"))
         inicio = inicio.replace(hour=0)
         fin = inicio + datetime.timedelta(days=4)

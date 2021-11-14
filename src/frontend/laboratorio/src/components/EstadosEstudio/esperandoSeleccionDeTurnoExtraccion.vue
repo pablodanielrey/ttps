@@ -1,31 +1,34 @@
 <template>
   <b-container>
     <div>
-      <h3>Seleccion de turno para un paciente </h3>
-      <h5>Paciente: {{estudio.paciente.apellido}} {{estudio.paciente.nombre}}</h5>
+      <h3>Seleccion de turno para un paciente</h3>
+      <h5>
+        Paciente: {{ estudio.paciente.apellido }} {{ estudio.paciente.nombre }}
+      </h5>
       <div v-if="loading">
         <b-spinner> </b-spinner>
       </div>
       <div v-else>
         <vue-cal
-          :disable-views="['years']"
+          :disable-views="['years', 'day']"
           :time-from="9 * 60"
           :time-to="15 * 60"
           :time-step="15"
           :disable-days="this.turnos"
           :snap-to-time="this.tiempoTurnos"
-          active-view="year"
           locale="es"
           :events="getPacientes"
           :on-event-click="onEventClick"
           style="height: 600px"
           class="vuecal--full-height-delete"
+          @view-change="logEvents('view-change', $event)"
+          ref="vuecal"
         />
       </div>
-      <b-modal 
-      ref="my-modal" 
-      :title="selectedEvent.title"
-      @ok="confirmarTurno(selectedEvent.start,selectedEvent.end)"
+      <b-modal
+        ref="my-modal"
+        :title="selectedEvent.title"
+        @ok="confirmarTurno(selectedEvent.start, selectedEvent.end)"
       >
         <div>
           <p v-if="selectedEvent.start != null">
@@ -41,7 +44,7 @@
           <li v-if="selectedEvent.end != null">
             Fin: {{ selectedEvent.end && selectedEvent.end.formatTime() }}
           </li>
-        </ul>     
+        </ul>
       </b-modal>
     </div>
   </b-container>
@@ -50,7 +53,7 @@
 
 <script>
 import TurnosService from "@/services/TurnosService.js";
-import axios from "axios";
+/* import axios from "axios"; */
 import VueCal from "vue-cal";
 import "vue-cal/dist/vuecal.css";
 import "vue-cal/dist/i18n/es.js";
@@ -59,17 +62,14 @@ export default {
   components: { VueCal },
 
   props: {
-     estudio:{
-      type:Object,
-      
-    }
-  },
-   created(){
-  },
+    estudio: {
+      type: Object,
+    },
+  }, 
   data() {
     return {
       tiempoTurnos: 15,
-      loading: true,
+      loading: false,
       value: "",
       context: null,
       turnos: [],
@@ -82,31 +82,57 @@ export default {
   },
 
   methods: {
-    async obtenerTurnos() {
+    logEvents(accion, event) {
+     
+      let rango;
+      if (event.view == "month") {
+        rango = {
+          inicio: event.firstCellDate.toISOString(),
+          fin: event.lastCellDate.toISOString(),
+        };
+      } else {
+        rango = {
+          inicio: event.startDate.toISOString(),
+          fin: event.endDate.toISOString(),
+        };
+      }
+      this.buscarTurnos(rango);    
+      console.log(accion);
+    },
+    async buscarTurnos(rango) {
+       
+         try {
+        let response = await TurnosService.obtenerTurnos(rango);
+        this.turnos = response.data;
+        console.log(response)
+      } catch (err) {
+        console.log(err);
+      }
+
+    },
+ /*    async obtenerTurnos() {
       try {
         let response = await TurnosService.obtenerTurnos();
         this.turnos = response.data;
       } catch (err) {
         console.log(err);
       }
-    },
+    }, */
     onEventClick(event, e) {
       this.selectedEvent = event;
       this.showDialog = true;
       this.$refs["my-modal"].show();
       // Prevent navigating to narrower view (default vue-cal behavior).
       e.stopPropagation();
-    },   
-    confirmarTurno(inicio,fin){
-
-      let turnoEstudio={
-        inicio:inicio.format('YYYY-MM-DD HH:m'),
-        fin: fin.toLocaleString('en-es'),
-        idEstudio:this.estudio.id
-      }
-      console.log(turnoEstudio)
-    }
- 
+    },
+    confirmarTurno(inicio, fin) {
+      let turnoEstudio = {
+        inicio: inicio.format("YYYY-MM-DD HH:m"),
+        fin: fin.toLocaleString("en-es"),
+        idEstudio: this.estudio.id,
+      };
+      console.log(turnoEstudio);
+    },
   },
   computed: {
     getOptionsPacientes() {
@@ -129,14 +155,14 @@ export default {
   },
 
   mounted() {
-    axios
+   /*  axios
       .all([this.obtenerTurnos()])
       .then(() => {
         this.loading = false;
       })
       .catch((err) => {
         console.log(err);
-      });
+      }); */
   },
 };
 </script>

@@ -35,16 +35,7 @@
         </b-col>
       </b-row>
       <b-row>
-        <b-col>
-          <b-button
-            title="Descargar Presupuesto"
-            variant="outline-primary"
-            download="presupuesto.pdf"
-          >
-            <b-icon icon="download" aria-hidden="true"></b-icon> <br
-          /></b-button>
-        </b-col>
-        <b-col lg="3" md="3" sm="10">
+        <b-col lg="3" md="3" sm="7">
           <b-button
             variant="outline-primary"
             @click="ingresarComprobante()"
@@ -62,18 +53,18 @@
             <b-icon icon="download" aria-hidden="true"></b-icon
           ></b-button>
         </b-col>
-        <b-col lg="3" md="3" sm="10">
+        <b-col lg="1" md="3" sm="7">
           <b-button
-            title="Enviar consentimiento informado"
+            title="Cargar consentimiento informado firmado"
             variant="outline-primary"
+            @click="cargarConsentimiento()"
           >
-            Enviar Consentimiento</b-button
+            Cargar Consentimiento</b-button
           >
         </b-col>
-      </b-row>
-      <b-row>
+      
         <br />
-        <b-col lg="3" md="3" sm="10">
+        <b-col lg="3" md="3" sm="7">
           <b-button
             title="Bajar consentimiento informado"
             variant="outline-primary"
@@ -89,6 +80,7 @@
             sm="10"
             title="Bajar consentimiento informado"
             variant="outline-primary"
+            @click="ingresarMuestra()"
           >
             Ingresar muestra</b-button
           >
@@ -97,7 +89,7 @@
           <b-button
             title="Persona que retiro muestra"
             variant="outline-primary"
-            @click="bajarConsentimiento()"
+            @click="retiroMuestra()"
           >
             Retiro muestra</b-button
           >
@@ -250,6 +242,7 @@ export default {
   props: {
     estudio: {
       type: Object,
+      default:null
     },
   },
   data() {
@@ -283,16 +276,36 @@ export default {
   },
 
   created() {
-    console.log(this.estudio);
+    if (this.estudio == null){
+       this.$router.push({
+        name: "listaEstudios"        
+      });
+    }
   },
 
   methods: {
     ingresarComprobante() {
-      console.log(this.estudio);
+   
       this.$router.push({
         name: "esperandoComprobantePago",
         params: {
-          estudio: this.estudio,
+          idEstudio: this.estudio.id,
+        },
+      });
+    },
+    ingresarMuestra() {
+      this.$router.push({
+        name: "esperandoTomaDeMuestra",
+        params: {
+          idEstudio: this.estudio.id,
+        },
+      });
+    },
+    retiroMuestra(){
+      this.$router.push({
+        name: "esperandoRetiroExtraccion",
+        params: {
+          idEstudio: this.estudio.id,
         },
       });
     },
@@ -306,13 +319,20 @@ export default {
         },
       });
     },
-    verEstudios(item) {
-      console.log(item);
+    verEstudios(item) {     
       this.itemsEst = item.estudios;
       this.$refs["my-modal"].show();
     },
     cargarResultado() {
       this.$refs["modalResultado"].show();
+    },
+    cargarConsentimiento() {
+      this.$router.push({
+        name: "esperandoConsentimientoInformado",
+        params: {
+          idEstudio: this.estudio.id,
+        },
+      });
     },
   },
 

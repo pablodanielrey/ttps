@@ -27,16 +27,16 @@
     >   
       <template v-slot:cell(acciones)="row">
       
-          <b-button
+          <a
             title="Descargar Presupuesto"
-            variant="outline-primary"
+             variant="outline-success"
             download="presupuesto.pdf"
-            
+            :href="row.item.estados[0].presupuesto"
+
           >
-            <b-icon icon="download" aria-hidden="true"></b-icon
-          ></b-button>
-           <b-button @click="detalleEstudio(row.item)">
-            Detalle
+             <b-icon icon="download"  variant="info"> </b-icon></a>
+           <b-button @click="detalleEstudio(row.item)"    variant="outline-white">
+            <b-icon icon="file-earmark-person-fill"  variant="info"> </b-icon> 
           </b-button> 
 
       </template>
@@ -106,6 +106,7 @@ export default {
  
   },
   methods: {
+  
     async obtenerListaEstudios() {
       try {
         let response = await EstudiosService.obtenerListaEstudios();

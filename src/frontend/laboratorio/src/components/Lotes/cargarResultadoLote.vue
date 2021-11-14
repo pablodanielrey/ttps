@@ -202,6 +202,7 @@ export default {
     data() {
 
         return {
+          alerts:[],
               perPage: 4,
               itemsEst: [],
               fieldsEst: [
