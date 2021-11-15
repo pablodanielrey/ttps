@@ -78,7 +78,7 @@ class SerializadorAnuladorPorFaltaDePago(serializers.ModelSerializer):
 class SerializadorEnviarConsentimientoInformado(serializers.ModelSerializer):
     class Meta:
         model = models.EnviarConsentimientoInformado
-        fields = ['id','fecha']
+        fields = ['id','fecha','fecha_enviado']
 
 class SerializadorEsperandoConsentimientoInformado(serializers.ModelSerializer):
     class Meta:
@@ -191,7 +191,7 @@ class VistaEstadoEstudio(viewsets.ModelViewSet):
         """ aca manejo comportamientos especiales de los estados """
         if clase_ultimo_estado == models.EsperandoSeleccionDeTurnoParaExtraccion:
             """ genero un turno """
-            paciente = personas_models.Persona.objects.get(estudio.paciente.id)
+            paciente = personas_models.Persona.objects.get(id=estudio.paciente.id)
             inicio = parser.parse(request.data['inicio'])
             fin = parser.parse(request.data['fin'])
             turno = turnos_models.TurnoConfirmado(persona=paciente,inicio=inicio, fin=fin)
