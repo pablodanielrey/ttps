@@ -9,7 +9,7 @@ router = routers.DefaultRouter()
 router.register('tiposEstudio', views.VistaTiposDeEstudio)
 router.register('diagnosticos', views.VistaDiagnostico)
 router.register('estudios', views.VistaEstudios)
-router.register('estadoEstudio', views.VistaEstadoEstudio)
+router.register('estado_estudio', views.VistaEstadoEstudio)
 
 #router.register('presupuestoEstudio', views.VistaPresupuestoEstudio)
 

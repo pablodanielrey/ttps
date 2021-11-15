@@ -130,10 +130,41 @@ class SerializadorEstadoEstudioPolimorfico(PolymorphicSerializer):
         models.EsperandoEntregaAMedicoDerivante: SerializadorEsperandoEntregaAMedicoDerivante
     }
 
+"""
+
+class EstadoHandler:
+    def load_data(self, estado, data):
+        pass
+
+class EsperandoComprobanteDePagoHandler(EstadoHandler):
+    def load_data(self, estado, data):
+        estado.comprobante = data['comprobante']
+
+"""
+
 class VistaEstadoEstudio(viewsets.ModelViewSet):
     queryset = models.EstadoEstudio.objects.all()
     serializer_class = SerializadorEstadoEstudioPolimorfico
 
+    # estados_handlers = {
+    #     models.EsperandoComprobanteDePago: EsperandoComprobanteDePagoHandler()
+    # }
+
+
+    def create(self, request, *args, **kwargs):
+        logging.debug(request.data)
+
+        estudio_id = request.data['id_estudio']
+        estudio = estudio_models.Estudio.objects.get(id=estudio_id)
+
+        ultimo_estado = estudio.estados.order_by('fecha').last()
+        
+        logging.debug(ultimo_estado)
+        #self.estados_handlers[ultimo_estado.__class__].load_data(request.data)
+        #ultimo_estado.save()
+
+        serializador = SerializadorEstadoEstudioPolimorfico(ultimo_estado, context={'request': request})
+        return Response(serializador.data)
 
 """
     ///////////////////////////////////////////////

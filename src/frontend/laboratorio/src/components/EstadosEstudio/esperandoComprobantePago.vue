@@ -50,6 +50,8 @@
 
 
 <script>
+import EstudiosService from "@/services/EstudiosService.js";
+
 export default {
   components: {},
   props: {
@@ -91,12 +93,18 @@ export default {
       this.counter -= 1;
     },
     async guardarComprobante() {
-      let result = await this.$refs.detailsConsentimiento.validate();
+      let result = await this.$refs.detailsComprobante.validate();
       if (result) {
         let datosComprobante = {
-          estudio: this.idEstudio,
+          id_estudio: this.idEstudio,
           comprobante: this.comprobantePago,
         };
+        try {
+          let response = await EstudiosService.cambiarEstado(datosComprobante);
+          console.log(response)
+      } catch (err) {
+        console.log(err);
+      }
         console.log(datosComprobante);
       }
     },
