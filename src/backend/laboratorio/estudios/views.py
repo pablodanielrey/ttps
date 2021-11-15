@@ -227,9 +227,8 @@ class VistaEstadoEstudio(viewsets.ModelViewSet):
             pass
 
 
-        #serializador = SerializadorEstadoEstudioPolimorfico(ultimo_estado, context={'request': request})
-        #return Response(serializador.data)
-        return Response('ok')
+        serializador = SerializadorEstadoEstudioPolimorfico(ultimo_estado, context={'request': request})
+        return Response(serializador.data)
 
 """
     ///////////////////////////////////////////////
