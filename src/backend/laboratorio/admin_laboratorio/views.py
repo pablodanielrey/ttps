@@ -66,11 +66,15 @@ def generar_estudio_de_muestra():
     obp.save()
 
 
-    # tipoe = estudio_models.TiposDeEstudio.objects.all().first()
-    # diagnostico = estudio_models.Diagnostico.objects.all().first()
-    # estudio = estudio_models.Estudio(paciente=p1,  tipo=tipoe, medico_derivante=mm, diagnostico=diagnostico)
-    # estudio.save()
+    tipoe = estudio_models.TiposDeEstudio.objects.all().first()
+    diagnostico = estudio_models.Diagnostico.objects.all().first()
+    estudio = estudio_models.Estudio(paciente=p1,  tipo=tipoe, medico_derivante=mm, diagnostico=diagnostico)
+    estudio.save()
 
+
+    estudio_models.EsperandoRetiroDeExtaccion(persona=empleado, estudio=estudio, extracionista='pepe se la lleva a la muestra', fecha_retiro=generar_fecha_now()).save()
+    estudio_models.EsperandoLoteDeMuestraParaProcesamientoBiotecnologico(persona=empleado).save()
+    
     # #estudio_models.EsperandoPresupuesto(persona=empleado, estudio=estudio, presupuesto=10.3).save()
     # #estudio_models.EsperandoFactura(persona=empleado, estudio=estudio, numero='dsaasd324324', monto=10.5).save()
     # #estudio_models.EsperandoFactura(persona=empleado, estudio=estudio, numero='dsaasd324325', monto=11.5, obra_social=ob_social).save()

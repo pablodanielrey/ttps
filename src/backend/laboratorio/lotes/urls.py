@@ -9,4 +9,7 @@ from . import views
 router = routers.DefaultRouter()
 router.register('lotes', views.VistaLotes)
 
-urlpatterns = router.urls
+
+urlpatterns = [
+    path('estudios', views.VistaEstudios.as_view())
+]

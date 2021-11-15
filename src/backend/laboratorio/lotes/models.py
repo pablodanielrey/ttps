@@ -25,7 +25,7 @@ class ModeloLotes:
     def __init__(self):
         pass
 
-    def generar_lote(self):
+    def obtener_estudios_para_lote(self):
         def _fecha_de_extraccion(estudio):
             retiro = sorted(estudio.estados.all(), key=lambda e: e.fecha)[-2]
             return retiro.fecha_retiro
