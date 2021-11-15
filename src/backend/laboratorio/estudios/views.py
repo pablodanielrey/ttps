@@ -86,7 +86,7 @@ class SerializadorEsperandoConsentimientoInformado(serializers.ModelSerializer):
         fields = ['id','fecha','consentimiento']
 
 class SerializadorEsperandoSeleccionDeTurnoParaExtraccion(serializers.ModelSerializer):
-    #turno = turnos_views.SerializadorTurnosConfirmados()
+    turno = turnos_views.SerializadorTurnosConfirmados()
     class Meta:
         model = models.EsperandoSeleccionDeTurnoParaExtraccion
         fields = ['id','fecha','turno']
@@ -199,7 +199,7 @@ class VistaEstadoEstudio(viewsets.ModelViewSet):
             logging.debug(f'turno generado {turno.id}')
 
             """ actualizo el estado """
-            ultimo_estado.turno = turno.id
+            ultimo_estado.turno = turno
             ultimo_estado.save()
 
         else:
