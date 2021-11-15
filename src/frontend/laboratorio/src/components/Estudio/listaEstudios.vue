@@ -24,21 +24,26 @@
       :current-page="currentPage"
       :per-page="perPage"
       @filtered="onFiltered"
-    >   
+    >
       <template v-slot:cell(acciones)="row">
-      
-          <a
-            title="Descargar Presupuesto"
-             variant="outline-success"
-            download="presupuesto.pdf"
-            :href="row.item.presupuesto"
-
-          >
-             <b-icon icon="download"  variant="info"> </b-icon></a>
-           <b-button @click="detalleEstudio(row.item)"    variant="outline-white">
-            <b-icon icon="file-earmark-person-fill"  variant="info"> </b-icon> 
-          </b-button> 
-
+        <a
+          title="Descargar Presupuesto"
+          variant="outline-success"
+          download="presupuesto.pdf"
+          :href="row.item.presupuesto"
+        >
+          <b-icon icon="download" variant="info"> </b-icon
+        ></a>
+        <b-button @click="detalleEstudio(row.item)" variant="outline-white">
+          <b-icon icon="file-earmark-person-fill" variant="info"> </b-icon>
+        </b-button>
+        <b-button
+          @click="siguienteEstado(row.item)"
+          variant="outline-white"
+          title="Siguiente estado"
+        >
+          <b-icon icon="arrow-right-square" variant="info"> </b-icon>
+        </b-button>
       </template>
     </b-table>
 
@@ -75,7 +80,6 @@ export default {
 
   data() {
     return {
-
       perPage: 4,
       pageOptions: [4, 10, 15],
       filter: null,
@@ -83,7 +87,11 @@ export default {
       totalRows: 1,
       fields: [
         { key: "paciente.nombre", label: "Nombre", class: "text-center p2" },
-          { key: "paciente.apellido", label: "Apellido", class: "text-center p2" },
+        {
+          key: "paciente.apellido",
+          label: "Apellido",
+          class: "text-center p2",
+        },
         {
           key: "medico_derivante.apellido",
           label: "Medico derivante",
@@ -95,18 +103,15 @@ export default {
           class: "text-center p2",
         },
         { key: "tipo.nombre", label: "Tipo Estudio", class: "text-center p2" },
-        
+
         { key: "acciones", label: "Acciones", class: "text-center p2" },
       ],
       items: [],
     };
   },
 
-  created() {
- 
-  },
+  created() {},
   methods: {
-  
     async obtenerListaEstudios() {
       try {
         let response = await EstudiosService.obtenerListaEstudios();
@@ -121,14 +126,23 @@ export default {
       this.currentPage = 1;
     },
     detalleEstudio(estudio) {
-   
-      console.log(estudio)
+      console.log(estudio);
       this.$router.push({
         name: "detalleDeEstudio",
         params: {
-        estudio: estudio
-    }
-      }); 
+          estudio: estudio,
+        },
+      });
+    },
+    siguienteEstado(estudio) {
+      let ultimoEstado = estudio.estados[estudio.estados.length - 1];
+      console.log(ultimoEstado.resourcetype);
+      this.$router.push({
+        name: ultimoEstado.resourcetype,
+        params: {
+          estudio: estudio,
+        },
+      });
     },
   },
   mounted() {

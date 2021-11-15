@@ -287,7 +287,7 @@ export default {
     ingresarComprobante() {
    
       this.$router.push({
-        name: "esperandoComprobantePago",
+        name: "EsperandoComprobanteDePago",
         params: {
           idEstudio: this.estudio.id,
         },
@@ -295,7 +295,7 @@ export default {
     },
     ingresarMuestra() {
       this.$router.push({
-        name: "esperandoTomaDeMuestra",
+        name: "EsperandoTomaDeMuestra",
         params: {
           idEstudio: this.estudio.id,
         },
@@ -303,7 +303,7 @@ export default {
     },
     retiroMuestra(){
       this.$router.push({
-        name: "esperandoRetiroExtraccion",
+        name: "EsperandoRetiroDeExtaccion",
         params: {
           idEstudio: this.estudio.id,
         },
@@ -313,7 +313,7 @@ export default {
       console.log("Turno");
       console.log(this.estudio);
       this.$router.push({
-        name: "seleccionTurno",
+        name: "EsperandoSeleccionDeTurnoParaExtraccion",
         params: {
           estudio: this.estudio,
         },
@@ -328,7 +328,7 @@ export default {
     },
     cargarConsentimiento() {
       this.$router.push({
-        name: "esperandoConsentimientoInformado",
+        name: "EsperandoConsentimientoInformado",
         params: {
           idEstudio: this.estudio.id,
         },
