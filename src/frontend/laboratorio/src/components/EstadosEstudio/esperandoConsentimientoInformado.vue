@@ -10,7 +10,11 @@
                 label="Ingrese el consentimiento firmado:"
                 label-for="pdf"
               >
-                <ValidationProvider    :rules="'required'" :name="'consentimiento informado '" v-slot="{ errors,valid }">
+                <ValidationProvider
+                  :rules="'required'"
+                  :name="'consentimiento informado '"
+                  v-slot="{ errors, valid }"
+                >
                   <b-form-file
                     v-model="file1"
                     :state="errors[0] ? false : valid ? true : null"
@@ -44,12 +48,14 @@
 
 
 <script>
+import EstudiosService from "@/services/EstudiosService.js";
+
 export default {
   components: {},
 
   props: {
-    idEstudio: {
-      type: String,
+    estudio: {
+      type: Object,
     },
   },
   created() {},
@@ -76,15 +82,40 @@ export default {
       this.counter -= 1;
     },
     async guardarConsentimiento() {
-      let result = await this.$refs.detailsConsentimiento.validate();
-      if (result){
-        let datosConsentimiento = {
-        estudio: this.idEstudio,
-        consentimiento: this.consentimiento,
-      };
-      console.log(datosConsentimiento);
+      try {
+        let result = await this.$refs.detailsConsentimiento.validate();
+        if (result) {
+          let datosConsentimiento = {
+            estudio_id: this.estudio.id,
+            consentimiento: this.consentimiento,
+          };
+          console.log(datosConsentimiento);
+          let response = await EstudiosService.actualizarUltimoEstado(
+            datosConsentimiento
+          );
+          console.log(response);
+          this.$root.$bvToast.toast("Se ingreso el consentimiento firmado", {
+            title: "Atencion!",
+            toaster: "b-toaster-top-center",
+            solid: true,
+            variant: "success",
+          });
+          this.$router.push({
+            name: "listaEstudios",
+          });
+        }
+      } catch (error) {
+         console.log(error);
+        this.$root.$bvToast.toast(
+          "ocurrio un error mientras ingresaba el consentimiento firmado, por favor vuelva a intentar",
+          {
+            title: "Atencion!",
+            toaster: "b-toaster-top-center",
+            solid: true,
+            variant: "danger",
+          }
+        );
       }
-   
     },
   },
   computed: {},

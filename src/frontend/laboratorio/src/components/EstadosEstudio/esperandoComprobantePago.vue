@@ -50,8 +50,8 @@
 
 
 <script>
- import EstudiosService from "@/services/EstudiosService.js";
- 
+import EstudiosService from "@/services/EstudiosService.js";
+
 export default {
   components: {},
   props: {
@@ -95,20 +95,38 @@ export default {
     async guardarComprobante() {
       let result = await this.$refs.detailsComprobante.validate();
       if (result) {
-        let datosComprobante = {
-          estudio_id: this.estudio.id,
-          comprobante: this.comprobantePago,
-        };
-        console.log(datosComprobante)
-         try {
+        try {
+          let datosComprobante = {
+            estudio_id: this.estudio.id,
+            comprobante: this.comprobantePago,
+          };
+          console.log(datosComprobante);
           let response = await EstudiosService.actualizarUltimoEstado(
             datosComprobante
-          );
+          );          
+            this.$root.$bvToast.toast("Se agrego el comprobante de pago", {
+              title: "Atencion!",
+              toaster: "b-toaster-top-center",
+              solid: true,
+              variant: "success",
+            });
+            this.$router.push({
+              name: "listaEstudios",
+            });
+          
           console.log(response);
         } catch (err) {
           console.log(err);
-        } 
-        console.log(datosComprobante);
+          this.$root.$bvToast.toast(
+            "ocurrio un error mientras agregaba el comprobante de pago",
+            {
+              title: "Atencion!",
+              toaster: "b-toaster-top-center",
+              solid: true,
+              variant: "danger",
+            }
+          );
+        }
       }
     },
   },

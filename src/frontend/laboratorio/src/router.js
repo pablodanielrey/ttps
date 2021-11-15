@@ -61,7 +61,7 @@ const router = new Router({
             { path: '/esperandoFactura', component: EsperandoFactura },
             { path: '/esperandoComprobantePago', component: EsperandoComprobantePago , name:'EsperandoComprobanteDePago' ,props:true},
             { path: '/anuladoFaltaPago', component: AnuladorPorFaltaDePago , name:'AnuladorPorFaltaDePago' },
-            { path: '/enviarConsentimientoInformado', component: EnviarConsentimientoInformado },
+            { path: '/enviarConsentimientoInformado', component: EnviarConsentimientoInformado, name:'EnviarConsentimientoInformado', props:true },
             { path: '/esperandoConsentimientoInformado', component: EsperandoConsentimientoInformado , name:'EsperandoConsentimientoInformado' ,props:true },
             { path: '/esperandoSeleccionDeTurnoExtraccion', component: EsperandoSeleccionDeTurnoExtraccion, name:'EsperandoSeleccionDeTurnoParaExtraccion',props:true },
             { path: '/esperandoTomaDeMuestra', component: EsperandoTomaDeMuestra , name:'EsperandoTomaDeMuestra',props:true },

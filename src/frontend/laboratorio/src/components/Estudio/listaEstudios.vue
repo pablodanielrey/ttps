@@ -80,7 +80,7 @@ export default {
 
   data() {
     return {
-      perPage: 4,
+      perPage:10,
       pageOptions: [4, 10, 15],
       filter: null,
       currentPage: 1,
@@ -103,6 +103,7 @@ export default {
           class: "text-center p2",
         },
         { key: "tipo.nombre", label: "Tipo Estudio", class: "text-center p2" },
+        { key: "estados.resourcetype", label: "Estado", class: "text-center p2" },
 
         { key: "acciones", label: "Acciones", class: "text-center p2" },
       ],
@@ -112,6 +113,9 @@ export default {
 
   created() {},
   methods: {
+    verEstado(paciente){
+      console.log(paciente)
+    },
     async obtenerListaEstudios() {
       try {
         let response = await EstudiosService.obtenerListaEstudios();
