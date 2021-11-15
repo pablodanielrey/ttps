@@ -78,7 +78,7 @@ class SerializadorAnuladorPorFaltaDePago(serializers.ModelSerializer):
 class SerializadorEnviarConsentimientoInformado(serializers.ModelSerializer):
     class Meta:
         model = models.EnviarConsentimientoInformado
-        fields = ['id','fehca']
+        fields = ['id','fecha']
 
 class SerializadorEsperandoConsentimientoInformado(serializers.ModelSerializer):
     class Meta:
@@ -196,6 +196,7 @@ class VistaEstadoEstudio(viewsets.ModelViewSet):
             fin = parser.parse(request.data['fin'])
             turno = turnos_models.TurnoConfirmado(persona=paciente,inicio=inicio, fin=fin)
             turno.save()
+            logging.debug(f'turno generado {turno.id}')
 
             """ actualizo el estado """
             ultimo_estado.turno = turno.id
@@ -226,8 +227,9 @@ class VistaEstadoEstudio(viewsets.ModelViewSet):
             pass
 
 
-        serializador = SerializadorEstadoEstudioPolimorfico(ultimo_estado, context={'request': request})
-        return Response(serializador.data)
+        #serializador = SerializadorEstadoEstudioPolimorfico(ultimo_estado, context={'request': request})
+        #return Response(serializador.data)
+        return Response('ok')
 
 """
     ///////////////////////////////////////////////
