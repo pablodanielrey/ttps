@@ -10,9 +10,11 @@ export default {
     },
     confirmarTurno(turno){
         return Api().post(API_URL + API_USER + "turnos_confirmados/",turno)
+    },
+    obtenerTurnosOcupados(){
+        return Api().get(API_URL + API_USER + "turnos_confirmados/")
 
     }
-
   
     
 }

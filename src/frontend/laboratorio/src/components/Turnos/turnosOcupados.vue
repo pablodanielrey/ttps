@@ -1,16 +1,14 @@
 <template>
   <b-container>
     <div>
-      <h3>Seleccion de turno para un paciente</h3>
-      <h5>
-        Paciente: {{ estudio.paciente.apellido }} {{ estudio.paciente.nombre }}
-      </h5>
+      <h3>Turnos Ocupados</h3>
+
       <div v-if="loading">
         <b-spinner> </b-spinner>
       </div>
       <div v-else>
         <vue-cal
-        active-view="years"
+          active-view="years"
           :disable-views="['years', 'day']"
           :time-step="15"
           :disable-days="this.turnos"
@@ -22,21 +20,33 @@
           class="vuecal--full-height-delete"
           @view-change="logEvents('view-change', $event)"
           ref="vuecal"
-          
         />
       </div>
-      <b-modal
-        ref="my-modal"
-        :title="selectedEvent.title"
-        @ok="confirmarTurno(selectedEvent.start, selectedEvent.end)"
-      >
+      <b-modal ref="my-modal" :title="selectedEvent.title" ok-only>
         <div>
           <p v-if="selectedEvent.start != null">
-            Turno seleccionado {{ selectedEvent.start.format("DD/MM/YYYY") }}
+            Turno Ocupado
+            {{ selectedEvent.start.format("DD/MM/YYYY") }}
           </p>
         </div>
+
         <p v-html="selectedEvent.contentFull" />
-        <strong>Detalles:</strong>
+        <strong>Detalles Paciente:</strong>
+        <ul>
+          <li v-if="selectedEvent.persona != null">
+            Nombre: {{ selectedEvent.persona.apellido }}
+            {{ selectedEvent.persona.nombre }}
+          </li>
+          <li v-if="selectedEvent.persona != null"> 
+            Telefono:
+            {{ selectedEvent.persona.telefono }}
+          </li>
+          <li v-if="selectedEvent.persona != null"> 
+            Email:
+            {{ selectedEvent.persona.email }}
+          </li>
+        </ul>
+        <strong>Detalles Turno:</strong>
         <ul>
           <li v-if="selectedEvent.start != null">
             Inicio {{ selectedEvent.start && selectedEvent.start.formatTime() }}
@@ -45,6 +55,11 @@
             Fin: {{ selectedEvent.end && selectedEvent.end.formatTime() }}
           </li>
         </ul>
+        <b-button
+          @click="cancelarTurno(selectedEvent.start, selectedEvent.end)"
+          variant="outline-danger"
+          >Cancelar turno</b-button
+        >
       </b-modal>
     </div>
   </b-container>
@@ -56,7 +71,7 @@ import TurnosService from "@/services/TurnosService.js";
 import VueCal from "vue-cal";
 import "vue-cal/dist/vuecal.css";
 import "vue-cal/dist/i18n/es.js";
-
+import axios from "axios";
 export default {
   components: { VueCal },
 
@@ -76,7 +91,6 @@ export default {
       value: "",
       context: null,
       turnos: [],
-      showDialog: false,
       selectedEvent: {},
       paciente: null,
       pacienteSelected: null,
@@ -85,70 +99,63 @@ export default {
   },
 
   methods: {
-    logEvents(accion, event) {
-      let rango;
-      if (event.view == "month") {
-        rango = {
-          inicio: event.firstCellDate.toISOString(),
-          fin: event.lastCellDate.toISOString(),
-        };
-      } else {
-        rango = {
-          inicio: event.startDate.toISOString(),
-          fin: event.endDate.toISOString(),
-        };
-      }
-      this.rangoCelda.inicio = rango.inicio;
-      this.rangoCelda.fin = rango.fin;
-      this.buscarTurnos(rango);
-    },
-    async buscarTurnos(rango) {
+    async obtenerTurnos() {
       try {
-        let response = await TurnosService.obtenerTurnos(rango);
-        this.turnos = response.data;
+        let response = await TurnosService.obtenerTurnosOcupados();
         console.log(response);
+        this.turnos = response.data;
       } catch (err) {
         console.log(err);
       }
     },
+    logEvents(accion, event) {
+      console.log(accion, event);
+    },
     onEventClick(event, e) {
+      console.log(event, e);
       this.selectedEvent = event;
-      this.showDialog = true;
       this.$refs["my-modal"].show();
       e.stopPropagation();
     },
-    async confirmarTurno(inicio, fin) {
+    async cancelarTurno(inicio, fin) {
       try {
         let turnoEstudio = {
           inicio: inicio.toISOString(),
           fin: fin.toISOString(),
-          id_estudio: this.estudio.id,
-          persona: this.estudio.paciente.id,
         };
-        let response = await TurnosService.confirmarTurno(turnoEstudio);
-        this.buscarTurnos(this.rangoCelda);
+        let response = await TurnosService.cancelarTurno(turnoEstudio);
+        this.obtenerTurnos();
         console.log(response);
       } catch (err) {
         console.log(err);
       }
     },
   },
-  computed: {   
+  computed: {
     getPacientes() {
       let pacientes = this.turnos.map((e) => ({
         start: new Date(e.inicio),
-        end: new Date(e.fin),       
-        title: "Disponible",
+        end: new Date(e.fin),
+        title: e.persona.apellido + " " + e.persona.nombre,
+        persona: e.persona,
       }));
 
       return pacientes;
     },
   },
 
-  mounted() {},
+  mounted() {
+    axios
+      .all([this.obtenerTurnos()])
+      .then(() => {
+        this.loading = false;
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  },
 };
 </script>
 
 <style scoped>
-
 </style>
