@@ -10,6 +10,7 @@ from zoneinfo import ZoneInfo
 
 from estudios import models as estudio_models
 from personas import models as persona_models
+from turnos import models as turnos_models
 
 
 def generar_fecha_now():
@@ -17,7 +18,7 @@ def generar_fecha_now():
 
 def generar_parametros_de_turnos_por_defecto():
 
-    estudio_models.ParametroDeTurnos.objects.all().delete()
+    turnos_models.ParametroDeTurnos.objects.all().delete()
 
     # inicializo los parámetros de los turnos a una semana antes como ejemplo.
     hoy = datetime.datetime.combine(datetime.date.today(), datetime.time(0)).replace(tzinfo=ZoneInfo('America/Argentina/Buenos_Aires'))
@@ -35,19 +36,19 @@ def generar_parametros_de_turnos_por_defecto():
     for r in rangos_de_prueba:
         fecha_valido = r['fecha']
         frecuencia = r['frecuencia']
-        pt = estudio_models.ParametroDeTurnos(fecha_valido=fecha_valido)
+        pt = turnos_models.ParametroDeTurnos(fecha_valido=fecha_valido)
         pt.save()
         for rinicio, rfin in r['rangos']:
             logging.debug(f'generando rango a partir de : {fecha_valido} de : {rinicio} hasta: {rfin} con la frecuencia: {frecuencia}')
-            r = estudio_models.RangoDeTurnos(parametros=pt, hora_inicio=rinicio, hora_fin=rfin, frecuencia=frecuencia)
+            r = turnos_models.RangoDeTurnos(parametros=pt, hora_inicio=rinicio, hora_fin=rfin, frecuencia=frecuencia)
             r.save()
 
 
 
 def generar_fechas_feriados():
-    estudio_models.FechasSinTurno.objects.all().delete()
+    turnos_models.FechasSinTurno.objects.all().delete()
     for feriado in [datetime.date(2021,10,28), datetime.date(2021,11,1), datetime.date(2021,11,3)]:
-        estudio_models.FechasSinTurno(fecha=feriado).save()
+        turnos_models.FechasSinTurno(fecha=feriado).save()
 
 
 
