@@ -11,8 +11,6 @@
       <div v-else>
         <vue-cal
           :disable-views="['years', 'day']"
-          :time-from="9 * 60"
-          :time-to="15 * 60"
           :time-step="15"
           :disable-days="this.turnos"
           :snap-to-time="this.tiempoTurnos"

@@ -2,6 +2,7 @@ from django.db import models
 
 import uuid
 import datetime
+import logging
 
 from django.db.models.fields import related
 
@@ -257,11 +258,20 @@ class ModeloTurnos:
         return sorted(turnos, key=lambda x: x['inicio'])
 
     def _generar_turnos_para_dia(self, fecha, rangos):
+        """
+            TODO: verificar que fecha siempre esta en la hora 00 del timezone que queremos manejar.
+        """
         turnos = []
         for rango in rangos:
             frecuencia = datetime.timedelta(minutes=rango.frecuencia)
-            hora_de_turno = fecha.replace(hour=rango.hora_inicio, minute=0, second=0, microsecond=0)
-            hora_de_fin = fecha.replace(hour=rango.hora_fin, minute=0, second=0, microsecond=0)
+            # hora_de_turno = fecha.replace(hour=rango.hora_inicio, minute=0, second=0, microsecond=0)
+            # hora_de_fin = fecha.replace(hour=rango.hora_fin, minute=0, second=0, microsecond=0)
+            hora_de_turno = fecha + datetime.timedelta(hours=rango.hora_inicio)
+            hora_de_fin = fecha + datetime.timedelta(hours=rango.hora_fin)
+
+            logging.debug(hora_de_turno)
+            logging.debug(hora_de_fin)
+
             nuevo_turno = hora_de_turno + frecuencia
             while nuevo_turno <= hora_de_fin:
                 turnos.append(self._formatear_turno(hora_de_turno, nuevo_turno))

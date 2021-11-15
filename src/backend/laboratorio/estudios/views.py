@@ -245,6 +245,8 @@ class VistaFechasSinTurno(viewsets.ViewSet):
 from dateutil import parser
 
 
+
+
 class VistaTurnosDisponibles(viewsets.ModelViewSet):
 
     queryset = models.ParametroDeTurnos.objects.none()
@@ -259,7 +261,7 @@ class VistaTurnosDisponibles(viewsets.ModelViewSet):
         fin = inicio + datetime.timedelta(days=4)
         """
         inicio = parser.parse(request.query_params.get('inicio'))
-        fin = parser.parse(request.query_params.get('fin'))
+        fin = parser.parse(request.query_params.get('fin')) + datetime.timedelta(seconds=1)
 
         logging.debug(f'buscando turnos entre {inicio} y {fin}')
 
