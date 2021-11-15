@@ -123,13 +123,21 @@ export default {
       // Prevent navigating to narrower view (default vue-cal behavior).
       e.stopPropagation();
     },
-    confirmarTurno(inicio, fin) {
-      let turnoEstudio = {
-        inicio: inicio.format("YYYY-MM-DD HH:m"),
-        fin: fin.toLocaleString("en-es"),
-        idEstudio: this.estudio.id,
-      };
-      console.log(turnoEstudio);
+    async confirmarTurno(inicio, fin) {
+       try {
+         let turnoEstudio = {
+            inicio: inicio.toISOString(),
+            fin: fin.toISOString(),
+            id_estudio: this.estudio.id,
+            persona: this.estudio.paciente.id 
+          };
+        let response = await TurnosService.confirmarTurno(turnoEstudio);
+        //this.buscarTurnos(turnoEstudio)
+        console.log(response)       
+      } catch (err) {
+        console.log(err);
+      }    
+
     },
   },
   computed: {

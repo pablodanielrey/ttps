@@ -276,7 +276,7 @@ class SerializadorTurnosConfirmados(serializers.ModelSerializer):
     persona = SerializadorDePersona()
     class Meta:
         model = models.TurnoConfirmado
-        fields = ['id','pesona','inicio','fin']
+        fields = ['id','persona','inicio','fin']
 
 class VistaTurnosConfirmados(viewsets.ModelViewSet):
 
@@ -296,3 +296,24 @@ class VistaTurnosConfirmados(viewsets.ModelViewSet):
 
         return Response(turnos)
     """
+
+    def create(self, request, *args, **kwargs):
+        logging.debug(request.data)
+
+        estudio_id = request.data['id_estudio']
+        estudio = estudio_models.Estudio.objects.get(id=estudio_id)
+        persona = estudio.paciente
+
+        #id_persona = request.data['persona']
+        #persona = [p for p in personas_models.Persona.objects.all() if p.id == id_persona][0]
+        #persona = personas_models.Persona.objects.get(id_persona)
+        
+        
+        inicio = parser.parse(request.data['inicio'])
+        fin = parser.parse(request.data['fin'])
+
+        turno = estudio_models.TurnoConfirmado(persona=persona, inicio=inicio, fin=fin)
+        turno.save()
+
+        serializador = SerializadorTurnosConfirmados(turno, context={'request': request})
+        return Response(serializador.data)

@@ -261,6 +261,7 @@ class ModeloTurnos:
         """
             TODO: verificar que fecha siempre esta en la hora 00 del timezone que queremos manejar.
         """
+        un_segundo = datetime.timedelta(seconds=1)
         turnos = []
         for rango in rangos:
             frecuencia = datetime.timedelta(minutes=rango.frecuencia)
@@ -268,13 +269,9 @@ class ModeloTurnos:
             # hora_de_fin = fecha.replace(hour=rango.hora_fin, minute=0, second=0, microsecond=0)
             hora_de_turno = fecha + datetime.timedelta(hours=rango.hora_inicio)
             hora_de_fin = fecha + datetime.timedelta(hours=rango.hora_fin)
-
-            logging.debug(hora_de_turno)
-            logging.debug(hora_de_fin)
-
             nuevo_turno = hora_de_turno + frecuencia
             while nuevo_turno <= hora_de_fin:
-                turnos.append(self._formatear_turno(hora_de_turno, nuevo_turno))
+                turnos.append(self._formatear_turno(hora_de_turno, nuevo_turno - un_segundo))
                 hora_de_turno = nuevo_turno
                 nuevo_turno += frecuencia
         return turnos
