@@ -23,8 +23,7 @@ class SerializadorDeLote(serializers.ModelSerializer):
     estudios = SerializadorDeEstudioDeLote(many=True)
     class Meta:
         model = models.Lote
-        fields = ['id','fecha', 'resultado', 'estudios']
-
+        fields = ['id', 'fecha', 'resultado', 'estudios']
 
 class VistaLotes(viewsets.ModelViewSet):
     queryset = models.Lote.objects.all()

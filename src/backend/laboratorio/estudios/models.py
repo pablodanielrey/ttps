@@ -60,7 +60,7 @@ class EsperandoSeleccionDeTurnoParaExtraccion(EstadoEstudio):
 
 class EsperandoTomaDeMuestra(EstadoEstudio):
     fecha_muestra = models.DateTimeField(null=True)
-    mililitros = models.IntegerField(null=True)
+    mililitros = models.FloatField(null=True)
     freezer = models.CharField(max_length=500,null=True)
     expirado = models.BooleanField(default=False)
 
