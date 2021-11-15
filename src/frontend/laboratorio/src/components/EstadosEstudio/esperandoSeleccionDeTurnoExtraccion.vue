@@ -51,7 +51,9 @@
 </template>
 
 <script>
+import EstudiosService from "@/services/EstudiosService.js";
 import TurnosService from "@/services/TurnosService.js";
+
 /* import axios from "axios"; */
 import VueCal from "vue-cal";
 import "vue-cal/dist/vuecal.css";
@@ -122,14 +124,27 @@ export default {
         let turnoEstudio = {
           inicio: inicio.toISOString(),
           fin: fin.toISOString(),
-          id_estudio: this.estudio.id,
-          persona: this.estudio.paciente.id,
+          estudio_id: this.estudio.id,          
         };
-        let response = await TurnosService.confirmarTurno(turnoEstudio);
-        this.buscarTurnos(this.rangoCelda);
+        let response = await  EstudiosService.actualizarUltimoEstado(turnoEstudio);
+         this.$root.$bvToast.toast("Se selecciono el turno para el paciente ", {
+          title: "Atencion!",
+          toaster: "b-toaster-top-center",
+          solid: true,
+          variant: "success",
+        });
+         this.$router.push({
+          name: "listaEstudios",
+        });
         console.log(response);
       } catch (err) {
         console.log(err);
+          this.$root.$bvToast.toast("no se pudo seleccionar el turno para el paciente, por favor vuelva a intentar ", {
+          title: "Atencion!",
+          toaster: "b-toaster-top-center",
+          solid: true,
+          variant: "danger",
+        });
       }
     },
   },

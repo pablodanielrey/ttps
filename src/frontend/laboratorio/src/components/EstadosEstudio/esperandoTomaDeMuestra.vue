@@ -81,12 +81,14 @@
 
 
 <script>
+import EstudiosService from "@/services/EstudiosService.js";
+
 export default {
   components: {},
 
   props: {
-    idEstudio: {
-      type: String,
+    estudio: {
+      type: Object,
     },
   },
   created() {},
@@ -98,13 +100,44 @@ export default {
   },
 
   methods: {
-    guardarDatos() {
-        let datosMuestra={
-          idEstudio:this.idEstudio,
-          freezer:this.freezer,
-          mililitros:this.mililitros
+    async guardarDatos() {
+      try {
+        let result = await this.$refs.detailMuestra.validate();
+        if (result) {
+          let datosMuestra = {
+            estudio_id: this.estudio.id,
+            freezer: this.freezer,
+            mililitros: this.mililitros,
+            fecha_muestra: new Date(),
+          };
+          console.log(datosMuestra);
+          let response = await EstudiosService.actualizarUltimoEstado(
+            datosMuestra
+          );
+          console.log(response);
+          this.$root.$bvToast.toast("Se ingresaron los datos de la muestra", {
+            title: "Atencion!",
+            toaster: "b-toaster-top-center",
+            solid: true,
+            variant: "success",
+          });
+          this.$router.push({
+            name: "listaEstudios",
+          });
         }
-        console.log(datosMuestra)
+        
+      } catch (error) {
+        console.log(error);
+        this.$root.$bvToast.toast(
+          "no se pudieron guardar los datos de la muestra, intente nuevamente",
+          {
+            title: "Atencion!",
+            toaster: "b-toaster-top-center",
+            solid: true,
+            variant: "danger",
+          }
+        );
+      }
     },
   },
   computed: {},
