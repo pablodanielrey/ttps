@@ -1,5 +1,6 @@
 from django.db.models.query import QuerySet
 from django.shortcuts import render
+from django.http import HttpResponseBadRequest
 
 
 
@@ -130,38 +131,40 @@ class SerializadorEstadoEstudioPolimorfico(PolymorphicSerializer):
         models.EsperandoEntregaAMedicoDerivante: SerializadorEsperandoEntregaAMedicoDerivante
     }
 
-"""
-
-class EstadoHandler:
-    def load_data(self, estado, data):
-        pass
-
-class EsperandoComprobanteDePagoHandler(EstadoHandler):
-    def load_data(self, estado, data):
-        estado.comprobante = data['comprobante']
-
-"""
 
 class VistaEstadoEstudio(viewsets.ModelViewSet):
     queryset = models.EstadoEstudio.objects.all()
     serializer_class = SerializadorEstadoEstudioPolimorfico
 
-    # estados_handlers = {
-    #     models.EsperandoComprobanteDePago: EsperandoComprobanteDePagoHandler()
-    # }
-
-
     def create(self, request, *args, **kwargs):
-        logging.debug(request.data)
+        """
+            En nuestro caso los creates no se realizan extrictamente cumpliendo REST.
+            Los create para las interfaces son modify de los estados actuales y se ejecuta el workflow.
+        """
 
-        estudio_id = request.data['id_estudio']
+        estudio_id = request.data.pop('estudio_id')
         estudio = estudio_models.Estudio.objects.get(id=estudio_id)
+
+        """
+            TODO: debemos estar seguros de que no actualizamos ningún id!!!!
+        """
+        try:
+            request.data.pop('id')
+        except KeyError as e:
+            pass
 
         ultimo_estado = estudio.estados.order_by('fecha').last()
         
         logging.debug(ultimo_estado)
-        #self.estados_handlers[ultimo_estado.__class__].load_data(request.data)
-        #ultimo_estado.save()
+        serializador = SerializadorEstadoEstudioPolimorfico.model_serializer_mapping[ultimo_estado.__class__](instance=ultimo_estado, data=request.data)
+        if serializador.is_valid():
+            if len(serializador.validated_data) <= 0:
+                return HttpResponseBadRequest()
+            serializador.save()
+
+        """
+            Ahora paso al nuevo estado de acuerdo al workflow.
+        """
 
         serializador = SerializadorEstadoEstudioPolimorfico(ultimo_estado, context={'request': request})
         return Response(serializador.data)

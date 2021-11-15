@@ -4,3 +4,4 @@ django-cors-headers
 django-polymorphic
 django-rest-polymorphic
 dateutils
+psycopg2-binary

@@ -19,8 +19,8 @@ export default {
     obtenerListaEstudios() {
         return Api().get(API_URL + API_USER + "estudios/")
     },
-    cambiarEstado(datos){
-        return Api().post(API_URL + API_USER + "estado_estudio/",datos)
+    actualizarUltimoEstado(datos){
+        return Api().post(API_URL + API_USER + "estados/",datos)
     }
     
   

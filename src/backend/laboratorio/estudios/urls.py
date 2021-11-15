@@ -9,7 +9,7 @@ router = routers.DefaultRouter()
 router.register('tiposEstudio', views.VistaTiposDeEstudio)
 router.register('diagnosticos', views.VistaDiagnostico)
 router.register('estudios', views.VistaEstudios)
-router.register('estado_estudio', views.VistaEstadoEstudio)
+router.register('estados', views.VistaEstadoEstudio)
 
 #router.register('presupuestoEstudio', views.VistaPresupuestoEstudio)
 
@@ -20,3 +20,5 @@ router.register('turnos_confirmados', views.VistaTurnosConfirmados)
 
 
 urlpatterns = router.urls
+for u in router.urls:
+    print(u)

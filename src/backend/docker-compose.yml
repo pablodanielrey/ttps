@@ -1,6 +1,21 @@
 version: "3.5"
 services:
+  db:
+    image: postgres:13
+    restart: "no"
+    expose:
+      - 5432
+    environment:
+      POSTGRES_DB: laboratorio
+      POSTGRES_USER: laboratorio
+      POSTGRES_PASSWORD: laboratorio
+    volumes:
+      - ./db:/var/lib/postgresql/data
+    network_mode: "host"
+    
   backend:
+    depends_on:
+      - db
     build:
       context: .
     restart: "no"
