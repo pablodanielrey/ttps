@@ -53,7 +53,7 @@ class EsperandoConsentimientoInformado(EstadoEstudio):
     consentimiento = models.TextField(null=True)
 
 class EsperandoSeleccionDeTurnoParaExtraccion(EstadoEstudio):
-    turno = models.ForeignKey(turnos_models.TurnoConfirmado, on_delete=models.CASCADE)
+    turno = models.ForeignKey(turnos_models.TurnoConfirmado, on_delete=models.CASCADE, null=True)
 
 class EsperandoTomaDeMuestra(EstadoEstudio):
     fecha_muestra = models.DateTimeField(null=True)

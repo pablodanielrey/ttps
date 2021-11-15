@@ -7,10 +7,12 @@ from django.http import HttpResponseBadRequest
 import logging
 import datetime
 from zoneinfo import ZoneInfo
+from dateutil import parser
 
 from . import models
 from personas import models as personas_models
 from estudios import models as estudio_models
+from turnos import models as turnos_models
 
 """
     Las vistas de rest framework
@@ -20,6 +22,7 @@ from rest_framework.response import Response
 
 
 from personas.views import SerializadorDeObraSocial, SerializadorDePersona
+from turnos import views as turnos_views
 
 class SerializadorTiposDeEstudio(serializers.HyperlinkedModelSerializer):
     class Meta:
@@ -78,6 +81,7 @@ class SerializadorEsperandoConsentimientoInformado(serializers.ModelSerializer):
         fields = ['id','fecha','consentimiento']
 
 class SerializadorEsperandoSeleccionDeTurnoParaExtraccion(serializers.ModelSerializer):
+    turno = turnos_views.SerializadorTurnosConfirmados()
     class Meta:
         model = models.EsperandoSeleccionDeTurnoParaExtraccion
         fields = ['id','fecha','turno']
@@ -176,14 +180,30 @@ class VistaEstadoEstudio(viewsets.ModelViewSet):
         
         logging.debug(ultimo_estado)
         clase_ultimo_estado = ultimo_estado.__class__
-        serializador = SerializadorEstadoEstudioPolimorfico.model_serializer_mapping[clase_ultimo_estado](instance=ultimo_estado, data=request.data)
-        if not serializador.is_valid():
-            return HttpResponseBadRequest()
-        if len(serializador.validated_data) <= 0:
-            """ no existen datos enviados para actualizar el nuevo estado """
-            return HttpResponseBadRequest()
 
-        serializador.save()
+        """ aca manejo comportamientos especiales de los estados """
+        if clase_ultimo_estado == models.EsperandoSeleccionDeTurnoParaExtraccion:
+            """ genero un turno """
+            paciente = personas_models.Persona.objects.get(estudio.paciente.id)
+            inicio = parser.parse(request.data['inicio'])
+            fin = parser.parse(request.data['fin'])
+            turno = turnos_models.TurnoConfirmado(persona=paciente,inicio=inicio, fin=fin)
+            turno.save()
+
+            """ actualizo el estado """
+            ultimo_estado.turno = turno.id
+            ultimo_estado.save()
+
+        else:
+            """ los casos normales de cambios de estado - se encarga el serializer """
+            serializador = SerializadorEstadoEstudioPolimorfico.model_serializer_mapping[clase_ultimo_estado](instance=ultimo_estado, data=request.data)
+            if not serializador.is_valid():
+                return HttpResponseBadRequest()
+            if len(serializador.validated_data) <= 0:
+                """ no existen datos enviados para actualizar el nuevo estado """
+                return HttpResponseBadRequest()
+
+            serializador.save()
 
         """
             Ahora paso al nuevo estado de acuerdo al workflow.

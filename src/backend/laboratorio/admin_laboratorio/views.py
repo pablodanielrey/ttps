@@ -65,39 +65,40 @@ def generar_estudio_de_muestra():
     obp = persona_models.ObraSocialPersona(persona=p1, obra_social=ob_social, numero_afiliado='afiliate12345')
     obp.save()
 
-    tipoe = estudio_models.TiposDeEstudio.objects.all().first()
-    diagnostico = estudio_models.Diagnostico.objects.all().first()
-    estudio = estudio_models.Estudio(paciente=p1,  tipo=tipoe, medico_derivante=mm, diagnostico=diagnostico)
-    estudio.save()
 
-    #estudio_models.EsperandoPresupuesto(persona=empleado, estudio=estudio, presupuesto=10.3).save()
-    #estudio_models.EsperandoFactura(persona=empleado, estudio=estudio, numero='dsaasd324324', monto=10.5).save()
-    #estudio_models.EsperandoFactura(persona=empleado, estudio=estudio, numero='dsaasd324325', monto=11.5, obra_social=ob_social).save()
-    estudio_models.EsperandoComprobanteDePago(persona=empleado, estudio=estudio, comprobante='base64-del-comprobante').save()
-    estudio_models.AnuladorPorFaltaDePago(persona=empleado, estudio=estudio).save()
+    # tipoe = estudio_models.TiposDeEstudio.objects.all().first()
+    # diagnostico = estudio_models.Diagnostico.objects.all().first()
+    # estudio = estudio_models.Estudio(paciente=p1,  tipo=tipoe, medico_derivante=mm, diagnostico=diagnostico)
+    # estudio.save()
+
+    # #estudio_models.EsperandoPresupuesto(persona=empleado, estudio=estudio, presupuesto=10.3).save()
+    # #estudio_models.EsperandoFactura(persona=empleado, estudio=estudio, numero='dsaasd324324', monto=10.5).save()
+    # #estudio_models.EsperandoFactura(persona=empleado, estudio=estudio, numero='dsaasd324325', monto=11.5, obra_social=ob_social).save()
+    # estudio_models.EsperandoComprobanteDePago(persona=empleado, estudio=estudio, comprobante='base64-del-comprobante').save()
+    # estudio_models.AnuladorPorFaltaDePago(persona=empleado, estudio=estudio).save()
 
 
-    tipoe = estudio_models.TiposDeEstudio.objects.all().first()
-    diagnostico = estudio_models.Diagnostico.objects.all().first()
-    estudio = estudio_models.Estudio(paciente=p1,  tipo=tipoe, medico_derivante=mm, diagnostico=diagnostico)
-    estudio.save()
+    # tipoe = estudio_models.TiposDeEstudio.objects.all().first()
+    # diagnostico = estudio_models.Diagnostico.objects.all().first()
+    # estudio = estudio_models.Estudio(paciente=p1,  tipo=tipoe, medico_derivante=mm, diagnostico=diagnostico)
+    # estudio.save()
 
-    #estudio_models.EsperandoPresupuesto(persona=empleado, estudio=estudio, presupuesto=10.3).save()
-    #estudio_models.EsperandoFactura(persona=empleado, estudio=estudio, numero='dsaasd324325', monto=11.5, obra_social=ob_social).save()
-    estudio_models.EsperandoComprobanteDePago(persona=empleado, estudio=estudio, comprobante='base64-del-comprobante').save()
-    estudio_models.EsperandoConsentimientoInformado(persona=empleado, estudio=estudio, consentimiento='base64-del-consntimiento').save()
+    # #estudio_models.EsperandoPresupuesto(persona=empleado, estudio=estudio, presupuesto=10.3).save()
+    # #estudio_models.EsperandoFactura(persona=empleado, estudio=estudio, numero='dsaasd324325', monto=11.5, obra_social=ob_social).save()
+    # estudio_models.EsperandoComprobanteDePago(persona=empleado, estudio=estudio, comprobante='base64-del-comprobante').save()
+    # estudio_models.EsperandoConsentimientoInformado(persona=empleado, estudio=estudio, consentimiento='base64-del-consntimiento').save()
 
-    estudio_models.EsperandoSeleccionDeTurnoParaExtraccion(persona=empleado, estudio=estudio, turno=generar_fecha_now()).save()
-    estudio_models.EsperandoTomaDeMuestra(persona=empleado, estudio=estudio, expirado=True).save()
+    # #estudio_models.EsperandoSeleccionDeTurnoParaExtraccion(persona=empleado, estudio=estudio, turno=generar_fecha_now()).save()
+    # estudio_models.EsperandoTomaDeMuestra(persona=empleado, estudio=estudio, expirado=True).save()
     
-    estudio_models.EsperandoSeleccionDeTurnoParaExtraccion(persona=empleado, estudio=estudio, turno=generar_fecha_now()).save()
-    estudio_models.EsperandoTomaDeMuestra(persona=empleado, estudio=estudio, fecha_muestra=generar_fecha_now(), mililitros=145, freezer=10, expirado=False).save()
-    estudio_models.EsperandoRetiroDeExtaccion(persona=empleado, estudio=estudio, extracionista='pepe se la lleva a la muestra', fecha_retiro=generar_fecha_now()).save()
+    # #estudio_models.EsperandoSeleccionDeTurnoParaExtraccion(persona=empleado, estudio=estudio, turno=generar_fecha_now()).save()
+    # estudio_models.EsperandoTomaDeMuestra(persona=empleado, estudio=estudio, fecha_muestra=generar_fecha_now(), mililitros=145, freezer=10, expirado=False).save()
+    # estudio_models.EsperandoRetiroDeExtaccion(persona=empleado, estudio=estudio, extracionista='pepe se la lleva a la muestra', fecha_retiro=generar_fecha_now()).save()
     
-    estudio_models.EsperandoLoteDeMuestraParaProcesamientoBiotecnologico(persona=empleado, estudio=estudio,numero_lote='2ef').save()
-    estudio_models.EsperandoProcesamientoDeLoteBiotecnologico(persona=empleado, estudio=estudio, resultado_url='https://www.google.com/informe.pdf', fecha_resultado=generar_fecha_now()).save()
-    estudio_models.EsperandoInterpretacionDeResultados(persona=empleado, estudio=estudio, fecha_informe=generar_fecha_now(), medico_informante=mm, informe='estas recontra bien. andate de vacaciones').save()
-    estudio_models.EsperandoEntregaAMedicoDerivante(persona=empleado, estudio=estudio, fecha_entrega=generar_fecha_now()).save()
+    # estudio_models.EsperandoLoteDeMuestraParaProcesamientoBiotecnologico(persona=empleado, estudio=estudio,numero_lote='2ef').save()
+    # estudio_models.EsperandoProcesamientoDeLoteBiotecnologico(persona=empleado, estudio=estudio, resultado_url='https://www.google.com/informe.pdf', fecha_resultado=generar_fecha_now()).save()
+    # estudio_models.EsperandoInterpretacionDeResultados(persona=empleado, estudio=estudio, fecha_informe=generar_fecha_now(), medico_informante=mm, informe='estas recontra bien. andate de vacaciones').save()
+    # estudio_models.EsperandoEntregaAMedicoDerivante(persona=empleado, estudio=estudio, fecha_entrega=generar_fecha_now()).save()
 
 
 class InitSite(APIView):
