@@ -49,6 +49,9 @@ class EsperandoComprobanteDePago(EstadoEstudio):
 class AnuladorPorFaltaDePago(EstadoEstudio):
     fecha_procesado = models.DateTimeField(null=True)
 
+class EnviarConsentimientoInformado(EstadoEstudio):
+    pass
+
 class EsperandoConsentimientoInformado(EstadoEstudio):
     consentimiento = models.TextField(null=True)
 

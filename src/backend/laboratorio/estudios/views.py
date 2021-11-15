@@ -75,13 +75,18 @@ class SerializadorAnuladorPorFaltaDePago(serializers.ModelSerializer):
         fields = ['id','fecha','fecha_procesado']
 
 
+class SerializadorEnviarConsentimientoInformado(serializers.ModelSerializer):
+    class Meta:
+        model = models.EnviarConsentimientoInformado
+        fields = ['id','fehca']
+
 class SerializadorEsperandoConsentimientoInformado(serializers.ModelSerializer):
     class Meta:
         model = models.EsperandoConsentimientoInformado
         fields = ['id','fecha','consentimiento']
 
 class SerializadorEsperandoSeleccionDeTurnoParaExtraccion(serializers.ModelSerializer):
-    turno = turnos_views.SerializadorTurnosConfirmados()
+    #turno = turnos_views.SerializadorTurnosConfirmados()
     class Meta:
         model = models.EsperandoSeleccionDeTurnoParaExtraccion
         fields = ['id','fecha','turno']
@@ -129,6 +134,7 @@ class SerializadorEstadoEstudioPolimorfico(PolymorphicSerializer):
         # models.EsperandoPresupuesto: SerializadorEsperandoPresupuesto,
         models.EsperandoComprobanteDePago: SerializadorEsperandoComprobanteDePago,
         models.AnuladorPorFaltaDePago: SerializadorAnuladorPorFaltaDePago,
+        models.EnviarConsentimientoInformado: SerializadorEnviarConsentimientoInformado,
         models.EsperandoConsentimientoInformado: SerializadorEsperandoConsentimientoInformado,
         models.EsperandoSeleccionDeTurnoParaExtraccion: SerializadorEsperandoSeleccionDeTurnoParaExtraccion,
         models.EsperandoTomaDeMuestra: SerializadorEsperandoTomaDeMuestra,
@@ -147,6 +153,7 @@ class VistaEstadoEstudio(viewsets.ModelViewSet):
 
     workflow = [
         models.EsperandoComprobanteDePago,
+        models.EnviarConsentimientoInformado,
         models.EsperandoConsentimientoInformado,
         models.EsperandoSeleccionDeTurnoParaExtraccion,
         models.EsperandoTomaDeMuestra,
