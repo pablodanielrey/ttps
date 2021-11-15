@@ -242,19 +242,24 @@ class VistaFechasSinTurno(viewsets.ViewSet):
     serializer_class = SerializadorFechasSinTurno
 
 
-class VistaListaTurnos(viewsets.ViewSet):
+from dateutil import parser
+
+
+class VistaTurnosDisponibles(viewsets.ModelViewSet):
 
     queryset = models.ParametroDeTurnos.objects.none()
 
     def list(self, request, *args, **kwargs):
+        """
         datos_rango = request
-        logging.debug(f'entra aca')
-        logging.debug(request)
-        inicio= self.request.query_params.get('inicio')
-        
+        inicio = request.query_params.get('inicio')
+
         inicio = datetime.datetime.now().replace(tzinfo=ZoneInfo("America/Argentina/Buenos_Aires"))
         inicio = inicio.replace(hour=0)
         fin = inicio + datetime.timedelta(days=4)
+        """
+        inicio = parser.parse(request.query_params.get('inicio'))
+        fin = parser.parse(request.query_params.get('fin'))
 
         logging.debug(f'buscando turnos entre {inicio} y {fin}')
 
@@ -271,7 +276,7 @@ class SerializadorTurnosConfirmados(serializers.ModelSerializer):
         model = models.TurnoConfirmado
         fields = ['id','pesona','inicio','fin']
 
-class VistaListaTurnosConfirmados(viewsets.ViewSet):
+class VistaTurnosConfirmados(viewsets.ModelViewSet):
 
     queryset = models.TurnoConfirmado.objects.all()
     serializer_class = SerializadorTurnosConfirmados
