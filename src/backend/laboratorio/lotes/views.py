@@ -10,7 +10,7 @@ from . import models
 """
     Las vistas de rest framework
 """
-from rest_framework import serializers, views, viewsets
+from rest_framework import serializers, views, viewsets, permissions
 from rest_framework.response import Response
 
 from estudios import views  as estudio_views
@@ -30,6 +30,7 @@ class SerializadorDeLote(serializers.ModelSerializer):
 class VistaLotes(viewsets.ModelViewSet):
     queryset = models.Lote.objects.all()
     serializer_class = SerializadorDeLote
+    permission_classes = [ permissions.DjangoModelPermissions ]
 
     def create(self, request, *args, **kwargs):
         logging.debug('llego al create')
@@ -38,6 +39,15 @@ class VistaLotes(viewsets.ModelViewSet):
         serializador = self.serializer_class(instance=lote, context={'request': request})
         return Response(serializador.data)
 
+
+    def update(self, request, pk):
+        lote = models.Lote.objects.get(id=pk)
+        # serializador = self.serializer_class(instance=lote, context={'request': request})
+        serializador = self.serializer_class(instance=lote, data=request.data)
+        if serializador.is_valid():
+            serializador.save()
+        models.ModeloLotes().actualizar_estudios_con_resultado(lote)
+        return Response(serializador.data)
 
 class VistaEstudios(views.APIView):
 

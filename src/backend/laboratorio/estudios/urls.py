@@ -11,5 +11,3 @@ router.register('estudios', views.VistaEstudios)
 router.register('estados', views.VistaEstadoEstudio)
 
 urlpatterns = router.urls
-for u in router.urls:
-    print(u)

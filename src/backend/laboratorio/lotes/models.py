@@ -65,6 +65,14 @@ class ModeloLotes:
         return lote
 
 
+    def actualizar_estudios_con_resultado(self, lote):
+        for estudio_de_lote in lote.estudios.all():
+            estudio = estudio_de_lote.estudio
+            ultimo_estado = estudio.ultimo_estado
+            ultimo_estado.fecha_resultado = lote.fecha
+            ultimo_estado.resultado_url = lote.resultado
+            ultimo_estado.save()
+            estudio_models.EsperandoInterpretacionDeResultados(estudio=estudio).save()
 
     def _generar_datos_de_prueba(self):
         from personas import models as persona_models

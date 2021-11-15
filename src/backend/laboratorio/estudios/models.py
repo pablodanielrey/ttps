@@ -79,9 +79,9 @@ class EsperandoProcesamientoDeLoteBiotecnologico(EstadoEstudio):
     resultado_url = models.URLField(null=True)
 
 class EsperandoInterpretacionDeResultados(EstadoEstudio):
-    fecha_informe = models.DateField()
-    medico_informante = models.ForeignKey(Persona, on_delete=models.CASCADE)
-    informe = models.TextField()
+    fecha_informe = models.DateField(null=True)
+    medico_informante = models.ForeignKey(Persona, on_delete=models.CASCADE, null=True)
+    informe = models.TextField(null=True)
    
 class EsperandoEntregaAMedicoDerivante(EstadoEstudio):
     fecha_entrega = models.DateTimeField(null=True)

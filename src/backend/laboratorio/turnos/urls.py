@@ -12,5 +12,3 @@ router.register('turnos_disponibles', views.VistaTurnosDisponibles)
 router.register('turnos_confirmados', views.VistaTurnosConfirmados)
 
 urlpatterns = router.urls
-for u in router.urls:
-    print(u)

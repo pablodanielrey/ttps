@@ -183,7 +183,7 @@ class VistaEstadoEstudio(viewsets.ModelViewSet):
             except KeyError as e:
                 pass
 
-        ultimo_estado = estudio.estados.order_by('fecha').last()
+        ultimo_estado = estudio.ultimo_estado
         
         logging.debug(ultimo_estado)
         clase_ultimo_estado = ultimo_estado.__class__
