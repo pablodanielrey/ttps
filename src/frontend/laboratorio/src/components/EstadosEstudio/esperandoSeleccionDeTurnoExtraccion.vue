@@ -66,6 +66,10 @@ export default {
   }, 
   data() {
     return {
+      rangoCelda:{
+        inicio:null,
+        fin:null,
+      },      
       tiempoTurnos: 15,
       loading: false,
       value: "",
@@ -94,6 +98,8 @@ export default {
           fin: event.endDate.toISOString(),
         };
       }
+      this.rangoCelda.inicio=rango.inicio
+      this.rangoCelda.fin=rango.fin
       this.buscarTurnos(rango);    
       console.log(accion);
     },
@@ -132,7 +138,7 @@ export default {
             persona: this.estudio.paciente.id 
           };
         let response = await TurnosService.confirmarTurno(turnoEstudio);
-        //this.buscarTurnos(turnoEstudio)
+        this.buscarTurnos( this.rangoCelda)
         console.log(response)       
       } catch (err) {
         console.log(err);
