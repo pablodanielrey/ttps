@@ -50,13 +50,13 @@
 
 
 <script>
-import EstudiosService from "@/services/EstudiosService.js";
-
+ import EstudiosService from "@/services/EstudiosService.js";
+ 
 export default {
   components: {},
   props: {
-    idEstudio: {
-      type: String,
+    estudio: {
+      type: Object,
     },
   },
   data() {
@@ -96,15 +96,18 @@ export default {
       let result = await this.$refs.detailsComprobante.validate();
       if (result) {
         let datosComprobante = {
-          estudio_id: this.idEstudio,
+          estudio_id: this.estudio.id,
           comprobante: this.comprobantePago,
         };
-        try {
-          let response = await EstudiosService.actualizarUltimoEstado(datosComprobante);
-          console.log(response)
-      } catch (err) {
-        console.log(err);
-      }
+        console.log(datosComprobante)
+         try {
+          let response = await EstudiosService.actualizarUltimoEstado(
+            datosComprobante
+          );
+          console.log(response);
+        } catch (err) {
+          console.log(err);
+        } 
         console.log(datosComprobante);
       }
     },
