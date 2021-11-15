@@ -27,7 +27,7 @@ class Estudio(models.Model):
     medico_derivante = models.ForeignKey(Persona, on_delete=models.CASCADE, related_name='estudios_derivados')
     diagnostico = models.ForeignKey(Diagnostico, on_delete=models.CASCADE, related_name='estudios')
     fecha_alta = models.DateField(default=datetime.date.today)
-
+    presupuesto = models.TextField()
 
 
 
@@ -39,8 +39,8 @@ class EstadoEstudio(PolymorphicModel):
     fecha = models.DateTimeField(auto_now=True)
     persona = models.ForeignKey(Persona, on_delete=models.CASCADE, null=True)
 
-class EsperandoPresupuesto(EstadoEstudio):
-    presupuesto = models.TextField(null=True)   
+# class EsperandoPresupuesto(EstadoEstudio):
+#     presupuesto = models.TextField(null=True)   
 
 class EsperandoComprobanteDePago(EstadoEstudio):
     comprobante = models.TextField(null=True)

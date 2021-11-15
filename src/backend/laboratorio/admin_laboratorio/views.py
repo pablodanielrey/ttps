@@ -69,7 +69,7 @@ def generar_estudio_de_muestra():
     estudio = estudio_models.Estudio(paciente=p1,  tipo=tipoe, medico_derivante=mm, diagnostico=diagnostico)
     estudio.save()
 
-    estudio_models.EsperandoPresupuesto(persona=empleado, estudio=estudio, presupuesto=10.3).save()
+    #estudio_models.EsperandoPresupuesto(persona=empleado, estudio=estudio, presupuesto=10.3).save()
     #estudio_models.EsperandoFactura(persona=empleado, estudio=estudio, numero='dsaasd324324', monto=10.5).save()
     #estudio_models.EsperandoFactura(persona=empleado, estudio=estudio, numero='dsaasd324325', monto=11.5, obra_social=ob_social).save()
     estudio_models.EsperandoComprobanteDePago(persona=empleado, estudio=estudio, comprobante='base64-del-comprobante').save()
@@ -81,7 +81,7 @@ def generar_estudio_de_muestra():
     estudio = estudio_models.Estudio(paciente=p1,  tipo=tipoe, medico_derivante=mm, diagnostico=diagnostico)
     estudio.save()
 
-    estudio_models.EsperandoPresupuesto(persona=empleado, estudio=estudio, presupuesto=10.3).save()
+    #estudio_models.EsperandoPresupuesto(persona=empleado, estudio=estudio, presupuesto=10.3).save()
     #estudio_models.EsperandoFactura(persona=empleado, estudio=estudio, numero='dsaasd324325', monto=11.5, obra_social=ob_social).save()
     estudio_models.EsperandoComprobanteDePago(persona=empleado, estudio=estudio, comprobante='base64-del-comprobante').save()
     estudio_models.EsperandoConsentimientoInformado(persona=empleado, estudio=estudio, consentimiento='base64-del-consntimiento').save()

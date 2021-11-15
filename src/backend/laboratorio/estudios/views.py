@@ -53,10 +53,10 @@ class SerializadorEstadoEstudio(serializers.ModelSerializer):
         model = models.EstadoEstudio
         fields = ['id','fecha']
 
-class SerializadorEsperandoPresupuesto(serializers.ModelSerializer):
-    class Meta:
-        model = models.EsperandoPresupuesto
-        fields = ['id','fecha','presupuesto']
+# class SerializadorEsperandoPresupuesto(serializers.ModelSerializer):
+#     class Meta:
+#         model = models.EsperandoPresupuesto
+#         fields = ['id','fecha','presupuesto']
 
 
 class SerializadorEsperandoComprobanteDePago(serializers.ModelSerializer):
@@ -117,7 +117,7 @@ class SerializadorEsperandoEntregaAMedicoDerivante(serializers.ModelSerializer):
 class SerializadorEstadoEstudioPolimorfico(PolymorphicSerializer):
     model_serializer_mapping = {
         models.EstadoEstudio: SerializadorEstadoEstudio,
-        models.EsperandoPresupuesto: SerializadorEsperandoPresupuesto,
+        # models.EsperandoPresupuesto: SerializadorEsperandoPresupuesto,
         models.EsperandoComprobanteDePago: SerializadorEsperandoComprobanteDePago,
         models.AnuladorPorFaltaDePago: SerializadorAnuladorPorFaltaDePago,
         models.EsperandoConsentimientoInformado: SerializadorEsperandoConsentimientoInformado,
@@ -179,7 +179,7 @@ class SerializadorEstudios(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = models.Estudio
-        fields = ['id', 'fecha_alta', 'diagnostico', 'paciente', 'medico_derivante', 'tipo', 'estados']
+        fields = ['id', 'fecha_alta', 'diagnostico', 'paciente', 'medico_derivante', 'tipo', 'presupuesto', 'estados']
 
 class VistaEstudios(viewsets.ModelViewSet):
     queryset = models.Estudio.objects.all()
@@ -191,7 +191,8 @@ class VistaEstudios(viewsets.ModelViewSet):
         """
 
         datos = request.data
-        logging.debug(datos)
+        #logging.debug(datos)
+        presupuesto = datos['presupuesto']
         paciente = personas_models.Persona.objects.get(id=datos['paciente']['id'])
         diagnostico = estudio_models.Diagnostico.objects.get(id=datos['diagnostico']['id'])
         tipo = estudio_models.TiposDeEstudio.objects.get(id=datos['tipo_estudio'])
@@ -200,14 +201,13 @@ class VistaEstudios(viewsets.ModelViewSet):
             medico_derivante=paciente,
             diagnostico=diagnostico,
             tipo=tipo,
-            fecha_alta=datos['fecha_alta']
-
+            fecha_alta=datos['fecha_alta'],
+            presupuesto=presupuesto
         )
         estudio.save()
 
-        presupuesto = datos['presupuesto']
-        ep = models.EsperandoPresupuesto(estudio=estudio, presupuesto=presupuesto)
-        ep.save()
+        esperando_comprobante = estudio_models.EsperandoComprobanteDePago(estudio=estudio)
+        esperando_comprobante.save()
 
         serializer = SerializadorEstudios(estudio, context={'request': request})
         return Response(serializer.data)
@@ -274,8 +274,6 @@ class VistaFechasSinTurno(viewsets.ViewSet):
 
 
 from dateutil import parser
-
-
 
 
 class VistaTurnosDisponibles(viewsets.ModelViewSet):

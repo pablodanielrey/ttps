@@ -31,7 +31,7 @@
             title="Descargar Presupuesto"
              variant="outline-success"
             download="presupuesto.pdf"
-            :href="row.item.estados[0].presupuesto"
+            :href="row.item.presupuesto"
 
           >
              <b-icon icon="download"  variant="info"> </b-icon></a>
