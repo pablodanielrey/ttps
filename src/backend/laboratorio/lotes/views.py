@@ -3,6 +3,7 @@ from django.http.response import HttpResponseBadRequest
 
 # Create your views here.
 import logging
+from dateutil import parser
 
 from . import models
 
@@ -25,7 +26,7 @@ class SerializadorDeLote(serializers.ModelSerializer):
     estudios = SerializadorDeEstudioDeLote(many=True)
     class Meta:
         model = models.Lote
-        fields = ['id', 'fecha', 'resultado', 'estudios']
+        fields = ['id', 'fecha', 'resultado','estudios']
 
 class VistaLotes(viewsets.ModelViewSet):
     queryset = models.Lote.objects.all()
@@ -43,11 +44,14 @@ class VistaLotes(viewsets.ModelViewSet):
     def update(self, request, pk):
         lote = models.Lote.objects.get(id=pk)
         # serializador = self.serializer_class(instance=lote, context={'request': request})
-        serializador = self.serializer_class(instance=lote, data=request.data)
-        if serializador.is_valid():
-            serializador.save()
-        models.ModeloLotes().actualizar_estudios_con_resultado(lote)
-        return Response(serializador.data)
+
+        logging.debug(request.data)
+
+        fecha = parser.parse(request.data['fecha'])
+        resultado = request.data['resultado']
+        models.ModeloLotes().cerrar_lote(lote, fecha, resultado)
+
+        return Response({'status':200})
 
 class VistaEstudios(views.APIView):
 

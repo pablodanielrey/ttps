@@ -65,7 +65,13 @@ class ModeloLotes:
         return lote
 
 
-    def actualizar_estudios_con_resultado(self, lote):
+    def cerrar_lote(self, lote, fecha, resultado):
+        lote.resultado = resultado
+        lote.fecha = fecha
+        lote.save()
+        self._actualizar_estudios_con_resultado(lote)
+
+    def _actualizar_estudios_con_resultado(self, lote):
         for estudio_de_lote in lote.estudios.all():
             estudio = estudio_de_lote.estudio
             ultimo_estado = estudio.ultimo_estado

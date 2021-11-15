@@ -11,7 +11,7 @@ router.register('lotes', views.VistaLotes)
 
 
 urlpatterns = [
-    path('estudios', views.VistaEstudios.as_view())
+    path('estudios/', views.VistaEstudios.as_view())
 ]
 urlpatterns.extend(router.urls)
 

@@ -176,6 +176,9 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework.authentication.BasicAuthentication',
         'rest_framework.authentication.SessionAuthentication'
+    ],
+    'DATE_INPUT_FORMATS': [
+        'iso-8601', '%Y-%m-%dT%H:%M:%S.%fZ'
     ]
 }
 
