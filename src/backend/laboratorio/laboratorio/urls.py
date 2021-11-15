@@ -21,6 +21,6 @@ urlpatterns = [
     path('admin_api/', include('admin_laboratorio.urls')),
     path('estudio_api/', include('estudios.urls')),
     path('api/', include('personas.urls')),
-    path('lotes/', include('lotes.urls'))
-
+    path('lotes/', include('lotes.urls')),
+    path('turnos/', include('turnos.urls'))
 ]

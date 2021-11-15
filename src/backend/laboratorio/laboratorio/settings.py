@@ -42,7 +42,8 @@ INSTALLED_APPS = [
     'rest_framework',
     'personas',
     'estudios',
-    'lotes'
+    'lotes',
+    'turnos'
 ]
 
 MIDDLEWARE = [
