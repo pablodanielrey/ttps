@@ -1,7 +1,8 @@
 from django.shortcuts import render
+from django.http.response import HttpResponseBadRequest
 
 # Create your views here.
-
+import logging
 
 from . import models
 
@@ -30,7 +31,12 @@ class VistaLotes(viewsets.ModelViewSet):
     queryset = models.Lote.objects.all()
     serializer_class = SerializadorDeLote
 
-
+    def create(self, request, *args, **kwargs):
+        logging.debug('llego al create')
+        """ redefino el create debido a que va totalmente otra lógica """
+        lote = models.ModeloLotes().generar_lote(request.data['estudios'])
+        serializador = self.serializer_class(instance=lote, context={'request': request})
+        return Response(serializador.data)
 
 
 class VistaEstudios(views.APIView):
@@ -39,5 +45,6 @@ class VistaEstudios(views.APIView):
     
     def get(self, request, format=None):
         estudios = self.modelo.obtener_estudios_para_lote()
-        serializador = estudio_views.SerializadorEstudios(estudios, many=True)
-        return Response(serializador.data)
+        # serializador = estudio_views.SerializadorEstudios(estudios, many=True)
+        # return Response(serializador.data)
+        return Response([e.id for e in estudios])

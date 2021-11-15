@@ -1,5 +1,6 @@
-from typing import Sequence
+
 from django.db import models
+
 
 import uuid
 
@@ -12,18 +13,21 @@ class Lote(models.Model):
 
 
 class EstudioDeLote(models.Model):
-    lote = models.ForeignKey(Lote, on_delete=models.CASCADE)
-    estudio = models.ForeignKey(estudio_models.Estudio, on_delete=models.CASCADE, related_name="estudios")
+    lote = models.ForeignKey(Lote, on_delete=models.CASCADE,  related_name="estudios")
+    estudio = models.ForeignKey(estudio_models.Estudio, on_delete=models.CASCADE)
 
 
+import logging
 
+import datetime
+from zoneinfo import ZoneInfo
 
+def generar_fecha_now():
+    return datetime.datetime.now(tz=ZoneInfo('America/Argentina/Buenos_Aires'))
 
 
 
 class ModeloLotes:
-    def __init__(self):
-        pass
 
     def obtener_estudios_para_lote(self):
         def _fecha_de_extraccion(estudio):
@@ -35,18 +39,34 @@ class ModeloLotes:
         estados_esperando_lote = estudio_models.EstadoEstudio.objects.filter(instance_of=estudio_models.EsperandoLoteDeMuestraParaProcesamientoBiotecnologico, EsperandoLoteDeMuestraParaProcesamientoBiotecnologico___numero_lote__isnull=True)
         estudios_esperando_lote = [e.estudio for e in estados_esperando_lote]
         estudios_ordenados = sorted(estudios_esperando_lote, key=_fecha_de_extraccion)
-        return estudios_ordenados[0:9]
+        return estudios_ordenados[0:10]
+
+
+    def generar_lote(self, estudios_ids):
+        logging.debug(estudios_ids)
+        if len(estudios_ids) != 10:
+            raise Exception()
+
+        lote = Lote(fecha=generar_fecha_now().date())
+        lote.save()
+
+        for eid in estudios_ids:
+            estudio = estudio_models.Estudio.objects.get(id=eid)
+            
+            """ actualizo el ultimo estado """
+            ultimo_estado = estudio.ultimo_estado
+            ultimo_estado.numero_lote = str(lote.id)
+            ultimo_estado.save()
+
+            """ cambio de estado el estudio """
+            estudio_models.EsperandoProcesamientoDeLoteBiotecnologico(estudio=estudio).save()
+            EstudioDeLote(lote=lote, estudio=estudio).save()
+
+        return lote
+
 
 
     def _generar_datos_de_prueba(self):
-
-        import datetime
-        from zoneinfo import ZoneInfo
-        
-        def generar_fecha_now():
-            return datetime.datetime.now(tz=ZoneInfo('America/Argentina/Buenos_Aires'))
-
-
         from personas import models as persona_models
 
         empleado = persona_models.Persona.objects.all().first()

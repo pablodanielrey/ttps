@@ -30,6 +30,9 @@ class Estudio(models.Model):
     fecha_alta = models.DateField(default=datetime.date.today)
     presupuesto = models.TextField()
 
+    @property
+    def ultimo_estado(self):
+        return self.estados.order_by('fecha').last()
 
 
 from polymorphic.models import PolymorphicModel
