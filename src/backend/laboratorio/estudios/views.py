@@ -114,6 +114,10 @@ class SerializadorEsperandoEntregaAMedicoDerivante(serializers.ModelSerializer):
         fields = ['id','fecha','fecha_entrega']
 
 
+class SerializadorResultadoDeEstudioEntregado(serializers.ModelSerializer):
+    class Meta:
+        model = models.ResultadoDeEstudioEntregado
+        fields = ['id','fecha']
 
 class SerializadorEstadoEstudioPolimorfico(PolymorphicSerializer):
     model_serializer_mapping = {
@@ -128,13 +132,27 @@ class SerializadorEstadoEstudioPolimorfico(PolymorphicSerializer):
         models.EsperandoLoteDeMuestraParaProcesamientoBiotecnologico: SerializadorEsperandoLoteDeMuestraParaProcesamientoBiotecnologico,
         models.EsperandoProcesamientoDeLoteBiotecnologico: SerializadorEsperandoProcesamientoDeLoteBiotecnologico,
         models.EsperandoInterpretacionDeResultados: SerializadorEsperandoInterpretacionDeResultados,
-        models.EsperandoEntregaAMedicoDerivante: SerializadorEsperandoEntregaAMedicoDerivante
+        models.EsperandoEntregaAMedicoDerivante: SerializadorEsperandoEntregaAMedicoDerivante,
+        models.ResultadoDeEstudioEntregado: SerializadorResultadoDeEstudioEntregado
     }
 
 
 class VistaEstadoEstudio(viewsets.ModelViewSet):
     queryset = models.EstadoEstudio.objects.all()
     serializer_class = SerializadorEstadoEstudioPolimorfico
+
+    workflow = [
+        models.EsperandoComprobanteDePago,
+        models.EsperandoConsentimientoInformado,
+        models.EsperandoSeleccionDeTurnoParaExtraccion,
+        models.EsperandoTomaDeMuestra,
+        models.EsperandoRetiroDeExtaccion,
+        models.EsperandoLoteDeMuestraParaProcesamientoBiotecnologico,
+        models.EsperandoInterpretacionDeResultados,
+        models.EsperandoEntregaAMedicoDerivante,
+        models.ResultadoDeEstudioEntregado
+    ]
+
 
     def create(self, request, *args, **kwargs):
         """
@@ -148,23 +166,38 @@ class VistaEstadoEstudio(viewsets.ModelViewSet):
         """
             TODO: debemos estar seguros de que no actualizamos ningún id!!!!
         """
-        try:
-            request.data.pop('id')
-        except KeyError as e:
-            pass
+        for campo_solo_lectura in ['id','fecha']:
+            try:
+                request.data.pop(campo_solo_lectura)
+            except KeyError as e:
+                pass
 
         ultimo_estado = estudio.estados.order_by('fecha').last()
         
         logging.debug(ultimo_estado)
-        serializador = SerializadorEstadoEstudioPolimorfico.model_serializer_mapping[ultimo_estado.__class__](instance=ultimo_estado, data=request.data)
-        if serializador.is_valid():
-            if len(serializador.validated_data) <= 0:
-                return HttpResponseBadRequest()
-            serializador.save()
+        clase_ultimo_estado = ultimo_estado.__class__
+        serializador = SerializadorEstadoEstudioPolimorfico.model_serializer_mapping[clase_ultimo_estado](instance=ultimo_estado, data=request.data)
+        if not serializador.is_valid():
+            return HttpResponseBadRequest()
+        if len(serializador.validated_data) <= 0:
+            """ no existen datos enviados para actualizar el nuevo estado """
+            return HttpResponseBadRequest()
+
+        serializador.save()
 
         """
             Ahora paso al nuevo estado de acuerdo al workflow.
         """
+        try:
+            indice = self.workflow.index(clase_ultimo_estado)
+            if indice+1 < len(self.workflow):
+                clase_siguiente_estado = self.workflow[indice+1]
+                siguiente_estado = clase_siguiente_estado(estudio=estudio)
+                siguiente_estado.save()
+
+        except ValueError as e:
+            pass
+
 
         serializador = SerializadorEstadoEstudioPolimorfico(ultimo_estado, context={'request': request})
         return Response(serializador.data)

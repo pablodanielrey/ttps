@@ -79,7 +79,8 @@ class EsperandoInterpretacionDeResultados(EstadoEstudio):
 class EsperandoEntregaAMedicoDerivante(EstadoEstudio):
     fecha_entrega = models.DateTimeField(null=True)
 
-
+class ResultadoDeEstudioEntregado(EstadoEstudio):
+    pass
 
 """
 class PresupuestoEstudio(models.Model):
