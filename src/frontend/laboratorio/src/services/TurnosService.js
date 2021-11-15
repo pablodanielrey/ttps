@@ -1,7 +1,7 @@
 import Api from "@/services/Api"
 
 const API_USER = ''
-const API_URL = '/estudio_api/'
+const API_URL = '/turnos/'
 
 export default {
     obtenerTurnos(rango) {

@@ -70,8 +70,8 @@ class VistaTurnosDisponibles(viewsets.ModelViewSet):
 
 
 
-class SerializadorTurnosConfirmados(serializers.ModelSerializer):
-    persona = SerializadorDePersona()
+class SerializadorTurnosConfirmados(serializers.HyperlinkedModelSerializer):
+    #persona = SerializadorDePersona()
     class Meta:
         model = models.TurnoConfirmado
         fields = ['id','persona','inicio','fin']
