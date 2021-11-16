@@ -22,4 +22,13 @@ from rest_framework.decorators import action
 
 
 
+class SerializadorDeObraSocial(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = models.ObraSocial
+        fields = ['id','nombre','telefono','email']
+
+class VistaObraSocial(viewsets.ModelViewSet):
+    queryset = models.ObraSocial.objects.all()
+    serializer_class = SerializadorDeObraSocial
+
 

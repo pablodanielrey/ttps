@@ -20,21 +20,6 @@ class SerializadorDeMedicoDerivante(serializers.ModelSerializer):
         model = models.Persona
         fields = ['id','nombre','apellido','email','matricula']
 
-
-# class VistaMedicoDerivante(views.APIView):
-
-#     model = models.PersonasModel()
-
-#     def post(self, request):
-#         nombre = request.data['nombre']
-#         apellido = request.data['apellido']
-#         email = request.data['email']
-#         medico = self.model.crearMedicoDerivante(nombre=nombre, apellido=apellido, email=email)
-
-#         serializador = SerializadorDeMedicoDerivante(instance=medico, context={'request':request})
-#         return Response(serializador.data)
-
-
 class VistaMedicoDerivante(viewsets.ModelViewSet):
     queryset = models.MedicoDerivante.all()
     serializer_class = SerializadorDeMedicoDerivante
@@ -42,12 +27,7 @@ class VistaMedicoDerivante(viewsets.ModelViewSet):
     model = models.PersonasModel()
 
     def create(self, request):
-        nombre = request.data['nombre']
-        apellido = request.data['apellido']
-        email = request.data['email']
-        matricula = request.data['matricula']
-        medico = self.model.crearMedicoDerivante(nombre=nombre, apellido=apellido, email=email, matricula=matricula)
-
+        medico = self.model.crearMedicoDerivante(**request.data)
         serializador = SerializadorDeMedicoDerivante(instance=medico, context={'request':request})
         return Response(serializador.data)
 
@@ -55,7 +35,6 @@ class VistaMedicoDerivante(viewsets.ModelViewSet):
     def buscar(self, request):
         q = request.query_params.get('q')
         logging.debug(f'buscando medico derivante : {q}')
-
         personas = models.MedicoDerivante.buscar(q)
         serializer = SerializadorDeMedicoDerivante(personas, many=True, context={'request': request})
         return Response(serializer.data)
@@ -64,9 +43,12 @@ class VistaMedicoDerivante(viewsets.ModelViewSet):
 
 
 class SerializadorDeMedicoInformante(serializers.ModelSerializer):
+    usuario = serializers.CharField(source='usuario.username')
+    clave = serializers.CharField(source='usuario.password')
+    matricula = serializers.CharField(source='matricula.numero')
     class Meta:
-        model = models.Persona
-        fields = ['id','nombre','apellido','email']
+        model = models.MedicoInformante
+        fields = ['id','nombre','apellido','email','matricula','usuario','clave']
 
 class VistaMedicoInformante(viewsets.ModelViewSet):
     queryset = models.MedicoInformante.all()
@@ -75,11 +57,7 @@ class VistaMedicoInformante(viewsets.ModelViewSet):
     model = models.PersonasModel()
 
     def create(self, request):
-        nombre = request.data['nombre']
-        apellido = request.data['apellido']
-        email = request.data['email']
-        medico = self.model.crearMedicoInformante(nombre=nombre, apellido=apellido, email=email)
-
+        medico = self.model.crearMedicoInformante(**request.data)
         serializador = self.serializer_class(instance=medico, context={'request':request})
         return Response(serializador.data)
 

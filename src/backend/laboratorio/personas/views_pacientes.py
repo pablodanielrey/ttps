@@ -3,37 +3,29 @@ import logging
 
 from rest_framework import serializers, viewsets, views
 from rest_framework.response import Response
-from rest_framework.decorators import action
 
-from django.contrib.auth import models as auth_models
+from rest_framework.decorators import action
 
 from . import models
 
-class SerializadorDeObraSocialPersona(serializers.HyperlinkedModelSerializer):
-    class Meta:
-        model = models.ObraSocialPersona
-        fields = ['obra_social','numero_afiliado']
-        
-class SerializadorDeHistoriaClinica(serializers.ModelSerializer):
-    class Meta:
-        model = models.HistoriaClinica
-        fields = ['historia_clinica']
-
-class SerializadorDePersona(serializers.HyperlinkedModelSerializer):
-    obra_social = SerializadorDeObraSocialPersona(required=False, many=True)
-    historia_clinica = SerializadorDeHistoriaClinica(required=False)
-    class Meta:
-        model = models.Persona
-        fields = ['id','nombre','apellido','email','dni','fecha_nacimiento','telefono','historia_clinica','obra_social']
+from . import views_personas
 
 
-class VistaPersona(viewsets.ModelViewSet):
+class SerializadorDePaciente(serializers.ModelSerializer):
+    obra_social = views_personas.SerializadorDeObraSocialPersona(required=False, many=True)
+    historia_clinica = serializers.CharField(source='historia_clinica.historia_clinica')
+    class Meta:
+        model = models.Paciente
+        fields = ['id','nombre','apellido','dni','email','fecha_nacimiento','telefono','direccion','historia_clinica','obra_social']
+
+
+class VistaPacientes(viewsets.ModelViewSet):
     """
         TODO: esto es necesario cambiarlo para algo parecido a :
         https://www.django-rest-framework.org/api-guide/serializers/#dealing-with-nested-objects
     """
-    queryset = models.Persona.objects.all()
-    serializer_class = SerializadorDePersona
+    queryset = models.Paciente.all()
+    serializer_class = SerializadorDePaciente
 
     def create(self, request, *args, **kwargs):
         datos_persona = request.data
@@ -72,6 +64,4 @@ class VistaPersona(viewsets.ModelViewSet):
 
         personas = models.Persona.buscar(q)
         serializer = SerializadorDePersona(personas, many=True, context={'request': request})
-        return Response(serializer.data)
-        
-
+        return Response(serializer.data)        

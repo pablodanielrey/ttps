@@ -42,6 +42,11 @@ class Persona(models.Model):
         return cls.all().filter(models.Q(nombre__icontains=termino) | models.Q(apellido__icontains=termino) | models.Q(dni__icontains=termino))
         
 
+class ObraSocialPersona(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    persona = models.ForeignKey(Persona, on_delete=models.CASCADE, related_name='obra_social')
+    obra_social = models.ForeignKey(ObraSocial, on_delete=models.CASCADE)
+    numero_afiliado = models.CharField(max_length=1024)
 class HistoriaClinica(models.Model):
     persona = models.ForeignKey(Persona, on_delete=models.CASCADE, related_name='historia_clinica')
     historia_clinica = models.CharField(max_length=9216, null=True)
@@ -95,17 +100,10 @@ class MedicoDerivante(Persona):
  
 
 
-class ObraSocialPersona(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    persona = models.ForeignKey(Persona, on_delete=models.CASCADE, related_name='obra_social')
-    obra_social = models.ForeignKey(ObraSocial, on_delete=models.CASCADE)
-    numero_afiliado = models.CharField(max_length=1024)
-
-
 class PersonasModel:
 
-    def _generar_usuario_django(self, usuario, grupo, email=None):
-        password = str(uuid.uuid4())
+    def _generar_usuario_django(self, usuario, grupo, clave=None, email=None):
+        password = clave if clave else str(uuid.uuid4())
         email = email if email else ''
         u = User(username=usuario, password=password, email=email)
         u.save()
@@ -116,15 +114,38 @@ class PersonasModel:
 
         return u
 
-    def crearPaciente(self, nombre, apellido, dni, email, direccion):
-        paciente = Paciente(nombre=nombre, apellido=apellido, dni=dni, email=email, direccion=direccion)
-        paciente.save()
+    def _crear_usuario_del_sistema(self, nombre, apellido, usuario, clave, clase):
+        persona = clase(nombre=nombre, apellido=apellido)
+        persona.save()
 
-        u = self._generar_usuario_django(str(paciente.id), Paciente.NOMBRE_GRUPO)    
-        paciente.usuario = u
-        paciente.save()
+        u = self._generar_usuario_django(usuario, clase.NOMBRE_GRUPO, clave)
+        persona.usuario = u
+        persona.save()
 
-        return paciente
+        return persona
+
+
+    def crearAdministrador(self, nombre, apellido, usuario, clave):
+        self._crear_usuario_del_sistema(nombre, apellido, usuario, clave, Administrador)
+
+    def crearConfigurador(self, nombre, apellido, usuario, clave):
+        self._crear_usuario_del_sistema(nombre, apellido, usuario, clave, Configurador)
+
+    def crearEmpleado(self, nombre, apellido, usuario, clave):
+        self._crear_usuario_del_sistema(nombre, apellido, usuario, clave, Empleado)
+
+
+    def crearMedicoInformante(self, nombre, apellido, email, matricula, usuario, clave):
+        medico = MedicoInformante(nombre=nombre, apellido=apellido, email=email)
+        medico.save()
+        matricula = Matricula(persona=medico, numero=matricula)
+        matricula.save()
+
+        u = self._generar_usuario_django(usuario, MedicoInformante.NOMBRE_GRUPO, clave, email)
+        medico.usuario = u
+        medico.save()
+
+        return medico
 
     def crearMedicoDerivante(self, nombre, apellido, email, matricula):
         medico = MedicoDerivante(nombre=nombre, apellido=apellido, email=email)
@@ -138,14 +159,15 @@ class PersonasModel:
 
         return medico
 
-    def crearMedicoInformante(self, nombre, apellido, email, matricula):
-        medico = MedicoInformante(nombre=nombre, apellido=apellido, email=email)
-        medico.save()
-        matricula = Matricula(persona=medico, numero=matricula)
-        matricula.save()
 
-        u = self._generar_usuario_django(str(medico.id), MedicoInformante.NOMBRE_GRUPO)
-        medico.usuario = u
-        medico.save()
+    def crearPaciente(self, **kwargs):
+        paciente = Paciente(**kwargs)
+        paciente.save()
 
-        return medico
+        u = self._generar_usuario_django(str(paciente.id), Paciente.NOMBRE_GRUPO)    
+        paciente.usuario = u
+        paciente.save()
+
+        return paciente
+
+
