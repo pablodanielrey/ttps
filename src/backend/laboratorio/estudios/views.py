@@ -21,7 +21,8 @@ from rest_framework import serializers, views, viewsets
 from rest_framework.response import Response
 
 
-from personas.views import SerializadorDeObraSocial, SerializadorDePersona
+from personas.views_personas import SerializadorDePersona
+
 from turnos import views as turnos_views
 
 class SerializadorTiposDeEstudio(serializers.HyperlinkedModelSerializer):
