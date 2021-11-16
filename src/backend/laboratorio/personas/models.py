@@ -1,10 +1,17 @@
 from django.db import models
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Group
 
 from django.db.models.deletion import CASCADE
 
 import uuid
 
+GRUPOS = [
+    'Administradores',
+    'Pacientes',
+    'Empleados',
+    'Médicos_Derivantes',
+    'Médicos_Informantes'
+]
 
 class ObraSocial(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
@@ -75,6 +82,18 @@ class ObraSocialPersona(models.Model):
 
 class PersonasModel:
 
+    def _generar_usuario_nulo_django(self, grupo, email=None):
+        username = str(uuid.uuid4())
+        password = str(uuid.uuid4())
+        email = email if email else ''
+        u = User(username=username, password=password, email=email)
+        u.save()
+
+        g = Group.objects.get(name=grupo)
+        u.groups.add(g)
+        u.save()
+
+
     def crearPersona(self, nombre, apellido, dni, email, direccion):
         paciente = Paciente(nombre=nombre, apellido=apellido, dni=dni, email=email, direccion=direccion)
         paciente.save()
@@ -85,6 +104,9 @@ class PersonasModel:
         medico.save()
         matricula = Matricula(persona=medico, numero=matricula)
         matricula.save()
+
+        self._generar_usuario_nulo_django(GRUPOS[3])    
+
         return medico
 
     def crearMedicoInformante(self, nombre, apellido, email):
