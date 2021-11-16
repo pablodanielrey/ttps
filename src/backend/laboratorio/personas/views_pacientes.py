@@ -41,23 +41,7 @@ class VistaPaciente(viewsets.ModelViewSet):
             if obra_social:
                 afiliado = request.data.pop("numero_afiliado")
 
-        historia_clinica = request.data.pop("historia_clinica")
-
         paciente = self.model.crearPaciente(**request.data)
-
-        # persona = models.Paciente(           
-        #     nombre=datos_persona['nombre'],
-        #     apellido=datos_persona['apellido'],
-        #     dni=datos_persona['dni'],
-        #     email=datos_persona['email'],
-        #     fecha_nacimiento=datos_persona['fecha_nacimiento'],
-        #     telefono=datos_persona['telefono'],
-        #     direccion=datos_persona['direccion']
-        # )
-        # persona.save()
-
-        hc = models.HistoriaClinica(persona=paciente, historia_clinica=historia_clinica)
-        hc.save()
 
         if obra_social:
             obraSocial = models.ObraSocial.objects.get(id=obra_social)
