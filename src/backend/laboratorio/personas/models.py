@@ -161,11 +161,13 @@ class PersonasModel:
 
 
     def crearPaciente(self, **kwargs):
+
+        historia_clinica = kwargs.pop('historia_clinica')
+
         paciente = Paciente(**kwargs)
         paciente.save()
 
-        historia_clinica = kwargs['historia_clinica']
-        hc = models.HistoriaClinica(persona=paciente, historia_clinica=historia_clinica)
+        hc = HistoriaClinica(persona=paciente, historia_clinica=historia_clinica)
         hc.save()
 
         u = self._generar_usuario_django(str(paciente.id), Paciente.NOMBRE_GRUPO)    
