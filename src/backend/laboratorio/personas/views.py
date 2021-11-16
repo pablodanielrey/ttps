@@ -44,6 +44,8 @@ class VistaUsuario(viewsets.ModelViewSet):
     queryset = auth_models.User.objects.all()
     serializer_class = SerializadorDeUsuario
 
+from rest_framework.decorators import action
+
 class VistaPersona(viewsets.ModelViewSet):
     """
         esto es necesario cambiarlo para algo parecido a :
@@ -80,6 +82,15 @@ class VistaPersona(viewsets.ModelViewSet):
             pacienteObraSocial.save()
 
         serializer = SerializadorDePersona(persona, context={'request': request})
+        return Response(serializer.data)
+
+    @action(detail=False, methods=['GET'])
+    def buscar(self, request):
+        q = request.query_params.get('q')
+        logging.debug(f'buscando a : {q}')
+
+        personas = models.Persona.buscar(q)
+        serializer = SerializadorDePersona(personas, many=True, context={'request': request})
         return Response(serializer.data)
         
 class VistaObraSocialPersona(viewsets.ModelViewSet):

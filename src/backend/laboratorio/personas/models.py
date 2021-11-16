@@ -29,6 +29,10 @@ class Persona(models.Model):
         obs = " | ".join([ f"{obp.numero_afiliado} {obp.obra_social.__str__()}" for obp in self.obra_social.all() ])
         return f"{self.nombre} {self.apellido} {self.dni} obra social : {obs}"
 
+    @classmethod
+    def buscar(cls, termino:str):
+        return cls.objects.filter(models.Q(nombre__icontains=termino) | models.Q(apellido__icontains=termino) | models.Q(dni__icontains=termino))
+
 
 class ObraSocialPersona(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
