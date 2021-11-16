@@ -1,28 +1,28 @@
-<template>  
+<template>
+  <div>
     <div class="wrapper">
-      <Menu  />
-      <router-view  /> 
+      <Menu />
+      <router-view />
+    </div>
+    <footer>
+      <b-navbar class="navbar"> </b-navbar>
+    </footer>
   </div>
 </template>
 
 <script>
-
 import Menu from "@/components/Home/menu.vue";
 
 export default {
   name: "Container",
   components: {
- Menu
+    Menu,
   },
   data() {
-    return {  
-    
-    };
+    return {};
   },
   props: {},
-  methods: {  
-  },
-
+  methods: {},
 };
 </script>
 
@@ -36,10 +36,18 @@ body {
 body {
   font-family: "Montserrat", sans-serif !important;
   background-color: white;
-  line-height: 2.5;
 }
 .wrapper {
   min-height: calc(100vh - 60px);
+  background-color: #ededed;
 }
+footer {
+  height: 50 px;
+  line-height: 50px;
+  margin-top: 11 px;
+}
+#navbar{
+  background-color: #ededed;
 
+}
 </style>

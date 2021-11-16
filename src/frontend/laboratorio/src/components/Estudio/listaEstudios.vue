@@ -1,9 +1,9 @@
 <template>
-  <b-container>
+  <b-container fluid>
     <br />
     <h4>Listado de Estudios</h4>
 
-    <b-col lg="6" class="my-1">
+    <b-col lg="4" class="my-1">
       <b-input-group size="sm">
         <b-form-input
           id="filter-input"
@@ -18,6 +18,7 @@
       </b-input-group>
     </b-col>
     <b-table
+    
       :items="items"
       :fields="fields"
       :filter="filter"
@@ -25,6 +26,9 @@
       :per-page="perPage"
       @filtered="onFiltered"
     >
+      <template v-slot:cell(estados)="row">
+        {{ obtenerUltimoEstado(row.item) }}
+      </template>
       <template v-slot:cell(acciones)="row">
         <a
           title="Descargar Presupuesto"
@@ -47,16 +51,17 @@
       </template>
     </b-table>
 
-    <b-row>
-      <b-col md="1">
+    <b-row >
+      <b-col >
         <b-form-select
+        style="width:150px"
           id="per-page-select"
           v-model="perPage"
           :options="pageOptions"
           size="sm"
         ></b-form-select>
       </b-col>
-      <b-col class="text-center">
+      <b-col>
         <b-pagination
           v-model="currentPage"
           :total-rows="totalRows"
@@ -80,7 +85,7 @@ export default {
 
   data() {
     return {
-      perPage:10,
+      perPage: 10,
       pageOptions: [4, 10, 15],
       filter: null,
       currentPage: 1,
@@ -103,7 +108,7 @@ export default {
           class: "text-center p2",
         },
         { key: "tipo.nombre", label: "Tipo Estudio", class: "text-center p2" },
-        { key: "estados.resourcetype", label: "Estado", class: "text-center p2" },
+        { key: "estados", label: "Estado", class: "text-center p2" },
 
         { key: "acciones", label: "Acciones", class: "text-center p2" },
       ],
@@ -113,14 +118,19 @@ export default {
 
   created() {},
   methods: {
-    verEstado(paciente){
-      console.log(paciente)
+    obtenerUltimoEstado(paciente) {
+      let nameEstado =
+        paciente.estados[paciente.estados.length - 1].resourcetype;
+      nameEstado = nameEstado.replace(/([a-z])([A-Z])/g, "$1 $2");
+      nameEstado = nameEstado.replace(/([A-Z])([A-Z][a-z])/g, "$1 $2");
+
+      return nameEstado;
     },
     async obtenerListaEstudios() {
       try {
         let response = await EstudiosService.obtenerListaEstudios();
         this.items = response.data;
-        console.log(this.items);
+        console.log(this.items)
       } catch (err) {
         console.log(err);
       }
@@ -130,7 +140,6 @@ export default {
       this.currentPage = 1;
     },
     detalleEstudio(estudio) {
-      console.log(estudio);
       this.$router.push({
         name: "detalleDeEstudio",
         params: {
@@ -140,7 +149,7 @@ export default {
     },
     siguienteEstado(estudio) {
       let ultimoEstado = estudio.estados[estudio.estados.length - 1];
-      console.log(ultimoEstado.resourcetype);
+
       this.$router.push({
         name: ultimoEstado.resourcetype,
         params: {

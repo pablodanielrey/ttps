@@ -27,15 +27,10 @@
         <b-col>
           <strong> Tipo de estudio: </strong>{{ estudio.tipo.nombre }}</b-col
         >
-        <b-col> <strong> Estado : </strong>Resultado Entregado</b-col>
+        <b-col> <strong> Estado : </strong>{{ ultimoEstado }}</b-col>
       </b-row>
       <b-row>
-        <b-col class="text-center pt-3">
-          <h4>Acciones</h4>
-        </b-col>
-      </b-row>
-      <b-row>
-        <b-col lg="3" md="3" sm="7">
+        <!--   <b-col lg="3" md="3" sm="7">
           <b-button
             variant="outline-primary"
             @click="ingresarComprobante()"
@@ -43,17 +38,19 @@
           >
             Ingresar comprobante</b-button
           >
-        </b-col>
-        <b-col>
-          <b-button
-            title="Bajar consentimiento informado"
-            variant="outline-primary"
-            @click="bajarConsentimiento()"
+        </b-col> -->
+        <b-col v-if="this.estudio.estados[1].consentimiento != undefined">
+          <a
+            v-if="this.estudio.estados[1] != undefined"
+            title="Descargar consentimiento"
+            variant="outline-success"
+            download="consentimiento.pdf"
+            :href="this.estudio.estados[1].consentimiento"
           >
-            <b-icon icon="download" aria-hidden="true"></b-icon
-          ></b-button>
+            <b-icon icon="download" variant="info"> </b-icon
+          ></a>
         </b-col>
-        <b-col lg="1" md="3" sm="7">
+        <!--     <b-col lg="1" md="3" sm="7">
           <b-button
             title="Cargar consentimiento informado firmado"
             variant="outline-primary"
@@ -61,10 +58,9 @@
           >
             Cargar Consentimiento</b-button
           >
-        </b-col>
-      
-        <br />
-        <b-col lg="3" md="3" sm="7">
+        </b-col> -->
+
+        <!--   <b-col lg="3" md="3" sm="7">
           <b-button
             title="Bajar consentimiento informado"
             variant="outline-primary"
@@ -72,8 +68,8 @@
           >
             Seleccionar turno</b-button
           >
-        </b-col>
-        <b-col>
+        </b-col> -->
+        <!--    <b-col>
           <b-button
             lg="3"
             md="3"
@@ -84,8 +80,8 @@
           >
             Ingresar muestra</b-button
           >
-        </b-col>
-        <b-col>
+        </b-col> -->
+        <!--  <b-col>
           <b-button
             title="Persona que retiro muestra"
             variant="outline-primary"
@@ -93,8 +89,8 @@
           >
             Retiro muestra</b-button
           >
-        </b-col>
-        <b-col>
+        </b-col> -->
+        <!--   <b-col>
           <b-button
             title="Informe de resultados"
             variant="outline-primary"
@@ -102,7 +98,7 @@
           >
             Informe Resultados</b-button
           >
-        </b-col>
+        </b-col> -->
       </b-row>
     </b-card>
 
@@ -242,12 +238,13 @@ export default {
   props: {
     estudio: {
       type: Object,
-      default:null
+      default: null,
     },
   },
   data() {
     return {
       perPage: 4,
+      ultimoEstado: null,
       itemsEst: [],
       alerts: [],
       fieldsEst: [
@@ -276,16 +273,34 @@ export default {
   },
 
   created() {
-    if (this.estudio == null){
-       this.$router.push({
-        name: "listaEstudios"        
+    if (this.estudio == null) {
+      this.$router.push({
+        name: "listaEstudios",
       });
+    } else {
+      this.obtenerUltimoEstado();
     }
   },
 
   methods: {
+    obtenerUltimoEstado() {
+      let estado = this.estudio.estados.sort(function (a, b) {
+        if (a.fecha < b.fecha) {
+          return 1;
+        }
+        if (a.fecha > b.fecha) {
+          return -1;
+        }
+        return 0;
+      });
+      this.ultimoEstado = estado[0].resourcetype;
+      this.ultimoEstado = this.ultimoEstado.replace(/([a-z])([A-Z])/g, "$1 $2");
+      this.ultimoEstado = this.ultimoEstado.replace(
+        /([A-Z])([A-Z][a-z])/g,
+        "$1 $2"
+      );
+    },
     ingresarComprobante() {
-   
       this.$router.push({
         name: "EsperandoComprobanteDePago",
         params: {
@@ -301,7 +316,7 @@ export default {
         },
       });
     },
-    retiroMuestra(){
+    retiroMuestra() {
       this.$router.push({
         name: "EsperandoRetiroDeExtaccion",
         params: {
@@ -319,7 +334,7 @@ export default {
         },
       });
     },
-    verEstudios(item) {     
+    verEstudios(item) {
       this.itemsEst = item.estudios;
       this.$refs["my-modal"].show();
     },

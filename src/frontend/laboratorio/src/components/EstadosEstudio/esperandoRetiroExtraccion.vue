@@ -29,6 +29,32 @@
                 </ValidationProvider>
               </b-form-group>
             </b-col>
+            <b-col lg="3" md="2">
+              <b-form-group
+                id="fecha-label"
+                label="Fecha retiro :"
+                label-for="Fecha retiro"
+              >
+                <ValidationProvider
+                  :name="'Fecha-retiro '"
+                  :rules="'required'"
+                  v-slot="{ errors, valid }"
+                >
+                  <b-form-input
+                    locale="es-AR"
+                    type="date"
+                    v-model="fecha_retiro"
+                    :state="errors[0] ? false : valid ? true : null"
+                  ></b-form-input>
+                  <b-form-invalid-feedback
+                    v-for="error in errors"
+                    :key="error.key"
+                  >
+                    {{ error }}
+                  </b-form-invalid-feedback>
+                </ValidationProvider>
+              </b-form-group>
+            </b-col>
           </b-row>
           <b-row class="pb-2">
             <b-col class="text-center pt-3">
@@ -45,30 +71,63 @@
 
 
 <script>
+import EstudiosService from "@/services/EstudiosService.js";
+
 export default {
   components: {},
 
   props: {
-    idEstudio: {
-      type: String,
+    estudio: {
+      type: Object,
     },
   },
   created() {},
   data() {
     return {
       retiro: null,
+      fecha_retiro: new Date().format("YYYY-MM-DD"),
     };
   },
 
   methods: {
     async guardarDatos() {
-      let result = await this.$refs.detailsExtraccion.validate();
-      if (result) {
-        let retiroExtraccion = {
-          estudio: this.idEstudio,
-          nombreRetiro: this.retiro,
-        };
-        console.log(retiroExtraccion);
+      try {
+        let result = await this.$refs.detailsExtraccion.validate();
+        if (result) {
+          let retiroExtraccion = {
+            estudio_id: this.estudio.id,
+            extracionista: this.retiro,
+            fecha_retiro: new Date(this.fecha_retiro),
+          };
+          console.log(retiroExtraccion);
+          let response = await EstudiosService.actualizarUltimoEstado(
+            retiroExtraccion
+          );
+          this.$root.$bvToast.toast(
+            "Se ingresaron los datos del retiro de la extraccion",
+            {
+              title: "Atencion!",
+              toaster: "b-toaster-top-center",
+              solid: true,
+              variant: "success",
+            }
+          );
+          this.$router.push({
+            name: "listaEstudios",
+          });
+
+          console.log(response);
+        }
+      } catch (error) {
+        this.$root.$bvToast.toast(
+          "ocurrio un error mientras ingresaba los datos del retiro de extraccion",
+          {
+            title: "Atencion!",
+            toaster: "b-toaster-top-center",
+            solid: true,
+            variant: "danger",
+          }
+        );
       }
     },
   },
