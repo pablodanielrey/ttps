@@ -60,7 +60,7 @@ def generar_lote():
     tipoe = estudio_models.TiposDeEstudio.objects.all().first()
     diagnostico = estudio_models.Diagnostico.objects.all().first()
 
-    for _ in range(0,20):
+    for _ in range(0,25):
         estudio = estudio_models.Estudio(paciente=empleado,  tipo=tipoe, medico_derivante=empleado, diagnostico=diagnostico)
         estudio.save()
 
