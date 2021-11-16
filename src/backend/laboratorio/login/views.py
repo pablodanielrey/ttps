@@ -13,6 +13,12 @@ from rest_framework.decorators import action
 
 from django.contrib.auth.models import User
 
+def obtener_roles(usuario):
+    grupos = []
+    for group in usuario.groups.all():
+        grupos.append(group.name)
+    return grupos
+
 class VistaToken(views.APIView):
     authentication_classes = [BasicAuthentication]
     permission_classes = [ IsAuthenticated ]
@@ -26,7 +32,13 @@ class VistaToken(views.APIView):
         except Token.DoesNotExist as e:
             token = Token.objects.create(user=usuario)
             
-        return Response({'token':token.key})
+        grupos = obtener_roles(usuario)
+        return Response(
+            {
+                'token':token.key,
+                'roles':grupos
+            }
+        )
 
 
 class VistaRoles(views.APIView):
@@ -35,8 +47,5 @@ class VistaRoles(views.APIView):
 
     def get(self, request, format=None):
         usuario = request.user
-
-        grupos = []
-        for group in usuario.groups.all():
-            grupos.append(group.name)
+        grupos = obtener_roles(usuario)
         return Response(grupos)
