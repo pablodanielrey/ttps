@@ -1,7 +1,7 @@
 import Api from "@/services/Api"
 
 const API_USER = ''
-const API_URL = '/turnos/'
+const API_URL = '/turnos_api/'
 
 export default {
     obtenerTurnos(rango) {

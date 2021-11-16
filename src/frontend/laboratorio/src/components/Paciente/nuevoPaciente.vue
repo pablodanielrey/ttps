@@ -6,7 +6,7 @@
     <div v-else>
       <b-row class="pb-2">
         <b-col class="text-center pt-3">
-          <p class="h3 text-center"><strong> Editar paciente</strong></p>
+          <p class="h3 text-center"><strong> Paciente</strong></p>
         </b-col>
       </b-row>
 
@@ -90,6 +90,31 @@
                     type="number"
                     placeholder="DNI"
                     v-model="paciente.dni"
+                    :state="errors[0] ? false : valid ? true : null"
+                  ></b-form-input>
+                  <b-form-invalid-feedback
+                    v-for="error in errors"
+                    :key="error.key"
+                  >
+                    {{ error }}
+                  </b-form-invalid-feedback>
+                </ValidationProvider>
+              </b-form-group>
+            </b-col>
+             <b-col lg="3" md="3">
+              <b-form-group
+                id="Direccion-label"
+                label="Direccion :"
+                label-for="Direccion"
+              >
+                <ValidationProvider
+                  :name="'Direccion '"
+                  :rules="'required'"
+                  v-slot="{ errors, valid }"
+                >
+                  <b-form-input
+                    placeholder="Direccion del paciente"
+                    v-model="paciente.direccion"
                     :state="errors[0] ? false : valid ? true : null"
                   ></b-form-input>
                   <b-form-invalid-feedback
