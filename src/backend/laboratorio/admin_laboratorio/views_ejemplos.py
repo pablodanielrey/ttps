@@ -152,14 +152,16 @@ class Ejemplos(APIView):
             Inicializo datos de ejemplo de una persona y un estudio
         """
         persona_models.ObraSocial(nombre='Osde', telefono='221-4237467', email='consutlas@osde.com.ar').save()
-        persona_models.ObraSocial(nombre='IOMA', telefono='221-4237467', email='consutlas@ioma.gov.ar').save()
+        persona_models.ObraSocial(nombre='Swiss Medical', telefono='221-4237468', email='consutlas@swiss.com.ar').save()
+        persona_models.ObraSocial(nombre='IOMA', telefono='221-4237467', email='consultas@ioma.gob.ar').save()
+        persona_models.ObraSocial(nombre='OSFATUN', telefono='221-4237469', email='consultas@osfatun.com.ar').save()
 
-        p1 = persona_models.Persona(nombre='Pablo', apellido='R', dni='1', email='pablo@supermail.com', telefono='221-1112233', fecha_nacimiento='1980-12-01')
+        p1 = persona_models.Persona(nombre='Pablo', apellido='Marmol', dni='10561134', email='pablo@roca.com', telefono='2211234567', fecha_nacimiento='1980-12-01')
         p1.save()
-        persona_models.Persona(nombre='Leonardo', apellido='B', dni='2211', email='leo@supermail.com', telefono='221-1112233', fecha_nacimiento='1981-02-03').save()
-        persona_models.Persona(nombre='Nico', apellido='G', dni='2222211', email='nico@supermail.com', telefono='221-1112233', fecha_nacimiento='2004-05-04').save()
+        persona_models.Persona(nombre='Leonardo', apellido='Da vinci', dni='6345345', email='leo@diflorencia.com', telefono='2211112233', fecha_nacimiento='1981-02-03').save()
+        persona_models.Persona(nombre='Nicolas', apellido='Otamendi', dni='35123456', email='nico@afa.com.ar', telefono='2211112233', fecha_nacimiento='2004-05-04').save()
 
-        mm = persona_models.Persona(nombre='Medi', apellido='Cote', dni='2212211', email='m@hotmail.com', telefono='221-1112233', fecha_nacimiento='1995-06-02')
+        mm = persona_models.Persona(nombre='Nick', apellido='Riviera', dni='22123123', email='barat@operation.com', telefono='2211112233', fecha_nacimiento='1995-06-02')
         mm.save()
 
         generar_estudio_de_muestra()
