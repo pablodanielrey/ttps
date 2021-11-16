@@ -25,6 +25,7 @@ import EsperandoSeleccionDeTurnoExtraccion from '@/components/EstadosEstudio/esp
 import EsperandoTomaDeMuestra from '@/components/EstadosEstudio/esperandoTomaDeMuestra.vue'
 import EsperandoRetiroExtraccion from '@/components/EstadosEstudio/esperandoRetiroExtraccion.vue'
 import EsperandoLoteDeMuestraParaProcesamientoBiotecnologico from '@/components/EstadosEstudio/EsperandoLoteDeMuestraParaProcesamientoBiotecnologico.vue'
+import EsperandoInterpretacionDeResultados from '@/components/EstadosEstudio/EsperandoInterpretacionDeResultados.vue'
 
 
 
@@ -69,8 +70,9 @@ const router = new Router({
             { path: '/esperandoTomaDeMuestra', component: EsperandoTomaDeMuestra , name:'EsperandoTomaDeMuestra',props:true },
             { path: '/esperandoRetiroExtraccion', component: EsperandoRetiroExtraccion , name:'EsperandoRetiroDeExtaccion',props:true },
             { path: '/EsperandoLoteDeMuestraParaProcesamientoBiotecnologico', component: EsperandoLoteDeMuestraParaProcesamientoBiotecnologico , name:'EsperandoLoteDeMuestraParaProcesamientoBiotecnologico',props:true },
+            { path: '/EsperandoInterpretacionDeResultados', component: EsperandoInterpretacionDeResultados , name:'EsperandoInterpretacionDeResultados',props:true },
 
-
+            
             { path: '/crearLote', component: CrearLote, name:'crearLote' },
             { path: '/cargarResultadoLote', component: CargarResultadoLote, name:'cargarResultadoLote'},
 

@@ -1,285 +1,217 @@
 <template>
-<b-container>
+  <b-container>
     <br />
-  
- <b-card header=" Listado de Lotes">
-    <b-table striped hover :items="items" :fields="fields">
-          <template v-slot:cell(acciones)="item">
-      
+
+    <b-card header=" Listado de Lotes">
+      <b-table striped hover :items="items" :fields="fields">
+        <template v-slot:cell(acciones)="item">
           <b-button
             title="Ver estudios"
             variant="outline-primary"
             @click="verEstudios(item.item)"
           >
-           Estudios
+            Estudios
           </b-button>
-             <b-button
+          <b-button
             title="URL"
             variant="outline-success"
-               @click="cargarResultado()"
+            @click="loteActual(item.item)"
+            v-b-modal.modal-prevent-closing
           >
-           Cargar Resultado
+            Cargar Resultado
           </b-button>
           <!-- <b-button @click="seleccionTurno(row.item.id)">
             seleccionar turno
           </b-button> -->
+        </template>
+      </b-table>
+      <div>
+        <b-row class="pb-2">
+          <b-col class="text-center pt-3">
+            <b-pagination
+              v-model="currentPage"
+              :total-rows="totalRows"
+              :per-page="perPage"
+            ></b-pagination>
+          </b-col>
+        </b-row>
+      </div>
+    </b-card>
+    <b-modal size="xl" ref="my-modal" title="Estudios del lote 1" ok-only>
+      <b-table :items="itemsEst" :fields="fieldsEst"> </b-table>
+    </b-modal>
 
-      </template>
-    </b-table>
-    <div>
-    <b-row class="pb-2">
-      <b-col class="text-center pt-3">
-        <b-pagination
-          v-model="currentPage"
-          :total-rows="totalRows"
-          :per-page="perPage"
-        ></b-pagination>
-      </b-col>
-      </b-row>
-    </div>
- </b-card>
-     <b-modal 
-     size="xl"
-      ref="my-modal" 
-      title="Estudios del lote 1" 
-      ok-only     
-      >
-         <b-table
-      :items="itemsEst"
-      :fields="fieldsEst"
-   
-    >   
-
-    </b-table>
-
-          
-      </b-modal>
-           <b-modal 
-     size="xl"
-      ref="modalResultado" 
-      title="Cargar resultados del lote" 
-      ok-only     
-      >
-  <ValidationObserver ref="detailsEstudio">
-        <b-form-group>
-          <b-alert
-            v-for="alert in alerts"
-            dismissible
-            v-bind:key="alert.key"
-            show
-            :variant="alert.variant"
-            >{{ alert.message }}</b-alert
-          >
+    <b-modal
+      id="modal-prevent-closing"
+      ref="modal"
+      title="Resultado"
+      @show="resetModal"
+      @hidden="resetModal"
+      @ok="handleOk"
+    >
+      <form ref="form" @submit.stop.prevent="handleSubmit">
+        <b-form-group
+          label="Url del resultado"
+          label-for="url-input"
+          invalid-feedback="el campo url del resultado es requerido"
+          :state="urlResultadostate"
+        >
+          <b-form-input
+            id="url-input"
+            v-model="urlResultado"
+            :state="urlResultadostate"
+            required
+          ></b-form-input>
         </b-form-group>
-          <b-row>
-            <b-col lg="5" md="5" sm="10">
-              <b-form-group
-                id="Resuttado-label"
-                label="Resultado:"
-                label-for="Resultado"
-              >
-                <ValidationProvider
-                  :name="'Resultado '"
-                  :rules="'required'"
-                  v-slot="{ errors, valid }"
-                >
-                  <b-form-input
-                    placeholder="Resultado"
-                 
-                    :state="errors[0] ? false : valid ? true : null"
-                  ></b-form-input>
-                  <b-form-invalid-feedback
-                    v-for="error in errors"
-                    :key="error.key"
-                  >
-                    {{ error }}
-                  </b-form-invalid-feedback>
-                </ValidationProvider>
-              </b-form-group>
-            </b-col>
-          
-            <b-col lg="5" md="5" sm="10">
-              <b-form-group
-                id="medico-label"
-                label="Medico Informante:"
-                label-for="Medico Informante"
-              >
-                <ValidationProvider
-                  :name="'Medico '"
-                  :rules="'required'"
-                  v-slot="{ errors, valid }"
-                >
-                  <b-form-input
-                    placeholder="medico Informante"
-                   
-                    :state="errors[0] ? false : valid ? true : null"
-                  ></b-form-input>
-                  <b-form-invalid-feedback
-                    v-for="error in errors"
-                    :key="error.key"
-                  >
-                    {{ error }}
-                  </b-form-invalid-feedback>
-                </ValidationProvider>
-              </b-form-group>
-            </b-col>
-          </b-row>
-          <b-row>
-       
-            <b-col lg="3" md="2">
-              <b-form-group
-                id="nacimiento-label"
-                label="Fecha Alta :"
-                label-for="Fecha Informe"
-              >
-                <ValidationProvider
-                  :name="'Fecha-alta '"
-                  :rules="'required'"
-                  v-slot="{ errors, valid }"
-                >
-                  <b-form-input
-                    locale="es-AR"
-                    type="date"
-                  
-                    :state="errors[0] ? false : valid ? true : null"
-                  ></b-form-input>
-                  <b-form-invalid-feedback
-                    v-for="error in errors"
-                    :key="error.key"
-                  >
-                    {{ error }}
-                  </b-form-invalid-feedback>
-                </ValidationProvider>
-              </b-form-group>
-            </b-col>
-          </b-row>
-  
-        <b-card header="Informe del resultado">
-          <b-row>
-            <b-col>
-              <b-form-group
-                id="historiaclinica-label"
-                label-for="Informe del resultado"
-              >
-                <ValidationProvider
-                  :name="'historiaclinica '"
-                  v-slot="{ errors, valid }"
-                >
-                  <vue-editor
-                    :state="errors[0] ? false : valid ? true : null"
-                
-                  ></vue-editor>
-                  <b-form-invalid-feedback
-                    v-for="error in errors"
-                    :key="error.key"
-                  >
-                    {{ error }}
-                  </b-form-invalid-feedback>
-                </ValidationProvider>
-              </b-form-group>
-            </b-col>
-          </b-row>
-        </b-card>
-      </ValidationObserver>
-
-          
-      </b-modal>
-</b-container>
+      </form>
+    </b-modal>
+  </b-container>
 </template>
 
 <script>
 import LotesService from "@/services/LotesService.js";
 import axios from "axios";
-import { VueEditor } from "vue2-editor";
-
 
 export default {
-    name: "CargarResultadoLote",
+  name: "CargarResultadoLote",
 
- components: { VueEditor },
-    props: {},
+  components: {},
+  props: {},
 
-    data() {
-
-        return {
-          alerts:[],
-              perPage: 4,
-              itemsEst: [],
-              fieldsEst: [
-        { key: "nombre", label: "Nombre", class: "text-center p2" },
-       
+  data() {
+    return {
+      idLoteActual: null,
+      urlResultadostate: null,
+      fechastate: null,
+      urlResultado: null,
+      fecha: null,
+      alerts: [],
+      perPage: 4,
+      itemsEst: [],
+      fieldsEst: [
         {
-          key: "medico_derivante",
+          key: "estudio.paciente.nombre",
+          label: "Nombre",
+          class: "text-center p2",
+        },
+        {
+          key: "estudio.paciente.apellido",
+          label: "Apellido",
+          class: "text-center p2",
+        },
+        {
+          key: "estudio.medico_derivante.apellido",
           label: "Medico derivante",
           class: "text-center p2",
-        },     
-        { key: "tipo", label: "Tipo Estudio", class: "text-center p2" },
-        
-        
+        },
+        {
+          key: "estudio.tipo.nombre",
+          label: "Tipo Estudio",
+          class: "text-center p2",
+        },
+        {
+          key: "estudio.diagnostico.nombre",
+          label: "Diagnostico",
+          class: "text-center p2",
+        },
       ],
       pageOptions: [4, 10, 15],
       filter: null,
       currentPage: 1,
       totalRows: 1,
-            items: [],
-            fields: [
-        { key: "id", label: "Numero", class: "text-center p2" },
-        
+      items: [],
+      fields: [
         { key: "fecha", label: "Fecha Creacion", class: "text-center p2" },
-        
+
         { key: "acciones", label: "Acciones", class: "text-center p2" },
       ],
-        };
-    },
+    };
+  },
 
-    created() {
-     
-    },
+  created() {},
 
-    methods: {
-        verEstudios(item){
-            console.log(item)
-            this.itemsEst=item.estudios
-                  this.$refs["my-modal"].show();
-        },
-        cargarResultado(){
-                   this.$refs["modalResultado"].show();
-        },
-        formatear_lista(e) {
-            return {
-              id: e.id,
-              numero: e.numero,
-              fecha:e.fecha,
-              estudios: e.estudios.reduce((a,) => 1+a, 0)
-            };
-        },
-        async obtenerLotes() {
-            try {
-                let response = await LotesService.obtenerLotes();
-                console.log(response);
-                this.items = response
-  
-            } catch (err) {
-                console.log(err);
-            }
+  methods: {
+    loteActual(item) {
+      console.log(item);
+      this.idLoteActual = item.id;
+    },
+    async guardarDatos(bvModalEvt) {
+      // Prevent modal from closing
+      bvModalEvt.preventDefault();
+      // Trigger submit handler
+      this.enviarDatos()();
+      console.log(this.fecha, this.urlResultado);
+    },
+    checkFormValidity() {
+      const valid = this.$refs.form.checkValidity();
+      this.urlResultadostate = valid;
+      return valid;
+    },
+    resetModal() {
+      this.urlResultado = "";
+      this.urlResultadostate = null;
+    },
+    handleOk(bvModalEvt) {
+      // Prevent modal from closing
+      bvModalEvt.preventDefault();
+      // Trigger submit handler
+      this.handleSubmit();
+    },
+    async handleSubmit() {
+      try {
+        if (!this.checkFormValidity()) {
+          return;
         }
+        let datos = { fecha: new Date(), resultado: this.urlResultado };
+        console.log(datos);
+        let response = await LotesService.cargarResultadoLote(
+          this.idLoteActual,
+          datos
+        );
+        console.log(response);
+        this.$nextTick(() => {
+          this.$bvModal.hide("modal-prevent-closing");
+        });
+      } catch (error) {
+        console.log(error);
+      }
+      if (!this.checkFormValidity()) {
+        return;
+      }
     },
 
-    computed: {
-
+    verEstudios(item) {
+      console.log(item);
+      this.itemsEst = item.estudios;
+      this.$refs["my-modal"].show();
+    },
+    cargarResultado() {
+      this.$refs["modalResultado"].show();
     },
 
-    mounted() {
-        axios
-            .all([this.obtenerLotes()])
-            .then(() => {
-                this.totalRows = this.items.length;
-            })
-            .catch((err) => {
-                console.log(err);
-            });
+    async obtenerLotes() {
+      try {
+        let response = await LotesService.obtenerLotes();
+        console.log(response);
+        this.items = response.data;
+      } catch (err) {
+        console.log(err);
+      }
     },
+  },
 
+  computed: {},
+
+  mounted() {
+    axios
+      .all([this.obtenerLotes()])
+      .then(() => {
+        this.totalRows = this.items.length;
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  },
 };
 </script>
 
