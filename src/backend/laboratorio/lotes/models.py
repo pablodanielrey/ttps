@@ -80,17 +80,3 @@ class ModeloLotes:
             ultimo_estado.save()
             estudio_models.EsperandoInterpretacionDeResultados(estudio=estudio).save()
 
-    def _generar_datos_de_prueba(self):
-        from personas import models as persona_models
-
-        empleado = persona_models.Persona.objects.all().first()
-
-        tipoe = estudio_models.TiposDeEstudio.objects.all().first()
-        diagnostico = estudio_models.Diagnostico.objects.all().first()
-
-        for _ in range(0,20):
-            estudio = estudio_models.Estudio(paciente=empleado,  tipo=tipoe, medico_derivante=empleado, diagnostico=diagnostico)
-            estudio.save()
-
-            estudio_models.EsperandoRetiroDeExtaccion(persona=empleado, estudio=estudio, extracionista='pepe se la lleva a la muestra', fecha_retiro=generar_fecha_now()).save()
-            estudio_models.EsperandoLoteDeMuestraParaProcesamientoBiotecnologico(estudio=estudio, persona=empleado).save()
