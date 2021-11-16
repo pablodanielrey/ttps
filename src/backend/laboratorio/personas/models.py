@@ -26,15 +26,6 @@ class Persona(models.Model):
     direccion = models.CharField(max_length=2096, null=True)
     
     @classmethod
-    def create(cls, *args, **kwargs):
-        assert kwargs.get('nombre') is not None
-        assert kwargs.get('apellido') is not None
-        assert kwargs.get('dni') is not None
-        assert kwargs.get('email') is not None
-        assert kwargs.get('direccion') is not None
-        return cls(args)
-
-    @classmethod
     def buscar(cls, termino:str):
         return cls.objects.filter(models.Q(nombre__icontains=termino) | models.Q(apellido__icontains=termino) | models.Q(dni__icontains=termino))
 

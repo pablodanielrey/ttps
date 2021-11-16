@@ -16,6 +16,3 @@ router.register('medicos_derivantes', views_medicos.VistaMedicoDerivante)
 router.register('medicos_informantes', views_medicos.VistaMedicoInformante)
 
 urlpatterns = router.urls
-
-for u in urlpatterns:
-    print(u)
