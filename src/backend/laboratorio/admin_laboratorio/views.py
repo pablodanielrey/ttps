@@ -69,6 +69,10 @@ def generar_grupos_iniciales():
         except IntegrityError as e:
             pass
 
+def generar_administrador():
+    persona_models.PersonasModel().crearAdministrador(nombre='LoAdministro', apellido='Todo', usuario='laboratorio', clave='laboratorio')
+
+
 class InitSite(APIView):
     
     permission_classes= [permissions.IsAdminUser]
@@ -455,6 +459,7 @@ class InitSite(APIView):
 
         generar_permisos()
         generar_grupos_iniciales()
+        generar_administrador()
 
         return Response({'status':'sistema inicializado'})
 
