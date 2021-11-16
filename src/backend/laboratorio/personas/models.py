@@ -1,17 +1,11 @@
 from django.db import models
 from django.contrib.auth.models import User, Group
 
-from django.db.models.deletion import CASCADE
+from django.db.models.deletion import CASCADE, SET_NULL
 
 import uuid
 
-GRUPOS = [
-    'Administradores',
-    'Pacientes',
-    'Empleados',
-    'Médicos_Derivantes',
-    'Médicos_Informantes'
-]
+
 
 class ObraSocial(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
@@ -31,11 +25,22 @@ class Persona(models.Model):
     fecha_nacimiento = models.DateField(null=True)
     telefono = models.CharField(max_length=50, null=True)
     direccion = models.CharField(max_length=2096, null=True)
-    
+    usuario = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+
+    def __str__(self):
+        return f"{self.id} {self.nombre} {self.apellido}"
+
+
+    NOMBRE_GRUPO = 'Pacientes'
+
+    @classmethod
+    def all(cls):
+        return cls.objects.filter(usuario__groups__name=cls.NOMBRE_GRUPO)
+
     @classmethod
     def buscar(cls, termino:str):
-        return cls.objects.filter(models.Q(nombre__icontains=termino) | models.Q(apellido__icontains=termino) | models.Q(dni__icontains=termino))
-
+        return cls.all().filter(models.Q(nombre__icontains=termino) | models.Q(apellido__icontains=termino) | models.Q(dni__icontains=termino))
+        
 
 class HistoriaClinica(models.Model):
     persona = models.ForeignKey(Persona, on_delete=models.CASCADE, related_name='historia_clinica')
@@ -46,31 +51,48 @@ class Matricula(models.Model):
     numero = models.CharField(max_length=500)
 
 
-class MedicoInformante(Persona):
+class Administrador(Persona):
+
     class Meta:
         proxy = True
 
-    @classmethod
-    def buscar(cls, termino:str):
-        return cls.objects.filter(models.Q(nombre__icontains=termino) | models.Q(apellido__icontains=termino) | models.Q(dni__icontains=termino))
+    NOMBRE_GRUPO = 'Administradores'
 
 
-class MedicoDerivante(Persona):
+class Empleado(Persona):
+
     class Meta:
         proxy = True
 
-    @classmethod
-    def buscar(cls, termino:str):
-        return cls.objects.filter(models.Q(nombre__icontains=termino) | models.Q(apellido__icontains=termino) | models.Q(dni__icontains=termino))
+    NOMBRE_GRUPO = 'Empleados'
 
+class Configurador(Persona):
+
+    class Meta:
+        proxy = True
+
+    NOMBRE_GRUPO = 'Configuradores'
 
 class Paciente(Persona):
     class Meta:
         proxy = True
 
-    @classmethod
-    def buscar(cls, termino:str):
-        return cls.objects.filter(models.Q(nombre__icontains=termino) | models.Q(apellido__icontains=termino) | models.Q(dni__icontains=termino))
+    NOMBRE_GRUPO = 'Pacientes'
+
+
+class MedicoInformante(Persona):
+    class Meta:
+        proxy = True
+
+    NOMBRE_GRUPO = 'Médicos_Informantes'
+
+        
+class MedicoDerivante(Persona):
+    class Meta:
+        proxy = True
+
+    NOMBRE_GRUPO = 'Médicos_Derivantes'
+ 
 
 
 class ObraSocialPersona(models.Model):
@@ -82,21 +104,26 @@ class ObraSocialPersona(models.Model):
 
 class PersonasModel:
 
-    def _generar_usuario_nulo_django(self, grupo, email=None):
-        username = str(uuid.uuid4())
+    def _generar_usuario_django(self, usuario, grupo, email=None):
         password = str(uuid.uuid4())
         email = email if email else ''
-        u = User(username=username, password=password, email=email)
+        u = User(username=usuario, password=password, email=email)
         u.save()
 
         g = Group.objects.get(name=grupo)
         u.groups.add(g)
         u.save()
 
+        return u
 
-    def crearPersona(self, nombre, apellido, dni, email, direccion):
+    def crearPaciente(self, nombre, apellido, dni, email, direccion):
         paciente = Paciente(nombre=nombre, apellido=apellido, dni=dni, email=email, direccion=direccion)
         paciente.save()
+
+        u = self._generar_usuario_django(str(paciente.id), Paciente.NOMBRE_GRUPO)    
+        paciente.usuario = u
+        paciente.save()
+
         return paciente
 
     def crearMedicoDerivante(self, nombre, apellido, email, matricula):
@@ -105,10 +132,20 @@ class PersonasModel:
         matricula = Matricula(persona=medico, numero=matricula)
         matricula.save()
 
-        self._generar_usuario_nulo_django(GRUPOS[3])    
+        u = self._generar_usuario_django(str(medico.id), MedicoDerivante.NOMBRE_GRUPO)    
+        medico.usuario = u
+        medico.save()
 
         return medico
 
-    def crearMedicoInformante(self, nombre, apellido, email):
-        medico = MedicoDerivante(nombre=nombre, apellido=apellido)
+    def crearMedicoInformante(self, nombre, apellido, email, matricula):
+        medico = MedicoInformante(nombre=nombre, apellido=apellido, email=email)
         medico.save()
+        matricula = Matricula(persona=medico, numero=matricula)
+        matricula.save()
+
+        u = self._generar_usuario_django(str(medico.id), MedicoInformante.NOMBRE_GRUPO)
+        medico.usuario = u
+        medico.save()
+
+        return medico

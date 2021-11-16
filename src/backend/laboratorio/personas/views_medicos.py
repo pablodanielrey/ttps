@@ -36,7 +36,7 @@ class SerializadorDeMedicoDerivante(serializers.ModelSerializer):
 
 
 class VistaMedicoDerivante(viewsets.ModelViewSet):
-    queryset = models.MedicoDerivante.objects.all()
+    queryset = models.MedicoDerivante.all()
     serializer_class = SerializadorDeMedicoDerivante
 
     model = models.PersonasModel()
@@ -69,7 +69,7 @@ class SerializadorDeMedicoInformante(serializers.ModelSerializer):
         fields = ['id','nombre','apellido','email']
 
 class VistaMedicoInformante(viewsets.ModelViewSet):
-    queryset = models.MedicoInformante.objects.all()
+    queryset = models.MedicoInformante.all()
     serializer_class = SerializadorDeMedicoInformante
 
     model = models.PersonasModel()

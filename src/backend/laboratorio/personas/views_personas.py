@@ -42,7 +42,7 @@ class SerializadorDePersona(serializers.HyperlinkedModelSerializer):
 
 class VistaPersona(viewsets.ModelViewSet):
     """
-        esto es necesario cambiarlo para algo parecido a :
+        TODO: esto es necesario cambiarlo para algo parecido a :
         https://www.django-rest-framework.org/api-guide/serializers/#dealing-with-nested-objects
     """
     queryset = models.Persona.objects.all()
