@@ -140,16 +140,16 @@ export default {
       this.currentPage = 1;
     },
     detalleEstudio(estudio) {
-      this.$router.push({
+      console.log(estudio)
+     this.$router.push({
         name: "detalleDeEstudio",
         params: {
           estudio: estudio,
         },
-      });
+      }); 
     },
     siguienteEstado(estudio) {
       let ultimoEstado = estudio.estados[estudio.estados.length - 1];
-
       this.$router.push({
         name: ultimoEstado.resourcetype,
         params: {

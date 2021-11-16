@@ -34,7 +34,8 @@ class VistaLotes(viewsets.ModelViewSet):
     permission_classes = [ permissions.DjangoModelPermissions ]
 
     def create(self, request, *args, **kwargs):
-        logging.debug('llego al create')
+        logging.debug("entra aca")
+        logging.debug(request.data['estudios'])
         """ redefino el create debido a que va totalmente otra lógica """
         lote = models.ModeloLotes().generar_lote(request.data['estudios'])
         serializador = self.serializer_class(instance=lote, context={'request': request})

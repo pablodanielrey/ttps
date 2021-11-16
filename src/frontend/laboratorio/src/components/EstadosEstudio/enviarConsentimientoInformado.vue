@@ -4,13 +4,15 @@
       <b-card
         header="Descargar resultado en formato pdf de estudio para entregarlo a medico derivante"
       >
-        <b-button
+        <a
           title="Bajar consentimiento informado"
           variant="outline-success"
           @click="bajarConsentimiento()"
+          download="consentimiento.pdf"
+          :href="this.estudio.estados[0].comprobante"
         >
           <b-icon icon="download" aria-hidden="true"></b-icon
-        ></b-button>
+        ></a>
         <br />
       </b-card>
     </div>
@@ -29,7 +31,9 @@ export default {
       type: Object,
     },
   },
-  created() {},
+  created() {
+    console.log(this.estudio)
+  },
   data() {
     return {};
   },

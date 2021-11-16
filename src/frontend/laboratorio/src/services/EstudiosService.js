@@ -7,6 +7,9 @@ export default {
     obtenerEstudios() {
         return Api().get(API_URL + API_USER + "tiposEstudio/")
     },
+    obtenerEstudio(id) {
+        return Api().get(API_URL + API_USER + "estudios/" + id)
+    },
     obtenerTurnos() {
         return Api().get(API_URL + API_USER + "listaTurnos/")
     },
