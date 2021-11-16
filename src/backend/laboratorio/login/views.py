@@ -20,12 +20,11 @@ class VistaToken(views.APIView):
 
     def get(self, request, format=None):
         usuario = request.user
-
         logging.debug(f'usuario logueado : {usuario}')
 
         try:
             token = Token.objects.get(user_id__username=usuario.username)
-        except User.DoesNotExist as e:
+        except Token.DoesNotExist as e:
             token = Token.objects.create(user=usuario)
             
         return Response({'token':token.key})
