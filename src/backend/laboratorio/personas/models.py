@@ -84,13 +84,8 @@ class ObraSocialPersona(models.Model):
 
 class PersonasModel:
 
-    def crearPersona(self, *args, **kwargs):
-        assert kwargs.get('nombre') is not None
-        assert kwargs.get('apellido') is not None
-        assert kwargs.get('dni') is not None
-        assert kwargs.get('email') is not None
-        assert kwargs.get('direccion') is not None
-        paciente = Paciente(args)
+    def crearPersona(self, nombre, apellido, dni, email, direccion):
+        paciente = Paciente(nombre=nombre, apellido=apellido, dni=dni, email=email, direccion=direccion)
         paciente.save()
         return paciente
 
@@ -101,3 +96,6 @@ class PersonasModel:
         matricula.save()
         return medico
 
+    def crearMedicoInformante(self, nombre, apellido, email):
+        medico = MedicoDerivante(nombre=nombre, apellido=apellido)
+        medico.save()

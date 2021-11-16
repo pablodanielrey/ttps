@@ -13,7 +13,7 @@ router.register('usuarios', views_usuarios.VistaUsuario)
 router.register('personas', views_personas.VistaPersona)
 router.register('obras_sociales', views_personas.VistaObraSocial)
 router.register('medicos_derivantes', views_medicos.VistaMedicoDerivante)
-
+router.register('medicos_informantes', views_medicos.VistaMedicoInformante)
 
 urlpatterns = router.urls
 

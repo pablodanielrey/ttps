@@ -59,3 +59,35 @@ class VistaMedicoDerivante(viewsets.ModelViewSet):
         personas = models.MedicoDerivante.buscar(q)
         serializer = SerializadorDeMedicoDerivante(personas, many=True, context={'request': request})
         return Response(serializer.data)
+
+
+
+
+class SerializadorDeMedicoInformante(serializers.ModelSerializer):
+    class Meta:
+        model = models.Persona
+        fields = ['id','nombre','apellido','email']
+
+class VistaMedicoInformante(viewsets.ModelViewSet):
+    queryset = models.MedicoInformante.objects.all()
+    serializer_class = SerializadorDeMedicoInformante
+
+    model = models.PersonasModel()
+
+    def create(self, request):
+        nombre = request.data['nombre']
+        apellido = request.data['apellido']
+        email = request.data['email']
+        medico = self.model.crearMedicoInformante(nombre=nombre, apellido=apellido, email=email)
+
+        serializador = self.serializer_class(instance=medico, context={'request':request})
+        return Response(serializador.data)
+
+    @action(detail=False, methods=['GET'])
+    def buscar(self, request):
+        q = request.query_params.get('q')
+        logging.debug(f'buscando medico informante : {q}')
+
+        personas = models.MedicoInformante.buscar(q)
+        serializer = SerializadorDeMedicoInformante(personas, many=True, context={'request': request})
+        return Response(serializer.data)
