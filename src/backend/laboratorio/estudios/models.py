@@ -82,6 +82,7 @@ class EsperandoInterpretacionDeResultados(EstadoEstudio):
     fecha_informe = models.DateField(null=True)
     medico_informante = models.ForeignKey(Persona, on_delete=models.CASCADE, null=True)
     informe = models.TextField(null=True)
+    resultado = models.CharField(max_length=500, null=True)
    
 class EsperandoEntregaAMedicoDerivante(EstadoEstudio):
     fecha_entrega = models.DateTimeField(null=True)

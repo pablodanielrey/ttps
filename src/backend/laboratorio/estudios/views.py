@@ -116,7 +116,7 @@ class SerializadorEsperandoProcesamientoDeLoteBiotecnologico(serializers.ModelSe
 class SerializadorEsperandoInterpretacionDeResultados(serializers.ModelSerializer):
     class Meta:
         model = models.EsperandoInterpretacionDeResultados
-        fields = ['id','fecha','fecha_informe','medico_informante','informe']
+        fields = ['id','fecha','fecha_informe','medico_informante','informe','resultado']
 
 class SerializadorEsperandoEntregaAMedicoDerivante(serializers.ModelSerializer):
     class Meta:
