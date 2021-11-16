@@ -1,5 +1,6 @@
 
 
+from django.db.utils import IntegrityError
 from django.shortcuts import render
 
 from rest_framework.views import APIView
@@ -89,13 +90,48 @@ def generar_estudio_de_muestra():
 
 def generar_usuarios_ejemplo():
     m = persona_models.PersonasModel()
-    m.crearPaciente(nombre='Pablo Daniel', apellido='Rey', dni='12345678', email="pablo@hotmail.com", direccion='calle 4 la plata', telefono='322 34324', fecha_nacimiento="2021-05-04", historia_clinica="desde hace 20 años que no se testea")
-    m.crearPaciente(nombre='Leandro', apellido='Bilbao', dni='12345672', email="leandro@hotmail.com", direccion='calle 12 la plata', telefono='322 34324', fecha_nacimiento="2021-05-04", historia_clinica="desde hace 20 años que no se testea")
-    m.crearPaciente(nombre='Nicolás', apellido='Magnani', dni='345672', email="leandro@hotmail.com", direccion='calle 12 la plata', telefono='322 34324', fecha_nacimiento="2021-05-04", historia_clinica="desde hace 20 años que no se testea")
-    m.crearMedicoDerivante(nombre='Medico1', apellido="derivante", email='medico2@simed.com', matricula='122223er')
-    m.crearMedicoDerivante(nombre='Medico2', apellido="derivante2", email='medico3@simed.com', matricula='123er')
-    m.crearMedicoDerivante(nombre='Medico3', apellido="derivante3", email='medico4@simed.com', matricula='1223er')
-    m.crearMedicoInformante(nombre='Medico', apellido="informante", email='medico1@simed.com', matricula='123er', usuario='medico1', clave='informante1')
+    try:
+        m.crearPaciente(nombre='Pablo Daniel', apellido='Rey', dni='12345678', email="pablo@hotmail.com", direccion='calle 4 la plata', telefono='322 34324', fecha_nacimiento="2021-05-04", historia_clinica="desde hace 20 años que no se testea")
+    except IntegrityError as e:
+        pass
+
+    try:
+        m.crearPaciente(nombre='Leandro', apellido='Bilbao', dni='12345672', email="leandro@hotmail.com", direccion='calle 12 la plata', telefono='322 34324', fecha_nacimiento="2021-05-04", historia_clinica="desde hace 20 años que no se testea")
+    except IntegrityError as e:
+        pass
+
+    try:
+        m.crearPaciente(nombre='Nicolás', apellido='Magnani', dni='345672', email="leandro@hotmail.com", direccion='calle 12 la plata', telefono='322 34324', fecha_nacimiento="2021-05-04", historia_clinica="desde hace 20 años que no se testea")
+    except IntegrityError as e:
+        pass
+
+    try:
+        m.crearMedicoDerivante(nombre='Medico1', apellido="derivante", email='medico2@simed.com', matricula='122223er')
+    except IntegrityError as e:
+        pass
+
+    try:
+        m.crearMedicoDerivante(nombre='Medico2', apellido="derivante2", email='medico3@simed.com', matricula='123er')
+    except IntegrityError as e:
+        pass
+
+    try:
+        m.crearMedicoDerivante(nombre='Medico3', apellido="derivante3", email='medico4@simed.com', matricula='1223er')
+    except IntegrityError as e:
+        pass
+
+    try:
+        m.crearMedicoInformante(nombre='Medico', apellido="informante", email='medico1@simed.com', matricula='123er', usuario='medico2', clave='informante2')
+    except IntegrityError as e:
+        pass
+
+def generar_usuarios_de_sistema():
+    m = persona_models.PersonasModel()
+    m.crearAdministrador("Super","Admin", "administrador", "administrador")
+    m.crearConfigurador("Configurador","sistema", "configurador", "configurador")
+    m.crearEmpleado("Empleado1", "Apellido1", "empleado", "empleado")
+    m.crearEmpleado("Empleado2", "Apellido2", "empleado2", "empleado2")
+
 
 class Ejemplos(APIView):
     
@@ -120,6 +156,7 @@ class Ejemplos(APIView):
         generar_lote()
 
         generar_usuarios_ejemplo()
+        generar_usuarios_de_sistema()
 
         return Response({'status':'ejemplos generados'})
 

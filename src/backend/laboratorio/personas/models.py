@@ -105,7 +105,7 @@ class PersonasModel:
     def _generar_usuario_django(self, usuario, grupo, clave=None, email=None):
         password = clave if clave else str(uuid.uuid4())
         email = email if email else ''
-        u = User(username=usuario, password=password, email=email)
+        u = User.objects.create_user(username=usuario, password=password, email=email)
         u.save()
 
         g = Group.objects.get(name=grupo)
