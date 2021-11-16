@@ -8,8 +8,6 @@ from rest_framework import serializers, views, viewsets
 from rest_framework.response import Response
 
 
-from personas.views import SerializadorDeObraSocial, SerializadorDePersona
-
 from estudios import models as estudio_models
 
 from . import models
