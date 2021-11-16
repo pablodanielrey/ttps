@@ -100,3 +100,4 @@ class PersonasModel:
         matricula = Matricula(persona=medico, numero=matricula)
         matricula.save()
         return medico
+

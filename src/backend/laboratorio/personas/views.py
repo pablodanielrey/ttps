@@ -125,18 +125,18 @@ class SerializadorDeMedicoDerivante(serializers.ModelSerializer):
         fields = ['id','nombre','apellido','email','matricula']
 
 
-class VistaMedicoDerivante(views.APIView):
+# class VistaMedicoDerivante(views.APIView):
 
-    model = models.PersonasModel()
+#     model = models.PersonasModel()
 
-    def post(self, request):
-        nombre = request.data['nombre']
-        apellido = request.data['apellido']
-        email = request.data['email']
-        medico = self.model.crearMedicoDerivante(nombre=nombre, apellido=apellido, email=email)
+#     def post(self, request):
+#         nombre = request.data['nombre']
+#         apellido = request.data['apellido']
+#         email = request.data['email']
+#         medico = self.model.crearMedicoDerivante(nombre=nombre, apellido=apellido, email=email)
 
-        serializador = SerializadorDeMedicoDerivante(instance=medico, context={'request':request})
-        return Response(serializador.data)
+#         serializador = SerializadorDeMedicoDerivante(instance=medico, context={'request':request})
+#         return Response(serializador.data)
 
 
 class VistaMedicoDerivante(viewsets.ModelViewSet):
@@ -154,3 +154,12 @@ class VistaMedicoDerivante(viewsets.ModelViewSet):
 
         serializador = SerializadorDeMedicoDerivante(instance=medico, context={'request':request})
         return Response(serializador.data)
+
+    @action(detail=False, methods=['GET'])
+    def buscar(self, request):
+        q = request.query_params.get('q')
+        logging.debug(f'buscando medico derivante : {q}')
+
+        personas = models.MedicoDerivante.buscar(q)
+        serializer = SerializadorDeMedicoDerivante(personas, many=True, context={'request': request})
+        return Response(serializer.data)
