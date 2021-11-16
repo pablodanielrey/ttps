@@ -90,20 +90,28 @@ def generar_estudio_de_muestra():
 
 def generar_usuarios_ejemplo():
     m = persona_models.PersonasModel()
-    try:
-        m.crearPaciente(nombre='Pablo Daniel', apellido='Rey', dni='12345678', email="pablo@hotmail.com", direccion='calle 4 la plata', telefono='322 34324', fecha_nacimiento="2021-05-04", historia_clinica="desde hace 20 años que no se testea")
-    except IntegrityError as e:
-        pass
 
-    try:
-        m.crearPaciente(nombre='Leandro', apellido='Bilbao', dni='12345672', email="leandro@hotmail.com", direccion='calle 12 la plata', telefono='322 34324', fecha_nacimiento="2021-05-04", historia_clinica="desde hace 20 años que no se testea")
-    except IntegrityError as e:
-        pass
+    pacientes = []
+    for i in range(0,10):
+        ano = f'{i+1}'.zfill(2)
+        pacientes.append(
+            {
+                'nombre': f'nombre{i}',
+                'apellido': f'apellido{i}',
+                'dni':f'{i}',
+                'email': f'email{i}@gmail.com',
+                'telefono': f'221 2222{i}',
+                'direccion': f'calle {i} la plata',
+                'fecha_nacimiento': f'2021-04-{ano}',
+                'historia_clinica': ''
+            }
+        )
+    for paciente in pacientes:
+        try:
+            m.crearPaciente(**paciente)
+        except IntegrityError as e:
+            pass
 
-    try:
-        m.crearPaciente(nombre='Nicolás', apellido='Magnani', dni='345672', email="leandro@hotmail.com", direccion='calle 12 la plata', telefono='322 34324', fecha_nacimiento="2021-05-04", historia_clinica="desde hace 20 años que no se testea")
-    except IntegrityError as e:
-        pass
 
     try:
         m.crearMedicoDerivante(nombre='Medico1', apellido="derivante", email='medico2@simed.com', matricula='122223er')
@@ -127,11 +135,13 @@ def generar_usuarios_ejemplo():
 
 def generar_usuarios_de_sistema():
     m = persona_models.PersonasModel()
-    m.crearAdministrador("Super","Admin", "administrador", "administrador")
-    m.crearConfigurador("Configurador","sistema", "configurador", "configurador")
-    m.crearEmpleado("Empleado1", "Apellido1", "empleado", "empleado")
-    m.crearEmpleado("Empleado2", "Apellido2", "empleado2", "empleado2")
-
+    try:
+        m.crearAdministrador("Super","Admin", "administrador", "administrador")
+        m.crearConfigurador("Configurador","sistema", "configurador", "configurador")
+        m.crearEmpleado("Empleado1", "Apellido1", "empleado", "empleado")
+        m.crearEmpleado("Empleado2", "Apellido2", "empleado2", "empleado2")
+    except IntegrityError as e:
+        pass
 
 class Ejemplos(APIView):
     
