@@ -8,6 +8,7 @@ from . import views
 router = routers.DefaultRouter()
 router.register('usuarios', views.VistaUsuario)
 router.register('personas', views.VistaPersona)
+router.register('medicos_derivantes', views.VistaMedicoDerivante)
 router.register('obrasSociales', views.VistaObraSocial)
 router.register('obraSocialPersonas', views.VistaObraSocialPersona)
 

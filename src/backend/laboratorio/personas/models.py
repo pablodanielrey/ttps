@@ -20,14 +20,55 @@ class Persona(models.Model):
     nombre = models.CharField(max_length=500)
     apellido = models.CharField(max_length=500)
     email = models.EmailField()
-    dni = models.CharField(max_length=50)
+    dni = models.CharField(max_length=50, null=True)
     fecha_nacimiento = models.DateField(null=True)
-    telefono = models.CharField(max_length=50)
+    telefono = models.CharField(max_length=50, null=True)
+    direccion = models.CharField(max_length=2096, null=True)
+    
+    @classmethod
+    def create(cls, *args, **kwargs):
+        assert kwargs.get('nombre') is not None
+        assert kwargs.get('apellido') is not None
+        assert kwargs.get('dni') is not None
+        assert kwargs.get('email') is not None
+        assert kwargs.get('direccion') is not None
+        return cls(args)
+
+    @classmethod
+    def buscar(cls, termino:str):
+        return cls.objects.filter(models.Q(nombre__icontains=termino) | models.Q(apellido__icontains=termino) | models.Q(dni__icontains=termino))
+
+
+class HistoriaClinica(models.Model):
+    persona = models.ForeignKey(Persona, on_delete=models.CASCADE, related_name='historia_clinica')
     historia_clinica = models.CharField(max_length=9216, null=True)
 
-    def __str__(self):
-        obs = " | ".join([ f"{obp.numero_afiliado} {obp.obra_social.__str__()}" for obp in self.obra_social.all() ])
-        return f"{self.nombre} {self.apellido} {self.dni} obra social : {obs}"
+class Matricula(models.Model):
+    persona = models.OneToOneField(Persona, on_delete=models.CASCADE, related_name='matricula')
+    numero = models.CharField(max_length=500)
+
+
+class MedicoInformante(Persona):
+    class Meta:
+        proxy = True
+
+    @classmethod
+    def buscar(cls, termino:str):
+        return cls.objects.filter(models.Q(nombre__icontains=termino) | models.Q(apellido__icontains=termino) | models.Q(dni__icontains=termino))
+
+
+class MedicoDerivante(Persona):
+    class Meta:
+        proxy = True
+
+    @classmethod
+    def buscar(cls, termino:str):
+        return cls.objects.filter(models.Q(nombre__icontains=termino) | models.Q(apellido__icontains=termino) | models.Q(dni__icontains=termino))
+
+
+class Paciente(Persona):
+    class Meta:
+        proxy = True
 
     @classmethod
     def buscar(cls, termino:str):
@@ -39,3 +80,23 @@ class ObraSocialPersona(models.Model):
     persona = models.ForeignKey(Persona, on_delete=models.CASCADE, related_name='obra_social')
     obra_social = models.ForeignKey(ObraSocial, on_delete=models.CASCADE)
     numero_afiliado = models.CharField(max_length=1024)
+
+
+class PersonasModel:
+
+    def crearPersona(self, *args, **kwargs):
+        assert kwargs.get('nombre') is not None
+        assert kwargs.get('apellido') is not None
+        assert kwargs.get('dni') is not None
+        assert kwargs.get('email') is not None
+        assert kwargs.get('direccion') is not None
+        paciente = Paciente(args)
+        paciente.save()
+        return paciente
+
+    def crearMedicoDerivante(self, nombre, apellido, email, matricula):
+        medico = MedicoDerivante(nombre=nombre, apellido=apellido, email=email)
+        medico.save()
+        matricula = Matricula(persona=medico, numero=matricula)
+        matricula.save()
+        return medico

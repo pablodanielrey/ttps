@@ -4,7 +4,7 @@ from django.shortcuts import render
 
 from django.contrib.auth import models as auth_models
 
-from rest_framework.response import Response
+
 
 import logging
 
@@ -15,7 +15,11 @@ from . import models
 """
     Las vistas de rest framework
 """
-from rest_framework import serializers, viewsets
+from rest_framework import serializers, viewsets, views
+from rest_framework.response import Response
+
+from rest_framework.decorators import action
+
 
 class SerializadorDeObraSocial(serializers.HyperlinkedModelSerializer):
     class Meta:
@@ -33,8 +37,14 @@ class SerializadorDeObraSocialPersona(serializers.HyperlinkedModelSerializer):
         model = models.ObraSocialPersona
         fields = ['obra_social','numero_afiliado']
         
+class SerializadorDeHistoriaClinica(serializers.ModelSerializer):
+    class Meta:
+        model = models.HistoriaClinica
+        fields = ['historia_clinica']
+
 class SerializadorDePersona(serializers.HyperlinkedModelSerializer):
     obra_social = SerializadorDeObraSocialPersona(required=False, many=True)
+    historia_clinica = SerializadorDeHistoriaClinica(required=False)
     class Meta:
         model = models.Persona
         fields = ['id','nombre','apellido','email','dni','fecha_nacimiento','telefono','historia_clinica','obra_social']
@@ -44,7 +54,6 @@ class VistaUsuario(viewsets.ModelViewSet):
     queryset = auth_models.User.objects.all()
     serializer_class = SerializadorDeUsuario
 
-from rest_framework.decorators import action
 
 class VistaPersona(viewsets.ModelViewSet):
     """
@@ -100,3 +109,48 @@ class VistaObraSocialPersona(viewsets.ModelViewSet):
 class VistaObraSocial(viewsets.ModelViewSet):
     queryset = models.ObraSocial.objects.all()
     serializer_class = SerializadorDeObraSocial
+
+
+
+class SerializadorDeMatricula(serializers.ModelSerializer):
+    class Meta:
+        model = models.Matricula
+        fields = ['numero']
+
+class SerializadorDeMedicoDerivante(serializers.ModelSerializer):
+    # matricula = SerializadorDeMatricula()
+    matricula = serializers.CharField(source='matricula.numero')
+    class Meta:
+        model = models.Persona
+        fields = ['id','nombre','apellido','email','matricula']
+
+
+class VistaMedicoDerivante(views.APIView):
+
+    model = models.PersonasModel()
+
+    def post(self, request):
+        nombre = request.data['nombre']
+        apellido = request.data['apellido']
+        email = request.data['email']
+        medico = self.model.crearMedicoDerivante(nombre=nombre, apellido=apellido, email=email)
+
+        serializador = SerializadorDeMedicoDerivante(instance=medico, context={'request':request})
+        return Response(serializador.data)
+
+
+class VistaMedicoDerivante(viewsets.ModelViewSet):
+    queryset = models.MedicoDerivante.objects.all()
+    serializer_class = SerializadorDeMedicoDerivante
+
+    model = models.PersonasModel()
+
+    def create(self, request):
+        nombre = request.data['nombre']
+        apellido = request.data['apellido']
+        email = request.data['email']
+        matricula = request.data['matricula']
+        medico = self.model.crearMedicoDerivante(nombre=nombre, apellido=apellido, email=email, matricula=matricula)
+
+        serializador = SerializadorDeMedicoDerivante(instance=medico, context={'request':request})
+        return Response(serializador.data)
