@@ -52,6 +52,22 @@ def generar_fechas_feriados():
 
 
 
+def generar_lote():
+    from personas import models as persona_models
+
+    empleado = persona_models.Persona.objects.all().first()
+
+    tipoe = estudio_models.TiposDeEstudio.objects.all().first()
+    diagnostico = estudio_models.Diagnostico.objects.all().first()
+
+    for _ in range(0,20):
+        estudio = estudio_models.Estudio(paciente=empleado,  tipo=tipoe, medico_derivante=empleado, diagnostico=diagnostico)
+        estudio.save()
+
+        estudio_models.EsperandoRetiroDeExtaccion(persona=empleado, estudio=estudio, extracionista='pepe se la lleva a la muestra', fecha_retiro=generar_fecha_now()).save()
+        estudio_models.EsperandoLoteDeMuestraParaProcesamientoBiotecnologico(estudio=estudio, persona=empleado).save()
+
+
 def generar_estudio_de_muestra():
 
     empleado = persona_models.Persona.objects.all().first()
@@ -65,7 +81,6 @@ def generar_estudio_de_muestra():
     obp = persona_models.ObraSocialPersona(persona=p1, obra_social=ob_social, numero_afiliado='afiliate12345')
     obp.save()
 
-
     tipoe = estudio_models.TiposDeEstudio.objects.all().first()
     diagnostico = estudio_models.Diagnostico.objects.all().first()
     estudio = estudio_models.Estudio(paciente=p1,  tipo=tipoe, medico_derivante=mm, diagnostico=diagnostico)
@@ -75,6 +90,8 @@ def generar_estudio_de_muestra():
     estudio_models.EsperandoRetiroDeExtaccion(persona=empleado, estudio=estudio, extracionista='pepe se la lleva a la muestra', fecha_retiro=generar_fecha_now()).save()
     estudio_models.EsperandoLoteDeMuestraParaProcesamientoBiotecnologico(estudio=estudio, persona=empleado).save()
     
+
+
     # #estudio_models.EsperandoPresupuesto(persona=empleado, estudio=estudio, presupuesto=10.3).save()
     # #estudio_models.EsperandoFactura(persona=empleado, estudio=estudio, numero='dsaasd324324', monto=10.5).save()
     # #estudio_models.EsperandoFactura(persona=empleado, estudio=estudio, numero='dsaasd324325', monto=11.5, obra_social=ob_social).save()
@@ -512,6 +529,7 @@ class Ejemplos(APIView):
         mm.save()
 
         generar_estudio_de_muestra()
+        generar_lote()
 
         return Response({'status':'ejemplos generados'})
 
