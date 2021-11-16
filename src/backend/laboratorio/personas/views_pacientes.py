@@ -38,7 +38,8 @@ class VistaPaciente(viewsets.ModelViewSet):
         obra_social = None
         if 'obra_social' in datos_persona:
             obra_social = request.data.pop("obra_social")
-            afiliado = request.data.pop("numero_afiliado")
+            if obra_social:
+                afiliado = request.data.pop("numero_afiliado")
 
         historia_clinica = request.data.pop("historia_clinica")
 
