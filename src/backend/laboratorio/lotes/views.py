@@ -29,7 +29,7 @@ class SerializadorDeLote(serializers.ModelSerializer):
         fields = ['id', 'fecha', 'resultado','estudios']
 
 class VistaLotes(viewsets.ModelViewSet):
-    queryset = models.Lote.objects.all()
+    queryset = models.Lote.all_pending()
     serializer_class = SerializadorDeLote
     permission_classes = [ permissions.DjangoModelPermissions ]
 

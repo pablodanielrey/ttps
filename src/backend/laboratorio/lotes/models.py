@@ -11,6 +11,9 @@ class Lote(models.Model):
     fecha = models.DateField()
     resultado = models.CharField(max_length=1024, null=True)
 
+    @classmethod
+    def all_pending(cls):
+        cls.objects.filter(resultado__isnull=True)
 
 class EstudioDeLote(models.Model):
     lote = models.ForeignKey(Lote, on_delete=models.CASCADE,  related_name="estudios")
