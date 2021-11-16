@@ -13,7 +13,7 @@ class Lote(models.Model):
 
     @classmethod
     def all_pending(cls):
-        cls.objects.filter(resultado__isnull=True)
+        return cls.objects.filter(resultado__isnull=True)
 
 class EstudioDeLote(models.Model):
     lote = models.ForeignKey(Lote, on_delete=models.CASCADE,  related_name="estudios")
