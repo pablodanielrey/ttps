@@ -13,7 +13,7 @@ from . import views_personas
 
 class SerializadorDePaciente(serializers.ModelSerializer):
     obra_social = views_personas.SerializadorDeObraSocialPersona(required=False, many=True)
-    #historia_clinica = serializers.CharField(source='historia_clinica.historia_clinica')
+    historia_clinica = serializers.CharField(source='historia_clinica.historia_clinica')
     class Meta:
         model = models.Paciente
         fields = ['id','nombre','apellido','dni','email','fecha_nacimiento','telefono','direccion','historia_clinica','obra_social']
@@ -27,35 +27,47 @@ class VistaPaciente(viewsets.ModelViewSet):
     queryset = models.Paciente.all()
     serializer_class = SerializadorDePaciente
 
+    model = models.PersonasModel()
+
     def create(self, request, *args, **kwargs):
         datos_persona = request.data
 
         logging.debug(datos_persona)
 
-        persona = models.Persona(           
-            nombre=datos_persona['nombre'],
-            apellido=datos_persona['apellido'],
-            dni=datos_persona['dni'],
-            email=datos_persona['email'],
-            fecha_nacimiento=datos_persona['fecha_nacimiento'],
-            telefono=datos_persona['telefono'],
-            direccion=datos_persona['direccion'],
-            historia_clinica=datos_persona['historia_clinica']
-        )
-        persona.save()
-
+        obra_social = None
         if 'obra_social' in datos_persona:
-            ob = datos_persona['obra_social']
-            obraSocial = models.ObraSocial.objects.get(id=ob)
+            obra_social = request.data.pop("obra_social")
+            afiliado = request.data.pop("numero_afiliado")
+
+        historia_clinica = request.data.pop("historia_clinica")
+
+        paciente = self.model.crearPaciente(**request.data)
+
+        # persona = models.Paciente(           
+        #     nombre=datos_persona['nombre'],
+        #     apellido=datos_persona['apellido'],
+        #     dni=datos_persona['dni'],
+        #     email=datos_persona['email'],
+        #     fecha_nacimiento=datos_persona['fecha_nacimiento'],
+        #     telefono=datos_persona['telefono'],
+        #     direccion=datos_persona['direccion']
+        # )
+        # persona.save()
+
+        hc = models.HistoriaClinica(persona=paciente, historia_clinica=historia_clinica)
+        hc.save()
+
+        if obra_social:
+            obraSocial = models.ObraSocial.objects.get(id=obra_social)
 
             pacienteObraSocial = models.ObraSocialPersona(
-                persona=persona,
+                persona=paciente,
                 obra_social=obraSocial,
-                numero_afiliado=datos_persona['numero_afiliado']
+                numero_afiliado=afiliado
             )
             pacienteObraSocial.save()
 
-        serializer = SerializadorDePaciente(persona, context={'request': request})
+        serializer = SerializadorDePaciente(paciente, context={'request': request})
         return Response(serializer.data)
 
     @action(detail=False, methods=['GET'])

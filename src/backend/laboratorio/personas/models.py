@@ -48,7 +48,7 @@ class ObraSocialPersona(models.Model):
     obra_social = models.ForeignKey(ObraSocial, on_delete=models.CASCADE)
     numero_afiliado = models.CharField(max_length=1024)
 class HistoriaClinica(models.Model):
-    persona = models.ForeignKey(Persona, on_delete=models.CASCADE, related_name='historia_clinica')
+    persona = models.OneToOneField(Persona, on_delete=models.CASCADE, related_name='historia_clinica')
     historia_clinica = models.CharField(max_length=9216, null=True)
 
 class Matricula(models.Model):
