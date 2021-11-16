@@ -1,45 +1,40 @@
 <template>
   <b-container>
-
- <b-card header=" Listado de Estudios esperando Lote para procesamiento biotecnológico">
-    <b-table
-      :items="items"
-      :fields="fields"
-      :filter="filter"
-      :current-page="currentPage"
-      :per-page="perPage"
-      @filtered="onFiltered"
-      selectable
+    <b-card
+      header=" Listado de Estudios esperando Lote para procesamiento biotecnológico"
     >
-      <template v-slot:cell(acciones)>
-        <b-button
-          title="Descargar Presupuesto"
-          variant="outline-success"
-          download="presupuesto.pdf"
-        >
-          <b-icon icon="eye" aria-hidden="true"></b-icon
-        ></b-button>
-        <!-- <b-button @click="seleccionTurno(row.item.id)">
-            seleccionar turno
-          </b-button> -->
-      </template>
-    </b-table>
+      <b-table
+        :items="estudios"
+        :fields="fields"
+        :filter="filter"
+        :current-page="currentPage"
+        :per-page="perPage"
+        @filtered="onFiltered"
+      >
+        <template v-slot:cell(fecha_alta)="row">
+          {{ obtenerFecha(row.item) }}
+        </template>
+      </b-table>
 
- <b-row class="pb-2">
-      <b-col class="text-center pt-3">
-        <b-button   variant="success"
-          >Crear Lote
-        </b-button>
-  
-      </b-col>
-    </b-row>
-     </b-card>
+      <b-row class="pb-2">
+        <b-col class="text-center pt-3">
+          <b-button
+            @click="crearLote()"
+            variant="success"
+            :disabled="estudios.length < 10 ? true : false"
+            >Crear Lote
+          </b-button>
+        </b-col>
+      </b-row>
+    </b-card>
   </b-container>
 </template>
 
 
 <script>
+import LotesService from "@/services/LotesService.js";
 import EstudiosService from "@/services/EstudiosService.js";
+
 import axios from "axios";
 export default {
   name: "ListaPacientes",
@@ -49,6 +44,7 @@ export default {
 
   data() {
     return {
+      estudios: [],
       perPage: 10,
       pageOptions: [4, 10, 15],
       filter: null,
@@ -73,21 +69,71 @@ export default {
         },
         { key: "tipo.nombre", label: "Tipo Estudio", class: "text-center p2" },
 
-        { key: "fecha_alta", label: "Fecha Extraccion", class: "text-center p2" },
+        {
+          key: "fecha_alta",
+          label: "Fecha Extraccion",
+          class: "text-center p2",
+        },
       ],
       items: [],
     };
   },
 
-  created() {
-    console.log(this.paciente);
-  },
+  created() {},
   methods: {
-    async obtenerListaEstudios() {
+    async crearLote() {
       try {
-        let response = await EstudiosService.obtenerListaEstudios();
+        let estudios = [];
+        let objeto = {};
+        let id
+        this.estudios.forEach((est) => {
+         id=est.id
+          estudios.push(id);
+        });   
+        objeto.estudios = estudios;   
+        let response = await LotesService.crearLote(objeto);
+         this.$root.$bvToast.toast(
+          "se creo con exito el lote",
+          {
+            title: "Atencion!",
+            toaster: "b-toaster-top-center",
+            solid: true,
+            variant: "success",
+          }
+        );
+        console.log(response);  
+
+      } catch (err) {
+        console.log(err);
+        this.$root.$bvToast.toast(
+          "ocurrio un error mientras creaba el lote, por favor vuelva a intentar",
+          {
+            title: "Atencion!",
+            toaster: "b-toaster-top-center",
+            solid: true,
+            variant: "danger",
+          }
+        );
+      }
+    },
+    obtenerFecha(estudio) {
+      
+
+      /*  let nameEstado =
+        paciente.estados[paciente.estados.length - 1].resourcetype;
+      nameEstado = nameEstado.replace(/([a-z])([A-Z])/g, "$1 $2");
+      nameEstado = nameEstado.replace(/([A-Z])([A-Z][a-z])/g, "$1 $2"); */
+      let fecha = estudio.estados[estudio.estados.length - 1].fecha;
+      fecha = new Date(fecha);
+      return fecha.format("YYYY-MM-DD");
+    },
+    async obtenerListaEstudiosEsperandoProcesamiento() {
+      try {
+        let response =
+          await LotesService.obtenerListaEstudiosEsperandoProcesamiento();
         this.items = response.data;
-        this.items.sort(function (a, b) {
+        this.obtenerEstudios();
+        /*    this.items.sort(function (a, b) {
           if (a.fecha_alta < b.fecha_alta){
             return -1
           }
@@ -96,9 +142,19 @@ export default {
           }
           
           
-        });
+        }); */
       } catch (err) {
         console.log(err);
+      }
+    },
+    async obtenerEstudios() {
+      try {
+        this.items.forEach(async (id) => {
+          let response = await EstudiosService.obtenerEstudio(id);
+          this.estudios.push(response.data);
+        });
+      } catch (error) {
+        console.log(error);
       }
     },
     onFiltered(filteredItems) {
@@ -114,7 +170,7 @@ export default {
   },
   mounted() {
     axios
-      .all([this.obtenerListaEstudios()])
+      .all([this.obtenerListaEstudiosEsperandoProcesamiento()])
       .then(() => {
         this.totalRows = this.items.length;
       })

@@ -27,25 +27,43 @@
         <b-col>
           <strong> Tipo de estudio: </strong>{{ estudio.tipo.nombre }}</b-col
         >
-        <b-col> <strong> Estado : </strong>{{ ultimoEstado }}</b-col>
+        <b-col> <strong> Estado : </strong>{{ obtenerUltimoEstado() }}</b-col>
       </b-row>
       <b-row>
-        <!--   <b-col lg="3" md="3" sm="7">
-          <b-button
-            variant="outline-primary"
-            @click="ingresarComprobante()"
-            title="Ingresar comprobante de  pago"
-          >
-            Ingresar comprobante</b-button
-          >
-        </b-col> -->
-        <b-col v-if="this.estudio.estados[1].consentimiento != undefined">
+        <b-col v-if="this.estudio.estados[3] != undefined">
+          <div v-if="this.estudio.estados[3].turno != null" > 
+            <strong> Turno:</strong>
+            {{ mostrarFecha(this.estudio.estados[3].turno.inicio) }}
+
+            <li>
+              Inicio {{ mostrarminutos(this.estudio.estados[3].turno.inicio) }}
+            </li>
+            <li>
+              Fin: {{ mostrarminutos(this.estudio.estados[3].turno.fin) }}
+            </li>
+          </div>
+        </b-col>
+      </b-row>
+      <b-row>
+        <b-col v-if="this.estudio.estados[0].comprobante != undefined">
+          <p>Comprobante:</p>
           <a
-            v-if="this.estudio.estados[1] != undefined"
-            title="Descargar consentimiento"
+            v-if="this.estudio.estados[0] != undefined"
+            title="Descargar Comprobante de pago"
+            variant="outline-success"
+            download="comprobante.pdf"
+            :href="this.estudio.estados[0].comprobante"
+          >
+            <b-icon icon="download" variant="info"> </b-icon
+          ></a>
+        </b-col>
+        <b-col v-if="this.estudio.estados[2] != undefined">
+          <p>Consentimiento:</p>
+          <a
+            title="Descargar consentimiento firmado"
             variant="outline-success"
             download="consentimiento.pdf"
-            :href="this.estudio.estados[1].consentimiento"
+            :href="this.estudio.estados[2].consentimiento"
           >
             <b-icon icon="download" variant="info"> </b-icon
           ></a>
@@ -278,13 +296,26 @@ export default {
         name: "listaEstudios",
       });
     } else {
-      this.obtenerUltimoEstado();
+      console.log(this.estudio);
     }
   },
 
   methods: {
+    mostrarminutos(fecha) {
+      return new Date(fecha).formatTime();
+    },
+    mostrarFecha(fecha) {
+      return new Date(fecha).format("DD-MM-YYYY");
+    },
     obtenerUltimoEstado() {
-      let estado = this.estudio.estados.sort(function (a, b) {
+      let nameEstado =
+        this.estudio.estados[this.estudio.estados.length - 1].resourcetype;
+      nameEstado = nameEstado.replace(/([a-z])([A-Z])/g, "$1 $2");
+      nameEstado = nameEstado.replace(/([A-Z])([A-Z][a-z])/g, "$1 $2");
+
+      return nameEstado;
+      /* let estado= this.estudio.estados
+       estado = estado.sort(function (a, b) {
         if (a.fecha < b.fecha) {
           return 1;
         }
@@ -298,56 +329,7 @@ export default {
       this.ultimoEstado = this.ultimoEstado.replace(
         /([A-Z])([A-Z][a-z])/g,
         "$1 $2"
-      );
-    },
-    ingresarComprobante() {
-      this.$router.push({
-        name: "EsperandoComprobanteDePago",
-        params: {
-          idEstudio: this.estudio.id,
-        },
-      });
-    },
-    ingresarMuestra() {
-      this.$router.push({
-        name: "EsperandoTomaDeMuestra",
-        params: {
-          idEstudio: this.estudio.id,
-        },
-      });
-    },
-    retiroMuestra() {
-      this.$router.push({
-        name: "EsperandoRetiroDeExtaccion",
-        params: {
-          idEstudio: this.estudio.id,
-        },
-      });
-    },
-    seleccionarTurno() {
-      console.log("Turno");
-      console.log(this.estudio);
-      this.$router.push({
-        name: "EsperandoSeleccionDeTurnoParaExtraccion",
-        params: {
-          estudio: this.estudio,
-        },
-      });
-    },
-    verEstudios(item) {
-      this.itemsEst = item.estudios;
-      this.$refs["my-modal"].show();
-    },
-    cargarResultado() {
-      this.$refs["modalResultado"].show();
-    },
-    cargarConsentimiento() {
-      this.$router.push({
-        name: "EsperandoConsentimientoInformado",
-        params: {
-          idEstudio: this.estudio.id,
-        },
-      });
+      ); */
     },
   },
 
