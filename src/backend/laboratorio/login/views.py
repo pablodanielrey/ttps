@@ -11,7 +11,6 @@ from rest_framework.authtoken.models import Token
 from rest_framework.response import Response
 from rest_framework.decorators import action
 
-
 from django.contrib.auth.models import User
 
 class VistaToken(views.APIView):
@@ -28,3 +27,16 @@ class VistaToken(views.APIView):
             token = Token.objects.create(user=usuario)
             
         return Response({'token':token.key})
+
+
+class VistaRoles(views.APIView):
+    authentication_classes = [BasicAuthentication]
+    permission_classes = [ IsAuthenticated ]
+
+    def get(self, request, format=None):
+        usuario = request.user
+
+        grupos = []
+        for group in usuario.groups.all():
+            grupos.append(group.name)
+        return Response(grupos)
