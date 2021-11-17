@@ -2,6 +2,7 @@
 import logging
 
 from rest_framework import serializers, viewsets, views
+from rest_framework.permissions import DjangoModelPermissions, IsAdminUser
 from rest_framework.response import Response
 
 from rest_framework.decorators import action
@@ -27,6 +28,8 @@ class VistaPaciente(viewsets.ModelViewSet):
     """
     queryset = models.Paciente.all()
     serializer_class = SerializadorDePaciente
+    permission_classes = [ DjangoModelPermissions ]
+    #permission_classes = [ IsAdminUser ]
 
     model = models.PersonasModel()
 

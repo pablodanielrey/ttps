@@ -2,8 +2,9 @@
 import logging
 
 from rest_framework import serializers, viewsets, views
+from rest_framework.permissions import DjangoModelPermissions
 from rest_framework.response import Response
-from rest_framework.decorators import action
+from rest_framework.decorators import action, permission_classes
 
 from django.contrib.auth import models as auth_models
 
@@ -34,6 +35,7 @@ class VistaPersona(viewsets.ModelViewSet):
     """
     queryset = models.Persona.objects.all()
     serializer_class = SerializadorDePersona
+    permission_classes = [ DjangoModelPermissions ]
 
     # def create(self, request, *args, **kwargs):
     #     datos_persona = request.data

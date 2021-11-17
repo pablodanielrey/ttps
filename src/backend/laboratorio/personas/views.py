@@ -8,6 +8,8 @@ from django.contrib.auth import models as auth_models
 
 import logging
 
+from rest_framework.permissions import DjangoModelPermissions
+
 from . import models
 
 
@@ -30,5 +32,10 @@ class SerializadorDeObraSocial(serializers.HyperlinkedModelSerializer):
 class VistaObraSocial(viewsets.ModelViewSet):
     queryset = models.ObraSocial.objects.all()
     serializer_class = SerializadorDeObraSocial
+    permission_classes = [ DjangoModelPermissions ]
 
-
+    @action(detail=False, methods=['GET'])
+    def p(self, request):
+        usuario = request.user
+        r = usuario.has_perm('personas.view_obrasocial')
+        return Response(r)

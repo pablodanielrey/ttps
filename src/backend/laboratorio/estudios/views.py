@@ -19,7 +19,7 @@ from turnos import models as turnos_models
 """
 from rest_framework import serializers, views, viewsets
 from rest_framework.response import Response
-
+from rest_framework.decorators import action
 
 from personas.views_personas import SerializadorDePersona
 
@@ -258,7 +258,7 @@ class VistaEstudios(viewsets.ModelViewSet):
         datos = request.data
         #logging.debug(datos)
         presupuesto = datos['presupuesto']
-        paciente = personas_models.Persona.objects.get(id=datos['paciente']['id'])
+        paciente = personas_models.Paciente.objects.get(id=datos['paciente']['id'])
         diagnostico = estudio_models.Diagnostico.objects.get(id=datos['diagnostico']['id'])
         tipo = estudio_models.TiposDeEstudio.objects.get(id=datos['tipo_estudio'])
         estudio = estudio_models.Estudio(
@@ -300,5 +300,11 @@ class VistaEstudios(viewsets.ModelViewSet):
         serializer = SerializadorEstudios(estudio, context={'request': request})
         return Response(serializer.data)
         
+    @action(detail=False, methods=['GET'])
+    def buscar(self, request):
+        q = request.query_params.get('q')
+        logging.debug(f'buscando a : {q}')
 
-
+        estudios = models.Estudio.buscar(q)
+        serializer = SerializadorEstudios(estudios, many=True, context={'request': request})
+        return Response(serializer.data)
