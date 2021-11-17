@@ -26,6 +26,7 @@ import EsperandoTomaDeMuestra from '@/components/EstadosEstudio/esperandoTomaDeM
 import EsperandoRetiroExtraccion from '@/components/EstadosEstudio/esperandoRetiroExtraccion.vue'
 import EsperandoLoteDeMuestraParaProcesamientoBiotecnologico from '@/components/EstadosEstudio/EsperandoLoteDeMuestraParaProcesamientoBiotecnologico.vue'
 import EsperandoInterpretacionDeResultados from '@/components/EstadosEstudio/EsperandoInterpretacionDeResultados.vue'
+import EsperandoProcesamientoDeLoteBiotecnologico from '@/components/EstadosEstudio/EsperandoProcesamientoDeLoteBiotecnologico.vue'
 
 
 
@@ -51,9 +52,10 @@ const router = new Router({
     base: process.env.BASE_URL,
     routes: [{
         path: '/',
+        name:'home',
         component: container ,
         meta: { 
-        requireAuth: false
+        requireAuth: true
         },
         children: [    
             { path: '/paciente', component: Paciente, name: 'paciente', props: true },
@@ -71,8 +73,9 @@ const router = new Router({
             { path: '/esperandoRetiroExtraccion', component: EsperandoRetiroExtraccion , name:'EsperandoRetiroDeExtaccion',props:true },
             { path: '/EsperandoLoteDeMuestraParaProcesamientoBiotecnologico', component: EsperandoLoteDeMuestraParaProcesamientoBiotecnologico , name:'EsperandoLoteDeMuestraParaProcesamientoBiotecnologico',props:true },
             { path: '/EsperandoInterpretacionDeResultados', component: EsperandoInterpretacionDeResultados , name:'EsperandoInterpretacionDeResultados',props:true },
+            { path: '/EsperandoProcesamientoDeLoteBiotecnologico', component: EsperandoProcesamientoDeLoteBiotecnologico , name:'EsperandoProcesamientoDeLoteBiotecnologico',props:true },
 
-            
+     
             { path: '/crearLote', component: CrearLote, name:'crearLote' },
             { path: '/cargarResultadoLote', component: CargarResultadoLote, name:'cargarResultadoLote'},
 
@@ -84,10 +87,26 @@ const router = new Router({
         ]
     },
     {
-     path: '/login', component: Login },
+     path: '/login', component: Login, name:'Login'},
     ],
 })
-
+router.beforeEach((to, from, next) => {
+    const requireAuth = to.matched.some(record => record.meta.requireAuth)
+  console.log(requireAuth)
+  console.log(window.localStorage.getItem('credenciales'))
+    if (requireAuth && !window.localStorage.getItem('credenciales')) {
+      next('/login')
+    } else if (window.localStorage.getItem('credenciales') && to.name == 'Login') {   
+      next('/')
+    } else {
+      if (!to.matched.length) {     
+        next('/');
+      } else {     
+        next();
+      }
+     
+    }
+  })
 
 
 

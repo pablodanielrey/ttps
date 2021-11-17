@@ -48,3 +48,12 @@ export default {
 //'Pacientes'  
 //'Médicos_Informantes' completa ultimo estado
 //'Médicos_Derivantes'
+
+// lista de pacientes - http://localhost:8000/personas_api/pacientes/
+// busqueda de pacientes por un termino - http://localhost:8000/personas_api/pacientes/buscar/?q=pab
+// lista de medicos derivantes - http://localhost:8000/personas_api/medicos_derivantes/
+// busqueda de medicos derivantes - http://localhost:8000/personas_api/medicos_derivantes/buscar/?q=med
+// lista de medicos derivantes - http://localhost:8000/personas_api/medicos_informantes/
+// busqueda de medicos derivantes - http://localhost:8000/personas_api/medicos_informantes/buscar/?q=med
+
+
