@@ -50,14 +50,14 @@
           <b-spinner variant="primary" label="Text Centered"></b-spinner>
         </div>
       </b-form-group>
-      <b-form-group class="text-center">
+     <!--  <b-form-group class="text-center">
         <b-button
           block
           @click="$router.push('registrar')"
           variant="outline-light"
           >Crear cuenta
         </b-button>
-      </b-form-group>
+      </b-form-group> -->
       <div class="text-center"></div>
     </b-form>
   </div>
@@ -93,7 +93,13 @@ export default {
     },
 
     async login() {
-      LoginService.login(this.credenciales.usuario, this.credenciales.clave);
+      try {
+           let response = await LoginService.login_api(this.credenciales.usuario, this.credenciales.clave);
+          console.log(response)
+      } catch (error) {
+        console.log("catch")
+          console.log(error.detail)
+      }
     },
   },
 };

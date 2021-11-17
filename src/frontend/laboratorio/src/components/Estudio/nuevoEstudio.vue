@@ -17,6 +17,8 @@
       </b-row> -->
 
       <ValidationObserver ref="detailsEstudio">
+                  complete <autocomplete :suggestions="cities" :selection.sync="value"></autocomplete>
+
         <b-form-group>
           <b-alert
             v-for="alert in alerts"

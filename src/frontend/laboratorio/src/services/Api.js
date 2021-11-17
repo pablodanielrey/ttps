@@ -8,11 +8,13 @@ export default () => {
     let instance = axios.create({
         baseURL: process.env.VUE_APP_API_URL,
         headers: {
+            // Authorization: `Bearer ${credenciales}`
         },
         auth: {
             'username': credenciales.usuario,
             'password': credenciales.clave
         }
+
     })
 
 

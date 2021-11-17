@@ -13,7 +13,7 @@ export default {
         return Api().get(API_URL + "lotes/")
     },
     cargarResultadoLote(id,datos){
-        console.log(API_URL + "lotes/"+id,datos +'/')
+        
         return Api().put(API_URL + "lotes/"+id +'/',datos )
     }
 
