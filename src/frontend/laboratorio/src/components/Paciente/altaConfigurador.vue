@@ -8,7 +8,7 @@
       </b-col>
     </b-row>
 
-    <ValidationObserver ref="detalleObraSocial">
+    <ValidationObserver ref="datosConfigurador">
       <b-form-group>
         <b-alert
           v-for="alert in alerts"
@@ -68,7 +68,7 @@
             </b-form-group>
           </b-col>
         </b-row>
-        <b-row> 
+        <b-row>
           <b-col lg="5" md="5">
             <b-form-group
               id="usuario-label"
@@ -81,7 +81,6 @@
                 v-slot="{ errors, valid }"
               >
                 <b-form-input
-               
                   placeholder="usuario"
                   v-model="configurador.usuario"
                   :state="errors[0] ? false : valid ? true : null"
@@ -97,19 +96,19 @@
           </b-col>
           <b-col lg="5" md="5">
             <b-form-group
-              id="email-label"
-              label="Direccion de correo electronico:"
-              label-for="email"
+              id="contraseña-label"
+              label="contraseña:"
+              label-for="contraseña"
             >
               <ValidationProvider
-                :name="'email '"
+                :name="'contraseña '"
                 :rules="'required'"
                 v-slot="{ errors, valid }"
               >
                 <b-form-input
-                  type="email"
-                  placeholder="Direccion de email"
-                  v-model="obraSocial.email"
+                  type="password"
+                  placeholder="contraseña"
+                  v-model="configurador.clave"
                   :state="errors[0] ? false : valid ? true : null"
                 ></b-form-input>
                 <b-form-invalid-feedback
@@ -127,9 +126,7 @@
 
     <b-row class="pb-2">
       <b-col class="text-center pt-3">
-        <b-button variant="success" @click="crearObraSocial()"
-          >Crear Obra Social
-        </b-button>
+        <b-button variant="success" @click="crear()">Crear </b-button>
       </b-col>
     </b-row>
   </b-container>
@@ -137,7 +134,7 @@
 
 
 <script>
-import ObrasSocialesService from "@/services/ObrasSocialesService";
+import PacientesService from "@/services/PacientesService";
 
 export default {
   components: {},
@@ -146,30 +143,31 @@ export default {
   data() {
     return {
       alerts: [],
-      obraSocial: {},
+      configurador: {},
     };
   },
   methods: {
-    async crearObraSocial() {
+    async crear() {
       try {
-        let result = await this.$refs.detalleObraSocial.validate();
+        let result = await this.$refs.datosConfigurador.validate();
         if (result) {
-          console.log(this.obraSocial);
-          let r = await ObrasSocialesService.crearObraSocial(this.obraSocial);
+          console.log(this.configurador);
+          let r = await PacientesService.crearConfigurador(this.configurador);
           console.log(r);
+
+          this.$root.$bvToast.toast("Se creo con exito el configurador", {
+            title: "Atencion!",
+            toaster: "b-toaster-top-center",
+            solid: true,
+            variant: "success",
+          });
+          this.$router.push({
+            name: "listaConfiguradores",
+          });
         }
-        this.$root.$bvToast.toast("Se creo con exito la obra social", {
-          title: "Atencion!",
-          toaster: "b-toaster-top-center",
-          solid: true,
-          variant: "success",
-        });
-        this.$router.push({
-          name: "listaObrasSociales",
-        });
       } catch (error) {
         console.log(error);
-        this.$root.$bvToast.toast("NO se pudo crear la obra social", {
+        this.$root.$bvToast.toast("NO se pudo crear el configurador, el usuario ya existe", {
           title: "Atencion!",
           toaster: "b-toaster-top-center",
           solid: true,
