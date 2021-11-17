@@ -41,13 +41,14 @@ class Estudio(models.Model):
         if estado:
             #estudios = cls.objects.filter(models.Q(estados__polymorphic_ctype=ContentType.objects.get_for_model(EsperandoComprobanteDePago)))
             estudios = cls.objects.filter(models.Q(estados__polymorphic_ctype=ContentType.objects.get(model=estado.lower())))
-        estudios = estudios.filter(
-            models.Q(tipo__nombre__icontains=termino) | 
-            models.Q(diagnostico__nombre__icontains=termino) | 
-            models.Q(paciente__dni__icontains=termino) |
-            models.Q(paciente__nombre__icontains=termino) |
-            models.Q(paciente__apellido__icontains=termino)
-        )
+        if termino:
+            estudios = estudios.filter(
+                models.Q(tipo__nombre__icontains=termino) | 
+                models.Q(diagnostico__nombre__icontains=termino) | 
+                models.Q(paciente__dni__icontains=termino) |
+                models.Q(paciente__nombre__icontains=termino) |
+                models.Q(paciente__apellido__icontains=termino)
+            )
         #polymorphic_ctype=ContentType.objects.get_for_model(SpecialGroup))
         return estudios
 
