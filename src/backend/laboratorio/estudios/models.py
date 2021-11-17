@@ -38,9 +38,6 @@ class Estudio(models.Model):
     @classmethod
     def buscar(cls, termino:str, estado=None):
         estudios = cls.objects
-        if estado:
-            #estudios = cls.objects.filter(models.Q(estados__polymorphic_ctype=ContentType.objects.get_for_model(EsperandoComprobanteDePago)))
-            estudios = cls.objects.filter(models.Q(estados__polymorphic_ctype=ContentType.objects.get(model=estado.lower())))
         if termino:
             estudios = estudios.filter(
                 models.Q(tipo__nombre__icontains=termino) | 
@@ -49,6 +46,15 @@ class Estudio(models.Model):
                 models.Q(paciente__nombre__icontains=termino) |
                 models.Q(paciente__apellido__icontains=termino)
             )
+
+        if estado:
+            #estudios = cls.objects.filter(models.Q(estados__polymorphic_ctype=ContentType.objects.get_for_model(EsperandoComprobanteDePago)))
+            poly = ContentType.objects.get(model=estado.lower())
+            estudios = cls.objects.filter(models.Q(estados__polymorphic_ctype=poly))
+            estudios_filtrados = [e for e in estudios if e.ultimo_estado.polymorphic_ctype.id == poly.id]
+            return estudios_filtrados
+
+
         #polymorphic_ctype=ContentType.objects.get_for_model(SpecialGroup))
         return estudios
 
