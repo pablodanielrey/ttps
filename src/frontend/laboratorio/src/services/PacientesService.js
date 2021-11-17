@@ -16,8 +16,14 @@ export default {
     obtenerMedicosInformantes(){
         return Api().get(API_URL + API_USER + "medicos_informantes/")
     },
+    deleteMedicosInformantes(paciente){
+        return Api().delete(API_URL + API_USER + "medicos_informantes/"+ paciente.id);
+    },
     obtenerMedicosDerivantes(){
         return Api().get(API_URL + API_USER + "medicos_derivantes/")
+    },
+    crearMedicoInformante(paciente) {
+        return Api().post(API_URL + API_USER + "medicos_informantes/", paciente);
     },
     borrarPaciente(paciente){
         return Api().delete(API_URL + API_USER + "pacientes/"+ paciente.id);
@@ -32,14 +38,13 @@ export default {
         return Api().delete(API_URL + API_USER + "configuradores/"+ paciente.id);
     },
     editarConfigurador(config){
-        console.log(config)
+        
         return Api().put(API_URL + "configuradores/"+config.id +'/',config )
     },
     editarPaciente(paciente){
         return Api().put(API_URL + "pacientes/"+paciente.id +'/',paciente )
-
-
-    }
+    },
+ 
     
 
 }

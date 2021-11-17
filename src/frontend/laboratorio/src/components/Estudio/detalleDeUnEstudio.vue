@@ -31,7 +31,7 @@
       </b-row>
       <b-row>
         <b-col v-if="this.estudio.estados[3] != undefined">
-          <div v-if="this.estudio.estados[3].turno != null" > 
+          <div v-if="this.estudio.estados[3].turno != null">
             <strong> Turno:</strong>
             {{ mostrarFecha(this.estudio.estados[3].turno.inicio) }}
 
@@ -43,15 +43,27 @@
             </li>
           </div>
         </b-col>
+        <b-col v-if="this.estudio.estados[4] != undefined">
+          <div v-if="this.estudio.estados[4].freezer != null">
+             <strong> Extraccion:</strong>
+            <li>  Frezeer: {{ this.estudio.estados[4].freezer }}</li>
+            <li>  Mililitros: {{ this.estudio.estados[4].mililitros }}</li>
+            
+          </div></b-col
+        >
+            </b-row>
+            <b-row>
+         <b-col v-if="this.estudio.estados[5] != undefined"><div v-if="this.estudio.estados[5].extracionista != null">
+            <strong> Extraccionista : </strong>{{ this.estudio.estados[5].extracionista }}
+            </div></b-col>
       </b-row>
       <b-row>
-         <b-col  v-if="this.estudio.paciente.historia_clinica != null">
+        <b-col v-if="this.estudio.paciente.historia_clinica != null">
           <p><strong> Historia clinica: </strong></p>
           <a
-          @click="verHistoria()"
+            @click="verHistoria()"
             title="ver Historia clinica"
             variant="outline-success"
-           
           >
             <b-icon icon="eye" variant="info"> </b-icon
           ></a>
@@ -254,11 +266,11 @@
         </b-card>
       </ValidationObserver>
     </b-modal>
-      <div v-if="this.estudio.paciente.historia_clinica != null">
+    <div v-if="this.estudio.paciente.historia_clinica != null">
       <b-modal ref="modalHistoriaCLinica" ok-only title="Historia clinica">
-        <div v-html="this.estudio.paciente.historia_clinica.historia_clinica "> </div>
-     
-      
+        <div
+          v-html="this.estudio.paciente.historia_clinica.historia_clinica"
+        ></div>
       </b-modal>
     </div>
   </b-container>
@@ -330,11 +342,11 @@ export default {
         this.estudio.estados[this.estudio.estados.length - 1].resourcetype;
       nameEstado = nameEstado.replace(/([a-z])([A-Z])/g, "$1 $2");
       nameEstado = nameEstado.replace(/([A-Z])([A-Z][a-z])/g, "$1 $2");
-      return nameEstado;   
+      return nameEstado;
     },
-    verHistoria(){
+    verHistoria() {
       this.$refs["modalHistoriaCLinica"].show();
-    }
+    },
   },
 
   computed: {},
