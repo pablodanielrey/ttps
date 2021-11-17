@@ -2,9 +2,9 @@
   <b-container>
     <div>
       <ValidationObserver ref="detailMuestra">
-        <b-card header="Ingrese los datos de la toma de muestra">
+        <b-card header="Ingrese los datos de toma de muestra">
           <div class="counter">
-            Quedan 20 dias para cargar los datos de la toma de muestra
+            Quedan 20 dias para cargar los datos de toma de muestra
           </div>
           <br />
           <b-row>
