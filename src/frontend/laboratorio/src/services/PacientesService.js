@@ -16,11 +16,22 @@ export default {
     obtenerMedicosInformantes(){
         return Api().get(API_URL + API_USER + "medicos_informantes/")
     },
+  
     deleteMedicosInformantes(paciente){
         return Api().delete(API_URL + API_USER + "medicos_informantes/"+ paciente.id);
     },
     obtenerMedicosDerivantes(){
         return Api().get(API_URL + API_USER + "medicos_derivantes/")
+    },
+    deleteMedicosDerivantes(paciente){
+        return Api().delete(API_URL + API_USER + "medicos_derivantes/"+ paciente.id);
+    },
+    editarDerivante(paciente){
+        return Api().put(API_URL + "medicos_derivantes/"+paciente.id +'/',paciente )
+
+    },
+    crearMedicoDerivante(paciente) {
+        return Api().post(API_URL + API_USER + "medicos_derivantes/", paciente);
     },
     crearMedicoInformante(paciente) {
         return Api().post(API_URL + API_USER + "medicos_informantes/", paciente);

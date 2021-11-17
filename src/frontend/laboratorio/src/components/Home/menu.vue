@@ -8,7 +8,7 @@
         <b-navbar-nav>
           <b-collapse class="ml-auto" id="nav-collapse" is-nav>
             <b-nav-item :to="{ name: '' }">Home</b-nav-item>
-            <b-nav-item-dropdown text="Pacientes" right v-if="this.permisos == 'Administradores' " >
+            <b-nav-item-dropdown text="Pacientes" right v-if="this.permisos == 'Administradores' || this.permisos == 'Empleados' " >
               <b-dropdown-item :to="{ name: 'listaPacientes' }"
                 >Listar</b-dropdown-item
               >
@@ -37,6 +37,14 @@
                 >Listar</b-dropdown-item
               >
               <b-dropdown-item :to="{ name: 'medicoInformante' }"
+                >nuevo</b-dropdown-item
+              >
+            </b-nav-item-dropdown>
+            <b-nav-item-dropdown v-if="this.permisos == 'Empleados' " text="Medicos derivantes" right>
+              <b-dropdown-item :to="{ name: 'listaDerivante' }"
+                >Listar</b-dropdown-item
+              >
+              <b-dropdown-item :to="{ name: 'medicoDerivante' }"
                 >nuevo</b-dropdown-item
               >
             </b-nav-item-dropdown>
