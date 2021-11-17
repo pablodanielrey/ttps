@@ -24,6 +24,14 @@
                 >nuevo</b-dropdown-item
               >
             </b-nav-item-dropdown>
+             <b-nav-item-dropdown v-if="this.permisos == 'Configuradores' " text="Configurador" right>
+              <b-dropdown-item :to="{ name: 'listaConfiguradores' }"
+                >Listar</b-dropdown-item
+              >
+              <b-dropdown-item :to="{ name: 'configuradores' }"
+                >nuevo</b-dropdown-item
+              >
+            </b-nav-item-dropdown>
              <b-nav-item-dropdown text="Resultados Informe" right>
               <b-dropdown-item :to="{ name: 'listaEstudiosEsperandoInforme' }"
                 >Listar</b-dropdown-item

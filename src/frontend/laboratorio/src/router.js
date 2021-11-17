@@ -9,6 +9,9 @@ import Login from '@/components/Login/Login.vue'
 import Paciente from '@/components/Paciente/nuevoPaciente.vue'
 import ListaPacientes from '@/components/Paciente/listaPacientes.vue'
 import ListaEstudios from '@/components/Estudio/listaEstudios.vue'
+import ListaConfiugradores from '@/components/Paciente/listaConfiguradores.vue'
+import NuevoConfigurador from '@/components/Paciente/altaConfigurador.vue'
+
 
 import NuevaObraSocial from '@/components/ObraSocial/nuevaObraSocial.vue'
 import ListaObrasSociales from '@/components/ObraSocial/listaObrasSociales.vue'
@@ -67,6 +70,8 @@ const router = new Router({
         },
         children: [    
             { path: '/paciente', component: Paciente, name: 'paciente', props: true },
+            { path: '/configuradores', component: NuevoConfigurador ,name:'configuradores' },
+            { path: '/listaConfiguradores', component: ListaConfiugradores ,name:'listaConfiguradores' },
             { path: '/lista', component: ListaPacientes  ,name:'listaPacientes'},
             { path: '/obraSocial', component: NuevaObraSocial ,name:'obraSocial' },
             { path: '/listaObrasSociales', component: ListaObrasSociales ,name:'listaObrasSociales' },

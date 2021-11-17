@@ -21,7 +21,16 @@ export default {
     },
     borrarPaciente(paciente){
         return Api().delete(API_URL + API_USER + "pacientes/"+ paciente.id);
-
-    }
+    },
+    crearConfigurador(paciente) {
+        return Api().post(API_URL + API_USER + "configuradores/", paciente);
+    },
+    obtenerConfiguradores(){
+        return Api().get(API_URL + API_USER + "configuradores/")
+    },
+    deleteConfigurador(paciente){
+        return Api().delete(API_URL + API_USER + "configuradores/"+ paciente.id);
+    },
     
+
 }
