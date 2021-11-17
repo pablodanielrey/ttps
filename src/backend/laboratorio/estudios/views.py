@@ -259,11 +259,12 @@ class VistaEstudios(viewsets.ModelViewSet):
         #logging.debug(datos)
         presupuesto = datos['presupuesto']
         paciente = personas_models.Paciente.objects.get(id=datos['paciente']['id'])
+        medico_derivante = personas_models.MedicoDerivante.objects.get(id=datos['medico_derivante']['id'])
         diagnostico = estudio_models.Diagnostico.objects.get(id=datos['diagnostico']['id'])
         tipo = estudio_models.TiposDeEstudio.objects.get(id=datos['tipo_estudio'])
         estudio = estudio_models.Estudio(
             paciente=paciente,
-            medico_derivante=paciente,
+            medico_derivante=medico_derivante,
             diagnostico=diagnostico,
             tipo=tipo,
             fecha_alta=datos['fecha_alta'],

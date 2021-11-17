@@ -55,11 +55,11 @@
             Fin: {{ selectedEvent.end && selectedEvent.end.formatTime() }}
           </li>
         </ul>
-        <b-button
+      <!--   <b-button
           @click="cancelarTurno(selectedEvent.start, selectedEvent.end)"
           variant="outline-danger"
           >Cancelar turno</b-button
-        >
+        > -->
       </b-modal>
     </div>
   </b-container>

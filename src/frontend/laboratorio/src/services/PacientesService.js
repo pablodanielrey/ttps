@@ -18,6 +18,10 @@ export default {
     },
     obtenerMedicosDerivantes(){
         return Api().get(API_URL + API_USER + "medicos_derivantes/")
+    },
+    borrarPaciente(paciente){
+        return Api().delete(API_URL + API_USER + "pacientes/"+ paciente.id);
+
     }
     
 }

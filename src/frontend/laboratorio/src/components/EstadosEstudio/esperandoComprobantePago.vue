@@ -62,22 +62,33 @@ export default {
   data() {
     return {
       file1: [],
-      counter: 20,
+      counter: 30,
       comprobantePago: null,
     };
   },
   created() {
-    let result = this.$crontab.addJob({
-      name: "counter",
-      interval: {
-        day: "/31",
-      },
-      job: this.countUp,
-    });
-    console.log(result);
+    let fecha = new Date(this.estudio.estados[0].fecha);
+    this.counter = new Date();
+
+    this.counter = this.difference(fecha, this.counter);
+    this.counter = this.counter == 0 ? 30 : this.counter
   },
 
   methods: {
+    difference(date1, date2) {
+      let date1utc = Date.UTC(
+        date1.getFullYear(),
+        date1.getMonth(),
+        date1.getDate()
+      );
+      let date2utc = Date.UTC(
+        date2.getFullYear(),
+        date2.getMonth(),
+        date2.getDate()
+      );
+      let day = 1000 * 60 * 60 * 24;
+      return (date2utc - date1utc) / day;
+    },
     obtenerPDF(event) {
       const file = event.target.files[0];
       this.createBase64(file);
@@ -103,17 +114,17 @@ export default {
           console.log(datosComprobante);
           let response = await EstudiosService.actualizarUltimoEstado(
             datosComprobante
-          );          
-            this.$root.$bvToast.toast("Se agrego el comprobante de pago", {
-              title: "Atencion!",
-              toaster: "b-toaster-top-center",
-              solid: true,
-              variant: "success",
-            });
-            this.$router.push({
-              name: "listaEstudios",
-            });
-          
+          );
+          this.$root.$bvToast.toast("Se agrego el comprobante de pago", {
+            title: "Atencion!",
+            toaster: "b-toaster-top-center",
+            solid: true,
+            variant: "success",
+          });
+          this.$router.push({
+            name: "listaEstudios",
+          });
+
           console.log(response);
         } catch (err) {
           console.log(err);

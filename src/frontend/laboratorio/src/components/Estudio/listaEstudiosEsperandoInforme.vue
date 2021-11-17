@@ -122,9 +122,10 @@ export default {
     },
     async obtenerListaEstudios() {
       try {
-        let response = await EstudiosService.obtenerListaEstudios();
+        let response = await EstudiosService.obtenerListaEstudiosParaInformes();
         this.items = response.data;
-     
+        console.log(response)
+      console.log("estudios:"+ this.items)
       } catch (err) {
         console.log(err);
       }

@@ -1,5 +1,5 @@
 <template>
-  <div class="contenedor1">
+  <div class="contenedor1"><br><br><br>
     <div class="wrapper1">
       <b-row class="h-100 justify-content-center align-items-center">
         <b-col sm="10" md="8" xl="4" class="base-box m-2">

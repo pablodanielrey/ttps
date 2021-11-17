@@ -92,7 +92,7 @@ export default {
   data() {
     return {
       perPage: 10,
-      pageOptions: [4, 10, 15],
+      pageOptions: [4, 10, 15,40],
       filter: null,
       currentPage: 1,
       loading:true,

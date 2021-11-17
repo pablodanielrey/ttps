@@ -24,6 +24,10 @@ export default {
     },
     actualizarUltimoEstado(datos){
         return Api().post(API_URL + API_USER + "estados/",datos)
+    },
+    obtenerListaEstudiosParaInformes(){
+        return Api().get(API_URL + API_USER + "estudios/buscar/?e=EsperandoInterpretacionDeResultados")
+
     }
     
   

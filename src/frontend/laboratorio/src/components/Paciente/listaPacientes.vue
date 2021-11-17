@@ -39,6 +39,13 @@
         >
           <b-icon icon="eye" aria-hidden="true"></b-icon
         ></b-button>
+          <b-button
+            @click="borrarPaciente(row.item)"
+            variant="outline-danger"
+            title="Eliminar"
+          >
+            <b-icon icon="trash" variant="danger"> </b-icon>
+          </b-button>
       </template>
     </b-table>
 
@@ -106,6 +113,30 @@ export default {
 
   created() {},
   methods: {
+    async borrarPaciente(paciente){ 
+      console.log(paciente)
+         try {
+        let response = await PacientesService.borrarPaciente(paciente);
+       this.$root.$bvToast.toast("Se elimino el paciente", {
+              title: "Atencion!",
+              toaster: "b-toaster-top-center",
+              solid: true,
+              variant: "success",
+            });
+        console.log(response)
+        this.obtenerPacientes()
+     
+      } catch (err) {
+        console.log(err);
+           this.$root.$bvToast.toast("No se pudo eliminar el paciente", {
+              title: "Atencion!",
+              toaster: "b-toaster-top-center",
+              solid: true,
+              variant: "danger",
+            });
+      }
+
+    },
     async obtenerPacientes() {
       try {
         let response = await PacientesService.obtenerPacientes();

@@ -1,0 +1,184 @@
+<template>
+  <b-container>
+    <b-row class="pb-2">
+      <b-col class="text-center pt-3">
+        <p class="h3 text-center">
+          <strong>Crear un configurador</strong>
+        </p>
+      </b-col>
+    </b-row>
+
+    <ValidationObserver ref="detalleObraSocial">
+      <b-form-group>
+        <b-alert
+          v-for="alert in alerts"
+          dismissible
+          v-bind:key="alert.key"
+          show
+          :variant="alert.variant"
+          >{{ alert.message }}</b-alert
+        >
+      </b-form-group>
+      <b-card header="Datos del configurador">
+        <b-row>
+          <b-col lg="5" md="5">
+            <b-form-group id="Nombre-label" label="Nombre :" label-for="Nombre">
+              <ValidationProvider
+                :name="'Nombre '"
+                :rules="'required'"
+                v-slot="{ errors, valid }"
+              >
+                <b-form-input
+                  placeholder="Nombre"
+                  v-model="configurador.nombre"
+                  :state="errors[0] ? false : valid ? true : null"
+                ></b-form-input>
+                <b-form-invalid-feedback
+                  v-for="error in errors"
+                  :key="error.key"
+                >
+                  {{ error }}
+                </b-form-invalid-feedback>
+              </ValidationProvider>
+            </b-form-group>
+          </b-col>
+          <b-col lg="5" md="5">
+            <b-form-group
+              id="apellido-label"
+              label="apellido :"
+              label-for="apellido"
+            >
+              <ValidationProvider
+                :name="'apellido '"
+                :rules="'required'"
+                v-slot="{ errors, valid }"
+              >
+                <b-form-input
+                  placeholder="apellido"
+                  v-model="configurador.apellido"
+                  :state="errors[0] ? false : valid ? true : null"
+                ></b-form-input>
+                <b-form-invalid-feedback
+                  v-for="error in errors"
+                  :key="error.key"
+                >
+                  {{ error }}
+                </b-form-invalid-feedback>
+              </ValidationProvider>
+            </b-form-group>
+          </b-col>
+        </b-row>
+        <b-row> 
+          <b-col lg="5" md="5">
+            <b-form-group
+              id="usuario-label"
+              label="usuario:"
+              label-for="usuario"
+            >
+              <ValidationProvider
+                :name="'usuario '"
+                :rules="'required'"
+                v-slot="{ errors, valid }"
+              >
+                <b-form-input
+               
+                  placeholder="usuario"
+                  v-model="configurador.usuario"
+                  :state="errors[0] ? false : valid ? true : null"
+                ></b-form-input>
+                <b-form-invalid-feedback
+                  v-for="error in errors"
+                  :key="error.key"
+                >
+                  {{ error }}
+                </b-form-invalid-feedback>
+              </ValidationProvider>
+            </b-form-group>
+          </b-col>
+          <b-col lg="5" md="5">
+            <b-form-group
+              id="email-label"
+              label="Direccion de correo electronico:"
+              label-for="email"
+            >
+              <ValidationProvider
+                :name="'email '"
+                :rules="'required'"
+                v-slot="{ errors, valid }"
+              >
+                <b-form-input
+                  type="email"
+                  placeholder="Direccion de email"
+                  v-model="obraSocial.email"
+                  :state="errors[0] ? false : valid ? true : null"
+                ></b-form-input>
+                <b-form-invalid-feedback
+                  v-for="error in errors"
+                  :key="error.key"
+                >
+                  {{ error }}
+                </b-form-invalid-feedback>
+              </ValidationProvider>
+            </b-form-group>
+          </b-col>
+        </b-row>
+      </b-card>
+    </ValidationObserver>
+
+    <b-row class="pb-2">
+      <b-col class="text-center pt-3">
+        <b-button variant="success" @click="crearObraSocial()"
+          >Crear Obra Social
+        </b-button>
+      </b-col>
+    </b-row>
+  </b-container>
+</template>
+
+
+<script>
+import ObrasSocialesService from "@/services/ObrasSocialesService";
+
+export default {
+  components: {},
+
+  props: {},
+  data() {
+    return {
+      alerts: [],
+      obraSocial: {},
+    };
+  },
+  methods: {
+    async crearObraSocial() {
+      try {
+        let result = await this.$refs.detalleObraSocial.validate();
+        if (result) {
+          console.log(this.obraSocial);
+          let r = await ObrasSocialesService.crearObraSocial(this.obraSocial);
+          console.log(r);
+        }
+        this.$root.$bvToast.toast("Se creo con exito la obra social", {
+          title: "Atencion!",
+          toaster: "b-toaster-top-center",
+          solid: true,
+          variant: "success",
+        });
+        this.$router.push({
+          name: "listaObrasSociales",
+        });
+      } catch (error) {
+        console.log(error);
+        this.$root.$bvToast.toast("NO se pudo crear la obra social", {
+          title: "Atencion!",
+          toaster: "b-toaster-top-center",
+          solid: true,
+          variant: "danger",
+        });
+      }
+    },
+  },
+  computed: {},
+};
+</script>
+
