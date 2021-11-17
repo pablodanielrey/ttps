@@ -1,8 +1,10 @@
 version: "3.5"
 services:
   repec:
-    image: httpd:2.4
-    container_name: apache
+    build:
+      context: .
+    #image: httpd:2.4
+    container_name: apache-laboratorio
     restart: always
     expose:
       - 80
