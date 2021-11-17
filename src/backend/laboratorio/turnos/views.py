@@ -9,6 +9,7 @@ from rest_framework.response import Response
 
 
 from estudios import models as estudio_models
+from personas import views_personas
 
 from . import models
 
@@ -69,7 +70,7 @@ class VistaTurnosDisponibles(viewsets.ModelViewSet):
 
 
 class SerializadorTurnosConfirmados(serializers.HyperlinkedModelSerializer):
-    #persona = SerializadorDePersona()
+    persona = views_personas.SerializadorDePersona()
     class Meta:
         model = models.TurnoConfirmado
         fields = ['id','persona','inicio','fin']
