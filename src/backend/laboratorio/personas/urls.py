@@ -8,10 +8,12 @@ from . import views_pacientes
 from . import views_medicos
 from . import views_usuarios
 from . import views_configuradores
+from . import views_empleados
 
 router = routers.DefaultRouter()
 router.register('usuarios', views_usuarios.VistaUsuario)
 router.register('configuradores', views_configuradores.VistaConfigurador)
+router.register('empleados', views_empleados.VistaEmpleado)
 router.register('personas', views_personas.VistaPersona)
 router.register('pacientes', views_pacientes.VistaPaciente)
 router.register('obras_sociales', views.VistaObraSocial)
