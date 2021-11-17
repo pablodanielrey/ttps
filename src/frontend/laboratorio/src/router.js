@@ -28,6 +28,8 @@ import EsperandoLoteDeMuestraParaProcesamientoBiotecnologico from '@/components/
 import EsperandoInterpretacionDeResultados from '@/components/EstadosEstudio/EsperandoInterpretacionDeResultados.vue'
 import EsperandoProcesamientoDeLoteBiotecnologico from '@/components/EstadosEstudio/EsperandoProcesamientoDeLoteBiotecnologico.vue'
 import EsperandoEntregaAMedicoDerivante from '@/components/EstadosEstudio/EsperandoEntregaAMedicoDerivante.vue'
+import ResultadoDeEstudioEntregado from '@/components/EstadosEstudio/ResultadoDeEstudioEntregado.vue'
+
 
 
 
@@ -78,7 +80,9 @@ const router = new Router({
             { path: '/EsperandoInterpretacionDeResultados', component: EsperandoInterpretacionDeResultados , name:'EsperandoInterpretacionDeResultados',props:true },
             { path: '/EsperandoProcesamientoDeLoteBiotecnologico', component: EsperandoProcesamientoDeLoteBiotecnologico , name:'EsperandoProcesamientoDeLoteBiotecnologico',props:true },
             { path: '/EsperandoEntregaAMedicoDerivante', component: EsperandoEntregaAMedicoDerivante , name:'EsperandoEntregaAMedicoDerivante',props:true },
-
+           
+            { path: '/ResultadoDeEstudioEntregado', component: ResultadoDeEstudioEntregado , name:'ResultadoDeEstudioEntregado',props:true },
+            
             
             { path: '/crearLote', component: CrearLote, name:'crearLote' },
             { path: '/cargarResultadoLote', component: CargarResultadoLote, name:'cargarResultadoLote'},
