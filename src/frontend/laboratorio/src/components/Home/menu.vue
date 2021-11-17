@@ -32,6 +32,14 @@
                 >nuevo</b-dropdown-item
               >
             </b-nav-item-dropdown>
+              <b-nav-item-dropdown v-if="this.permisos == 'Empleados' " text="Medicos informantes" right>
+              <b-dropdown-item :to="{ name: 'listaMedicoInformante' }"
+                >Listar</b-dropdown-item
+              >
+              <b-dropdown-item :to="{ name: 'medicoInformante' }"
+                >nuevo</b-dropdown-item
+              >
+            </b-nav-item-dropdown>
              <b-nav-item-dropdown text="Resultados Informe" right v-if="this.permisos == 'Médicos_Informantes' ">
               <b-dropdown-item :to="{ name: 'listaEstudiosEsperandoInforme' }"
                 >Listar</b-dropdown-item

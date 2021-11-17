@@ -11,6 +11,9 @@ import ListaPacientes from '@/components/Paciente/listaPacientes.vue'
 import ListaEstudios from '@/components/Estudio/listaEstudios.vue'
 import ListaConfiugradores from '@/components/Paciente/listaConfiguradores.vue'
 import NuevoConfigurador from '@/components/Paciente/altaConfigurador.vue'
+import ListaMedicoInformante from '@/components/Paciente/listaMedicoInformante.vue'
+import NuevoInformante from '@/components/Paciente/nuevoInformante.vue'
+
 
 
 import NuevaObraSocial from '@/components/ObraSocial/nuevaObraSocial.vue'
@@ -72,6 +75,8 @@ const router = new Router({
             { path: '/paciente', component: Paciente, name: 'paciente', props: true },
             { path: '/configuradores', component: NuevoConfigurador ,name:'configuradores' , props: true},
             { path: '/listaConfiguradores', component: ListaConfiugradores ,name:'listaConfiguradores' },
+            { path: '/medicoInformante', component: NuevoInformante ,name:'medicoInformante' , props: true},
+            { path: '/listaMedicoInformante', component: ListaMedicoInformante ,name:'listaMedicoInformante' },
             { path: '/lista', component: ListaPacientes  ,name:'listaPacientes'},
             { path: '/obraSocial', component: NuevaObraSocial ,name:'obraSocial', props:true },
             { path: '/listaObrasSociales', component: ListaObrasSociales ,name:'listaObrasSociales' },
