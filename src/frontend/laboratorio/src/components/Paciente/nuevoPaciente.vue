@@ -353,7 +353,32 @@ export default {
     },
    
     async editarPaciente() {
-      console.log("edit");
+   
+       try {
+        let result = await this.$refs.detailsPaciente.validate();        
+        if (result) {
+          let r = await PacientesService.editarPaciente(this.paciente);
+          if (r.status == 200) {
+            this.$root.$bvToast.toast("Se edito con exito el paciente", {
+              title: "Atencion!",
+              toaster: "b-toaster-top-center",
+              solid: true,
+              variant: "success",
+            });
+            this.$router.push({
+              name: "listaPacientes",
+            });
+          }
+        }
+      } catch (err) {
+        console.log(err);
+           this.$root.$bvToast.toast("No se pudo editar el paciente", {
+              title: "Atencion!",
+              toaster: "b-toaster-top-center",
+              solid: true,
+              variant: "danger",
+            });
+      }
     },
     async crearPaciente() {
       try {

@@ -13,5 +13,9 @@ export default {
     deleteObra(obraSocial) {
         return Api().delete(API_URL + API_USER + "obras_sociales/"+ obraSocial.id);
     },
+    editarObraSocial(obraSocial){
+        return Api().put(API_URL + "obras_sociales/"+obraSocial.id +'/',obraSocial )
+
+    }
     
 }

@@ -31,6 +31,15 @@ export default {
     deleteConfigurador(paciente){
         return Api().delete(API_URL + API_USER + "configuradores/"+ paciente.id);
     },
+    editarConfigurador(config){
+        console.log(config)
+        return Api().put(API_URL + "configuradores/"+config.id +'/',config )
+    },
+    editarPaciente(paciente){
+        return Api().put(API_URL + "pacientes/"+paciente.id +'/',paciente )
+
+
+    }
     
 
 }

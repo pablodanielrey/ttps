@@ -3,7 +3,8 @@
     <b-row class="pb-2">
       <b-col class="text-center pt-3">
         <p class="h3 text-center">
-          <strong>Crear una nueva Obra Social</strong>
+          <strong  v-if="!editar">Crear una nueva Obra Social</strong>
+            <strong  v-if="editar">Editar Obra Social</strong>
         </p>
       </b-col>
     </b-row>
@@ -101,8 +102,11 @@
 
     <b-row class="pb-2">
       <b-col class="text-center pt-3">
-        <b-button variant="success" @click="crearObraSocial()"
+        <b-button variant="success" @click="crearObraSocial()" v-if="!editar"
           >Crear Obra Social
+        </b-button>
+         <b-button variant="success" @click="editarObraSocial()" v-if="editar"
+          >Editar Obra Social
         </b-button>
       </b-col>
     </b-row>
@@ -116,12 +120,31 @@ import ObrasSocialesService from "@/services/ObrasSocialesService";
 export default {
   components: {},
 
-  props: {},
+  props: {
+     obraSocial: {
+      type: Object,
+      default: function () {
+        return {
+          nombre: "",
+          email:null,
+          telefono: null,
+
+        };
+      },
+    },
+    editar: {
+      type: Boolean,
+      return: false,
+    },
+  },
   data() {
     return {
       alerts: [],
-      obraSocial: {},
+      
     };
+  },
+  created (){
+    console.log(this.obraSocial)
   },
   methods: {
     async crearObraSocial() {
@@ -151,6 +174,34 @@ export default {
         });
       }
     },
+    async editarObraSocial(){
+      
+       try {
+        let result = await this.$refs.detalleObraSocial.validate();
+        if (result) {
+          console.log(this.obraSocial);
+          let r = await ObrasSocialesService.editarObraSocial(this.obraSocial);
+          console.log(r);
+        }
+        this.$root.$bvToast.toast("Se edito con exito la obra social", {
+          title: "Atencion!",
+          toaster: "b-toaster-top-center",
+          solid: true,
+          variant: "success",
+        });
+        this.$router.push({
+              name: "listaObrasSociales",
+            });
+      } catch (error) {
+        console.log(error);
+        this.$root.$bvToast.toast("NO se pudo editar la obra social", {
+          title: "Atencion!",
+          toaster: "b-toaster-top-center",
+          solid: true,
+          variant: "danger",
+        });
+      }
+    }
   },
   computed: {},
 };

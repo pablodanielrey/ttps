@@ -70,10 +70,10 @@ const router = new Router({
         },
         children: [    
             { path: '/paciente', component: Paciente, name: 'paciente', props: true },
-            { path: '/configuradores', component: NuevoConfigurador ,name:'configuradores' },
+            { path: '/configuradores', component: NuevoConfigurador ,name:'configuradores' , props: true},
             { path: '/listaConfiguradores', component: ListaConfiugradores ,name:'listaConfiguradores' },
             { path: '/lista', component: ListaPacientes  ,name:'listaPacientes'},
-            { path: '/obraSocial', component: NuevaObraSocial ,name:'obraSocial' },
+            { path: '/obraSocial', component: NuevaObraSocial ,name:'obraSocial', props:true },
             { path: '/listaObrasSociales', component: ListaObrasSociales ,name:'listaObrasSociales' },
             
             { path: '/estudio', component: NuevoEstudio , name:'nuevoEstudio'},

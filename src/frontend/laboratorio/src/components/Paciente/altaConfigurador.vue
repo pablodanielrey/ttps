@@ -3,7 +3,8 @@
     <b-row class="pb-2">
       <b-col class="text-center pt-3">
         <p class="h3 text-center">
-          <strong>Crear un configurador</strong>
+          <strong v-if="!editar"> Crear un configurador</strong>
+            <strong v-if="editar"> Editar configurador</strong>
         </p>
       </b-col>
     </b-row>
@@ -126,7 +127,10 @@
 
     <b-row class="pb-2">
       <b-col class="text-center pt-3">
-        <b-button variant="success" @click="crear()">Crear </b-button>
+        <b-button variant="success" @click="crear()" v-if="!editar">Crear </b-button>
+         <b-button variant="success" @click="editarConfigurador()" v-if="editar"
+          >Editar 
+        </b-button>
       </b-col>
     </b-row>
   </b-container>
@@ -139,11 +143,26 @@ import PacientesService from "@/services/PacientesService";
 export default {
   components: {},
 
-  props: {},
+  props: {
+    configurador: {
+      type: Object,
+      default: function () {
+        return {
+          nombre: "",
+          apellido: null,
+          usuario: null,
+          clave: null,
+        };
+      },
+    },
+    editar: {
+      type: Boolean,
+      return: false,
+    },
+  },
   data() {
     return {
       alerts: [],
-      configurador: {},
     };
   },
   methods: {
@@ -167,14 +186,49 @@ export default {
         }
       } catch (error) {
         console.log(error);
-        this.$root.$bvToast.toast("NO se pudo crear el configurador, el usuario ya existe", {
-          title: "Atencion!",
-          toaster: "b-toaster-top-center",
-          solid: true,
-          variant: "danger",
-        });
+        this.$root.$bvToast.toast(
+          "NO se pudo crear el configurador, el usuario ya existe",
+          {
+            title: "Atencion!",
+            toaster: "b-toaster-top-center",
+            solid: true,
+            variant: "danger",
+          }
+        );
       }
     },
+    async editarConfigurador(){
+          try {
+        let result = await this.$refs.datosConfigurador.validate();
+        if (result) {
+          console.log(this.configurador);
+          let r = await PacientesService.editarConfigurador(this.configurador);
+          console.log(r);
+
+          this.$root.$bvToast.toast("Se edito con exito el configurador", {
+            title: "Atencion!",
+            toaster: "b-toaster-top-center",
+            solid: true,
+            variant: "success",
+          });
+          this.$router.push({
+            name: "listaConfiguradores",
+          });
+        }
+      } catch (error) {
+        console.log(error);
+        this.$root.$bvToast.toast(
+          "NO se pudo editar el configurador",
+          {
+            title: "Atencion!",
+            toaster: "b-toaster-top-center",
+            solid: true,
+            variant: "danger",
+          }
+        );
+      }
+
+    }
   },
   computed: {},
 };

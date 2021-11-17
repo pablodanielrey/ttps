@@ -1,5 +1,5 @@
 <template>
-  <b-container fluid>
+  <b-container>
     <div v-if="loading">
       <b-spinner> </b-spinner>
 
@@ -21,6 +21,8 @@
         </b-input-group>
       </b-col>
       <b-table
+        show-empty
+        empty-text="Todavia no hay obras sociales en el sistema"
         :items="items"
         :fields="fields"
         :filter="filter"
@@ -28,14 +30,25 @@
         :per-page="perPage"
         @filtered="onFiltered"
       >
-        
-        <template v-slot:cell(acciones)="row">        
+        <template v-slot:cell(acciones)="row">
           <b-button
             @click="siguienteEstado(row.item)"
             variant="outline-danger"
             title="Eliminar"
           >
             <b-icon icon="trash" variant="danger"> </b-icon>
+          </b-button>
+          <b-button
+            @click="editar(row.item)"
+            variant="outline-success"
+            title="Editar"
+          >
+            <b-icon
+              icon="arrow-repeat
+"
+              variant="success"
+            >
+            </b-icon>
           </b-button>
         </template>
       </b-table>
@@ -93,7 +106,7 @@ export default {
           label: "Direccion de correo",
           class: "text-center p2",
         },
-     
+
         { key: "acciones", label: "Acciones", class: "text-center p2" },
       ],
       items: [],
@@ -102,53 +115,50 @@ export default {
 
   created() {},
   methods: {
-    async siguienteEstado(obra){
-        console.log(obra)
-        try {
+    async siguienteEstado(obra) {
+      console.log(obra);
+      try {
         let response = await ObrasSocialesService.deleteObra(obra);
-       this.$root.$bvToast.toast("Se elimino la obra social", {
-              title: "Atencion!",
-              toaster: "b-toaster-top-center",
-              solid: true,
-              variant: "success",
-            });
-        console.log(response)
-        this.obtenerObrasSociales()
-     
+        this.$root.$bvToast.toast("Se elimino la obra social", {
+          title: "Atencion!",
+          toaster: "b-toaster-top-center",
+          solid: true,
+          variant: "success",
+        });
+        console.log(response);
+        this.obtenerObrasSociales();
       } catch (err) {
         console.log(err);
-           this.$root.$bvToast.toast("No se pudo eliminar la  obra social", {
-              title: "Atencion!",
-              toaster: "b-toaster-top-center",
-              solid: true,
-              variant: "danger",
-            });
+        this.$root.$bvToast.toast("No se pudo eliminar la  obra social", {
+          title: "Atencion!",
+          toaster: "b-toaster-top-center",
+          solid: true,
+          variant: "danger",
+        });
       }
-
     },
     async obtenerObrasSociales() {
       try {
         let response = await ObrasSocialesService.obtenerObrasSociales();
-        this.items = response.data; 
-        console.log(this.items)
-     
+        this.items = response.data;
+        console.log(this.items);
       } catch (err) {
         console.log(err);
       }
+    },
+    editar(obrasocial) {
+      this.$router.push({
+        name: "obraSocial",
+        params: {
+          obraSocial: obrasocial,
+          editar: true,
+        },
+      });
     },
     onFiltered(filteredItems) {
       this.totalRows = filteredItems.length;
       this.currentPage = 1;
     },
-    detalleEstudio(estudio) {
-      console.log(estudio);
-      this.$router.push({
-        name: "detalleDeEstudio",
-        params: {
-          estudio: estudio,
-        },
-      });
-    },   
   },
   mounted() {
     axios

@@ -24,7 +24,7 @@
                 >nuevo</b-dropdown-item
               >
             </b-nav-item-dropdown>
-             <b-nav-item-dropdown v-if="this.permisos == 'Configuradores' " text="Configurador" right>
+             <b-nav-item-dropdown v-if="this.permisos == 'Administradores' " text="Configurador" right>
               <b-dropdown-item :to="{ name: 'listaConfiguradores' }"
                 >Listar</b-dropdown-item
               >
@@ -32,7 +32,7 @@
                 >nuevo</b-dropdown-item
               >
             </b-nav-item-dropdown>
-             <b-nav-item-dropdown text="Resultados Informe" right>
+             <b-nav-item-dropdown text="Resultados Informe" right v-if="this.permisos == 'Médicos_Informantes' ">
               <b-dropdown-item :to="{ name: 'listaEstudiosEsperandoInforme' }"
                 >Listar</b-dropdown-item
               >
@@ -61,11 +61,11 @@
                 >Listar</b-dropdown-item
               >
             </b-nav-item-dropdown>
-            <b-nav-item-dropdown   v-if="this.permisos == 'Configuradores'" text="Turnos " >
+          <!--   <b-nav-item-dropdown   v-if="this.permisos == 'Configuradores'" text="Turnos " >
               <b-dropdown-item :to="{ name: 'configurarTurnos' }"
                 >Configurar turnos</b-dropdown-item
               >
-            </b-nav-item-dropdown>
+            </b-nav-item-dropdown> -->
 
             <b-nav-item @click="cerarrSesion()" right>Cerrar sesion</b-nav-item>
           </b-collapse>

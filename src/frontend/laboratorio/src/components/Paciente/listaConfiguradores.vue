@@ -21,6 +21,8 @@
         </b-input-group>
       </b-col>
       <b-table
+      show-empty
+        empty-text="Todavia no hay usuarios configuradores"
         :items="items"
         :fields="fields"
         :filter="filter"
@@ -37,6 +39,17 @@
           >
             <b-icon icon="trash" variant="danger"> </b-icon>
           </b-button>
+    <!--       <b-button
+            @click="editar(row.item)"
+            variant="outline-success"
+            title="Editar"
+          >
+            <b-icon
+              icon="arrow-repeat"
+              variant="success"
+            >
+            </b-icon>
+          </b-button> -->
         </template>
       </b-table>
 
@@ -137,6 +150,15 @@ export default {
         console.log(err);
       }
     },
+     editar(configurador) {
+      this.$router.push({
+        name: "configuradores",
+        params: {
+          configurador: configurador,
+          editar: true,
+        },
+      });
+    },
     onFiltered(filteredItems) {
       this.totalRows = filteredItems.length;
       this.currentPage = 1;
@@ -144,7 +166,7 @@ export default {
     detalleEstudio(estudio) {
       console.log(estudio);
       this.$router.push({
-        name: "detalleDeEstudio",
+        name: "configuradores",
         params: {
           estudio: estudio,
         },

@@ -45,6 +45,17 @@
         </b-col>
       </b-row>
       <b-row>
+         <b-col  v-if="this.estudio.paciente.historia_clinica != null">
+          <p><strong> Historia clinica: </strong></p>
+          <a
+          @click="verHistoria()"
+            title="ver Historia clinica"
+            variant="outline-success"
+           
+          >
+            <b-icon icon="eye" variant="info"> </b-icon
+          ></a>
+        </b-col>
         <b-col v-if="this.estudio.estados[0].comprobante != undefined">
           <p>Comprobante:</p>
           <a
@@ -243,6 +254,13 @@
         </b-card>
       </ValidationObserver>
     </b-modal>
+      <div v-if="this.estudio.paciente.historia_clinica != null">
+      <b-modal ref="modalHistoriaCLinica" ok-only title="Historia clinica">
+        <div v-html="this.estudio.paciente.historia_clinica.historia_clinica "> </div>
+     
+      
+      </b-modal>
+    </div>
   </b-container>
 </template>
 
@@ -312,25 +330,11 @@ export default {
         this.estudio.estados[this.estudio.estados.length - 1].resourcetype;
       nameEstado = nameEstado.replace(/([a-z])([A-Z])/g, "$1 $2");
       nameEstado = nameEstado.replace(/([A-Z])([A-Z][a-z])/g, "$1 $2");
-
-      return nameEstado;
-      /* let estado= this.estudio.estados
-       estado = estado.sort(function (a, b) {
-        if (a.fecha < b.fecha) {
-          return 1;
-        }
-        if (a.fecha > b.fecha) {
-          return -1;
-        }
-        return 0;
-      });
-      this.ultimoEstado = estado[0].resourcetype;
-      this.ultimoEstado = this.ultimoEstado.replace(/([a-z])([A-Z])/g, "$1 $2");
-      this.ultimoEstado = this.ultimoEstado.replace(
-        /([A-Z])([A-Z][a-z])/g,
-        "$1 $2"
-      ); */
+      return nameEstado;   
     },
+    verHistoria(){
+      this.$refs["modalHistoriaCLinica"].show();
+    }
   },
 
   computed: {},

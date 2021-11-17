@@ -25,13 +25,13 @@
       @filtered="onFiltered"
     >
       <template v-slot:cell(acciones)="row">
-        <b-button
+     <!--    <b-button
           title="Editar paciente"
           variant="outline-primary"
           @click="editarPaciente(row.item)"
         >
           <b-icon icon="arrow-clockwise" aria-hidden="true"></b-icon
-        ></b-button>
+        ></b-button> -->
         <b-button
           title="Ver historia clinica"
           variant="outline-primary"
@@ -90,8 +90,8 @@ export default {
   data() {
     return {
       historiaClinica: null,
-      perPage: 4,
-      pageOptions: [4, 10, 15],
+      perPage: 10,
+      pageOptions: [10, 15,20],
       filter: null,
       currentPage: 1,
       totalRows: 1,
@@ -114,16 +114,15 @@ export default {
   created() {},
   methods: {
     async borrarPaciente(paciente){ 
-      console.log(paciente)
          try {
         let response = await PacientesService.borrarPaciente(paciente);
+        console.log(response)
        this.$root.$bvToast.toast("Se elimino el paciente", {
               title: "Atencion!",
               toaster: "b-toaster-top-center",
               solid: true,
               variant: "success",
             });
-        console.log(response)
         this.obtenerPacientes()
      
       } catch (err) {
@@ -141,7 +140,6 @@ export default {
       try {
         let response = await PacientesService.obtenerPacientes();
         this.items = response.data;
-        console.log(this.items);
       } catch (err) {
         console.log(err);
       }
@@ -151,14 +149,12 @@ export default {
       this.currentPage = 1;
     },
     editarPaciente(paciente) {
-      console.log(paciente);
       this.$router.push({
         name: "paciente",
         params: { paciente: paciente, editar: true },
       });
     },
     verHistoria(historiaClinica) {
-      console.log(historiaClinica);
       this.historiaClinica = historiaClinica;
          this.$refs["modalHistoriaCLinica"].show();
     },

@@ -244,6 +244,7 @@
                   v-slot="{ errors, valid }"
                 >
                   <vue-editor
+                  disabled
                     :state="errors[0] ? false : valid ? true : null"
                     v-model="historiaClinicaPaciente"
                   ></vue-editor>
