@@ -1,7 +1,7 @@
 <template>
   <b-container>
     <div>
-      <b-card header="Estudio esperando que se ingrese el comprobante pago">
+      <b-card header="Estudio esperando ingreso del comprobante pago">
         <b-row>
           <b-col lg="5" md="5" class="text-center pt-3">
             <ValidationObserver ref="detailsComprobante">

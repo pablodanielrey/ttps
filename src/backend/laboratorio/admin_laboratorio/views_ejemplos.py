@@ -37,9 +37,10 @@ def generar_lote():
 def aca_podes_editar_lean():
 
     # lean aca esta el codigo que va!!
-    #m = persona_models.PersonasModel()
-    #m.crearPaciente(nombre=, apellido=, dni=, email=, telefono=, direccion=, fecha_nacimiento=, historia_clinica=, )
-    pass
+    m = persona_models.PersonasModel()
+    m.crearPaciente(nombre='Leandro', apellido='Bilbao', dni='32070891', email='leandrobilbao@gmail.com', telefono='2211234567', direccion='calle falsa 123', fecha_nacimiento='1995-06-02', historia_clinica='ufff por donde empiezo', )
+    m2 = persona_models.PersonasModel()
+    m2.crearPaciente(nombre='Leandro2', apellido='Bilbao2', dni='32070892', email='leandrobilbao2@gmail.com', telefono='2211234568', direccion='calle falsa 123bis', fecha_nacimiento='1995-06-03', historia_clinica='ufff por donde empiezo, mas atras', )
 
 
 
