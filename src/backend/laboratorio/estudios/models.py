@@ -34,6 +34,16 @@ class Estudio(models.Model):
     def ultimo_estado(self):
         return self.estados.order_by('fecha').last()
 
+    @classmethod
+    def buscar(cls, termino:str):
+        return cls.objects.all().filter(
+            models.Q(tipo__nombre__icontains=termino) | 
+            models.Q(diagnostico__nombre__icontains=termino) | 
+            models.Q(paciente__dni__icontains=termino) |
+            models.Q(paciente__nombre__icontains=termino) |
+            models.Q(paciente__apellido__icontains=termino)
+        )    
+
 
 from polymorphic.models import PolymorphicModel
 
