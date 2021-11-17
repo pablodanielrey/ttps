@@ -2,7 +2,9 @@
   <b-container>
     <b-row class="pb-2">
       <b-col class="text-center pt-3">
-        <p class="h3 text-center"><strong>Crear una nueva Obra Social</strong></p>
+        <p class="h3 text-center">
+          <strong>Crear una nueva Obra Social</strong>
+        </p>
       </b-col>
     </b-row>
 
@@ -19,7 +21,7 @@
       </b-form-group>
       <b-card header="Datos Obra Social">
         <b-row>
-          <b-col lg="3" md="3">
+          <b-col lg="5" md="5">
             <b-form-group id="Nombre-label" label="Nombre :" label-for="Nombre">
               <ValidationProvider
                 :name="'Nombre '"
@@ -40,9 +42,8 @@
               </ValidationProvider>
             </b-form-group>
           </b-col>
-        </b-row>
-        <b-row>
-          <b-col lg="2" md="2">
+
+          <b-col lg="5" md="5">
             <b-form-group
               id="telefono-label"
               label="Telefono:"
@@ -68,7 +69,7 @@
               </ValidationProvider>
             </b-form-group>
           </b-col>
-          <b-col lg="3" md="3">
+          <b-col lg="5" md="5">
             <b-form-group
               id="email-label"
               label="Direccion de correo electronico:"
@@ -95,8 +96,7 @@
             </b-form-group>
           </b-col>
         </b-row>
-      </b-card
-      >
+      </b-card>
     </ValidationObserver>
 
     <b-row class="pb-2">
@@ -111,28 +111,46 @@
 
 
 <script>
-
-import ObrasSocialesService from '@/services/ObrasSocialesService'
+import ObrasSocialesService from "@/services/ObrasSocialesService";
 
 export default {
-  components: {
-  },
+  components: {},
 
   props: {},
   data() {
     return {
       alerts: [],
-      obraSocial: {}
+      obraSocial: {},
     };
   },
   methods: {
     async crearObraSocial() {
-      let result = await this.$refs.detalleObraSocial.validate();
-      console.log(result)
-      console.log(this.obraSocial)
-      let r = await ObrasSocialesService.crearObraSocial(this.obraSocial)
-      console.log(r)
-    }
+      try {
+        let result = await this.$refs.detalleObraSocial.validate();
+        if (result) {
+          console.log(this.obraSocial);
+          let r = await ObrasSocialesService.crearObraSocial(this.obraSocial);
+          console.log(r);
+        }
+        this.$root.$bvToast.toast("Se creo con exito la obra social", {
+          title: "Atencion!",
+          toaster: "b-toaster-top-center",
+          solid: true,
+          variant: "success",
+        });
+        this.$router.push({
+              name: "listaObrasSociales",
+            });
+      } catch (error) {
+        console.log(error);
+        this.$root.$bvToast.toast("NO se pudo crear la obra social", {
+          title: "Atencion!",
+          toaster: "b-toaster-top-center",
+          solid: true,
+          variant: "danger",
+        });
+      }
+    },
   },
   computed: {},
 };

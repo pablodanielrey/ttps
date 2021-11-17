@@ -48,10 +48,10 @@ export default {
 
 
 //'Administradores' a configurador a empleado
-//'Empleados' buscador de pacientes  - cancelar turno - listar turno ocupados  esta 
-//'Configuradores' configura turno y rango horario  1  -   os abm - abm de entidades basicas y de medicos informantes
+//'Empleados' buscador de pacientes  - cancelar turno - listar turno ocupados  ESTA 
+//'Configuradores' configura turno y rango horario  1  -   os abm ESTA - abm de entidades basicas y de medicos informantes
 //'Pacientes'  
-//'Médicos_Informantes' completa ultimo estado
+//'Médicos_Informantes' completa ultimo estado ESTA 
 //'Médicos_Derivantes'
 
 // lista de pacientes - http://localhost:8000/personas_api/pacientes/

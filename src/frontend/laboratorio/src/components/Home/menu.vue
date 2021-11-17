@@ -16,6 +16,14 @@
                 >nuevo</b-dropdown-item
               >
             </b-nav-item-dropdown>
+             <b-nav-item-dropdown text="Obra  Social" right>
+              <b-dropdown-item :to="{ name: 'listaObrasSociales' }"
+                >Listar</b-dropdown-item
+              >
+              <b-dropdown-item :to="{ name: 'obraSocial' }"
+                >nuevo</b-dropdown-item
+              >
+            </b-nav-item-dropdown>
              <b-nav-item-dropdown text="Resultados Informe" right>
               <b-dropdown-item :to="{ name: 'listaEstudiosEsperandoInforme' }"
                 >Listar</b-dropdown-item

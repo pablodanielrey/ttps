@@ -9,6 +9,9 @@ export default {
     },
     crearObraSocial(obraSocial) {
         return Api().post(API_URL + API_USER + "obras_sociales/", obraSocial);
-    }
+    },
+    deleteObra(obraSocial) {
+        return Api().delete(API_URL + API_USER + "obras_sociales/"+ obraSocial.id);
+    },
     
 }
