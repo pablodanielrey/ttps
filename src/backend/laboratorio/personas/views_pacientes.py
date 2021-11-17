@@ -28,7 +28,7 @@ class VistaPaciente(viewsets.ModelViewSet):
     """
     queryset = models.Paciente.all()
     serializer_class = SerializadorDePaciente
-    permission_classes = [ DjangoModelPermissions ]
+    #permission_classes = [ DjangoModelPermissions ]
     #permission_classes = [ IsAdminUser ]
 
     model = models.PersonasModel()

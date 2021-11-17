@@ -35,7 +35,7 @@ class VistaPersona(viewsets.ModelViewSet):
     """
     queryset = models.Persona.objects.all()
     serializer_class = SerializadorDePersona
-    permission_classes = [ DjangoModelPermissions ]
+    #permission_classes = [ DjangoModelPermissions ]
 
     # def create(self, request, *args, **kwargs):
     #     datos_persona = request.data
