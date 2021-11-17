@@ -5,6 +5,7 @@ import datetime
 import logging
 
 from django.db.models.fields import related
+from django.contrib.contenttypes.models import ContentType
 
 from personas.models import Persona, ObraSocial
 from turnos import models as turnos_models
@@ -35,14 +36,20 @@ class Estudio(models.Model):
         return self.estados.order_by('fecha').last()
 
     @classmethod
-    def buscar(cls, termino:str):
-        return cls.objects.all().filter(
+    def buscar(cls, termino:str, estado=None):
+        estudios = cls.objects
+        if estado:
+            #estudios = cls.objects.filter(models.Q(estados__polymorphic_ctype=ContentType.objects.get_for_model(EsperandoComprobanteDePago)))
+            estudios = cls.objects.filter(models.Q(estados__polymorphic_ctype=ContentType.objects.get(model=estado.lower())))
+        estudios = estudios.filter(
             models.Q(tipo__nombre__icontains=termino) | 
             models.Q(diagnostico__nombre__icontains=termino) | 
             models.Q(paciente__dni__icontains=termino) |
             models.Q(paciente__nombre__icontains=termino) |
             models.Q(paciente__apellido__icontains=termino)
-        )    
+        )
+        #polymorphic_ctype=ContentType.objects.get_for_model(SpecialGroup))
+        return estudios
 
 
 from polymorphic.models import PolymorphicModel

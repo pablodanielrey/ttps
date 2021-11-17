@@ -303,8 +303,9 @@ class VistaEstudios(viewsets.ModelViewSet):
     @action(detail=False, methods=['GET'])
     def buscar(self, request):
         q = request.query_params.get('q')
-        logging.debug(f'buscando a : {q}')
+        e = request.query_params.get('e',None)
+        logging.debug(f'buscando a : {q}  en estado : {e}')
 
-        estudios = models.Estudio.buscar(q)
+        estudios = models.Estudio.buscar(q, e)
         serializer = SerializadorEstudios(estudios, many=True, context={'request': request})
         return Response(serializer.data)

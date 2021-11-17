@@ -56,6 +56,7 @@ class VistaLotes(viewsets.ModelViewSet):
 
 class VistaEstudios(views.APIView):
 
+    queryset = models.Lote.objects.none()
     modelo = models.ModeloLotes()
     
     def get(self, request, format=None):
