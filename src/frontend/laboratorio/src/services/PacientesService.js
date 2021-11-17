@@ -13,49 +13,60 @@ export default {
     crearPaciente(paciente) {
         return Api().post(API_URL + API_USER + "pacientes/", paciente);
     },
-    obtenerMedicosInformantes(){
+    obtenerMedicosInformantes() {
         return Api().get(API_URL + API_USER + "medicos_informantes/")
     },
-  
-    deleteMedicosInformantes(paciente){
-        return Api().delete(API_URL + API_USER + "medicos_informantes/"+ paciente.id);
+
+    deleteMedicosInformantes(paciente) {
+        return Api().delete(API_URL + API_USER + "medicos_informantes/" + paciente.id);
     },
-    obtenerMedicosDerivantes(){
+    obtenerMedicosDerivantes() {
         return Api().get(API_URL + API_USER + "medicos_derivantes/")
     },
-    deleteMedicosDerivantes(paciente){
-        return Api().delete(API_URL + API_USER + "medicos_derivantes/"+ paciente.id);
+    deleteMedicosDerivantes(paciente) {
+        return Api().delete(API_URL + API_USER + "medicos_derivantes/" + paciente.id);
     },
-    editarDerivante(paciente){
-        return Api().put(API_URL + "medicos_derivantes/"+paciente.id +'/',paciente )
+    editarDerivante(paciente) {
+        return Api().put(API_URL + "medicos_derivantes/" + paciente.id + '/', paciente)
 
     },
     crearMedicoDerivante(paciente) {
         return Api().post(API_URL + API_USER + "medicos_derivantes/", paciente);
     },
+    obtenerEmpleados() {
+        console.log(API_URL + API_USER + "empleados/")
+        return Api().get(API_URL + API_USER + "empleados/")
+    },
+    crearEmpleado(paciente) {
+        return Api().post(API_URL + API_USER + "empleados/", paciente);
+    },
+    deleteEmpleado(paciente) {
+        return Api().delete(API_URL + API_USER + "empleados/" + paciente.id);
+
+    },
     crearMedicoInformante(paciente) {
         return Api().post(API_URL + API_USER + "medicos_informantes/", paciente);
     },
-    borrarPaciente(paciente){
-        return Api().delete(API_URL + API_USER + "pacientes/"+ paciente.id);
+    borrarPaciente(paciente) {
+        return Api().delete(API_URL + API_USER + "pacientes/" + paciente.id);
     },
     crearConfigurador(paciente) {
         return Api().post(API_URL + API_USER + "configuradores/", paciente);
     },
-    obtenerConfiguradores(){
+    obtenerConfiguradores() {
         return Api().get(API_URL + API_USER + "configuradores/")
     },
-    deleteConfigurador(paciente){
-        return Api().delete(API_URL + API_USER + "configuradores/"+ paciente.id);
+    deleteConfigurador(paciente) {
+        return Api().delete(API_URL + API_USER + "configuradores/" + paciente.id);
     },
-    editarConfigurador(config){
-        
-        return Api().put(API_URL + "configuradores/"+config.id +'/',config )
+    editarConfigurador(config) {
+
+        return Api().put(API_URL + "configuradores/" + config.id + '/', config)
     },
-    editarPaciente(paciente){
-        return Api().put(API_URL + "pacientes/"+paciente.id +'/',paciente )
+    editarPaciente(paciente) {
+        return Api().put(API_URL + "pacientes/" + paciente.id + '/', paciente)
     },
- 
-    
+
+
 
 }

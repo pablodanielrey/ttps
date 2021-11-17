@@ -16,6 +16,8 @@ import NuevoInformante from '@/components/Paciente/nuevoInformante.vue'
 import ListaDerivante from '@/components/Paciente/listaDerivante.vue'
 import NuevoDerivante from '@/components/Paciente/nuevoDerivante.vue'
 
+import ListaEmpleado from '@/components/Paciente/listaEmpleado.vue'
+import NuevoEmpleado from '@/components/Paciente/nuevoEmpleado.vue'
 
 
 
@@ -82,7 +84,8 @@ const router = new Router({
             { path: '/listaMedicoInformante', component: ListaMedicoInformante ,name:'listaMedicoInformante' },
             { path: '/medicoDerivante', component: NuevoDerivante ,name:'medicoDerivante' , props: true},
             { path: '/listaDerivante', component: ListaDerivante ,name:'listaDerivante' },
-            
+            { path: '/empleado', component: NuevoEmpleado ,name:'empleado' , props: true},
+            { path: '/listaEmpleado', component: ListaEmpleado ,name:'listaEmpleado' },
             { path: '/lista', component: ListaPacientes  ,name:'listaPacientes'},
             { path: '/obraSocial', component: NuevaObraSocial ,name:'obraSocial', props:true },
             { path: '/listaObrasSociales', component: ListaObrasSociales ,name:'listaObrasSociales' },

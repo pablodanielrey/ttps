@@ -8,11 +8,19 @@
         <b-navbar-nav>
           <b-collapse class="ml-auto" id="nav-collapse" is-nav>
             <b-nav-item :to="{ name: '' }">Home</b-nav-item>
-            <b-nav-item-dropdown text="Pacientes" right v-if="this.permisos == 'Administradores' || this.permisos == 'Empleados' " >
+            <b-nav-item-dropdown text="Pacientes" right v-if="this.permisos == 'Empleados' " >
               <b-dropdown-item :to="{ name: 'listaPacientes' }"
                 >Listar</b-dropdown-item
               >
               <b-dropdown-item :to="{ name: 'paciente' }"
+                >nuevo</b-dropdown-item
+              >
+            </b-nav-item-dropdown>
+            <b-nav-item-dropdown text="Empleados" right v-if="this.permisos == 'Administradores'  " >
+              <b-dropdown-item :to="{ name: 'listaEmpleado' }"
+                >Listar</b-dropdown-item
+              >
+              <b-dropdown-item :to="{ name: 'empleado' }"
                 >nuevo</b-dropdown-item
               >
             </b-nav-item-dropdown>
