@@ -207,7 +207,7 @@ class VistaEstadoEstudio(viewsets.ModelViewSet):
             """ los casos normales de cambios de estado - se encarga el serializer """
             serializador = SerializadorEstadoEstudioPolimorfico.model_serializer_mapping[clase_ultimo_estado](instance=ultimo_estado, data=request.data)
             if not serializador.is_valid():
-                return HttpResponseBadRequest()
+                return HttpResponseBadRequest(serializador.errors)
             if len(serializador.validated_data) <= 0:
                 """ no existen datos enviados para actualizar el nuevo estado """
                 return HttpResponseBadRequest()

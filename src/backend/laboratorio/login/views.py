@@ -13,6 +13,9 @@ from rest_framework.decorators import action
 
 from django.contrib.auth.models import User
 
+from personas import models as persona_models
+from personas import views_personas
+
 def obtener_roles(usuario):
     grupos = []
     for group in usuario.groups.all():
@@ -28,6 +31,12 @@ class VistaToken(views.APIView):
         logging.debug(f'usuario logueado : {usuario}')
 
         try:
+            persona = persona_models.Persona.objects.get(usuario=usuario)
+            serializador = views_personas.SerializadorDePersona(instance=persona)
+        except persona_models.Persona.DoesNotExist as e:
+            serializador = None
+
+        try:
             token = Token.objects.get(user_id__username=usuario.username)
         except Token.DoesNotExist as e:
             token = Token.objects.create(user=usuario)
@@ -36,7 +45,8 @@ class VistaToken(views.APIView):
         return Response(
             {
                 'token':token.key,
-                'roles':grupos
+                'persona': serializador.data if serializador else '', 
+                'roles': grupos
             }
         )
 
@@ -49,3 +59,5 @@ class VistaRoles(views.APIView):
         usuario = request.user
         grupos = obtener_roles(usuario)
         return Response(grupos)
+
+
