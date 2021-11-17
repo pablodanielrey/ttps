@@ -81,7 +81,9 @@ export default {
       type: Object,
     },
   },
-  created() {},
+  created() {
+  
+  },
   data() {
     return {
       retiro: null,
@@ -95,6 +97,7 @@ export default {
         let result = await this.$refs.detailsExtraccion.validate();
         if (result) {
           let retiroExtraccion = {
+
             estudio_id: this.estudio.id,
             extracionista: this.retiro,
             fecha_retiro: new Date(this.fecha_retiro),

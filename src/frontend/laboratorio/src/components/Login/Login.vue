@@ -99,7 +99,7 @@ export default {
         let response = await LoginService.login_api(
           this.credenciales.usuario,
           this.credenciales.clave
-        );
+        );        
         console.log(response);
         this.$router.push({
           name: "home",

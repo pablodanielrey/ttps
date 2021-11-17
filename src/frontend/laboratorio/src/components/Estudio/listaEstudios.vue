@@ -1,8 +1,11 @@
 <template>
   <b-container fluid>
-    <br />
+  <div v-if="loading">
+      <b-spinner> </b-spinner>
+   
     <h4>Listado de Estudios</h4>
-
+</div>
+<div v-else>
     <b-col lg="4" class="my-1">
       <b-input-group size="sm">
         <b-form-input
@@ -41,6 +44,7 @@
         <b-button @click="detalleEstudio(row.item)" variant="outline-white">
           <b-icon icon="file-earmark-person-fill" variant="info"> </b-icon>
         </b-button>
+        <div v-if="esUltimoEstado(row.item)">
         <b-button
           @click="siguienteEstado(row.item)"
           variant="outline-white"
@@ -48,6 +52,7 @@
         >
           <b-icon icon="arrow-right-square" variant="info"> </b-icon>
         </b-button>
+        </div>
       </template>
     </b-table>
 
@@ -70,6 +75,7 @@
       </b-col>
       <br />
     </b-row>
+</div>
   </b-container>
 </template>
 
@@ -89,6 +95,7 @@ export default {
       pageOptions: [4, 10, 15],
       filter: null,
       currentPage: 1,
+      loading:true,
       totalRows: 1,
       fields: [
         { key: "paciente.nombre", label: "Nombre", class: "text-center p2" },
@@ -126,11 +133,15 @@ export default {
 
       return nameEstado;
     },
+    esUltimoEstado(estudio){
+      let ultimoEstado = estudio.estados[estudio.estados.length - 1];
+      return ultimoEstado.resourcetype == "ResultadoDeEstudioEntregado"? false : true
+
+    },
     async obtenerListaEstudios() {
       try {
         let response = await EstudiosService.obtenerListaEstudios();
         this.items = response.data;
-        console.log(this.items)
       } catch (err) {
         console.log(err);
       }
@@ -140,7 +151,6 @@ export default {
       this.currentPage = 1;
     },
     detalleEstudio(estudio) {
-      console.log(estudio)
      this.$router.push({
         name: "detalleDeEstudio",
         params: {
@@ -150,6 +160,7 @@ export default {
     },
     siguienteEstado(estudio) {
       let ultimoEstado = estudio.estados[estudio.estados.length - 1];
+      
       this.$router.push({
         name: ultimoEstado.resourcetype,
         params: {
@@ -163,6 +174,7 @@ export default {
       .all([this.obtenerListaEstudios()])
       .then(() => {
         this.totalRows = this.items.length;
+        this.loading=false
       })
       .catch((err) => {
         console.log(err);

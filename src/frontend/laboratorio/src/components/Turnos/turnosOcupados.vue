@@ -87,7 +87,7 @@ export default {
         fin: null,
       },
       tiempoTurnos: 15,
-      loading: false,
+      loading: true,
       value: "",
       context: null,
       turnos: [],

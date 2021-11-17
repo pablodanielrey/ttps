@@ -1,5 +1,9 @@
 <template>
   <b-container>
+    <div v-if="loading">
+      <b-spinner></b-spinner>
+    </div>
+    <div v-else> 
     <b-card
       header=" Listado de Estudios esperando Lote para procesamiento biotecnológico"
     >
@@ -27,6 +31,7 @@
         </b-col>
       </b-row>
     </b-card>
+    </div>
   </b-container>
 </template>
 
@@ -45,6 +50,7 @@ export default {
   data() {
     return {
       estudios: [],
+      loading:true,
       perPage: 10,
       pageOptions: [4, 10, 15],
       filter: null,
@@ -102,6 +108,9 @@ export default {
           }
         );
         console.log(response);  
+         this.$router.push({
+              name: "cargarResultadoLote",
+            });
 
       } catch (err) {
         console.log(err);
@@ -173,6 +182,7 @@ export default {
       .all([this.obtenerListaEstudiosEsperandoProcesamiento()])
       .then(() => {
         this.totalRows = this.items.length;
+        this.loading=false
       })
       .catch((err) => {
         console.log(err);

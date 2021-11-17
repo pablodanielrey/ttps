@@ -11,6 +11,9 @@ import ListaPacientes from '@/components/Paciente/listaPacientes.vue'
 import ListaEstudios from '@/components/Estudio/listaEstudios.vue'
 
 import NuevaObraSocial from '@/components/ObraSocial/nuevaObraSocial.vue'
+import ListaObrasSociales from '@/components/ObraSocial/listaObrasSociales.vue'
+
+
 import NuevoEstudio from '@/components/Estudio/nuevoEstudio.vue'
 import DetalleDeUnEstudio from '@/components/Estudio/detalleDeUnEstudio.vue'
 
@@ -27,9 +30,14 @@ import EsperandoRetiroExtraccion from '@/components/EstadosEstudio/esperandoReti
 import EsperandoLoteDeMuestraParaProcesamientoBiotecnologico from '@/components/EstadosEstudio/EsperandoLoteDeMuestraParaProcesamientoBiotecnologico.vue'
 import EsperandoInterpretacionDeResultados from '@/components/EstadosEstudio/EsperandoInterpretacionDeResultados.vue'
 import EsperandoProcesamientoDeLoteBiotecnologico from '@/components/EstadosEstudio/EsperandoProcesamientoDeLoteBiotecnologico.vue'
+import EsperandoEntregaAMedicoDerivante from '@/components/EstadosEstudio/EsperandoEntregaAMedicoDerivante.vue'
+import ResultadoDeEstudioEntregado from '@/components/EstadosEstudio/ResultadoDeEstudioEntregado.vue'
 
 
 
+
+import EsperandoInterpretacionDeResultadosInformante from '@/components/Estudio/EsperandoInterpretacionDeResultadosInformante.vue'
+import listaEstudiosEsperandoInforme from '@/components/Estudio/listaEstudiosEsperandoInforme.vue'
 
 
 
@@ -60,7 +68,9 @@ const router = new Router({
         children: [    
             { path: '/paciente', component: Paciente, name: 'paciente', props: true },
             { path: '/lista', component: ListaPacientes  ,name:'listaPacientes'},
-            { path: '/obraSocial', component: NuevaObraSocial },
+            { path: '/obraSocial', component: NuevaObraSocial ,name:'obraSocial' },
+            { path: '/listaObrasSociales', component: ListaObrasSociales ,name:'listaObrasSociales' },
+            
             { path: '/estudio', component: NuevoEstudio , name:'nuevoEstudio'},
             { path: '/listaEstudios', component: ListaEstudios, name:'listaEstudios' },
             { path: '/esperandoFactura', component: EsperandoFactura },
@@ -74,15 +84,22 @@ const router = new Router({
             { path: '/EsperandoLoteDeMuestraParaProcesamientoBiotecnologico', component: EsperandoLoteDeMuestraParaProcesamientoBiotecnologico , name:'EsperandoLoteDeMuestraParaProcesamientoBiotecnologico',props:true },
             { path: '/EsperandoInterpretacionDeResultados', component: EsperandoInterpretacionDeResultados , name:'EsperandoInterpretacionDeResultados',props:true },
             { path: '/EsperandoProcesamientoDeLoteBiotecnologico', component: EsperandoProcesamientoDeLoteBiotecnologico , name:'EsperandoProcesamientoDeLoteBiotecnologico',props:true },
-
-     
+            { path: '/EsperandoEntregaAMedicoDerivante', component: EsperandoEntregaAMedicoDerivante , name:'EsperandoEntregaAMedicoDerivante',props:true },
+           
+            { path: '/ResultadoDeEstudioEntregado', component: ResultadoDeEstudioEntregado , name:'ResultadoDeEstudioEntregado',props:true },
+            
+            
             { path: '/crearLote', component: CrearLote, name:'crearLote' },
             { path: '/cargarResultadoLote', component: CargarResultadoLote, name:'cargarResultadoLote'},
 
-            { path: '/configurarTurnos', component: ConfigurarTurnos },
+            { path: '/configurarTurnos', component: ConfigurarTurnos ,name:'configurarTurnos'},
             { path: '/configurarFechasSinTurnos', component: ConfigurarFechasSinTurno },
             { path: '/turnosOcupados', component: TurnosOcupados , name:'turnosOcupados'},
 
+            { path: '/EsperandoInterpretacionDeResultadosInformante', component: EsperandoInterpretacionDeResultadosInformante , name:'EsperandoInterpretacionDeResultadosInformante',props:true },
+            { path: '/listaEstudiosEsperandoInforme', component: listaEstudiosEsperandoInforme , name:'listaEstudiosEsperandoInforme',props:true },
+
+            
             { path: '/detalleDeEstudio', component: DetalleDeUnEstudio, name:'detalleDeEstudio',props: true  }
         ]
     },
