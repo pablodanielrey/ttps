@@ -18,7 +18,7 @@ class SerializadorDeEmpleado(serializers.ModelSerializer):
         fields = ['id','nombre','apellido','usuario','clave']
 
 class VistaEmpleado(viewsets.ModelViewSet):
-    queryset = models.Configurador.all()
+    queryset = models.Empleado.all()
     serializer_class = SerializadorDeEmpleado
 
     model = models.PersonasModel()
