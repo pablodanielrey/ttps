@@ -26,12 +26,12 @@ def generar_lote():
     tipoe = estudio_models.TiposDeEstudio.objects.all().first()
     diagnostico = estudio_models.Diagnostico.objects.all().first()
 
-    for _ in range(0,25):
-        estudio = estudio_models.Estudio(paciente=empleado,  tipo=tipoe, medico_derivante=empleado, diagnostico=diagnostico)
-        estudio.save()
+    # for _ in range(0,25):
+    #     estudio = estudio_models.Estudio(paciente=empleado,  tipo=tipoe, medico_derivante=empleado, diagnostico=diagnostico)
+    #     estudio.save()
 
-        estudio_models.EsperandoRetiroDeExtaccion(persona=empleado, estudio=estudio, extracionista='pepe se la lleva a la muestra', fecha_retiro=generar_fecha_now()).save()
-        estudio_models.EsperandoLoteDeMuestraParaProcesamientoBiotecnologico(estudio=estudio, persona=empleado).save()
+    #     estudio_models.EsperandoRetiroDeExtaccion(persona=empleado, estudio=estudio, extracionista='pepe se la lleva a la muestra', fecha_retiro=generar_fecha_now()).save()
+    #     estudio_models.EsperandoLoteDeMuestraParaProcesamientoBiotecnologico(estudio=estudio, persona=empleado).save()
 
 
 def aca_podes_editar_lean():
@@ -147,10 +147,11 @@ def generar_usuarios_ejemplo():
 def generar_usuarios_de_sistema():
     m = persona_models.PersonasModel()
     try:
-        m.crearAdministrador("Super","Admin", "administrador", "administrador")
-        m.crearConfigurador("Configurador","sistema", "configurador", "configurador")
-        m.crearEmpleado("Empleado1", "Apellido1", "empleado", "empleado")
-        m.crearEmpleado("Empleado2", "Apellido2", "empleado2", "empleado2")
+        m.crearAdministrador("Super","Admin", "administrador", "ttp")
+        m.crearConfigurador("Configurador","sistema", "configurador", "ttp")
+        m.crearEmpleado("Empleado1", "Apellido1", "empleado", "ttp")
+        m.crearEmpleado("Empleado2", "Apellido2", "empleado2", "ttp")
+        m.crearMedicoInformante("Medico","Informante","medico@simed.com", "matricula_de_informante1", "medicoinf", "ttp")
     except IntegrityError as e:
         pass
 
