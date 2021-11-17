@@ -31,7 +31,7 @@ class SerializadorDeLote(serializers.ModelSerializer):
 class VistaLotes(viewsets.ModelViewSet):
     queryset = models.Lote.all_pending()
     serializer_class = SerializadorDeLote
-    permission_classes = [ permissions.DjangoModelPermissions ]
+    permission_classes = [ permissions.IsAuthenticated ]
 
     def create(self, request, *args, **kwargs):
         logging.debug("entra aca")
@@ -58,6 +58,7 @@ class VistaEstudios(views.APIView):
 
     queryset = models.Lote.objects.none()
     modelo = models.ModeloLotes()
+    permission_classes = [ permissions.IsAuthenticated ]
     
     def get(self, request, format=None):
         estudios = self.modelo.obtener_estudios_para_lote()
