@@ -12,6 +12,12 @@ export default {
     },
     crearPaciente(paciente) {
         return Api().post(API_URL + API_USER + "pacientes/", paciente);
+    },
+    obtenerMedicosInformantes(){
+        return Api().get(API_URL + API_USER + "medicos_informantes/")
+    },
+    obtenerMedicosDerivantes(){
+        return Api().get(API_URL + API_USER + "medicos_derivantes/")
     }
     
 }

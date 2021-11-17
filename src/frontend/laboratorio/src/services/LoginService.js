@@ -36,14 +36,19 @@ export default {
                 'usuario': username,
                 'clave': password
             }));
+            window.localStorage.setItem('permisos', response.data.roles )
         } 
+    },
+    cerrarSesion(){
+        window.localStorage.removeItem('credenciales');
     }
+
 
 }
 
 
 //'Administradores' a configurador a empleado
-//'Empleados' buscador de pacientes  - cancelar turno - listar turno ocupados   
+//'Empleados' buscador de pacientes  - cancelar turno - listar turno ocupados  esta 
 //'Configuradores' configura turno y rango horario  1  -   os abm - abm de entidades basicas y de medicos informantes
 //'Pacientes'  
 //'Médicos_Informantes' completa ultimo estado
@@ -55,5 +60,5 @@ export default {
 // busqueda de medicos derivantes - http://localhost:8000/personas_api/medicos_derivantes/buscar/?q=med
 // lista de medicos derivantes - http://localhost:8000/personas_api/medicos_informantes/
 // busqueda de medicos derivantes - http://localhost:8000/personas_api/medicos_informantes/buscar/?q=med
-
+// buscar estudios - http://localhost:8000/estudio_api/estudios/buscar/?q=122
 

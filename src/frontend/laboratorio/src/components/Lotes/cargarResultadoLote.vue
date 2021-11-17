@@ -3,7 +3,14 @@
     <br />
 
     <b-card header=" Listado de Lotes">
-      <b-table striped hover :items="items" :fields="fields">
+      <b-table
+        striped
+        hover
+        :items="items"
+        :fields="fields"
+        show-empty
+        empty-text="Todavia no hay lotes para que se cargen los resultados"
+      >
         <template v-slot:cell(acciones)="item">
           <b-button
             title="Ver estudios"
@@ -172,6 +179,13 @@ export default {
         this.$nextTick(() => {
           this.$bvModal.hide("modal-prevent-closing");
         });
+        this.$root.$bvToast.toast("se guardo la Url del resultado con exito", {
+          title: "Atencion!",
+          toaster: "b-toaster-top-center",
+          solid: true,
+          variant: "success",
+        });
+        this.obtenerLotes();
       } catch (error) {
         console.log(error);
       }

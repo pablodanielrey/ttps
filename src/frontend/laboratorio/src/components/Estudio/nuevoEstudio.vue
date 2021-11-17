@@ -16,9 +16,7 @@
         </b-col>
       </b-row> -->
 
-      <ValidationObserver ref="detailsEstudio">
-                  complete <autocomplete :suggestions="cities" :selection.sync="value"></autocomplete>
-
+      <ValidationObserver ref="detailsEstudio">        
         <b-form-group>
           <b-alert
             v-for="alert in alerts"
@@ -69,22 +67,35 @@
                 </ValidationProvider>
               </b-form-group>
             </b-col>
-            <b-col lg="5" md="5" sm="10">
+          <b-col lg="5" md="5" sm="10">
               <b-form-group
-                id="medico-label"
-                label="Medico derivante:"
-                label-for="Medico"
+                id="MedicoDerivante-label"
+                label="Medico Derivante:"
+                label-for="medico"
               >
                 <ValidationProvider
-                  :name="'Medico '"
+                  :name="'Medico derivante '"
                   :rules="'required'"
                   v-slot="{ errors, valid }"
                 >
-                  <b-form-input
-                    placeholder="medico derivante"
+                  <v-select
+                    
+                    placeholder="Seleccione un medico derivante  "
                     v-model="estudio.medico_derivante"
+                    :options="getOptionsMedicoDerivante"
+                    :value="medicoDerivanteSelected"
+                    :sercheable="true"
+                    responsive="sm"
+                    size="sm"
+                    lenguage="en-US"
                     :state="errors[0] ? false : valid ? true : null"
-                  ></b-form-input>
+                  ></v-select>
+                  <p
+                    style="color: red; font-size: 10px"
+                    v-if="estudio.medico_derivante == '' || estudio.medico_derivante == null"
+                  >
+                    Se debe seleccionar un medico derivante
+                  </p>
                   <b-form-invalid-feedback
                     v-for="error in errors"
                     :key="error.key"
@@ -278,9 +289,11 @@ export default {
     return {
       valid: null,
       pacienteSelected: null,
+      medicoDerivanteSelected:null,
       diagnosticoSelected: null,
       estudios: [],
       pacientes: [],
+      medicosDerivantes:[],
       diagnosticosLista: [],
       file1: [],
       alerts: [],
@@ -299,8 +312,7 @@ export default {
   },
 
   methods: {
-    cambiarPaciente() {
-    
+    cambiarPaciente() {    
        this.obtenerHistoriaClinicaPaciente()
     },
     cambiarDiagnostico() {
@@ -333,6 +345,16 @@ export default {
       try {
         const response = await ObrasSocialesService.obtenerObrasSociales();
         this.obras_sociales = response.data;
+      } catch (err) {
+        console.log(err);
+      }
+    },
+    
+      async obtenerMedicosDerivantes() {
+      try {
+        let response = await PacientesService.obtenerMedicosDerivantes();
+        this.medicosDerivantes = response.data;
+        console.log(this.medicosDerivantes)
       } catch (err) {
         console.log(err);
       }
@@ -408,6 +430,13 @@ export default {
       }));
       return pacientes;
     },
+    getOptionsMedicoDerivante(){
+      let pacientes = this.medicosDerivantes.map((e) => ({
+        id: e.id,
+        label: e.nombre + " " + e.apellido,
+      }));
+      return pacientes;
+    },
     getOptionsDiagnosticos() {
       let diagnosticosLista = this.diagnosticosLista.map((e) => ({
         id: e.id,
@@ -424,7 +453,7 @@ export default {
         this.obtenerPacientes(),
         this.obtenerEstudios(),
         this.obtenerDiagnosticos(),
-       
+        this.obtenerMedicosDerivantes()
       ])
       .then(() => {
         this.loading = false;

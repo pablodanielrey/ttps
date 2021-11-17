@@ -101,7 +101,7 @@
                 </ValidationProvider>
               </b-form-group>
             </b-col>
-             <b-col lg="3" md="3">
+            <b-col lg="3" md="3">
               <b-form-group
                 id="Direccion-label"
                 label="Direccion :"
@@ -113,6 +113,7 @@
                   v-slot="{ errors, valid }"
                 >
                   <b-form-input
+                    type="email"
                     placeholder="Direccion del paciente"
                     v-model="paciente.direccion"
                     :state="errors[0] ? false : valid ? true : null"
@@ -168,6 +169,7 @@
                   <b-form-input
                     placeholder="Telefono"
                     v-model="paciente.telefono"
+                     type="number"
                     :state="errors[0] ? false : valid ? true : null"
                   ></b-form-input>
                   <b-form-invalid-feedback
@@ -211,6 +213,7 @@
               <b-form-group id="os-label" label="Obra Social:" label-for="os">
                 <ValidationProvider :name="'os '" v-slot="{ errors, valid }">
                   <b-form-select
+                    @change="cambioOs()"
                     :options="getObrasSociales"
                     v-model="paciente.obra_social"
                     :state="errors[0] ? false : valid ? true : null"
@@ -232,12 +235,13 @@
                 label-for="numeroOS"
               >
                 <ValidationProvider
+                :rules="required"
                   :name="'numeroOS '"
                   v-slot="{ errors, valid }"
                 >
                   <b-form-input
                     placeholder="Numero de afiliado"
-                    type="number"
+                    type="number"                    
                     v-model="paciente.numero_afiliado"
                     :state="errors[0] ? false : valid ? true : null"
                   ></b-form-input>
@@ -325,6 +329,7 @@ export default {
           fecha_nacimiento: null,
           historia_clinica: null,
           telefono: null,
+
         };
       },
     },
@@ -332,19 +337,21 @@ export default {
       type: Boolean,
       return: false,
     },
-  },
-  created() {
-    console.log(this.paciente);
-  },
+  },  
   data() {
     return {
       alerts: [],
       loading: true,
       obras_sociales: [],
+      required:''
     };
   },
 
   methods: {
+    cambioOs(){
+     this.required='required'
+    },
+   
     async editarPaciente() {
       console.log("edit");
     },
@@ -352,17 +359,19 @@ export default {
       try {
         let result = await this.$refs.detailsPaciente.validate();
         console.log(result);
-        let r = await PacientesService.crearPaciente(this.paciente);
-        if (r.status == 200) {
-          this.$root.$bvToast.toast("Se creo con exito el paciente", {
-            title: "Atencion!",
-            toaster: "b-toaster-top-center",
-            solid: true,
-            variant: "success",
-          });
-          this.$router.push({
-            name: "listaPacientes",
-          });
+        if (result) {
+          let r = await PacientesService.crearPaciente(this.paciente);
+          if (r.status == 200) {
+            this.$root.$bvToast.toast("Se creo con exito el paciente", {
+              title: "Atencion!",
+              toaster: "b-toaster-top-center",
+              solid: true,
+              variant: "success",
+            });
+            this.$router.push({
+              name: "listaPacientes",
+            });
+          }
         }
       } catch (err) {
         console.log(err);

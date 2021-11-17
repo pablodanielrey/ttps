@@ -12,6 +12,7 @@
     "bootstrap": "^4.6.0",
     "bootstrap-vue": "^2.21.2",
     "core-js": "^3.6.5",
+    "jspdf": "^2.4.0",
     "vee-validate": "^2.2.15",
     "vue": "^2.6.11",
     "vue-cal": "^3.10.1",

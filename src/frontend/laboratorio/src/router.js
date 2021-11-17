@@ -27,9 +27,12 @@ import EsperandoRetiroExtraccion from '@/components/EstadosEstudio/esperandoReti
 import EsperandoLoteDeMuestraParaProcesamientoBiotecnologico from '@/components/EstadosEstudio/EsperandoLoteDeMuestraParaProcesamientoBiotecnologico.vue'
 import EsperandoInterpretacionDeResultados from '@/components/EstadosEstudio/EsperandoInterpretacionDeResultados.vue'
 import EsperandoProcesamientoDeLoteBiotecnologico from '@/components/EstadosEstudio/EsperandoProcesamientoDeLoteBiotecnologico.vue'
+import EsperandoEntregaAMedicoDerivante from '@/components/EstadosEstudio/EsperandoEntregaAMedicoDerivante.vue'
 
 
 
+import EsperandoInterpretacionDeResultadosInformante from '@/components/Estudio/EsperandoInterpretacionDeResultadosInformante.vue'
+import listaEstudiosEsperandoInforme from '@/components/Estudio/listaEstudiosEsperandoInforme.vue'
 
 
 
@@ -74,15 +77,20 @@ const router = new Router({
             { path: '/EsperandoLoteDeMuestraParaProcesamientoBiotecnologico', component: EsperandoLoteDeMuestraParaProcesamientoBiotecnologico , name:'EsperandoLoteDeMuestraParaProcesamientoBiotecnologico',props:true },
             { path: '/EsperandoInterpretacionDeResultados', component: EsperandoInterpretacionDeResultados , name:'EsperandoInterpretacionDeResultados',props:true },
             { path: '/EsperandoProcesamientoDeLoteBiotecnologico', component: EsperandoProcesamientoDeLoteBiotecnologico , name:'EsperandoProcesamientoDeLoteBiotecnologico',props:true },
+            { path: '/EsperandoEntregaAMedicoDerivante', component: EsperandoEntregaAMedicoDerivante , name:'EsperandoEntregaAMedicoDerivante',props:true },
 
-     
+            
             { path: '/crearLote', component: CrearLote, name:'crearLote' },
             { path: '/cargarResultadoLote', component: CargarResultadoLote, name:'cargarResultadoLote'},
 
-            { path: '/configurarTurnos', component: ConfigurarTurnos },
+            { path: '/configurarTurnos', component: ConfigurarTurnos ,name:'configurarTurnos'},
             { path: '/configurarFechasSinTurnos', component: ConfigurarFechasSinTurno },
             { path: '/turnosOcupados', component: TurnosOcupados , name:'turnosOcupados'},
 
+            { path: '/EsperandoInterpretacionDeResultadosInformante', component: EsperandoInterpretacionDeResultadosInformante , name:'EsperandoInterpretacionDeResultadosInformante',props:true },
+            { path: '/listaEstudiosEsperandoInforme', component: listaEstudiosEsperandoInforme , name:'listaEstudiosEsperandoInforme',props:true },
+
+            
             { path: '/detalleDeEstudio', component: DetalleDeUnEstudio, name:'detalleDeEstudio',props: true  }
         ]
     },
