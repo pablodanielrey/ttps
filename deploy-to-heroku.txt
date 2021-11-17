@@ -1,0 +1,2 @@
+https://medium.com/@shashankmohabia/deploying-a-django-app-to-heroku-using-github-repository-319c04a11c1a
+
