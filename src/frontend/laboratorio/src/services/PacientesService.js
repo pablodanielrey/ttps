@@ -44,6 +44,9 @@ export default {
         return Api().delete(API_URL + API_USER + "empleados/" + paciente.id);
 
     },
+    editarEmpleado(paciente) {
+        return Api().put(API_URL + "empleados/" + paciente.id + '/', paciente);
+    },
     crearMedicoInformante(paciente) {
         return Api().post(API_URL + API_USER + "medicos_informantes/", paciente);
     },

@@ -45,11 +45,6 @@
             variant="outline-success"
             title="Editar"
           >
-          <b-button
-            @click="editar(row.item)"
-            variant="outline-success"
-            title="Editar"
-          >
             <b-icon icon="arrow-repeat" variant="success"> </b-icon>
           </b-button>
         </template>
@@ -97,8 +92,12 @@ export default {
       loading: true,
       totalRows: 1,
       fields: [
-        { key: "nombre", label: "Nombre", class: "text-center p2" },
-           {
+        { 
+          key: "nombre", 
+          label: "Nombre", 
+          class: "text-center p2" 
+        },
+        {
           key: "apellido",
           label: "Apellido",
           class: "text-center p2",
@@ -110,7 +109,11 @@ export default {
         },
      
      
-        { key: "acciones", label: "Acciones", class: "text-center p2" },
+        { 
+          key: "acciones", 
+          label: "Acciones", 
+          class: "text-center p2" 
+        },
       ],
       items: [],
     };
@@ -152,7 +155,15 @@ export default {
         console.log(err);
       }
     },
-  
+    editar(configurado) {
+      this.$router.push({
+        name: "empleado",
+        params: {
+          empleado: configurado,
+          editar: true,
+        },
+      });
+    },
     onFiltered(filteredItems) {
       this.totalRows = filteredItems.length;
       this.currentPage = 1;

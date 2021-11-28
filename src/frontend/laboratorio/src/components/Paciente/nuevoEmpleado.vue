@@ -187,7 +187,7 @@ export default {
       } catch (error) {
         console.log(error);
         this.$root.$bvToast.toast(
-          "NO se pudo crear el empleado, el usuario ya existe",
+          "No se pudo crear el empleado, el usuario ya existe",
           {
             title: "Atencion!",
             toaster: "b-toaster-top-center",
@@ -197,28 +197,28 @@ export default {
         );
       }
     },
-    async editarConfigurador(){
-          try {
+    async editarempleado(){
+      try {
         let result = await this.$refs.datosConfigurador.validate();
         if (result) {
-          console.log(this.configurador);
-          let r = await PacientesService.editarConfigurador(this.configurador);
+          console.log(this.empleado);
+          let r = await PacientesService.editarEmpleado(this.empleado);
           console.log(r);
 
-          this.$root.$bvToast.toast("Se edito con exito el configurador", {
+          this.$root.$bvToast.toast("Se edito con exito el empleado", {
             title: "Atencion!",
             toaster: "b-toaster-top-center",
             solid: true,
             variant: "success",
           });
           this.$router.push({
-            name: "listaConfiguradores",
+            name: "listaEmpleado",
           });
         }
       } catch (error) {
         console.log(error);
         this.$root.$bvToast.toast(
-          "NO se pudo editar el configurador",
+          "No se pudo editar el empleado",
           {
             title: "Atencion!",
             toaster: "b-toaster-top-center",
