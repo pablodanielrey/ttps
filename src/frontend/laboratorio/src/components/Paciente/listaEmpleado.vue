@@ -3,10 +3,10 @@
     <div v-if="loading">
       <b-spinner> </b-spinner>
 
-      <h4>Listado de Empleados</h4>
+      <h4>Empleados</h4>
     </div>
     <div v-else>
-         <h4>Listado de Empleados</h4>
+         <h4>Empleados</h4>
       <b-col lg="4" class="my-1">
         <b-input-group size="sm">
           <b-form-input
@@ -40,17 +40,18 @@
           >
             <b-icon icon="trash" variant="danger"> </b-icon>
           </b-button>
-    <!--       <b-button
+          <b-button
             @click="editar(row.item)"
             variant="outline-success"
             title="Editar"
           >
-            <b-icon
-              icon="arrow-repeat"
-              variant="success"
-            >
-            </b-icon>
-          </b-button> -->
+          <b-button
+            @click="editar(row.item)"
+            variant="outline-success"
+            title="Editar"
+          >
+            <b-icon icon="arrow-repeat" variant="success"> </b-icon>
+          </b-button>
         </template>
       </b-table>
 
