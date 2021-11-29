@@ -155,11 +155,11 @@ export default {
         console.log(err);
       }
     },
-    editar(configurado) {
+    editar(empleado) {
       this.$router.push({
         name: "empleado",
         params: {
-          empleado: configurado,
+          empleado: empleado,
           editar: true,
         },
       });
