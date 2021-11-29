@@ -239,6 +239,18 @@ class SerializadorDePersonaResumido(serializers.ModelSerializer):
         model = models.Persona
         fields = ['id','nombre','apellido']
 
+class SerializadorEstudiosDetalle(serializers.HyperlinkedModelSerializer):
+    paciente = SerializadorDePersona()
+    medico_derivante = SerializadorDePersona()
+    tipo = SerializadorTiposDeEstudio()
+    diagnostico = SerializadorDiagnostico()
+    estados = SerializadorEstadoEstudioPolimorfico(many=True)
+    ultimo_estado = SerializadorEstadoEstudioPolimorfico()
+
+    class Meta:
+        model = models.Estudio
+        fields = ['id', 'fecha_alta', 'diagnostico', 'paciente', 'medico_derivante', 'tipo', 'presupuesto', 'estados', 'ultimo_estado']
+
 class SerializadorEstudios(serializers.HyperlinkedModelSerializer):
     paciente = SerializadorDePersonaResumido()
     medico_derivante = SerializadorDePersonaResumido()
@@ -254,6 +266,17 @@ class SerializadorEstudios(serializers.HyperlinkedModelSerializer):
 class VistaEstudios(viewsets.ModelViewSet):
     queryset = models.Estudio.objects.all()
     serializer_class = SerializadorEstudios
+
+    custom_serializer_class = {
+        'retrieve': SerializadorEstudiosDetalle,
+        'list': SerializadorEstudios
+    }
+
+    def get_serializer_class(self):
+        try:
+            return self.custom_serializer_class[self.action]
+        except (KeyError, AttributeError) as e:
+            return super().get_serializer_class()
 
     def create(self, request, *args, **kwargs):
         """
