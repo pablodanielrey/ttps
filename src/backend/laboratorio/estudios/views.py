@@ -176,7 +176,7 @@ class VistaEstadoEstudio(viewsets.ModelViewSet):
         estudio = estudio_models.Estudio.objects.get(id=estudio_id)
 
         """
-            TODO: debemos estar seguros de que no actualizamos ningún id!!!!
+            TODO: debemos estar seguros de que no actualizamos ningún dato sensible desde afuera.
         """
         for campo_solo_lectura in ['id','fecha']:
             try:
@@ -234,17 +234,22 @@ class VistaEstadoEstudio(viewsets.ModelViewSet):
 """
     ///////////////////////////////////////////////
 """
+class SerializadorDePersonaResumido(serializers.ModelSerializer):
+    class Meta:
+        model = models.Persona
+        fields = ['id','nombre','apellido']
 
 class SerializadorEstudios(serializers.HyperlinkedModelSerializer):
-    paciente = SerializadorDePersona()
-    medico_derivante = SerializadorDePersona()
+    paciente = SerializadorDePersonaResumido()
+    medico_derivante = SerializadorDePersonaResumido()
     tipo = SerializadorTiposDeEstudio()
     diagnostico = SerializadorDiagnostico()
-    estados = SerializadorEstadoEstudioPolimorfico(many=True)
+    #estados = SerializadorEstadoEstudioPolimorfico(many=True)
+    ultimo_estado = SerializadorEstadoEstudioPolimorfico()
 
     class Meta:
         model = models.Estudio
-        fields = ['id', 'fecha_alta', 'diagnostico', 'paciente', 'medico_derivante', 'tipo', 'presupuesto', 'estados']
+        fields = ['id', 'fecha_alta', 'diagnostico', 'paciente', 'medico_derivante', 'tipo', 'presupuesto', 'ultimo_estado']
 
 class VistaEstudios(viewsets.ModelViewSet):
     queryset = models.Estudio.objects.all()
