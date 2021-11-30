@@ -35,6 +35,22 @@ class Estudio(models.Model):
     def ultimo_estado(self):
         return self.estados.order_by('fecha').last()
 
+
+    @property
+    def comprobante_de_pago(self):
+        comprobantes = self.estados.instance_of(EsperandoComprobanteDePago)
+        for ecomprobante in comprobantes:
+            return ecomprobante.comprobante
+        return None
+
+    @property
+    def consentimiento_informado(self):
+        consentiminetos = self.estados.instance_of(EsperandoConsentimientoInformado)
+        for econsentimiento in consentiminetos:
+            return econsentimiento.consentimiento
+        return None
+
+
     @classmethod
     def buscar(cls, termino:str, estado=None):
         estudios = cls.objects

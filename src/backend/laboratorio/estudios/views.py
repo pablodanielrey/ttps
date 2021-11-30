@@ -66,9 +66,9 @@ class SerializadorEstadoEstudio(serializers.ModelSerializer):
 
 class SerializadorEsperandoComprobanteDePago(serializers.ModelSerializer):
     class Meta:
-        logging.debug("comprobante")
         model = models.EsperandoComprobanteDePago
-        fields = ['id','fecha','comprobante']
+        # fields = ['id','fecha','comprobante']
+        fields = ['id','fecha']
 
 class SerializadorAnuladorPorFaltaDePago(serializers.ModelSerializer):
     class Meta:
@@ -84,7 +84,8 @@ class SerializadorEnviarConsentimientoInformado(serializers.ModelSerializer):
 class SerializadorEsperandoConsentimientoInformado(serializers.ModelSerializer):
     class Meta:
         model = models.EsperandoConsentimientoInformado
-        fields = ['id','fecha','consentimiento']
+        # fields = ['id','fecha','consentimiento']
+        fields = ['id','fecha']
 
 class SerializadorEsperandoSeleccionDeTurnoParaExtraccion(serializers.ModelSerializer):
     turno = turnos_views.SerializadorTurnosConfirmados()
@@ -249,7 +250,7 @@ class SerializadorEstudiosDetalle(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = models.Estudio
-        fields = ['id', 'fecha_alta', 'diagnostico', 'paciente', 'medico_derivante', 'tipo', 'presupuesto', 'estados', 'ultimo_estado']
+        fields = ['id', 'fecha_alta', 'diagnostico', 'paciente', 'medico_derivante', 'tipo', 'estados', 'ultimo_estado']
 
 class SerializadorEstudios(serializers.HyperlinkedModelSerializer):
     paciente = SerializadorDePersonaResumido()
@@ -261,7 +262,7 @@ class SerializadorEstudios(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = models.Estudio
-        fields = ['id', 'fecha_alta', 'diagnostico', 'paciente', 'medico_derivante', 'tipo', 'presupuesto', 'ultimo_estado']
+        fields = ['id', 'fecha_alta', 'diagnostico', 'paciente', 'medico_derivante', 'tipo', 'ultimo_estado']
 
 class VistaEstudios(viewsets.ModelViewSet):
     queryset = models.Estudio.objects.all()
@@ -338,3 +339,23 @@ class VistaEstudios(viewsets.ModelViewSet):
         estudios = models.Estudio.buscar(q, e)
         serializer = SerializadorEstudios(estudios, many=True, context={'request': request})
         return Response(serializer.data)
+
+    @action(detail=True, methods=['GET'])
+    def presupuesto(self, request, pk=None):
+        estudio = self.get_object()
+        return Response({'presupuesto': estudio.presupuesto})
+
+
+    @action(detail=True, methods=['GET'])
+    def comprobante_de_pago(self, request, pk=None):
+        estudio = self.get_object()
+        return Response({
+            'comprobante': estudio.comprobante_de_pago
+        })
+    
+    @action(detail=True, methods=['GET'])
+    def consentimiento_informado(self, request, pk=None):
+        estudio = self.get_object()
+        return Response({
+            'consentimiento': estudio.consentimiento_informado
+        })
