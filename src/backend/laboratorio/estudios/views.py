@@ -1,9 +1,9 @@
 from django.db.models.query import QuerySet
 from django.shortcuts import render
-from django.http import HttpResponseBadRequest
+from django.http import HttpResponseBadRequest, HttpResponse
 
 
-
+import base64
 import logging
 import datetime
 from zoneinfo import ZoneInfo
@@ -343,19 +343,24 @@ class VistaEstudios(viewsets.ModelViewSet):
     @action(detail=True, methods=['GET'])
     def presupuesto(self, request, pk=None):
         estudio = self.get_object()
-        return Response({'presupuesto': estudio.presupuesto})
+        datos = estudio.presupuesto
+        if not datos:
+            return HttpResponseBadRequest('no existe presupuesto para el estudio')
+        return HttpResponse(base64.b64decode(datos), content_type='application/pdf')
 
 
     @action(detail=True, methods=['GET'])
     def comprobante_de_pago(self, request, pk=None):
         estudio = self.get_object()
-        return Response({
-            'comprobante': estudio.comprobante_de_pago
-        })
+        datos = estudio.comprobante_de_pago
+        if not datos:
+            return HttpResponseBadRequest('no existe comprobante para el estudio')
+        return HttpResponse(base64.b64decode(datos), content_type='application/pdf')
     
     @action(detail=True, methods=['GET'])
     def consentimiento_informado(self, request, pk=None):
         estudio = self.get_object()
-        return Response({
-            'consentimiento': estudio.consentimiento_informado
-        })
+        datos = estudio.consentimiento_informado
+        if not datos:
+            return HttpResponseBadRequest('no existe consentimiento para el estudio')
+        return HttpResponse(base64.b64decode(datos), content_type='application/pdf')        
