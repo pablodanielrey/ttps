@@ -67,8 +67,14 @@ class SerializadorEstadoEstudio(serializers.ModelSerializer):
 class SerializadorEsperandoComprobanteDePago(serializers.ModelSerializer):
     class Meta:
         model = models.EsperandoComprobanteDePago
+        fields = ['id','fecha']
+
+class SerializadorEsperandoComprobanteDePagoUpload(serializers.ModelSerializer):
+    class Meta:
+        model = models.EsperandoComprobanteDePago
         fields = ['id','fecha','comprobante']
-        #fields = ['id','fecha']
+
+
 
 class SerializadorAnuladorPorFaltaDePago(serializers.ModelSerializer):
     class Meta:
@@ -148,7 +154,6 @@ class SerializadorEstadoEstudioPolimorfico(PolymorphicSerializer):
         models.ResultadoDeEstudioEntregado: SerializadorResultadoDeEstudioEntregado
     }
 
-
 class VistaEstadoEstudio(viewsets.ModelViewSet):
     queryset = models.EstadoEstudio.objects.all()
     serializer_class = SerializadorEstadoEstudioPolimorfico
@@ -191,7 +196,15 @@ class VistaEstadoEstudio(viewsets.ModelViewSet):
         clase_ultimo_estado = ultimo_estado.__class__
 
         """ aca manejo comportamientos especiales de los estados """
-        if clase_ultimo_estado == models.EsperandoSeleccionDeTurnoParaExtraccion:
+        if clase_ultimo_estado == models.EsperandoComprobanteDePago:
+            serializador = SerializadorEsperandoComprobanteDePagoUpload(instance=ultimo_estado, data=request.data)
+            if not serializador.is_valid():
+                return HttpResponseBadRequest(serializador.errors)
+            if len(serializador.validated_data) <= 0:
+                return HttpResponseBadRequest()
+            serializador.save()
+
+        elif clase_ultimo_estado == models.EsperandoSeleccionDeTurnoParaExtraccion:
             """ genero un turno """
             paciente = personas_models.Persona.objects.get(id=estudio.paciente.id)
             inicio = parser.parse(request.data['inicio'])
@@ -252,17 +265,20 @@ class SerializadorEstudiosDetalle(serializers.HyperlinkedModelSerializer):
         model = models.Estudio
         fields = ['id', 'fecha_alta', 'diagnostico', 'paciente', 'medico_derivante', 'tipo', 'estados', 'ultimo_estado']
 
+
 class SerializadorEstudios(serializers.HyperlinkedModelSerializer):
     paciente = SerializadorDePersonaResumido()
     medico_derivante = SerializadorDePersonaResumido()
     tipo = SerializadorTiposDeEstudio()
     diagnostico = SerializadorDiagnostico()
-    #estados = SerializadorEstadoEstudioPolimorfico(many=True)
+    # #estados = SerializadorEstadoEstudioPolimorfico(many=True)
     ultimo_estado = SerializadorEstadoEstudioPolimorfico()
 
     class Meta:
         model = models.Estudio
-        fields = ['id', 'fecha_alta', 'diagnostico', 'paciente', 'medico_derivante', 'tipo', 'ultimo_estado']
+        fields = ['id', 'fecha_alta', 'diagnostico', 'paciente', 'medico_derivante', 'tipo','ultimo_estado']
+
+
 
 class VistaEstudios(viewsets.ModelViewSet):
     queryset = models.Estudio.objects.all()
@@ -301,8 +317,9 @@ class VistaEstudios(viewsets.ModelViewSet):
         )
         estudio.save()
 
-        paciente.historia_clinica.historia_clinica = datos['diagnostico_presuntivo']
-        paciente.save()
+        hc = personas_models.HistoriaClinica.objects.filter(persona=paciente).first()
+        hc.historia_clinica = datos['diagnostico_presuntivo']
+        hc.save()
 
         esperando_comprobante = estudio_models.EsperandoComprobanteDePago(estudio=estudio)
         esperando_comprobante.save()
