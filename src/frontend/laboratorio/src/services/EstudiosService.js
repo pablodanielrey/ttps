@@ -27,9 +27,12 @@ export default {
     },
     obtenerListaEstudiosParaInformes(){
         return Api().get(API_URL + API_USER + "estudios/buscar/?e=EsperandoInterpretacionDeResultados")
+    },
+    obtenerConsentimientoInformado(idEstudio){
+        console.log(API_URL + API_USER + "estudios/"+idEstudio+"/consentimiento_informado/")
+      return Api().get(API_URL + API_USER + "estudios/"+idEstudio+"/consentimiento_informado/")
 
     }
-    
   
     
 }

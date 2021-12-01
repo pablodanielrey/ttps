@@ -10,7 +10,7 @@
       </div>
       <div v-else>
         <vue-cal
-        active-view="years"
+          active-view="years"
           :disable-views="['years', 'day']"
           :time-step="15"
           :disable-days="this.turnos"
@@ -75,13 +75,10 @@ export default {
       },
       tiempoTurnos: 15,
       loading: false,
-      value: "",
-      context: null,
       turnos: [],
       showDialog: false,
       selectedEvent: {},
       paciente: null,
-      pacienteSelected: null,
       pacientes: [],
     };
   },

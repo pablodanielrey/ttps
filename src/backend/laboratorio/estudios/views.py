@@ -67,8 +67,8 @@ class SerializadorEstadoEstudio(serializers.ModelSerializer):
 class SerializadorEsperandoComprobanteDePago(serializers.ModelSerializer):
     class Meta:
         model = models.EsperandoComprobanteDePago
-        # fields = ['id','fecha','comprobante']
-        fields = ['id','fecha']
+        fields = ['id','fecha','comprobante']
+        #fields = ['id','fecha']
 
 class SerializadorAnuladorPorFaltaDePago(serializers.ModelSerializer):
     class Meta:
@@ -84,8 +84,8 @@ class SerializadorEnviarConsentimientoInformado(serializers.ModelSerializer):
 class SerializadorEsperandoConsentimientoInformado(serializers.ModelSerializer):
     class Meta:
         model = models.EsperandoConsentimientoInformado
-        # fields = ['id','fecha','consentimiento']
-        fields = ['id','fecha']
+        fields = ['id','fecha','consentimiento']
+        #fields = ['id','fecha']
 
 class SerializadorEsperandoSeleccionDeTurnoParaExtraccion(serializers.ModelSerializer):
     turno = turnos_views.SerializadorTurnosConfirmados()

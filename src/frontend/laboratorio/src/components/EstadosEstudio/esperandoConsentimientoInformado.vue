@@ -77,10 +77,7 @@ export default {
         this.consentimiento = e.target.result;
       };
       reader.readAsDataURL(file);
-    },
-    countUp() {
-      this.counter -= 1;
-    },
+    },  
     async guardarConsentimiento() {
       try {
         let result = await this.$refs.detailsConsentimiento.validate();
@@ -107,7 +104,7 @@ export default {
       } catch (error) {
          console.log(error);
         this.$root.$bvToast.toast(
-          "ocurrio un error mientras ingresaba el consentimiento firmado, por favor vuelva a intentar",
+          "Ocurrio un error mientras ingresaba el consentimiento firmado, por favor vuelva a intentar",
           {
             title: "Atencion!",
             toaster: "b-toaster-top-center",

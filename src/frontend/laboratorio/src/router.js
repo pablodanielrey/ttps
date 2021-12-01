@@ -38,7 +38,7 @@ import EsperandoConsentimientoInformado from '@/components/EstadosEstudio/espera
 import EsperandoSeleccionDeTurnoExtraccion from '@/components/EstadosEstudio/esperandoSeleccionDeTurnoExtraccion.vue'
 import EsperandoTomaDeMuestra from '@/components/EstadosEstudio/esperandoTomaDeMuestra.vue'
 import EsperandoRetiroExtraccion from '@/components/EstadosEstudio/esperandoRetiroExtraccion.vue'
-import EsperandoLoteDeMuestraParaProcesamientoBiotecnologico from '@/components/EstadosEstudio/EsperandoLoteDeMuestraParaProcesamientoBiotecnologico.vue'
+import EsperandoLoteDeMuestraParaProcesamientoBiotecnologico from '@/components/EstadosEstudio/esperandoLoteDeMuestraParaProcesamientoBiotecnologico.vue'
 import EsperandoInterpretacionDeResultados from '@/components/EstadosEstudio/EsperandoInterpretacionDeResultados.vue'
 import EsperandoProcesamientoDeLoteBiotecnologico from '@/components/EstadosEstudio/EsperandoProcesamientoDeLoteBiotecnologico.vue'
 import EsperandoEntregaAMedicoDerivante from '@/components/EstadosEstudio/EsperandoEntregaAMedicoDerivante.vue'
@@ -62,9 +62,6 @@ import ConfigurarFechasSinTurno from '@/components/Turnos/configurarFechasSinTur
 
 //turnos
 import TurnosOcupados from '@/components/Turnos/turnosOcupados.vue'
-
-// lo siguiente necesita que vue tenga el compilador de templates.
-// const Foo = { template: '<div>superrr fooooo</div>' }
 
 const router = new Router({
     mode: 'history',

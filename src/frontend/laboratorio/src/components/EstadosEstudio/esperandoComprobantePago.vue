@@ -67,9 +67,9 @@ export default {
     };
   },
   created() {
-    let fecha = new Date(this.estudio.estados[0].fecha);
+    console.log(this.estudio)
+    let fecha = new Date(this.estudio.fecha_alta);
     this.counter = new Date();
-
     this.counter = this.difference(fecha, this.counter);
     this.counter = this.counter == 0 ? 30 : this.counter
   },
@@ -99,10 +99,7 @@ export default {
         this.comprobantePago = e.target.result;
       };
       reader.readAsDataURL(file);
-    },
-    countUp() {
-      this.counter -= 1;
-    },
+    },  
     async guardarComprobante() {
       let result = await this.$refs.detailsComprobante.validate();
       if (result) {
@@ -112,7 +109,7 @@ export default {
             comprobante: this.comprobantePago,
           };
           console.log(datosComprobante);
-          let response = await EstudiosService.actualizarUltimoEstado(
+           await EstudiosService.actualizarUltimoEstado(
             datosComprobante
           );
           this.$root.$bvToast.toast("Se agrego el comprobante de pago", {
@@ -124,8 +121,6 @@ export default {
           this.$router.push({
             name: "listaEstudios",
           });
-
-          console.log(response);
         } catch (err) {
           console.log(err);
           this.$root.$bvToast.toast(

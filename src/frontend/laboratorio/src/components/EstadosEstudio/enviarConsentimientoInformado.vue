@@ -2,19 +2,22 @@
   <b-container>
     <div>
       <b-card
-        header="Descargar resultado en formato pdf de estudio para entregarlo a medico derivante"
+        header="Descargar consentimiento informado en formato pdf"
       >
         <a
           title="Bajar consentimiento informado"
           variant="outline-success"
-          @click="bajarConsentimiento()"
-          download="consentimiento.pdf"
-          :href="this.estudio.estados[0].comprobante"
+          @click="descargarConsentimiento()"
+          download="consentimiento.pdf"        
         >
           <b-icon icon="download" aria-hidden="true"></b-icon
         ></a>
-        <br />
+        <br/>
+             <b-button variant="success" @click="siguienteEstado()"
+              >Siguiente
+            </b-button>
       </b-card>
+  
     </div>
   </b-container>
 </template>
@@ -39,30 +42,42 @@ export default {
   },
 
   methods: {
-    async bajarConsentimiento() {
+    async descargarConsentimiento(){
+      try {        
+        let response = await EstudiosService.obtenerConsentimientoInformado(
+          this.estudio.id
+        );
+        console.log(response)
+      } catch (error) {
+        this.$root.$bvToast.toast(
+          "ocurrio un error mientras descargaba el consentimiento, por favor vuelva a intentar",
+          {
+            title: "Atencion!",
+            toaster: "b-toaster-top-center",
+            solid: true,
+            variant: "danger",
+          }
+        );
+
+      }
+    },
+    async siguienteEstado() {
       try {
         let datosConsentimiento = {
           estudio_id: this.estudio.id,
           fecha_enviado: new Date(),
-        };
-        console.log(datosConsentimiento);
+        };       
         let response = await EstudiosService.actualizarUltimoEstado(
           datosConsentimiento
         );
         console.log(response);
-        this.$root.$bvToast.toast("Se descargo el consentimiento ", {
-          title: "Atencion!",
-          toaster: "b-toaster-top-center",
-          solid: true,
-          variant: "success",
-        });
         this.$router.push({
           name: "listaEstudios",
         });
       } catch (error) {
         console.log(error);
         this.$root.$bvToast.toast(
-          "ocurrio un error mientras descargaba el consentimiento",
+          "ocurrio un error mientras continuaba ",
           {
             title: "Atencion!",
             toaster: "b-toaster-top-center",

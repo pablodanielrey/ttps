@@ -6,7 +6,6 @@ import Api from "@/services/Api"
 const API_URL = '/login_api/'
 export default {
     login(usuario, clave) {
-        console.log('almacenando ' + usuario + ' y su clave')
         window.localStorage.setItem('credenciales', JSON.stringify({
             'usuario': usuario,
             'clave': clave
@@ -19,7 +18,6 @@ export default {
         return credenciales
     },
    async  login_api(username, password) {
-        console.log(window.localStorage.getItem('credenciales') == undefined)
         if (window.localStorage.getItem('credenciales') == undefined) {
             let instance = axios.create({
                 baseURL: process.env.VUE_APP_API_URL,
@@ -29,7 +27,6 @@ export default {
                 }
             })
             let response = await instance.get(API_URL  + "login/");
-            console.log(response);
             // response.token
             // response.roles
             window.localStorage.setItem('credenciales', JSON.stringify({
