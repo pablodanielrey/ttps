@@ -301,6 +301,9 @@ class VistaEstudios(viewsets.ModelViewSet):
         )
         estudio.save()
 
+        paciente.historia_clinica.historia_clinica = datos['diagnostico_presuntivo']
+        paciente.save()
+
         esperando_comprobante = estudio_models.EsperandoComprobanteDePago(estudio=estudio)
         esperando_comprobante.save()
 
