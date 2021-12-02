@@ -40,7 +40,7 @@ class SerializadorTemplateConsentimiento(serializers.ModelSerializer):
     archivo = serializers.PrimaryKeyRelatedField(many=False, read_only=True)
     class Meta:
         model = models.TemplateConsentimiento
-        fields  = ['id','archivo']
+        fields  = ['id','fecha','archivo','historico']
 
 class VistaTemplateConsentimiento(viewsets.ModelViewSet):
     queryset = models.TemplateConsentimiento.objects.all()
@@ -52,10 +52,18 @@ class VistaTemplateConsentimiento(viewsets.ModelViewSet):
             return HttpResponseBadRequest('debe enviar el template de consentimiento')
         archivo = models.Archivo.from_datauri(datos)
         archivo.save()
-        template = models.TemplateConsentimientoInformado(archivo=archivo)
+        template = models.TemplateConsentimiento(archivo=archivo)
         template.save()
         serializador = self.serializer_class(instance=template)
         return Response(serializador.data)
+
+    def retrieve(self, request, *args, **kwargs):
+        template = self.get_object()
+        datos = template.archivo
+        if not datos:
+            return HttpResponseBadRequest()
+        return HttpResponse(base64.b64decode(datos.contenido), content_type='application/pdf')        
+
 
 class SerializadorTiposDeEstudio(serializers.HyperlinkedModelSerializer):
     class Meta:
