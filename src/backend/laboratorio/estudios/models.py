@@ -30,7 +30,7 @@ class Archivo(models.Model):
 
 class TemplateConsentimiento(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    fecha = models.DateField(auto_now=True)
+    fecha = models.DateTimeField(auto_now=True)
     archivo = models.ForeignKey(Archivo, on_delete=models.CASCADE, null=False)
     historico = models.BooleanField(default=False)
 
