@@ -11,9 +11,26 @@ from personas.models import Persona, ObraSocial
 from turnos import models as turnos_models
 
 
+
 class Archivo(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     contenido = models.TextField()
+    content_type = models.CharField(max_length=500)
+    encoding = models.CharField(max_length=500)
+
+    @classmethod
+    def from_datauri(cls, content):
+        partes = content.split(";")
+        content_type = partes[0].replace('data:','')
+        encoding_partes = partes[1].split(',')
+        encoding = encoding_partes[0]
+        contenido = encoding_partes[1]
+        return cls(contenido=contenido, encoding=encoding, content_type=content_type)
+
+
+class TemplateConsentimientoInformado(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    models.ForeignKey(Archivo, on_delete=models.CASCADE, null=False)
 
 class Diagnostico(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)

@@ -196,13 +196,13 @@ class VistaEstadoEstudio(viewsets.ModelViewSet):
 
         """ aca manejo comportamientos especiales de los estados """
         if clase_ultimo_estado == models.EsperandoComprobanteDePago:
-            archivo = models.Archivo(contenido=request.data['comprobante'])
+            archivo = models.Archivo.from_datauri(request.data['comprobante'])
             archivo.save()
             ultimo_estado.comprobante = archivo
             ultimo_estado.save()
 
         elif clase_ultimo_estado == models.EsperandoConsentimientoInformado:
-            archivo = models.Archivo(contenido=request.data['consentimiento'])
+            archivo = models.Archivo.from_datauri(request.data['consentimiento'])
             archivo.save()
             ultimo_estado.consentimiento = archivo
             ultimo_estado.save()
@@ -310,7 +310,7 @@ class VistaEstudios(viewsets.ModelViewSet):
 
         datos = request.data
         #logging.debug(datos)
-        presupuesto = models.Archivo(contenido=datos['presupuesto'])
+        presupuesto = models.Archivo.from_datauri(datos['presupuesto'])
         presupuesto.save()
 
         paciente = personas_models.Paciente.objects.get(id=datos['paciente']['id'])
@@ -376,7 +376,7 @@ class VistaEstudios(viewsets.ModelViewSet):
         datos = estudio.presupuesto
         if not datos:
             return HttpResponseBadRequest('no existe presupuesto para el estudio')
-        return HttpResponse(base64.b64decode(datos), content_type='application/pdf')
+        return HttpResponse(base64.b64decode(datos.contenido), content_type='application/pdf')
 
 
     @action(detail=True, methods=['GET'])
@@ -385,7 +385,7 @@ class VistaEstudios(viewsets.ModelViewSet):
         datos = estudio.comprobante_de_pago
         if not datos:
             return HttpResponseBadRequest('no existe comprobante para el estudio')
-        return HttpResponse(base64.b64decode(datos), content_type='application/pdf')
+        return HttpResponse(base64.b64decode(datos.contenido), content_type='application/pdf')
     
     @action(detail=True, methods=['GET'])
     def consentimiento_informado(self, request, pk=None):
@@ -393,4 +393,4 @@ class VistaEstudios(viewsets.ModelViewSet):
         datos = estudio.consentimiento_informado
         if not datos:
             return HttpResponseBadRequest('no existe consentimiento para el estudio')
-        return HttpResponse(base64.b64decode(datos), content_type='application/pdf')        
+        return HttpResponse(base64.b64decode(datos.contenido), content_type='application/pdf')        
