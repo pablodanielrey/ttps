@@ -1,8 +1,6 @@
 <template>
   <b-container>
-    <div v-if="loading">
-      <b-spinner> </b-spinner>
-
+    <div>
       <h4>Template Consentimiento Informado</h4>
     </div>    
   </b-container>
@@ -10,6 +8,7 @@
 
 
 <script>
+
 </script>
 
 

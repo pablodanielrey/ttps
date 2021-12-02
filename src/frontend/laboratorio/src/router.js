@@ -23,7 +23,7 @@ import NuevoEmpleado from '@/components/Paciente/nuevoEmpleado.vue'
 
 import NuevaObraSocial from '@/components/ObraSocial/nuevaObraSocial.vue'
 import ListaObrasSociales from '@/components/ObraSocial/listaObrasSociales.vue'
-
+import editarTemplateConsentimiento from '@/components/TemplateConsentimiento/editarTemplateConsentimiento'
 
 import NuevoEstudio from '@/components/Estudio/nuevoEstudio.vue'
 import DetalleDeUnEstudio from '@/components/Estudio/detalleDeUnEstudio.vue'
@@ -86,6 +86,7 @@ const router = new Router({
             { path: '/lista', component: ListaPacientes  ,name:'listaPacientes'},
             { path: '/obraSocial', component: NuevaObraSocial ,name:'obraSocial', props:true },
             { path: '/listaObrasSociales', component: ListaObrasSociales ,name:'listaObrasSociales' },
+            { path: '/templateConsentimiento', component: editarTemplateConsentimiento ,name:'editarTemplateConsentimiento' },
             
             { path: '/estudio', component: NuevoEstudio , name:'nuevoEstudio'},
             { path: '/listaEstudios', component: ListaEstudios, name:'listaEstudios' },
