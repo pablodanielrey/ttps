@@ -1,4 +1,5 @@
 from django.db.models.query import QuerySet
+from django.http.response import HttpResponseNotFound
 from django.shortcuts import render
 from django.http import HttpResponseBadRequest, HttpResponse
 
@@ -56,6 +57,17 @@ class VistaTemplateConsentimiento(viewsets.ModelViewSet):
         template.save()
         serializador = self.serializer_class(instance=template)
         return Response(serializador.data)
+
+    @action(detail=False, methods=['GET'])
+    def valido(self, request):
+        templates = models.TemplateConsentimiento.objects.filter(historico=False).order_by('-fecha')
+        for template in templates:
+            datos = template.archivo
+            if not datos:
+                return HttpResponseBadRequest()
+            return HttpResponse(base64.b64decode(datos.contenido), content_type='application/pdf')        
+        return HttpResponseNotFound()
+
 
     @action(detail=True, methods=['GET'])
     def contenido(self, request, pk=None):
