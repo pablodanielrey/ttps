@@ -8,16 +8,16 @@
               >Descargar actual
             </b-button>
           </div>
-          <br>
+          <br/>
               <a
                 title="Bajar template consentimiento"
                 variant="outline-success"
                 @click="verTemplate()"
                 download="templateConsentimiento.pdf"        
               >
-                <b-icon icon="download" aria-hidden="true"></b-icon>
+                <b-icon icon="download" variant="info"> </b-icon>
               </a>
-          <br>
+          <br/>
           <div>
             <ValidationObserver ref="detailsTemplate">
               <b-form-group
@@ -116,19 +116,10 @@ export default {
     },
     async verTemplate(){
       try {        
-        let response = await TemplateConsentimientoService.obtenerTemplateConsentimiento();
+        let response = await TemplateConsentimientoService.obtenerTemplateConsentimiento2();
         console.log(response)
       } catch (error) {
-        this.$root.$bvToast.toast(
-          "ocurrio un error mientras descargaba el template, por favor vuelva a intentar",
-          {
-            title: "Atencion!",
-            toaster: "b-toaster-top-center",
-            solid: true,
-            variant: "danger",
-          }
-        );
-
+        console.log(error);
       }
     },
   },
