@@ -7,7 +7,7 @@ from . import views
 router = routers.DefaultRouter()
 router.register('tiposEstudio', views.VistaTiposDeEstudio)
 router.register('diagnosticos', views.VistaDiagnostico)
-router.register('templateConsentimiento', views.VistaTemplateConsentimiento)
+router.register('templateConsentimientoInformado', views.VistaTemplateConsentimientoInformado)
 router.register('estudios', views.VistaEstudios)
 router.register('estados', views.VistaEstadoEstudio)
 router.register('archivos', views.VistaArchivos)

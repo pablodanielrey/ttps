@@ -34,6 +34,28 @@ class SerializadorArchivos(serializers.ModelSerializer):
 class VistaArchivos(viewsets.ReadOnlyModelViewSet):
     queryset = models.Archivo.objects.all()
     serializer_class = SerializadorArchivos
+    
+    
+class SerializadorTemplateConsentimientoInformado(serializers.ModelSerializer):
+    archivo = serializers.PrimaryKeyRelatedField(many=False, read_only=True)
+    class Meta:
+        model = models.TemplateConsentimientoInformado
+        fields  = ['id','archivo']
+
+class VistaTemplateConsentimientoInformado(viewsets.ModelViewSet):
+    queryset = models.TemplateConsentimientoInformado.objects.all()
+    serializer_class = SerializadorTemplateConsentimientoInformado
+
+    def create(self, request, *args, **kwargs):
+        datos = request.data['consentimiento']
+        if not datos:
+            return HttpResponseBadRequest('debe enviar el template de consentimiento')
+        archivo = models.Archivo.from_datauri(datos)
+        archivo.save()
+        template = models.TemplateConsentimientoInformado(archivo=archivo)
+        template.save()
+        serializador = self.serializer_class(instance=template)
+        return Response(serializador.data)
 
 class SerializadorTiposDeEstudio(serializers.HyperlinkedModelSerializer):
     class Meta:
@@ -52,15 +74,6 @@ class SerializadorDiagnostico(serializers.HyperlinkedModelSerializer):
 class VistaDiagnostico(viewsets.ModelViewSet):
     queryset = models.Diagnostico.objects.all()
     serializer_class = SerializadorDiagnostico
-
-class SerializadorTemplateConsentimiento(serializers.HyperlinkedModelSerializer):
-    class Meta:
-        model = models.TemplateConsentimientoInformado
-        fields = []
-
-class VistaTemplateConsentimiento(viewsets.ModelViewSet):
-    queryset = models.TemplateConsentimientoInformado.objects.all()
-    serializer_class = SerializadorTemplateConsentimiento
 
 
 """
