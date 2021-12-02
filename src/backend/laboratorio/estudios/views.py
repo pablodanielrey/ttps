@@ -29,7 +29,7 @@ from turnos import views as turnos_views
 class SerializadorArchivos(serializers.ModelSerializer):
     class Meta:
         model = models.Archivo
-        fields = ['id','contenido']
+        fields = ['id','content_type','encoding']
 
 class VistaArchivos(viewsets.ReadOnlyModelViewSet):
     queryset = models.Archivo.objects.all()
