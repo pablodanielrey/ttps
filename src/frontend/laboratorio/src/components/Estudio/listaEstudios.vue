@@ -162,7 +162,7 @@ export default {
       this.$router.push({
         name: "detalleDeEstudio",
         params: {
-          estudio: estudio,
+          estudioId: estudio.id,
         },
       });
     },
