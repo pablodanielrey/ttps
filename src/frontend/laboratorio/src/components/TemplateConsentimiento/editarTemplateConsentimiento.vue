@@ -32,7 +32,7 @@
         </b-row>
         <b-row class="pb-2">
           <b-col class="text-center pt-3">
-            <b-button variant="success" @click="guardarTemplateConsentimiento()"
+            <b-button variant="success" @click="guardarTemplate()"
               >Guardar
             </b-button>
           </b-col>
@@ -51,13 +51,14 @@ export default {
   props: {
     templateConsentimiento: {
       type: Object,
-      default: null,
     }
   },
   created() {},
   data() {
     return {
+      file1: [],
       archivo: null,
+      comprobantePago: null,
     };
   },
 
@@ -78,7 +79,7 @@ export default {
       if (result) {
         try {
           let datosTemplate = {
-            id: this.id,
+            id: 1,
             archivo: this.archivo,
           };
           console.log(datosTemplate);
