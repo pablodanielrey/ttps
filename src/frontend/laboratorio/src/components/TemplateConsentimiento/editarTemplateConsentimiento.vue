@@ -2,12 +2,27 @@
   <b-container>   
     <div>
       <b-card header="Template Consentimiento informado">
-        <b-row>
-          <b-col lg="5" md="5" class="text-center pt-3">
+        <div>
+          <div>
+            <b-button variant="success" @click="verTemplate()"
+              >Descargar actual
+            </b-button>
+          </div>
+          <br>
+              <a
+                title="Bajar template consentimiento"
+                variant="outline-success"
+                @click="verTemplate()"
+                download="templateConsentimiento.pdf"        
+              >
+                <b-icon icon="download" aria-hidden="true"></b-icon>
+              </a>
+          <br>
+          <div>
             <ValidationObserver ref="detailsTemplate">
               <b-form-group
                 id="pdf-label"
-                label="Template Consentimiento:"
+                label="Cargar nuevo:"
                 label-for="pdf"
               >
                 <ValidationProvider :name="'pdf '" v-slot="{ errors }">
@@ -16,7 +31,7 @@
                     :state="Boolean(file1)"
                     @change="obtenerPDF($event, file1)"
                     accept="application/pdf"
-                    placeholder="Seleccione el Template para Consentimiento informado..."
+                    placeholder="Seleccione un nuevo Template para Consentimiento informado..."
                     browse-text="Buscar"
                   ></b-form-file>
                   <b-form-invalid-feedback
@@ -28,15 +43,11 @@
                 </ValidationProvider>
               </b-form-group>
             </ValidationObserver>
-          </b-col>
-        </b-row>
-        <b-row class="pb-2">
-          <b-col class="text-center pt-3">
             <b-button variant="success" @click="guardarTemplate()"
               >Guardar
             </b-button>
-          </b-col>
-        </b-row>
+          </div>
+        </div>
       </b-card>
     </div>
   </b-container>
@@ -101,6 +112,23 @@ export default {
             }
           );
         }
+      }
+    },
+    async verTemplate(){
+      try {        
+        let response = await TemplateConsentimientoService.obtenerTemplateConsentimiento();
+        console.log(response)
+      } catch (error) {
+        this.$root.$bvToast.toast(
+          "ocurrio un error mientras descargaba el template, por favor vuelva a intentar",
+          {
+            title: "Atencion!",
+            toaster: "b-toaster-top-center",
+            solid: true,
+            variant: "danger",
+          }
+        );
+
       }
     },
   },
