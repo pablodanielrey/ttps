@@ -67,13 +67,7 @@ class SerializadorEstadoEstudio(serializers.ModelSerializer):
 class SerializadorEsperandoComprobanteDePago(serializers.ModelSerializer):
     class Meta:
         model = models.EsperandoComprobanteDePago
-        fields = ['id','fecha']
-
-class SerializadorEsperandoComprobanteDePagoUpload(serializers.ModelSerializer):
-    class Meta:
-        model = models.EsperandoComprobanteDePago
         fields = ['id','fecha','comprobante']
-
 
 
 class SerializadorAnuladorPorFaltaDePago(serializers.ModelSerializer):
@@ -196,15 +190,15 @@ class VistaEstadoEstudio(viewsets.ModelViewSet):
         clase_ultimo_estado = ultimo_estado.__class__
 
         """ aca manejo comportamientos especiales de los estados """
-        if clase_ultimo_estado == models.EsperandoComprobanteDePago:
-            serializador = SerializadorEsperandoComprobanteDePagoUpload(instance=ultimo_estado, data=request.data)
-            if not serializador.is_valid():
-                return HttpResponseBadRequest(serializador.errors)
-            if len(serializador.validated_data) <= 0:
-                return HttpResponseBadRequest()
-            serializador.save()
+        # if clase_ultimo_estado == models.EsperandoComprobanteDePago:
+        #     serializador = SerializadorEsperandoComprobanteDePago(instance=ultimo_estado, data=request.data)
+        #     if not serializador.is_valid():
+        #         return HttpResponseBadRequest(serializador.errors)
+        #     if len(serializador.validated_data) <= 0:
+        #         return HttpResponseBadRequest()
+        #     serializador.save()
 
-        elif clase_ultimo_estado == models.EsperandoSeleccionDeTurnoParaExtraccion:
+        if clase_ultimo_estado == models.EsperandoSeleccionDeTurnoParaExtraccion:
             """ genero un turno """
             paciente = personas_models.Persona.objects.get(id=estudio.paciente.id)
             inicio = parser.parse(request.data['inicio'])
