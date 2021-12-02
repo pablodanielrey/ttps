@@ -5,12 +5,12 @@ const API_URL = '/estudio_api/'
 
 export default {
     obtenerTemplateConsentimiento() {
-        return Api().get(API_URL + API_USER + "templateConsentimientoInformado/")
+        return Api().get(API_URL + API_USER + "templateConsentimiento/")
     },
     editarTemplateConsentimiento(template) {
         let datos = {
             'consentimiento': template
         }
-        return Api().post(API_URL + "templateConsentimientoInformado/", datos)
+        return Api().post(API_URL + "templateConsentimiento/", datos)
     },
 }
