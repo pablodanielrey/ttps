@@ -58,7 +58,6 @@ export default {
     return {
       file1: [],
       archivo: null,
-      comprobantePago: null,
     };
   },
 
@@ -78,10 +77,7 @@ export default {
       let result = await this.$refs.detailsTemplate.validate();
       if (result) {
         try {
-          let datosTemplate = {
-            id: 1,
-            archivo: this.archivo,
-          };
+          let datosTemplate = this.archivo;
           console.log(datosTemplate);
            await TemplateConsentimientoService.editarTemplateConsentimiento(
             datosTemplate
