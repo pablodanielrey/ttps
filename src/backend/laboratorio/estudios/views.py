@@ -25,6 +25,17 @@ from personas.views_personas import SerializadorDePersona
 
 from turnos import views as turnos_views
 
+
+class SerializadorArchivos(serializers.ModelSerializer):
+    class Meta:
+        model = models.Archivo
+        fields = ['id','contenido']
+
+class VistaArchivos(viewsets.ReadOnlyModelViewSet):
+    queryset = models.Archivo.objects.all()
+    serializer_class = SerializadorArchivos
+
+
 class SerializadorTiposDeEstudio(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = models.TiposDeEstudio
@@ -57,12 +68,6 @@ class SerializadorEstadoEstudio(serializers.ModelSerializer):
     class Meta:
         model = models.EstadoEstudio
         fields = ['id','fecha']
-
-# class SerializadorEsperandoPresupuesto(serializers.ModelSerializer):
-#     class Meta:
-#         model = models.EsperandoPresupuesto
-#         fields = ['id','fecha','presupuesto']
-
 
 class SerializadorEsperandoComprobanteDePago(serializers.ModelSerializer):
     class Meta:
@@ -190,15 +195,19 @@ class VistaEstadoEstudio(viewsets.ModelViewSet):
         clase_ultimo_estado = ultimo_estado.__class__
 
         """ aca manejo comportamientos especiales de los estados """
-        # if clase_ultimo_estado == models.EsperandoComprobanteDePago:
-        #     serializador = SerializadorEsperandoComprobanteDePago(instance=ultimo_estado, data=request.data)
-        #     if not serializador.is_valid():
-        #         return HttpResponseBadRequest(serializador.errors)
-        #     if len(serializador.validated_data) <= 0:
-        #         return HttpResponseBadRequest()
-        #     serializador.save()
+        if clase_ultimo_estado == models.EsperandoComprobanteDePago:
+            archivo = models.Archivo(contenido=request.data['comprobante'])
+            archivo.save()
+            ultimo_estado.comprobante = archivo
+            ultimo_estado.save()
 
-        if clase_ultimo_estado == models.EsperandoSeleccionDeTurnoParaExtraccion:
+        elif clase_ultimo_estado == models.EsperandoConsentimientoInformado:
+            archivo = models.Archivo(contenido=request.data['consentimiento'])
+            archivo.save()
+            ultimo_estado.consentimiento = archivo
+            ultimo_estado.save()
+
+        elif clase_ultimo_estado == models.EsperandoSeleccionDeTurnoParaExtraccion:
             """ genero un turno """
             paciente = personas_models.Persona.objects.get(id=estudio.paciente.id)
             inicio = parser.parse(request.data['inicio'])
@@ -247,6 +256,9 @@ class SerializadorDePersonaResumido(serializers.ModelSerializer):
         model = models.Persona
         fields = ['id','nombre','apellido']
 
+
+
+
 class SerializadorEstudiosDetalle(serializers.HyperlinkedModelSerializer):
     paciente = SerializadorDePersona()
     medico_derivante = SerializadorDePersona()
@@ -254,10 +266,11 @@ class SerializadorEstudiosDetalle(serializers.HyperlinkedModelSerializer):
     diagnostico = SerializadorDiagnostico()
     estados = SerializadorEstadoEstudioPolimorfico(many=True)
     ultimo_estado = SerializadorEstadoEstudioPolimorfico()
+    presupuesto = serializers.PrimaryKeyRelatedField(many=False, read_only=True)
 
     class Meta:
         model = models.Estudio
-        fields = ['id', 'fecha_alta', 'diagnostico', 'paciente', 'medico_derivante', 'tipo', 'estados', 'ultimo_estado']
+        fields = ['id', 'fecha_alta', 'diagnostico', 'paciente', 'medico_derivante', 'tipo', 'estados', 'ultimo_estado', 'presupuesto']
 
 
 class SerializadorEstudios(serializers.HyperlinkedModelSerializer):
@@ -267,10 +280,11 @@ class SerializadorEstudios(serializers.HyperlinkedModelSerializer):
     diagnostico = SerializadorDiagnostico()
     # #estados = SerializadorEstadoEstudioPolimorfico(many=True)
     ultimo_estado = SerializadorEstadoEstudioPolimorfico()
+    presupuesto = serializers.PrimaryKeyRelatedField(many=False, read_only=True)
 
     class Meta:
         model = models.Estudio
-        fields = ['id', 'fecha_alta', 'diagnostico', 'paciente', 'medico_derivante', 'tipo','ultimo_estado']
+        fields = ['id', 'fecha_alta', 'diagnostico', 'paciente', 'medico_derivante', 'tipo','ultimo_estado','presupuesto']
 
 
 
@@ -296,7 +310,9 @@ class VistaEstudios(viewsets.ModelViewSet):
 
         datos = request.data
         #logging.debug(datos)
-        presupuesto = datos['presupuesto']
+        presupuesto = models.Archivo(contenido=datos['presupuesto'])
+        presupuesto.save()
+
         paciente = personas_models.Paciente.objects.get(id=datos['paciente']['id'])
         medico_derivante = personas_models.MedicoDerivante.objects.get(id=datos['medico_derivante']['id'])
         diagnostico = estudio_models.Diagnostico.objects.get(id=datos['diagnostico']['id'])

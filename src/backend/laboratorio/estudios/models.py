@@ -10,6 +10,11 @@ from django.contrib.contenttypes.models import ContentType
 from personas.models import Persona, ObraSocial
 from turnos import models as turnos_models
 
+
+class Archivo(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    contenido = models.TextField()
+
 class Diagnostico(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     nombre = models.CharField(max_length=1024)
@@ -20,7 +25,6 @@ class Diagnostico(models.Model):
 class TiposDeEstudio(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     nombre = models.CharField(max_length=1024)
-    consentimiento = models.CharField(max_length=9216, null=True)
 
 class Estudio(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
@@ -29,25 +33,26 @@ class Estudio(models.Model):
     medico_derivante = models.ForeignKey(Persona, on_delete=models.CASCADE, related_name='estudios_derivados')
     diagnostico = models.ForeignKey(Diagnostico, on_delete=models.CASCADE, related_name='estudios')
     fecha_alta = models.DateField(default=datetime.date.today)
-    presupuesto = models.TextField()
+    presupuesto = models.ForeignKey(Archivo, on_delete=models.CASCADE, null=True)
 
     @property
     def ultimo_estado(self):
         return self.estados.order_by('fecha').last()
 
-
     @property
     def comprobante_de_pago(self):
         comprobantes = self.estados.instance_of(EsperandoComprobanteDePago)
         for ecomprobante in comprobantes:
-            return ecomprobante.comprobante
+            if ecomprobante.comprobante:
+                return ecomprobante.comprobante.contenido
         return None
 
     @property
     def consentimiento_informado(self):
         consentiminetos = self.estados.instance_of(EsperandoConsentimientoInformado)
         for econsentimiento in consentiminetos:
-            return econsentimiento.consentimiento
+            if econsentimiento.consentimiento:
+                return econsentimiento.consentimiento.contenido
         return None
 
 
@@ -87,7 +92,7 @@ class EstadoEstudio(PolymorphicModel):
 #     presupuesto = models.TextField(null=True)   
 
 class EsperandoComprobanteDePago(EstadoEstudio):
-    comprobante = models.TextField(null=True)
+    comprobante = models.ForeignKey(Archivo, on_delete=models.CASCADE, null=True)
 
 class AnuladorPorFaltaDePago(EstadoEstudio):
     fecha_procesado = models.DateTimeField(null=True)
@@ -96,7 +101,7 @@ class EnviarConsentimientoInformado(EstadoEstudio):
     fecha_enviado = models.DateTimeField(null=True)
 
 class EsperandoConsentimientoInformado(EstadoEstudio):
-    consentimiento = models.TextField(null=True)
+    consentimiento = models.ForeignKey(Archivo, on_delete=models.CASCADE, null=True)
 
 class EsperandoSeleccionDeTurnoParaExtraccion(EstadoEstudio):
     turno = models.ForeignKey(turnos_models.TurnoConfirmado, on_delete=models.CASCADE, null=True)
@@ -112,7 +117,7 @@ class EsperandoRetiroDeExtaccion(EstadoEstudio):
     fecha_retiro = models.DateTimeField(null=True)
 
 class EsperandoLoteDeMuestraParaProcesamientoBiotecnologico(EstadoEstudio):
-    numero_lote=models.CharField(max_length=500,null=True)
+    numero_lote = models.CharField(max_length=500,null=True)
 
 class EsperandoProcesamientoDeLoteBiotecnologico(EstadoEstudio):
     fecha_resultado = models.DateField(null=True)

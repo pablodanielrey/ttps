@@ -9,5 +9,6 @@ router.register('tiposEstudio', views.VistaTiposDeEstudio)
 router.register('diagnosticos', views.VistaDiagnostico)
 router.register('estudios', views.VistaEstudios)
 router.register('estados', views.VistaEstadoEstudio)
+router.register('archivos', views.VistaArchivos)
 
 urlpatterns = router.urls
