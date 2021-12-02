@@ -31,8 +31,9 @@
               <b-dropdown-item :to="{ name: 'obraSocial' }"
                 >nuevo</b-dropdown-item
               >
-            </b-nav-item-dropdown>
-             <b-nav-item-dropdown v-if="this.permisos == 'Administradores' " text="Configurador" right>
+              </b-nav-item-dropdown>
+            <b-nav-item v-if="this.permisos == 'Configuradores' " :to="{ name: 'editarTemplateConsentimiento' }" right>Template Consentimiento</b-nav-item>
+            <b-nav-item-dropdown v-if="this.permisos == 'Administradores' " text="Configurador" right>
               <b-dropdown-item :to="{ name: 'listaConfiguradores' }"
                 >Listar</b-dropdown-item
               >
