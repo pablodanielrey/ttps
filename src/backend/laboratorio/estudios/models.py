@@ -30,7 +30,7 @@ class Archivo(models.Model):
 
 class TemplateConsentimientoInformado(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    models.ForeignKey(Archivo, on_delete=models.CASCADE, null=False)
+    archivo = models.ForeignKey(Archivo, on_delete=models.CASCADE, null=False)
 
 class Diagnostico(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)

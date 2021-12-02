@@ -35,12 +35,10 @@ class VistaArchivos(viewsets.ReadOnlyModelViewSet):
     queryset = models.Archivo.objects.all()
     serializer_class = SerializadorArchivos
 
-
 class SerializadorTiposDeEstudio(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = models.TiposDeEstudio
         fields = ['id','nombre']
-
 
 class VistaTiposDeEstudio(viewsets.ModelViewSet):
     queryset = models.TiposDeEstudio.objects.all()
@@ -51,10 +49,18 @@ class SerializadorDiagnostico(serializers.HyperlinkedModelSerializer):
         model = models.Diagnostico
         fields = ['id', 'nombre']
 
-
 class VistaDiagnostico(viewsets.ModelViewSet):
     queryset = models.Diagnostico.objects.all()
     serializer_class = SerializadorDiagnostico
+
+class SerializadorTemplateConsentimiento(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = models.TemplateConsentimientoInformado
+        fields = []
+
+class VistaTemplateConsentimiento(viewsets.ModelViewSet):
+    queryset = models.TemplateConsentimientoInformado.objects.all()
+    serializer_class = SerializadorTemplateConsentimiento
 
 
 """
