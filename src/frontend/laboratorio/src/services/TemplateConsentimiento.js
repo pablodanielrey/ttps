@@ -9,7 +9,6 @@ export default {
     },
     obtenerTemplateConsentimiento2(){
         let credenciales = JSON.parse(window.localStorage.getItem('credenciales'));       
-
         axios({
             method: 'get',
             url: API_URL + API_USER + "templateConsentimiento/valido",

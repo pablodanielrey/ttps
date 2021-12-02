@@ -18,6 +18,7 @@
                 <b-icon icon="download" variant="info"> </b-icon>
               </a>
           <br/>
+      
           <div>
             <ValidationObserver ref="detailsTemplate">
               <b-form-group
