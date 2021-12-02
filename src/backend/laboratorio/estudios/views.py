@@ -57,12 +57,14 @@ class VistaTemplateConsentimiento(viewsets.ModelViewSet):
         serializador = self.serializer_class(instance=template)
         return Response(serializador.data)
 
-    def retrieve(self, request, *args, **kwargs):
+    @action(detail=True, methods=['GET'])
+    def contenido(self, request, pk=None):
         template = self.get_object()
         datos = template.archivo
         if not datos:
             return HttpResponseBadRequest()
         return HttpResponse(base64.b64decode(datos.contenido), content_type='application/pdf')        
+        
 
 
 class SerializadorTiposDeEstudio(serializers.HyperlinkedModelSerializer):
