@@ -36,15 +36,15 @@ class VistaArchivos(viewsets.ReadOnlyModelViewSet):
     serializer_class = SerializadorArchivos
     
     
-class SerializadorTemplateConsentimientoInformado(serializers.ModelSerializer):
+class SerializadorTemplateConsentimiento(serializers.ModelSerializer):
     archivo = serializers.PrimaryKeyRelatedField(many=False, read_only=True)
     class Meta:
-        model = models.TemplateConsentimientoInformado
+        model = models.TemplateConsentimiento
         fields  = ['id','archivo']
 
-class VistaTemplateConsentimientoInformado(viewsets.ModelViewSet):
-    queryset = models.TemplateConsentimientoInformado.objects.all()
-    serializer_class = SerializadorTemplateConsentimientoInformado
+class VistaTemplateConsentimiento(viewsets.ModelViewSet):
+    queryset = models.TemplateConsentimiento.objects.all()
+    serializer_class = SerializadorTemplateConsentimiento
 
     def create(self, request, *args, **kwargs):
         datos = request.data['consentimiento']
