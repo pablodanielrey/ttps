@@ -8,6 +8,7 @@ export default {
         let credenciales = JSON.parse(window.localStorage.getItem('credenciales'));       
         axios({
             method: 'get',
+            //url: "http://127.0.0.1:8000" + API_URL + API_USER + "templateConsentimiento/valido/",
             url: "http://127.0.0.1:8000" + API_URL + API_USER + "templateConsentimiento/valido/",
             responseType: 'arraybuffer',
             auth: {

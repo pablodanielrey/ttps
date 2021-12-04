@@ -36,10 +36,10 @@ export default {
     },
     descargarConsentimiento(){
         let credenciales = JSON.parse(window.localStorage.getItem('credenciales'));       
-
         axios({
             method: 'get',
             url: 'http://localhost:8000/estudio_api/estudios/27b1e022-8c0a-4e9e-9f39-b29d79a289b5/consentimiento_informado/',
+            //url: 'http://localhost:8000' + API_URL + API_USER + "estudios/" + idEstudio + "/consentimiento_informado/",
             responseType: 'arraybuffer',
             auth: {
                 'username': credenciales.usuario,
