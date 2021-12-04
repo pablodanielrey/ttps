@@ -8,16 +8,6 @@
               >Descargar actual
             </b-button>
           </div>
-          <br/>
-              <a
-                title="Bajar template consentimiento"
-                variant="outline-success"
-                @click="verTemplate()"
-                download="templateConsentimiento.pdf"        
-              >
-                <b-icon icon="download" variant="info"> </b-icon>
-              </a>
-          <br/>
       
           <div>
             <ValidationObserver ref="detailsTemplate">
@@ -59,6 +49,9 @@
 import TemplateConsentimientoService from "@/services/TemplateConsentimiento.js";
 
 export default {
+  mounted() {
+  },
+
   components: {},
   props: {
     templateConsentimiento: {
@@ -117,7 +110,7 @@ export default {
     },
     async verTemplate(){
       try {        
-        let response = await TemplateConsentimientoService.obtenerTemplateConsentimiento2();
+        let response = await TemplateConsentimientoService.obtenerTemplateConsentimiento();
         console.log(response)
       } catch (error) {
         console.log(error);
@@ -125,8 +118,6 @@ export default {
     },
   },
   computed: {},
-
-  mounted() {},
 };
 </script>
 

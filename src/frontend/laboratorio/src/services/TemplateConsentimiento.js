@@ -4,14 +4,11 @@ const API_USER = ''
 const API_URL = '/estudio_api/'
 
 export default {
-    obtenerTemplateConsentimiento() {
-        return Api().get(API_URL + API_USER + "templateConsentimiento/valido")
-    },
-    obtenerTemplateConsentimiento2(){
+    obtenerTemplateConsentimiento(){
         let credenciales = JSON.parse(window.localStorage.getItem('credenciales'));       
         axios({
             method: 'get',
-            url: API_URL + API_USER + "templateConsentimiento/valido",
+            url: "http://127.0.0.1:8000" + API_URL + API_USER + "templateConsentimiento/valido/",
             responseType: 'arraybuffer',
             auth: {
                 'username': credenciales.usuario,
@@ -22,7 +19,7 @@ export default {
             let blob = new Blob([response.data], { type: 'application/pdf' })
             let link = document.createElement('a')
             link.href = window.URL.createObjectURL(blob)
-            link.download = 'Report.pdf'
+            link.download = "ConsentimientoInformado.pdf"
             link.click()
           })
     },
