@@ -2,8 +2,9 @@
   <b-container>
     <div>
       <b-card header="Estudio esperando ingreso del comprobante pago">
-        <b-row>
-          <b-col lg="5" md="5" class="text-center pt-3">
+        <div>
+        <b-row class="pb-2">
+          <b-col class="text-center pt-3">
             <ValidationObserver ref="detailsComprobante">
               <b-form-group
                 id="pdf-label"
@@ -30,19 +31,19 @@
             </ValidationObserver>
           </b-col>
         </b-row>
-
-        <div>
-          <div class="counter">
-            Quedan {{ counter }} dias para subir el comprobante de pago
-          </div>
         </div>
-        <b-row class="pb-2">
-          <b-col class="text-center pt-3">
-            <b-button variant="success" @click="guardarComprobante()"
-              >Guardar
-            </b-button>
-          </b-col>
-        </b-row>
+        <div class="counter">
+          Quedan {{ counter }} dias para subir el comprobante de pago
+        </div>
+        <div>
+          <b-row class="pb-2">
+            <b-col class="text-center pt-3">
+              <b-button variant="success" @click="guardarComprobante()"
+                >Guardar
+              </b-button>
+            </b-col>
+          </b-row>
+        </div>
       </b-card>
     </div>
   </b-container>

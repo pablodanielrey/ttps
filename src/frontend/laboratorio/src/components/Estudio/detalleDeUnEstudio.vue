@@ -75,6 +75,17 @@
               <b-icon icon="eye" variant="info"> </b-icon
             ></a>
           </b-col>
+          <b-col>
+            <p><strong> Presupuesto: </strong></p>
+            <a
+              title="Descargar Presupuesto"
+              variant="outline-success"
+              download="presupuesto.pdf"
+              @click="bajarPresupuesto()"
+            >
+              <b-icon icon="download" variant="info"> </b-icon
+            ></a>
+          </b-col>
           <b-col v-if="this.estudio.estados[0].comprobante != undefined">
             <p>Comprobante:</p>
             <a
@@ -366,15 +377,22 @@ export default {
       this.$refs["modalHistoriaCLinica"].show();
     },
     async bajarConsentimiento(){
-       try {
+      try {
         let response = await EstudiosService.descargarConsentimiento();
         console.log(response);
         
       } catch (error) {
         console.log(error);
       }
-    
-    }
+    },
+    async bajarPresupuesto(){
+      try {
+        let response = await EstudiosService.descargarPresupuesto(this.estudioId);
+        console.log(response);
+      } catch (error) {
+        console.log(error);
+      }
+    },
   },
 
   computed: {},
