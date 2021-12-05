@@ -2,22 +2,20 @@
   <b-container>
     <div>
       <b-card
-        header="Descargar consentimiento informado en formato pdf"
+        header="Descargar Template de consentimiento informado en formato pdf"
       >
-        <a
-          title="Bajar consentimiento informado"
-          variant="outline-success"
-          @click="descargarConsentimiento()"
-          download="consentimiento.pdf"        
-        >
-          <b-icon icon="download" aria-hidden="true"></b-icon
-        ></a>
+        <div>
+          <b-button variant="success" @click="verTemplate()"
+            >Descargar Template de consentimiento
+          </b-button>
+        </div>
         <br/>
-             <b-button variant="success" @click="siguienteEstado()"
-              >Siguiente
-            </b-button>
+        <div>
+          <b-button variant="success" @click="siguienteEstado()"
+            >Siguiente
+          </b-button>
+        </div>
       </b-card>
-  
     </div>
   </b-container>
 </template>
@@ -25,6 +23,7 @@
 
 <script>
 import EstudiosService from "@/services/EstudiosService.js";
+import TemplateConsentimientoService from "@/services/TemplateConsentimiento.js";
 
 export default {
   components: {},
@@ -42,23 +41,12 @@ export default {
   },
 
   methods: {
-    async descargarConsentimiento(){
+    async verTemplate(){
       try {        
-        let response = await EstudiosService.obtenerConsentimientoInformado(
-          this.estudio.id
-        );
+        let response = await TemplateConsentimientoService.obtenerTemplateConsentimiento();
         console.log(response)
       } catch (error) {
-        this.$root.$bvToast.toast(
-          "ocurrio un error mientras descargaba el consentimiento, por favor vuelva a intentar",
-          {
-            title: "Atencion!",
-            toaster: "b-toaster-top-center",
-            solid: true,
-            variant: "danger",
-          }
-        );
-
+        console.log(error);
       }
     },
     async siguienteEstado() {

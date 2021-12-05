@@ -13,7 +13,6 @@ export default {
         return Api().get(API_URL + "lotes/")
     },
     cargarResultadoLote(id,datos){
-        
         return Api().put(API_URL + "lotes/"+id +'/',datos )
     }
 
