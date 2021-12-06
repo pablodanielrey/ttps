@@ -14,7 +14,7 @@
           >
         </b-form-group>
         <b-row>
-          <b-col lg="5" md="5" sm="10">
+          <b-col>
             <b-form-group
               id="Resuttado-label"
               label="Resultado:"
@@ -39,62 +39,7 @@
               </ValidationProvider>
             </b-form-group>
           </b-col>
-
-          <b-col lg="5" md="5" sm="10">
-            <b-form-group
-              id="medico-label"
-              label="Medico Informante:"
-              label-for="Medico Informante"
-            >
-              <ValidationProvider
-                :name="'Medico '"
-                :rules="'required'"
-                v-slot="{ errors, valid }"
-              >
-                <b-form-select
-                  :options="getMedicosInformantes"
-                  v-model="resultado.medico_informante"
-                  :state="errors[0] ? false : valid ? true : null"
-                ></b-form-select>
-                <b-form-invalid-feedback
-                  v-for="error in errors"
-                  :key="error.key"
-                >
-                  {{ error }}
-                </b-form-invalid-feedback>
-              </ValidationProvider>
-            </b-form-group>
-          </b-col>
         </b-row>
-        <b-row>
-          <b-col lg="3" md="2">
-            <b-form-group
-              id="nacimiento-label"
-              label="Fecha Alta :"
-              label-for="Fecha Informe"
-            >
-              <ValidationProvider
-                :name="'Fecha-alta '"
-                :rules="'required'"
-                v-slot="{ errors, valid }"
-              >
-                <b-form-input
-                  locale="es-AR"
-                  type="date"
-                  v-model="resultado.fecha_informe"
-                  :state="errors[0] ? false : valid ? true : null"
-                ></b-form-input>
-                <b-form-invalid-feedback
-                  v-for="error in errors"
-                  :key="error.key"
-                >
-                  {{ error }}
-                </b-form-invalid-feedback>
-              </ValidationProvider>
-            </b-form-group>
-          </b-col>
-        </b-row>
-
         <b-card header="Informe del resultado">
           <b-row>
             <b-col>
@@ -132,11 +77,14 @@
     </div>
   </b-container>
 </template>
+
+
 <script>
 import { VueEditor } from "vue2-editor";
 import EstudiosService from "@/services/EstudiosService.js";
 import axios from "axios";
 import PacientesService from "@/services/PacientesService.js";
+
 export default {
   components: { VueEditor },
   props: {
@@ -174,11 +122,10 @@ export default {
       try {
         let result = await this.$refs.detailsResultado.validate();
         if (result) {
-         
           let datos = {
             estudio_id: this.estudio.id,
-            fecha_informe: new Date(this.resultado.fecha_informe),
-            medico_informante: this.resultado.medico_informante,
+            fecha_informe: new Date(),
+            medico_informante: "f9ddc2a4-42a9-43fe-aeb3-9aea0c384a18",
             resultado: this.resultado.resultado,
             informe: this.resultado.informe,
           };

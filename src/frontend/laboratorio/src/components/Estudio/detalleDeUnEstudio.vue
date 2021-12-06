@@ -65,6 +65,14 @@
           >
         </b-row>
         <b-row>
+          <b-col v-if="this.estudio.estados[6] != undefined"
+            ><div v-if="this.estudio.estados[6].medico_informante != null">
+              <strong> Medico Informante: </strong
+              >{{ this.estudio.estados[6].medico_informante }}
+            </div></b-col
+          >
+        </b-row>
+        <b-row>
           <b-col v-if="this.estudio.paciente.historia_clinica != null">
             <p><strong> Historia clinica: </strong></p>
             <a
@@ -109,55 +117,6 @@
               <b-icon icon="download" variant="info"> </b-icon
             ></a>
           </b-col>
-          <!--     <b-col lg="1" md="3" sm="7">
-          <b-button
-            title="Cargar consentimiento informado firmado"
-            variant="outline-primary"
-            @click="cargarConsentimiento()"
-          >
-            Cargar Consentimiento</b-button
-          >
-        </b-col> -->
-
-          <!--   <b-col lg="3" md="3" sm="7">
-          <b-button
-            title="Bajar consentimiento informado"
-            variant="outline-primary"
-            @click="seleccionarTurno()"
-          >
-            Seleccionar turno</b-button
-          >
-        </b-col> -->
-          <!--    <b-col>
-          <b-button
-            lg="3"
-            md="3"
-            sm="10"
-            title="Bajar consentimiento informado"
-            variant="outline-primary"
-            @click="ingresarMuestra()"
-          >
-            Ingresar muestra</b-button
-          >
-        </b-col> -->
-          <!--  <b-col>
-          <b-button
-            title="Persona que retiro muestra"
-            variant="outline-primary"
-            @click="retiroMuestra()"
-          >
-            Retiro muestra</b-button
-          >
-        </b-col> -->
-          <!--   <b-col>
-          <b-button
-            title="Informe de resultados"
-            variant="outline-primary"
-            @click="cargarResultado()"
-          >
-            Informe Resultados</b-button
-          >
-        </b-col> -->
         </b-row>
       </b-card>
 

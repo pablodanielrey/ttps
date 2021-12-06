@@ -112,12 +112,10 @@ export default {
 
   created() {},
   methods: {
-    obtenerUltimoEstado(paciente) {
-      let nameEstado =
-        paciente.estados[paciente.estados.length - 1].resourcetype;
+    obtenerUltimoEstado(estudio) {
+      let nameEstado = estudio.ultimo_estado.resourcetype;
       nameEstado = nameEstado.replace(/([a-z])([A-Z])/g, "$1 $2");
       nameEstado = nameEstado.replace(/([A-Z])([A-Z][a-z])/g, "$1 $2");
-
       return nameEstado;
     },
     async obtenerListaEstudios() {
