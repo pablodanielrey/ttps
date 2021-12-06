@@ -161,6 +161,7 @@ class SerializadorEsperandoProcesamientoDeLoteBiotecnologico(serializers.ModelSe
 
 
 class SerializadorEsperandoInterpretacionDeResultados(serializers.ModelSerializer):
+    medico_informante = SerializadorDePersona()
     class Meta:
         model = models.EsperandoInterpretacionDeResultados
         fields = ['id','fecha','fecha_informe','medico_informante','informe','resultado']
