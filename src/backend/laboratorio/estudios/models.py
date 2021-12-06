@@ -63,7 +63,7 @@ class Estudio(models.Model):
         comprobantes = self.estados.instance_of(EsperandoComprobanteDePago)
         for ecomprobante in comprobantes:
             if ecomprobante.comprobante:
-                return ecomprobante.comprobante.contenido
+                return ecomprobante.comprobante
         return None
 
     @property
@@ -71,7 +71,7 @@ class Estudio(models.Model):
         consentiminetos = self.estados.instance_of(EsperandoConsentimientoInformado)
         for econsentimiento in consentiminetos:
             if econsentimiento.consentimiento:
-                return econsentimiento.consentimiento.contenido
+                return econsentimiento.consentimiento
         return None
 
 
