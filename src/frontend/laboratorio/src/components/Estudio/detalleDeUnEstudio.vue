@@ -59,7 +59,7 @@
         <b-row>
           <b-col v-if="this.estudio.estados[5] != undefined"
             ><div v-if="this.estudio.estados[5].extracionista != null">
-              <strong> Extraccionista : </strong
+              <strong> Persona que retiro la muestra: </strong
               >{{ this.estudio.estados[5].extracionista }}
             </div></b-col
           >
