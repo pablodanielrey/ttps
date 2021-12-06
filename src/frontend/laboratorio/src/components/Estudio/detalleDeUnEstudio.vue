@@ -98,14 +98,14 @@
               <b-icon icon="download" variant="info"> </b-icon
             ></a>
           </b-col>
-          <b-col v-if="this.estudio.estados[2] != undefined">
+          <b-col v-if="this.estudio.estados[3] != undefined">
             <p>Consentimiento:</p>
             <a
               title="Descargar consentimiento firmado"
               variant="outline-success"
               download="consentimiento.pdf"
-            @click="bajarConsentimiento()"
-            >   <!-- :href="this.estudio.estados[2].consentimiento" -->
+              @click="bajarConsentimiento()"
+            >  
               <b-icon icon="download" variant="info"> </b-icon
             ></a>
           </b-col>
@@ -394,9 +394,8 @@ export default {
     },
     async bajarConsentimiento(){
       try {
-        let response = await EstudiosService.descargarConsentimiento();
+        let response = await EstudiosService.descargarConsentimiento(this.estudioId);
         console.log(response);
-        
       } catch (error) {
         console.log(error);
       }

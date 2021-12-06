@@ -72,11 +72,11 @@ export default {
             link.click()
           })
     },
-    descargarConsentimiento(){
+    descargarConsentimiento(id){
         let credenciales = JSON.parse(window.localStorage.getItem('credenciales'));       
         axios({
             method: 'get',
-            url: process.env.VUE_APP_API_URL + API_URL + API_USER + "estudios/27b1e022-8c0a-4e9e-9f39-b29d79a289b5/consentimiento_informado/",
+            url: process.env.VUE_APP_API_URL + API_URL + API_USER + "estudios/" + id + "/consentimiento_informado/",
             responseType: 'arraybuffer',
             auth: {
                 'username': credenciales.usuario,
@@ -87,7 +87,7 @@ export default {
             let blob = new Blob([response.data], { type: 'application/pdf' })
             let link = document.createElement('a')
             link.href = window.URL.createObjectURL(blob)
-            link.download = 'Report.pdf'
+            link.download = 'ConsentimientoFirmado.pdf'
             link.click()
           })
     },

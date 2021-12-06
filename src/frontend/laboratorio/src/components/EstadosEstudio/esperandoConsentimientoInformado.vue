@@ -3,11 +3,11 @@
     <div>
       <b-card header="Consentimiento informado firmado por el paciente">
         <b-row>
-          <b-col lg="5" md="5" class="text-center pt-3">
+          <b-col class="text-center pt-3">
             <ValidationObserver ref="detailsConsentimiento">
               <b-form-group
                 id="pdf-label"
-                label="Ingrese el consentimiento firmado:"
+                label="Consentimiento informado firmado:"
                 label-for="pdf"
               >
                 <ValidationProvider
@@ -20,7 +20,7 @@
                     :state="errors[0] ? false : valid ? true : null"
                     @change="obtenerPDF($event, file1)"
                     accept="application/pdf"
-                    placeholder="Ingrese el consentimiento firmado..."
+                    placeholder="click aqui para subir"
                     browse-text="Buscar"
                   ></b-form-file>
                   <b-form-invalid-feedback
