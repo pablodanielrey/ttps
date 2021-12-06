@@ -66,11 +66,20 @@
         </b-row>
         <b-row>
           <b-col v-if="this.estudio.estados[6] != undefined"
-            ><div v-if="this.estudio.estados[6].medico_informante != null">
-              <strong> Medico Informante: </strong
-              >{{ this.estudio.estados[6].medico_informante }}
+            ><div v-if="this.estudio.estados[6].numero_lote != null">
+              <strong> Procesado en lote: </strong
+              >{{ this.estudio.estados[6].numero_lote }}
             </div></b-col
-          >
+          > 
+        </b-row>
+        <b-row>
+          <b-col v-if="this.estudio.estados[7] != undefined"
+            ><div v-if="this.estudio.estados[7].numero_lote != null">
+              <strong> Procesado en lote: </strong
+              >{{ this.estudio.estados[7].numero_lote }}
+            </div></b-col
+          > {{ this.estudio.estados[8] }}
+          {{ estudio.medico_informante.apellido }}
         </b-row>
         <b-row>
           <b-col v-if="this.estudio.paciente.historia_clinica != null">
