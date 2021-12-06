@@ -23,6 +23,7 @@ from rest_framework.response import Response
 from rest_framework.decorators import action
 
 from personas.views_personas import SerializadorDePersona
+from personas.views_medicos import SerializadorDeMedicoDerivante, SerializadorDeMedicoInformante
 
 from turnos import views as turnos_views
 
@@ -161,7 +162,7 @@ class SerializadorEsperandoProcesamientoDeLoteBiotecnologico(serializers.ModelSe
 
 
 class SerializadorEsperandoInterpretacionDeResultados(serializers.ModelSerializer):
-    medico_informante = SerializadorDePersona()
+    medico_informante = SerializadorDeMedicoInformante()
     class Meta:
         model = models.EsperandoInterpretacionDeResultados
         fields = ['id','fecha','fecha_informe','medico_informante','informe','resultado']
