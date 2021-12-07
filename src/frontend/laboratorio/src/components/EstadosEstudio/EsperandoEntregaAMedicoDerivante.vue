@@ -64,38 +64,6 @@ export default {
       }
     },
     async bajarInforme() {
-      /*     try {
-          let datos={
-              fecha_entrega:this.fecha_entrega,
-              estudio_id:this.estudio.id
-          }
-
-          let response = await EstudiosService.actualizarUltimoEstado(
-            datos
-          );          
-            this.$root.$bvToast.toast("se envio al medico derivante", {
-              title: "Atencion!",
-              toaster: "b-toaster-top-center",
-              solid: true,
-              variant: "success",
-            });
-            this.$router.push({
-              name: "listaEstudios",
-            });
-          
-          console.log(response);
-        } catch (err) {
-          console.log(err);
-          this.$root.$bvToast.toast(
-            "ocurrio un error mientras se enviaba al medico derivante",
-            {
-              title: "Atencion!",
-              toaster: "b-toaster-top-center",
-              solid: true,
-              variant: "danger",
-            }
-          );
-        } */
       console.log(this.estudio);
       let pdfName = 'informeEstudio'; 
       var doc = new jsPDF();
@@ -112,32 +80,32 @@ export default {
       //doc.text("Resultado:  " + this.estudio.diagnostico.nombre, 40,70);
       doc.save(pdfName + ".pdf");
     },
-  },
-  async siguienteEstado() {
-    try {
-      let datosConsentimiento = {
-        estudio_id: this.estudio.id,
-        fecha_enviado: new Date(),
-      };       
-      let response = await EstudiosService.actualizarUltimoEstado(
-        datosConsentimiento
-      );
-      console.log(response);
-      this.$router.push({
-        name: "listaEstudios",
-      });
-    } catch (error) {
-      console.log(error);
-      this.$root.$bvToast.toast(
-        "ocurrio un error mientras continuaba ",
-        {
-          title: "Atencion!",
-          toaster: "b-toaster-top-center",
-          solid: true,
-          variant: "danger",
-        }
-      );
-    }
+    async siguienteEstado() {
+      try {
+        let datosFinales = {
+          estudio_id: this.estudio.id,
+          fecha_enviado: new Date(),
+        };       
+        let response = await EstudiosService.actualizarUltimoEstado(
+          datosFinales
+        );
+        console.log(response);
+        this.$router.push({
+          name: "listaEstudios",
+        });
+      } catch (error) {
+        console.log(error);
+        this.$root.$bvToast.toast(
+          "ocurrio un error mientras continuaba ",
+          {
+            title: "Atencion!",
+            toaster: "b-toaster-top-center",
+            solid: true,
+            variant: "danger",
+          }
+        );
+      }
+    },
   },
   computed: {},
   mounted() {
