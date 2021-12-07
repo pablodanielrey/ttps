@@ -32,13 +32,6 @@
       >
         <template v-slot:cell(acciones)="row">
           <b-button
-            @click="siguienteEstado(row.item)"
-            variant="outline-danger"
-            title="Eliminar"
-          >
-            <b-icon icon="trash" variant="danger"> </b-icon>
-          </b-button>
-          <b-button
             @click="editar(row.item)"
             variant="outline-success"
             title="Editar"
@@ -49,6 +42,13 @@
               variant="success"
             >
             </b-icon>
+          </b-button>
+          <b-button
+            @click="siguienteEstado(row.item)"
+            variant="outline-danger"
+            title="Eliminar"
+          >
+            <b-icon icon="trash" variant="danger"> </b-icon>
           </b-button>
         </template>
       </b-table>

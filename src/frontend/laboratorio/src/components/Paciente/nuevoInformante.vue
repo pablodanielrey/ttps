@@ -180,7 +180,7 @@
     <b-row class="pb-2">
       <b-col class="text-center pt-3">
         <b-button variant="success" @click="crear()" v-if="!editar">Crear </b-button>
-         <b-button variant="success" @click="editarConfigurador()" v-if="editar"
+         <b-button variant="success" @click="editarInformante()" v-if="editar"
           >Editar 
         </b-button>
       </b-col>
@@ -228,7 +228,7 @@ export default {
           let r = await PacientesService.crearMedicoInformante(this.medicoInformante);
           console.log(r);
 
-          this.$root.$bvToast.toast("Se creo con exito el meidco informante", {
+          this.$root.$bvToast.toast("Se creo con exito el medico informante", {
             title: "Atencion!",
             toaster: "b-toaster-top-center",
             solid: true,
@@ -241,7 +241,7 @@ export default {
       } catch (error) {
         console.log(error);
         this.$root.$bvToast.toast(
-          "NO se pudo crear el medico informante, el usuario ya existe",
+          "No se pudo crear el medico informante, el usuario ya existe",
           {
             title: "Atencion!",
             toaster: "b-toaster-top-center",
@@ -251,28 +251,28 @@ export default {
         );
       }
     },
-    async editarConfigurador(){
-          try {
+    async editarInformante(){
+    try {
         let result = await this.$refs.datosInformante.validate();
         if (result) {
-          console.log(this.configurador);
-          let r = await PacientesService.editarConfigurador(this.configurador);
+          console.log(this.medicoInformante);
+          let r = await PacientesService.editarMedicoInformante(this.medicoInformante);
           console.log(r);
 
-          this.$root.$bvToast.toast("Se edito con exito el configurador", {
+          this.$root.$bvToast.toast("Se edito con exito el medico informante", {
             title: "Atencion!",
             toaster: "b-toaster-top-center",
             solid: true,
             variant: "success",
           });
           this.$router.push({
-            name: "listaConfiguradores",
+            name: "listaMedicosInformantes",
           });
         }
       } catch (error) {
         console.log(error);
         this.$root.$bvToast.toast(
-          "NO se pudo editar el configurador",
+          "No se pudo editar el medico informante",
           {
             title: "Atencion!",
             toaster: "b-toaster-top-center",

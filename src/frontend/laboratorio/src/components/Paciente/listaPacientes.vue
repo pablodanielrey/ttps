@@ -25,13 +25,6 @@
       @filtered="onFiltered"
     >
       <template v-slot:cell(acciones)="row">
-     <!--    <b-button
-          title="Editar paciente"
-          variant="outline-primary"
-          @click="editarPaciente(row.item)"
-        >
-          <b-icon icon="arrow-clockwise" aria-hidden="true"></b-icon
-        ></b-button> -->
         <b-button
           title="Ver historia clinica"
           variant="outline-primary"
@@ -39,6 +32,13 @@
         >
           <b-icon icon="eye" aria-hidden="true"></b-icon
         ></b-button>
+        <b-button
+          title="Editar paciente"
+          variant="outline-primary"
+          @click="editarPaciente(row.item)"
+        >
+          <b-icon icon="arrow-clockwise" aria-hidden="true"></b-icon
+        ></b-button> 
           <b-button
             @click="borrarPaciente(row.item)"
             variant="outline-danger"
