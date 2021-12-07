@@ -31,18 +31,17 @@ export default {
     },
     
     obtenerEmpleados() {
-        console.log(API_URL + API_USER + "empleados/")
         return Api().get(API_URL + API_USER + "empleados/")
     },
-    crearEmpleado(paciente) {
-        return Api().post(API_URL + API_USER + "empleados/", paciente);
+    crearEmpleado(empleado) {
+        return Api().post(API_URL + API_USER + "empleados/", empleado);
     },
-    deleteEmpleado(paciente) {
-        return Api().delete(API_URL + API_USER + "empleados/" + paciente.id);
+    deleteEmpleado(empleado) {
+        return Api().delete(API_URL + API_USER + "empleados/" + empleado.id);
 
     },
-    editarEmpleado(paciente) {
-        return Api().put(API_URL + "empleados/" + paciente.id + '/', paciente);
+    editarEmpleado(empleado) {
+        return Api().put(API_URL + "empleados/" + empleado.id + '/', empleado);
     },
   
 
