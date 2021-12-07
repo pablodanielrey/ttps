@@ -4,7 +4,7 @@
       <b-col class="text-center pt-3">
         <p class="h3 text-center">
           <strong v-if="!editar"> Crear un medico infomante</strong>
-            <strong v-if="editar"> Editar un medico informante</strong>
+          <strong v-if="editar"> Editar un medico informante</strong>
         </p>
       </b-col>
     </b-row>

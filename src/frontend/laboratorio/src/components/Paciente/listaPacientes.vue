@@ -33,11 +33,11 @@
           <b-icon icon="eye" aria-hidden="true"></b-icon
         ></b-button>
         <b-button
-          title="Editar paciente"
-          variant="outline-primary"
+          title="Editar"
+          variant="outline-success"
           @click="editarPaciente(row.item)"
         >
-          <b-icon icon="arrow-clockwise" aria-hidden="true"></b-icon
+          <b-icon icon="arrow-repeat" variant="sucess"> </b-icon
         ></b-button> 
           <b-button
             @click="borrarPaciente(row.item)"
