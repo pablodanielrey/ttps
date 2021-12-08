@@ -11,8 +11,8 @@ from . import models
 
 
 class SerializadorDeConfigurador(serializers.ModelSerializer):
-    usuario = serializers.CharField(source='usuario.username')
-    clave = serializers.CharField(source='usuario.password')
+    usuario = serializers.CharField(source='usuario.username', read_only=True)
+    clave = serializers.CharField(source='usuario.password', read_only=True)
     class Meta:
         model = models.Configurador
         fields = ['id','nombre','apellido','usuario','clave']

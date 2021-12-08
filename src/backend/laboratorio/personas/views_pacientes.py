@@ -13,8 +13,9 @@ from . import views_personas
 
 
 class SerializadorDePaciente(serializers.ModelSerializer):
-    obra_social = views_personas.SerializadorDeObraSocialPersona(required=False, many=True)
-    historia_clinica = serializers.CharField(source='historia_clinica.historia_clinica')
+    """obra_social = views_personas.SerializadorDeObraSocialPersona(required=False, many=True, read_only=True)"""
+    obra_social = views_personas.SerializadorDeObraSocialPersona(source='obra_social.obraSocial', read_only=True)
+    historia_clinica = serializers.CharField(source='historia_clinica.historia_clinica', read_only=True)
 
     class Meta:
         model = models.Paciente

@@ -43,9 +43,9 @@ class VistaMedicoDerivante(viewsets.ModelViewSet):
 
 
 class SerializadorDeMedicoInformante(serializers.ModelSerializer):
-    usuario = serializers.CharField(source='usuario.username')
-    clave = serializers.CharField(source='usuario.password')
-    matricula = serializers.CharField(source='matricula.numero')
+    usuario = serializers.CharField(source='usuario.username', read_only=True)
+    clave = serializers.CharField(source='usuario.password', read_only=True)
+    matricula = serializers.CharField(source='matricula.numero', read_only=True)
     class Meta:
         model = models.MedicoInformante
         fields = ['id','nombre','apellido','email','matricula','usuario','clave']

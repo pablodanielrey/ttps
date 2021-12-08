@@ -11,8 +11,8 @@ from . import models
 
 
 class SerializadorDeEmpleado(serializers.ModelSerializer):
-    usuario = serializers.CharField(source='usuario.username')
-    clave = serializers.CharField(source='usuario.password')
+    usuario = serializers.CharField(source='usuario.username', read_only=True)
+    clave = serializers.CharField(source='usuario.password', read_only=True)
     class Meta:
         model = models.Empleado
         fields = ['id','nombre','apellido','usuario','clave']
