@@ -15,7 +15,7 @@ class SerializadorDeMatricula(serializers.ModelSerializer):
 
 class SerializadorDeMedicoDerivante(serializers.ModelSerializer):
     # matricula = SerializadorDeMatricula()
-    matricula = serializers.CharField(source='matricula.numero')
+    matricula = serializers.CharField(source='matricula.numero', read_only=True)
     class Meta:
         model = models.Persona
         fields = ['id','nombre','apellido','email','matricula']
