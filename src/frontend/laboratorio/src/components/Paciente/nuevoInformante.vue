@@ -266,7 +266,7 @@ export default {
             variant: "success",
           });
           this.$router.push({
-            name: "listaMedicosInformantes",
+            name: "listaMedicoInformante",
           });
         }
       } catch (error) {
