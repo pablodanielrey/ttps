@@ -15,10 +15,17 @@ class SerializadorDeMatricula(serializers.ModelSerializer):
 
 class SerializadorDeMedicoDerivante(serializers.ModelSerializer):
     # matricula = SerializadorDeMatricula()
-    matricula = serializers.CharField(source='matricula.numero', read_only=True)
+    matricula = serializers.CharField(source='matricula.numero', read_only=False)
     class Meta:
         model = models.Persona
         fields = ['id','nombre','apellido','email','matricula']
+
+    def update(self, instance, validated_data):
+        logging.info(validated_data)
+        matricula = validated_data.pop('matricula')
+        instance.matricula.numero = matricula['numero']
+        instance.matricula.save()
+        return super().update(instance, validated_data)
 
 class VistaMedicoDerivante(viewsets.ModelViewSet):
     queryset = models.MedicoDerivante.all()
