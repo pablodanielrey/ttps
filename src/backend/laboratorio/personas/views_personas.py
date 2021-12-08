@@ -10,7 +10,13 @@ from django.contrib.auth import models as auth_models
 
 from . import models
 
+class SerializadorDeObraSocial(serializers.ModelSerializer):
+    class Meta:
+        model = models.ObraSocial
+        fields = ['id','nombre']
+
 class SerializadorDeObraSocialPersona(serializers.HyperlinkedModelSerializer):
+    obra_social = SerializadorDeObraSocial()
     class Meta:
         model = models.ObraSocialPersona
         fields = ['obra_social','numero_afiliado']

@@ -47,6 +47,7 @@ class ObraSocialPersona(models.Model):
     persona = models.ForeignKey(Persona, on_delete=models.CASCADE, related_name='obra_social')
     obra_social = models.ForeignKey(ObraSocial, on_delete=models.CASCADE)
     numero_afiliado = models.CharField(max_length=1024)
+
 class HistoriaClinica(models.Model):
     persona = models.OneToOneField(Persona, on_delete=models.CASCADE, related_name='historia_clinica')
     historia_clinica = models.CharField(max_length=9216, null=True)
@@ -84,6 +85,11 @@ class Paciente(Persona):
 
     NOMBRE_GRUPO = 'Pacientes'
 
+    @classmethod
+    def crear_obra_social(cls, id_obra_social, numero_afiliado):
+        os = ObraSocial.objects.get(id=id_obra_social)
+        osp = ObraSocialPersona(obra_social=os, numero_afiliado=numero_afiliado)
+        return osp
 
 class MedicoInformante(Persona):
     class Meta:
