@@ -10,6 +10,9 @@ export default {
     obtenerEstudio(id) {
         return Api().get(API_URL + API_USER + "estudios/" + id)
     },
+    obtenerEstudiosPorMesAño(){
+        return Api().get(API_URL + API_USER + "estudios/estudios_estadisitcas_mes" )
+    },
     obtenerTurnos() {
         return Api().get(API_URL + API_USER + "listaTurnos/")
     },

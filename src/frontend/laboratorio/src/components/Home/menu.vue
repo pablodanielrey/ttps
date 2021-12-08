@@ -86,6 +86,11 @@
                 >Listar</b-dropdown-item
               >
             </b-nav-item-dropdown>
+             <b-nav-item-dropdown  text="Estadisticas" right>
+              <b-dropdown-item :to="{ name: 'estadisticas' }"
+                >Ver</b-dropdown-item
+              >
+            </b-nav-item-dropdown>
           <!--   <b-nav-item-dropdown   v-if="this.permisos == 'Configuradores'" text="Turnos " >
               <b-dropdown-item :to="{ name: 'configurarTurnos' }"
                 >Configurar turnos</b-dropdown-item

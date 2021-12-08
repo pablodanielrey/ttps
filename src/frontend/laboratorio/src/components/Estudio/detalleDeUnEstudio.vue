@@ -1,132 +1,144 @@
 <template>
   <b-container class="bv-example-row">
     <div v-if="loading">
-        <b-spinner> </b-spinner>
+      <b-spinner> </b-spinner>
     </div>
     <div v-else>
       <br />
-      <b-card header="Detalle de un estudio">
-        <b-row>
-          <b-col
-            ><strong> Paciente: </strong> {{ estudio.paciente.apellido }}
-            {{ estudio.paciente.nombre }} <br
-          /></b-col>
-          <b-col>
-            <strong> Fecha de alta: </strong>{{ estudio.fecha_alta }} <br
-          /></b-col>
-        </b-row>
-        <b-row>
-          <b-col>
-            <strong> Medico Derivante: </strong>
-            {{ estudio.medico_derivante.apellido }}
-            {{ estudio.medico_derivante.nombre }} <br
-          /></b-col>
+      <h3>Detalle de un estudio</h3>
+      <br>
+      <b-row>
+        <b-col>
+          <h5>
+            <strong> Paciente: </strong> {{ estudio.paciente.apellido }}
+            {{ estudio.paciente.nombre }} <br /></h5
+        ></b-col>
+        <b-col>
+           <h5>
+          <strong> Fecha de alta: </strong>{{ estudio.fecha_alta }} <br
+        />
+         </h5></b-col>
+      </b-row>
+      <b-row>
+        <b-col> <h5>
+          <strong> Medico Derivante: </strong>
+          {{ estudio.medico_derivante.apellido }}
+          {{ estudio.medico_derivante.nombre }} <br
+        /> </h5></b-col>
 
-          <b-col>
-            <strong> Diagnostico Presuntivo: </strong
-            >{{ estudio.diagnostico.nombre }} <br
-          /></b-col>
-        </b-row>
-        <b-row>
-          <b-col>
-            <strong> Tipo de estudio: </strong>{{ estudio.tipo.nombre }}</b-col
-          >
-          <b-col> <strong> Estado : </strong>{{ obtenerUltimoEstado() }}</b-col>
-        </b-row>
-        <b-row>
-          <b-col v-if="this.estudio.estados[3] != undefined">
-            <div v-if="this.estudio.estados[3].turno != null">
-              <strong> Turno:</strong>
-              {{ mostrarFecha(this.estudio.estados[3].turno.inicio) }}
+        <b-col> <h5>
+          <strong> Diagnostico Presuntivo: </strong
+          >{{ estudio.diagnostico.nombre }} <br
+        /> </h5></b-col>
+      </b-row>
+      <b-row>
+        <h5>
+        <b-col> 
+          <strong> Tipo de estudio: </strong>{{ estudio.tipo.nombre }}</b-col
+        >
+        <b-col> <strong> Estado : </strong>{{ obtenerUltimoEstado() }}</b-col> </h5>
+      </b-row>
+      <b-row>
+        <b-col v-if="this.estudio.estados[3] != undefined">
+           <h5>
+          <div v-if="this.estudio.estados[3].turno != null">
+            <strong> Turno:</strong>
+            {{ mostrarFecha(this.estudio.estados[3].turno.inicio) }}
 
-              <li>
-                Inicio
-                {{ mostrarminutos(this.estudio.estados[3].turno.inicio) }}
-              </li>
-              <li>
-                Fin: {{ mostrarminutos(this.estudio.estados[3].turno.fin) }}
-              </li>
-            </div>
-          </b-col>
-          <b-col v-if="this.estudio.estados[4] != undefined">
-            <div v-if="this.estudio.estados[4].freezer != null">
-              <strong> Extraccion:</strong>
-              <li>Frezeer: {{ this.estudio.estados[4].freezer }}</li>
-              <li>Mililitros: {{ this.estudio.estados[4].mililitros }}</li>
-            </div></b-col
+            <li>
+              Inicio
+              {{ mostrarminutos(this.estudio.estados[3].turno.inicio) }}
+            </li>
+            <li>
+              Fin: {{ mostrarminutos(this.estudio.estados[3].turno.fin) }}
+            </li>
+          </div>
+           </h5>
+        </b-col>
+        <b-col v-if="this.estudio.estados[4] != undefined">
+           <h5>
+          <div v-if="this.estudio.estados[4].freezer != null">
+            <strong> Extraccion:</strong>
+            <li>Frezeer: {{ this.estudio.estados[4].freezer }}</li>
+            <li>Mililitros: {{ this.estudio.estados[4].mililitros }}</li>
+          </div> </h5></b-col
+        >
+      </b-row>
+      <b-row>
+         <h5>
+        <b-col v-if="this.estudio.estados[5] != undefined"
+          ><div v-if="this.estudio.estados[5].extracionista != null">
+            <strong> Persona que retiro la muestra: </strong
+            >{{ this.estudio.estados[5].extracionista }}
+          </div> </b-col
+        ></h5>
+      </b-row>
+      <b-row>
+        <h5>
+        <b-col v-if="this.estudio.estados[6] != undefined"
+          > <div v-if="this.estudio.estados[6].numero_lote != null">
+            <strong> Procesado en lote: </strong
+            >{{ this.estudio.estados[6].numero_lote }}
+          </div></b-col
+        >
+         </h5>
+      </b-row>
+      <b-row>
+        <h5>
+        <b-col v-if="this.estudio.estados[7] != undefined"
+          > <div v-if="this.estudio.estados[7].numero_lote != null">
+            <strong> Informe redactado por: </strong
+            >{{ this.estudio.estados[7].numero_lote }}
+          </div></b-col
+        > </h5>
+      </b-row>
+      <b-row>
+        
+        <b-col v-if="this.estudio.paciente.historia_clinica != null"> 
+          <p><strong> Historia clinica: </strong></p>
+          <a
+            @click="verHistoria()"
+            title="ver Historia clinica"
+            variant="outline-success"
           >
-        </b-row>
-        <b-row>
-          <b-col v-if="this.estudio.estados[5] != undefined"
-            ><div v-if="this.estudio.estados[5].extracionista != null">
-              <strong> Persona que retiro la muestra: </strong
-              >{{ this.estudio.estados[5].extracionista }}
-            </div></b-col
+            <b-icon icon="eye" variant="info"> </b-icon
+          ></a> 
+        </b-col>
+        <b-col>
+          <p>Presupuesto:</p>
+          <a
+            title="Descargar Presupuesto"
+            variant="outline-success"
+            download="presupuesto.pdf"
+            @click="bajarPresupuesto()"
           >
-        </b-row>
-        <b-row>
-          <b-col v-if="this.estudio.estados[6] != undefined"
-            ><div v-if="this.estudio.estados[6].numero_lote != null">
-              <strong> Procesado en lote: </strong
-              >{{ this.estudio.estados[6].numero_lote }}
-            </div></b-col
-          > 
-        </b-row>
-        <b-row>
-          <b-col v-if="this.estudio.estados[7] != undefined"
-            ><div v-if="this.estudio.estados[7].numero_lote != null">
-              <strong> Informe redactado por: </strong
-              >{{ this.estudio.estados[7].numero_lote }}
-            </div></b-col
-          > 
-        </b-row>
-        <b-row>
-          <b-col v-if="this.estudio.paciente.historia_clinica != null">
-            <p><strong> Historia clinica: </strong></p>
-            <a
-              @click="verHistoria()"
-              title="ver Historia clinica"
-              variant="outline-success"
-            >
-              <b-icon icon="eye" variant="info"> </b-icon
-            ></a>
-          </b-col>
-          <b-col>
-            <p>Presupuesto:</p>
-            <a
-              title="Descargar Presupuesto"
-              variant="outline-success"
-              download="presupuesto.pdf"
-              @click="bajarPresupuesto()"
-            >
-              <b-icon icon="download" variant="info"> </b-icon
-            ></a>
-          </b-col>
-          <b-col v-if="this.estudio.estados[0].comprobante != undefined">
-            <p>Comprobante:</p>
-            <a
-              v-if="this.estudio.estados[0] != undefined"
-              title="Descargar Comprobante de pago"
-              variant="outline-success"
-              download="pago.pdf"
-              @click="bajarPago()"
-            >
-              <b-icon icon="download" variant="info"> </b-icon
-            ></a>
-          </b-col>
-          <b-col v-if="this.estudio.estados[3] != undefined">
-            <p>Consentimiento:</p>
-            <a
-              title="Descargar consentimiento firmado"
-              variant="outline-success"
-              download="consentimiento.pdf"
-              @click="bajarConsentimiento()"
-            >  
-              <b-icon icon="download" variant="info"> </b-icon
-            ></a>
-          </b-col>
-        </b-row>
-      </b-card>
+            <b-icon icon="download" variant="info"> </b-icon
+          ></a>
+        </b-col>
+        <b-col v-if="this.estudio.estados[0].comprobante != undefined">
+          <p>Comprobante:</p>
+          <a
+            v-if="this.estudio.estados[0] != undefined"
+            title="Descargar Comprobante de pago"
+            variant="outline-success"
+            download="pago.pdf"
+            @click="bajarPago()"
+          >
+            <b-icon icon="download" variant="info"> </b-icon
+          ></a>
+        </b-col>
+        <b-col v-if="this.estudio.estados[3] != undefined">
+          <p>Consentimiento:</p>
+          <a
+            title="Descargar consentimiento firmado"
+            variant="outline-success"
+            download="consentimiento.pdf"
+            @click="bajarConsentimiento()"
+          >
+            <b-icon icon="download" variant="info"> </b-icon
+          ></a>
+        </b-col>
+      </b-row>
 
       <b-modal
         size="xl"
@@ -343,15 +355,17 @@ export default {
     verHistoria() {
       this.$refs["modalHistoriaCLinica"].show();
     },
-    async bajarPresupuesto(){
+    async bajarPresupuesto() {
       try {
-        let response = await EstudiosService.descargarPresupuesto(this.estudioId);
+        let response = await EstudiosService.descargarPresupuesto(
+          this.estudioId
+        );
         console.log(response);
       } catch (error) {
         console.log(error);
       }
     },
-    async bajarPago(){
+    async bajarPago() {
       try {
         let response = await EstudiosService.descargarPago(this.estudioId);
         console.log(response);
@@ -359,9 +373,11 @@ export default {
         console.log(error);
       }
     },
-    async bajarConsentimiento(){
+    async bajarConsentimiento() {
       try {
-        let response = await EstudiosService.descargarConsentimiento(this.estudioId);
+        let response = await EstudiosService.descargarConsentimiento(
+          this.estudioId
+        );
         console.log(response);
       } catch (error) {
         console.log(error);

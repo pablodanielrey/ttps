@@ -20,6 +20,8 @@
         </b-input-group>
       </b-col>
       <b-table
+       show-empty
+        empty-text="El sistema no posee estudios cargados"
         :items="items"
         :fields="fields"
         :filter="filter"
@@ -69,6 +71,7 @@
         <br />
       </b-row>
     </div>
+    
   </b-container>
 </template>
 

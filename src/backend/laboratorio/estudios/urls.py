@@ -11,5 +11,6 @@ router.register('templateConsentimiento', views.VistaTemplateConsentimiento)
 router.register('estudios', views.VistaEstudios)
 router.register('estados', views.VistaEstadoEstudio)
 router.register('archivos', views.VistaArchivos)
+router.register('estadisticas', views.VistaEstadisticas)
 
 urlpatterns = router.urls

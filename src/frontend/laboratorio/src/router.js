@@ -15,6 +15,7 @@ import ListaMedicoInformante from '@/components/Paciente/listaMedicoInformante.v
 import NuevoInformante from '@/components/Paciente/nuevoInformante.vue'
 import ListaDerivante from '@/components/Paciente/listaDerivante.vue'
 import NuevoDerivante from '@/components/Paciente/nuevoDerivante.vue'
+import Estadisticas from '@/components/Estadisticas/estadisticas.vue'
 
 import ListaEmpleado from '@/components/Paciente/listaEmpleado.vue'
 import NuevoEmpleado from '@/components/Paciente/nuevoEmpleado.vue'
@@ -43,9 +44,6 @@ import EsperandoInterpretacionDeResultados from '@/components/EstadosEstudio/Esp
 import EsperandoProcesamientoDeLoteBiotecnologico from '@/components/EstadosEstudio/EsperandoProcesamientoDeLoteBiotecnologico.vue'
 import EsperandoEntregaAMedicoDerivante from '@/components/EstadosEstudio/EsperandoEntregaAMedicoDerivante.vue'
 import ResultadoDeEstudioEntregado from '@/components/EstadosEstudio/ResultadoDeEstudioEntregado.vue'
-
-
-
 
 import EsperandoInterpretacionDeResultadosInformante from '@/components/Estudio/EsperandoInterpretacionDeResultadosInformante.vue'
 import listaEstudiosEsperandoInforme from '@/components/Estudio/listaEstudiosEsperandoInforme.vue'
@@ -117,7 +115,9 @@ const router = new Router({
             { path: '/listaEstudiosEsperandoInforme', component: listaEstudiosEsperandoInforme , name:'listaEstudiosEsperandoInforme',props:true },
 
             
-            { path: '/detalleDeEstudio', component: DetalleDeUnEstudio, name:'detalleDeEstudio',props: true  }
+            { path: '/detalleDeEstudio', component: DetalleDeUnEstudio, name:'detalleDeEstudio',props: true  },
+            { path: '/estadisticas', component: Estadisticas, name:'estadisticas'  }
+
         ]
     },
     {
