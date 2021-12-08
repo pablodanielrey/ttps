@@ -29,6 +29,7 @@ class SerializadorDePaciente(serializers.ModelSerializer):
         instance.historia_clinica.historia_clinica = historia_clinica['historia_clinica']
         instance.historia_clinica.save()
        
+        #TODO: corregir este codigo porque no me está trayendo los datos el serializer
         if 'obra_social' in validated_data:
             obra_social = validated_data.pop('obra_social')
             logging.info(obra_social)
