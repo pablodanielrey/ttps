@@ -8,7 +8,7 @@
           </div>
           <br />
           <b-row>
-            <b-col lg="3" md="3" sm="10">
+            <b-col lg="5" md="5" sm="10">
               <b-form-group
                 id="mililitros-label"
                 label="Cantidad de mililitros:"
@@ -38,6 +38,7 @@
               </b-form-group>
               <div class="mt-2">Cantidad: {{ mililitros }}</div>
             </b-col>
+            <b-col lg="1"></b-col>
             <b-col lg="3" md="3" sm="10">
               <b-form-group
                 id="freezer-label"

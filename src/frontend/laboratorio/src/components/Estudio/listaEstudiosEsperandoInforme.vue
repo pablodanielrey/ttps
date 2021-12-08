@@ -2,10 +2,10 @@
   <b-container fluid>
     <div v-if="loading">
       <b-spinner> </b-spinner>
-
-      <h4>Listado de Estudios</h4>
     </div>
+
     <div v-else>
+      <h4>Listado de estudios esperando informe</h4>
       <b-col lg="4" class="my-1">
         <b-input-group size="sm">
           <b-form-input
@@ -32,7 +32,6 @@
           {{ obtenerUltimoEstado(row.item) }}
         </template>
         <template v-slot:cell(acciones)="row">
-        
           <b-button
             @click="siguienteEstado(row.item)"
             variant="outline-white"
@@ -122,8 +121,6 @@ export default {
       try {
         let response = await EstudiosService.obtenerListaEstudiosParaInformes();
         this.items = response.data;
-        console.log(response)
-      console.log("estudios:"+ this.items)
       } catch (err) {
         console.log(err);
       }
@@ -131,18 +128,8 @@ export default {
     onFiltered(filteredItems) {
       this.totalRows = filteredItems.length;
       this.currentPage = 1;
-    },
-    detalleEstudio(estudio) {
-      console.log(estudio);
-      this.$router.push({
-        name: "detalleDeEstudio",
-        params: {
-          estudio: estudio,
-        },
-      });
-    },
+    },   
     siguienteEstado(estudio) {
-      
       //let ultimoEstado = estudio.estados[estudio.estados.length - 1];
       this.$router.push({
         name: "EsperandoInterpretacionDeResultadosInformante",

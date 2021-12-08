@@ -7,7 +7,6 @@
             <ValidationObserver ref="detailsConsentimiento">
               <b-form-group
                 id="pdf-label"
-                label="Consentimiento informado firmado:"
                 label-for="pdf"
               >
                 <ValidationProvider
@@ -20,7 +19,7 @@
                     :state="errors[0] ? false : valid ? true : null"
                     @change="obtenerPDF($event, file1)"
                     accept="application/pdf"
-                    placeholder="click aqui para subir"
+                    placeholder="Seleccione el consentimiento informado.."
                     browse-text="Buscar"
                   ></b-form-file>
                   <b-form-invalid-feedback

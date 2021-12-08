@@ -3,34 +3,27 @@
     <div v-if="loading">
       <b-spinner></b-spinner>
     </div>
-    <div v-else> 
-    <b-card
-      header=" Listado de Estudios esperando Lote para procesamiento biotecnológico"
-    >
-      <b-table
-        :items="estudios"
-        :fields="fields"
-        :filter="filter"
-        :current-page="currentPage"
-        :per-page="perPage"
-        @filtered="onFiltered"
+    <div v-else>
+      <b-card
+        header=" Listado de Estudios esperando Lote para procesamiento biotecnológico"
       >
-        <template v-slot:cell(fecha_alta)="row">
-          {{ obtenerFecha(row.item) }}
-        </template>
-      </b-table>
+        <b-table :items="estudios" :fields="fields">
+          <template v-slot:cell(fecha_alta)="row">
+            {{ obtenerFecha(row.item) }}
+          </template>
+        </b-table>
 
-      <b-row class="pb-2">
-        <b-col class="text-center pt-3">
-          <b-button
-            @click="crearLote()"
-            variant="success"
-            :disabled="estudios.length < 10 ? true : false"
-            >Crear Lote
-          </b-button>
-        </b-col>
-      </b-row>
-    </b-card>
+        <b-row class="pb-2">
+          <b-col class="text-center pt-3">
+            <b-button
+              @click="crearLote()"
+              variant="success"
+              :disabled="estudios.length < 10 ? true : false"
+              >Crear Lote
+            </b-button>
+          </b-col>
+        </b-row>
+      </b-card>
     </div>
   </b-container>
 </template>
@@ -50,12 +43,8 @@ export default {
   data() {
     return {
       estudios: [],
-      loading:true,
+      loading: true,
       perPage: 10,
-      pageOptions: [4, 10, 15],
-      filter: null,
-      currentPage: 1,
-      totalRows: 1,
       fields: [
         { key: "paciente.nombre", label: "Nombre", class: "text-center p2" },
         {
@@ -91,27 +80,23 @@ export default {
       try {
         let estudios = [];
         let objeto = {};
-        let id
+        let id;
         this.estudios.forEach((est) => {
-         id=est.id
+          id = est.id;
           estudios.push(id);
-        });   
-        objeto.estudios = estudios;   
+        });
+        objeto.estudios = estudios;
         let response = await LotesService.crearLote(objeto);
-         this.$root.$bvToast.toast(
-          "se creo con exito el lote",
-          {
-            title: "Atencion!",
-            toaster: "b-toaster-top-center",
-            solid: true,
-            variant: "success",
-          }
-        );
-        console.log(response);  
-         this.$router.push({
-              name: "cargarResultadoLote",
-            });
-
+        this.$root.$bvToast.toast("se creo con exito el lote", {
+          title: "Atencion!",
+          toaster: "b-toaster-top-center",
+          solid: true,
+          variant: "success",
+        });
+        console.log(response);
+        this.$router.push({
+          name: "cargarResultadoLote",
+        });
       } catch (err) {
         console.log(err);
         this.$root.$bvToast.toast(
@@ -126,15 +111,10 @@ export default {
       }
     },
     obtenerFecha(estudio) {
-      
-
-      /*  let nameEstado =
-        paciente.estados[paciente.estados.length - 1].resourcetype;
-      nameEstado = nameEstado.replace(/([a-z])([A-Z])/g, "$1 $2");
-      nameEstado = nameEstado.replace(/([A-Z])([A-Z][a-z])/g, "$1 $2"); */
-      let fecha = estudio.estados[estudio.estados.length - 1].fecha;
+      //let fecha = estudio.estados[estudio.estados.length - 1].fecha;
+      let fecha = estudio.ultimo_estado.fecha;
       fecha = new Date(fecha);
-      return fecha.format("YYYY-MM-DD");
+      return fecha.format("DD-MM-YYYY");
     },
     async obtenerListaEstudiosEsperandoProcesamiento() {
       try {
@@ -142,38 +122,33 @@ export default {
           await LotesService.obtenerListaEstudiosEsperandoProcesamiento();
         this.items = response.data;
         this.obtenerEstudios();
-        /*    this.items.sort(function (a, b) {
-          if (a.fecha_alta < b.fecha_alta){
-            return -1
-          }
-          if (a.fecha_alta > b.fecha_alta){
-            return 1
-          }
-          
-          
-        }); */
       } catch (err) {
         console.log(err);
       }
     },
     async obtenerEstudios() {
+      this.loading = true;
       try {
         this.items.forEach(async (id) => {
+          this.loading = true;
           let response = await EstudiosService.obtenerEstudio(id);
           this.estudios.push(response.data);
         });
+        this.ordenarEstudiosPorFecha();
       } catch (error) {
         console.log(error);
+      } finally {
+        this.loading = false;
       }
     },
-    onFiltered(filteredItems) {
-      this.totalRows = filteredItems.length;
-      this.currentPage = 1;
-    },
-    seleccionTurno(estudio) {
-      this.$router.push({
-        name: "seleccionTurno",
-        params: { estudio: estudio },
+    ordenarEstudiosPorFecha() {
+      this.estudios.sort(function (a, b) {
+        if (new Date(a.ultimo_estado.fecha) > new Date(b.ultimo_estado.fecha)) {
+          return 1;
+        }
+        if (new Date(a.ultimo_estado.fecha) < new Date(b.ultimo_estado.fecha)) {
+          return -1;
+        }
       });
     },
   },
@@ -182,7 +157,6 @@ export default {
       .all([this.obtenerListaEstudiosEsperandoProcesamiento()])
       .then(() => {
         this.totalRows = this.items.length;
-        this.loading=false
       })
       .catch((err) => {
         console.log(err);

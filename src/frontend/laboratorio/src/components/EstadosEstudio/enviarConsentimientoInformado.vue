@@ -5,12 +5,10 @@
         header="Descargar Template de consentimiento informado en formato pdf"
       >
         <div>
-          <b-button variant="success" @click="verTemplate()"
-            >Descargar Template de consentimiento
+          <b-button id="btnConsentimiento" variant="outline-primary" @click="verTemplate()" title="Descargar consentimiento">
+            <b-icon icon="cloud-download" variant="outline-primary"> </b-icon>
           </b-button>
-        </div>
-        <br/>
-        <div>
+      
           <b-button variant="success" @click="siguienteEstado()"
             >Siguiente
           </b-button>
@@ -33,18 +31,17 @@ export default {
       type: Object,
     },
   },
-  created() {
-    console.log(this.estudio)
-  },
+  created() {},
   data() {
     return {};
   },
 
   methods: {
-    async verTemplate(){
-      try {        
-        let response = await TemplateConsentimientoService.obtenerTemplateConsentimiento();
-        console.log(response)
+    async verTemplate() {
+      try {
+        let response =
+          await TemplateConsentimientoService.obtenerTemplateConsentimiento();
+        console.log(response);
       } catch (error) {
         console.log(error);
       }
@@ -54,7 +51,7 @@ export default {
         let datosConsentimiento = {
           estudio_id: this.estudio.id,
           fecha_enviado: new Date(),
-        };       
+        };
         let response = await EstudiosService.actualizarUltimoEstado(
           datosConsentimiento
         );
@@ -64,15 +61,12 @@ export default {
         });
       } catch (error) {
         console.log(error);
-        this.$root.$bvToast.toast(
-          "ocurrio un error mientras continuaba ",
-          {
-            title: "Atencion!",
-            toaster: "b-toaster-top-center",
-            solid: true,
-            variant: "danger",
-          }
-        );
+        this.$root.$bvToast.toast("ocurrio un error mientras continuaba ", {
+          title: "Atencion!",
+          toaster: "b-toaster-top-center",
+          solid: true,
+          variant: "danger",
+        });
       }
     },
   },
@@ -81,4 +75,8 @@ export default {
   mounted() {},
 };
 </script>
-
+<style scoped>
+#btnConsentimiento{
+  margin: 30px
+}
+</style>

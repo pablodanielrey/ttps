@@ -2,6 +2,7 @@
   <b-container>
     <div v-if="loading"></div>
     <div v-else>
+      <h4>Resultados del informe</h4>
       <ValidationObserver ref="detailsResultado">
         <b-form-group>
           <b-alert
@@ -14,7 +15,7 @@
           >
         </b-form-group>
         <b-row>
-          <b-col>
+          <b-col lg="5" md="7" sm="10">
             <b-form-group
               id="Resuttado-label"
               label="Resultado:"
@@ -44,12 +45,13 @@
           <b-row>
             <b-col>
               <b-form-group
-                id="historiaclinica-label"
+                id="informe-label"
                 label-for="Informe del resultado"
               >
                 <ValidationProvider
-                  :name="'historiaclinica '"
+                  :name="'informe '"
                   v-slot="{ errors, valid }"
+                  :rules="'required'"
                 >
                   <vue-editor
                     :state="errors[0] ? false : valid ? true : null"
@@ -95,13 +97,10 @@ export default {
   data() {
     return {
       medicosInformantes: [],
-      loading: true,
-      retiro: null,
-      urlRestultado: null,
+      loading: true,   
       alerts: [],
       resultado: {
         resultado: null,
-        medico_informante: null,
         fecha_informe: new Date().format("YYYY-MM-DD"),
         informe: null,
       },
@@ -120,12 +119,13 @@ export default {
     },
     async guardarDatos() {
       try {
+        
         let result = await this.$refs.detailsResultado.validate();
+        console.log(result)
         if (result) {
           let datos = {
             estudio_id: this.estudio.id,
-            fecha_informe: new Date(),
-            medico_informante: "f9ddc2a4-42a9-43fe-aeb3-9aea0c384a18",
+            fecha_informe: new Date(),          
             resultado: this.resultado.resultado,
             informe: this.resultado.informe,
           };

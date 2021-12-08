@@ -22,7 +22,6 @@
           class="vuecal--full-height-delete"
           @view-change="logEvents('view-change', $event)"
           ref="vuecal"
-          
         />
       </div>
       <b-modal
@@ -105,51 +104,65 @@ export default {
       try {
         let response = await TurnosService.obtenerTurnos(rango);
         this.turnos = response.data;
-        console.log(response);
       } catch (err) {
         console.log(err);
       }
     },
     onEventClick(event, e) {
-      this.selectedEvent = event;
-      this.showDialog = true;
+      this.selectedEvent = event;  
+      if (this.selectedEvent.start < new Date()){
+         this.$root.$bvToast.toast(
+          "Esta seleccionando un turno con una fecha o hora que ya paso, por favor seleccione otro turno",
+          {
+            title: "Atencion!",
+            toaster: "b-toaster-top-center",
+            solid: true,
+            variant: "danger",
+          }
+        );
+      }else{
+        this.showDialog = true;
       this.$refs["my-modal"].show();
       e.stopPropagation();
+      }
+      
     },
     async confirmarTurno(inicio, fin) {
       try {
         let turnoEstudio = {
           inicio: inicio.toISOString(),
           fin: fin.toISOString(),
-          estudio_id: this.estudio.id,          
+          estudio_id: this.estudio.id,
         };
-        let response = await  EstudiosService.actualizarUltimoEstado(turnoEstudio);
-         this.$root.$bvToast.toast("Se selecciono el turno para el paciente ", {
+        await EstudiosService.actualizarUltimoEstado(turnoEstudio);
+        this.$root.$bvToast.toast("Se selecciono el turno para el paciente ", {
           title: "Atencion!",
           toaster: "b-toaster-top-center",
           solid: true,
           variant: "success",
         });
-         this.$router.push({
+        this.$router.push({
           name: "listaEstudios",
         });
-        console.log(response);
       } catch (err) {
         console.log(err);
-          this.$root.$bvToast.toast("no se pudo seleccionar el turno para el paciente, por favor vuelva a intentar ", {
-          title: "Atencion!",
-          toaster: "b-toaster-top-center",
-          solid: true,
-          variant: "danger",
-        });
+        this.$root.$bvToast.toast(
+          "no se pudo seleccionar el turno para el paciente, por favor vuelva a intentar ",
+          {
+            title: "Atencion!",
+            toaster: "b-toaster-top-center",
+            solid: true,
+            variant: "danger",
+          }
+        );
       }
     },
   },
-  computed: {   
+  computed: {
     getPacientes() {
       let pacientes = this.turnos.map((e) => ({
         start: new Date(e.inicio),
-        end: new Date(e.fin),       
+        end: new Date(e.fin),
         title: "Disponible",
       }));
 
@@ -162,5 +175,4 @@ export default {
 </script>
 
 <style scoped>
-
 </style>

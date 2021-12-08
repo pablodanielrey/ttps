@@ -1,8 +1,7 @@
 <template>
   <b-container>
     <br />
-
-    <b-card header=" Listado de Lotes">
+       <h4>Listado de Lotes generados</h4>
       <b-table
         striped
         hover
@@ -27,9 +26,7 @@
           >
             Cargar Resultado
           </b-button>
-          <!-- <b-button @click="seleccionTurno(row.item.id)">
-            seleccionar turno
-          </b-button> -->
+      
         </template>
       </b-table>
       <div>
@@ -43,7 +40,6 @@
           </b-col>
         </b-row>
       </div>
-    </b-card>
     <b-modal size="xl" ref="my-modal" title="Estudios del lote 1" ok-only>
       <b-table :items="itemsEst" :fields="fieldsEst"> </b-table>
     </b-modal>
@@ -142,13 +138,7 @@ export default {
       console.log(item);
       this.idLoteActual = item.id;
     },
-    async guardarDatos(bvModalEvt) {
-      // Prevent modal from closing
-      bvModalEvt.preventDefault();
-      // Trigger submit handler
-      this.enviarDatos()();
-      console.log(this.fecha, this.urlResultado);
-    },
+   
     checkFormValidity() {
       const valid = this.$refs.form.checkValidity();
       this.urlResultadostate = valid;
@@ -194,8 +184,7 @@ export default {
       }
     },
 
-    verEstudios(item) {
-      console.log(item);
+    verEstudios(item) {    
       this.itemsEst = item.estudios;
       this.$refs["my-modal"].show();
     },

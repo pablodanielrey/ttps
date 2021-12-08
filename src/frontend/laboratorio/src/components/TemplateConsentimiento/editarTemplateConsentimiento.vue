@@ -1,5 +1,5 @@
 <template>
-  <b-container>   
+  <b-container>
     <div>
       <b-card header="Template Consentimiento informado">
         <div>
@@ -8,7 +8,6 @@
               >Descargar actual
             </b-button>
           </div>
-      
           <div>
             <ValidationObserver ref="detailsTemplate">
               <b-form-group
@@ -49,14 +48,13 @@
 import TemplateConsentimientoService from "@/services/TemplateConsentimiento.js";
 
 export default {
-  mounted() {
-  },
+  mounted() {},
 
   components: {},
   props: {
     templateConsentimiento: {
       type: Object,
-    }
+    },
   },
   created() {},
   data() {
@@ -77,14 +75,14 @@ export default {
         this.archivo = e.target.result;
       };
       reader.readAsDataURL(file);
-    },  
+    },
     async guardarTemplate() {
       let result = await this.$refs.detailsTemplate.validate();
       if (result) {
         try {
           let datosTemplate = this.archivo;
           console.log(datosTemplate);
-           await TemplateConsentimientoService.editarTemplateConsentimiento(
+          await TemplateConsentimientoService.editarTemplateConsentimiento(
             datosTemplate
           );
 
@@ -108,10 +106,11 @@ export default {
         }
       }
     },
-    async verTemplate(){
-      try {        
-        let response = await TemplateConsentimientoService.obtenerTemplateConsentimiento();
-        console.log(response)
+    async verTemplate() {
+      try {
+        let response =
+          await TemplateConsentimientoService.obtenerTemplateConsentimiento();
+        console.log(response);
       } catch (error) {
         console.log(error);
       }

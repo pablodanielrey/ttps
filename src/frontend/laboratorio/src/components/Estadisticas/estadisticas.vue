@@ -9,7 +9,7 @@
 </template>
 
 <script>
-import LineChart from "./LineChart.js";
+import LineChart from "@/services/estadisticasService/LineChart.js";
 import EstudiosService from "@/services/EstudiosService.js";
 import axios from "axios";
 

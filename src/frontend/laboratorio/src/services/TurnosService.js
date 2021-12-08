@@ -5,7 +5,6 @@ const API_URL = '/turnos_api/'
 
 export default {
     obtenerTurnos(rango) {
-        console.log(rango)
         return Api().get(API_URL + API_USER + "turnos_disponibles/", {params: { inicio: rango.inicio, fin: rango.fin }})
     },
     confirmarTurno(turno){
