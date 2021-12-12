@@ -49,16 +49,6 @@ class VistaEstadisticas(viewsets.ModelViewSet):
     queryset = models.TiposDeEstudio.objects.all()
     serializer_class = SerializadorTiposDeEstudio
 
-    @action(detail=False, methods=['GET'])
-    def tipos_estudio(self, request):
-        "ver si se puede, armar un array con nombreEstudio,cantidad de veces que esta"
-        "sino a tipoEstudio agregarle una variable para ver la cantidad a medida que se crean de ese tipo incrementar"
-        estudios = models.TiposDeEstudio.objects.all()
-        print(estudios)
-        serializer = SerializadorTiposDeEstudio(estudios, context={'request': request})
-        return Response(serializer.data)    
-
-
     
 class SerializadorTemplateConsentimiento(serializers.ModelSerializer):
     archivo = serializers.PrimaryKeyRelatedField(many=False, read_only=True)
@@ -467,6 +457,21 @@ class VistaEstudios(viewsets.ModelViewSet):
         
         print(cantidadPorMes)
         return Response({'Estudios': cantidadPorMes})
+
+    @action(detail=False, methods=['GET'])
+    def tipos_estudio(self, request):        
+        tipos={}
+        index=0
+        tipoEstudio = models.TiposDeEstudio.objects.all()
+        for tipo in tipoEstudio:  
+            tipos[index]=({
+                "tipo": tipo.nombre,
+                "cantidad": models.Estudio.objects.filter(tipo= tipo).count()
+            })
+            index=index +1 
+
+        return Response({'Estudios': tipos})
+    
 
 
 

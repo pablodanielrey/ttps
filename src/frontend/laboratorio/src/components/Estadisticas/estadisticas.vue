@@ -5,17 +5,23 @@
       :chartData="this.datacollection"
       :options="this.chartOptions"
     />
+    <bar-chart
+      v-if="loading"
+      :chartData="this.dataTipoEstudios"
+      :options="this.chartOptions"
+    />
   </div>
 </template>
 
 <script>
 import LineChart from "@/services/estadisticasService/LineChart.js";
+import BarChart from "@/services/estadisticasService/BarChart.js";
 import EstudiosService from "@/services/EstudiosService.js";
 import axios from "axios";
 
 export default {
   name: "LineChartContainer",
-  components: { LineChart },
+  components: { LineChart, BarChart },
   data() {
     return {
       loading: false,
@@ -35,10 +41,14 @@ export default {
           "Diciembre",
         ],
         datasets: [],
-        
+      },
+      dataTipoEstudios: {
+        labels: [],
+        datasets: [],
       },
       chartOptions: {
-       responsive: true, maintainAspectRatio: false
+        responsive: true,
+        maintainAspectRatio: false,
       },
     };
   },
@@ -49,34 +59,53 @@ export default {
     async obtenerEstudiosPorMesAño() {
       try {
         let response = await EstudiosService.obtenerEstudiosPorMesAño();
-
         this.armarDatos(response.data);
       } catch (error) {
         console.log(error);
       }
     },
-    armarDatos(datos) {
-      console.log("datacollection", this.datacollection);
-      let data = [0,0,0,0,0,0,0,0,0,0,0];
-      datos.Estudios.forEach((e) => {
-          console.log(e.count)
-        data[e.month-1]=e.count;
+    async obtenerEstudiosPorTipo() {
+      try {
+        let response = await EstudiosService.obtenerEstudiosPorTipo();
+        this.armarDatosTipoEstudios(response.data.Estudios);
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    armarDatosTipoEstudios(data) {      
+      let dataTipos=[]      
+      for (let index = 0; index < Object.values(data).length; index++) {
+        this.dataTipoEstudios.labels.push(data[index].tipo);
+        dataTipos.push(data[index].cantidad)        
+      }
+       this.dataTipoEstudios.datasets.push({
+        label: "Tipos de estudio",
+        backgroundColor:  [
+            "#77CEFF",
+            "#0079AF",
+            "#123E6B",
+            "#97B0C4",
+            "#A5C8ED",
+          ],
+        data: dataTipos,
       });
-      console.log(data);
-      this.datacollection.datasets.push({         
-          label: 'Estudios en el año',
-          backgroundColor: ' 	#6495ED ',
-          data:data
-       
-      })
+    },
 
-
-
+    armarDatos(datos) {
+      let data = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+      datos.Estudios.forEach((e) => {
+        data[e.month - 1] = e.count;
+      });
+      this.datacollection.datasets.push({
+        label: "Estudios en el año",
+        backgroundColor: " 	#6495ED ",
+        data: data,
+      });
     },
   },
   mounted() {
     axios
-      .all([this.obtenerEstudiosPorMesAño()])
+      .all([this.obtenerEstudiosPorMesAño(), this.obtenerEstudiosPorTipo()])
       .then(() => {
         this.loading = true;
       })

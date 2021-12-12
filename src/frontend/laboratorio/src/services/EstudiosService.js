@@ -13,6 +13,10 @@ export default {
     obtenerEstudiosPorMesAño(){
         return Api().get(API_URL + API_USER + "estudios/estudios_estadisitcas_mes" )
     },
+    obtenerEstudiosPorTipo(){
+        return Api().get(API_URL + API_USER + "estudios/tipos_estudio" )
+
+    },
     obtenerTurnos() {
         return Api().get(API_URL + API_USER + "listaTurnos/")
     },
@@ -31,8 +35,7 @@ export default {
     obtenerListaEstudiosParaInformes(){
         return Api().get(API_URL + API_USER + "estudios/buscar/?e=EsperandoInterpretacionDeResultados")
     },
-    obtenerConsentimientoInformado(idEstudio){
-        console.log(API_URL + API_USER + "estudios/"+idEstudio+"/consentimiento_informado/")
+    obtenerConsentimientoInformado(idEstudio){      
       return Api().get(API_URL + API_USER + "estudios/"+idEstudio+"/consentimiento_informado/")
 
     },

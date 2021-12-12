@@ -126,8 +126,7 @@ const router = new Router({
 })
 router.beforeEach((to, from, next) => {
     const requireAuth = to.matched.some(record => record.meta.requireAuth)
-  console.log(requireAuth)
-  console.log(window.localStorage.getItem('credenciales'))
+
     if (requireAuth && !window.localStorage.getItem('credenciales')) {
       next('/login')
     } else if (window.localStorage.getItem('credenciales') && to.name == 'Login') {   
