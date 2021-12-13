@@ -52,7 +52,7 @@ class Estudio(models.Model):
     medico_derivante = models.ForeignKey(Persona, on_delete=models.CASCADE, related_name='estudios_derivados')
     diagnostico = models.ForeignKey(Diagnostico, on_delete=models.CASCADE, related_name='estudios')
     fecha_alta = models.DateField(default=datetime.date.today)
-    presupuesto = models.ForeignKey(Archivo, on_delete=models.CASCADE, null=True)
+    presupuesto = models.ForeignKey(Archivo, on_delete=models.CASCADE, null=False)
 
     @property
     def ultimo_estado(self):

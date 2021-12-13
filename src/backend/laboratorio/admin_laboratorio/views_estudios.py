@@ -18,10 +18,39 @@ def generar_fecha_now():
     return datetime.datetime.now(tz=ZoneInfo('America/Argentina/Buenos_Aires'))
 
 
+def pdf_minimo():
+    return "JVBERi0xLjAKMSAwIG9iajw8L1BhZ2VzIDIgMCBSPj5lbmRvYmogMiAwIG9iajw8L0tpZHNbMyAw\nIFJdL0NvdW50IDE+PmVuZG9iaiAzIDAgb2JqPDwvTWVkaWFCb3hbMCAwIDMgM10+PmVuZG9iagp0\ncmFpbGVyPDwvUm9vdCAxIDAgUj4+Cg=="
+
+def generar_estudio(medico, paciente):
+    archivo = estudio_models.Archivo(contenido=pdf_minimo(), content_type='application/pdf', encoding='base64')
+    archivo.save()
+
+    tipo_estudio = estudio_models.TiposDeEstudio.objects.first()
+    diagnostico = estudio_models.Diagnostico.objects.first()
+    estudio = estudio_models.Estudio(paciente=paciente, medico_derivante=medico, diagnostico=diagnostico, tipo=tipo_estudio, presupuesto=archivo)
+    estudio.save()
+    return estudio
+
+def generar_estudios_estado1(empleado, medico, paciente):
+    estudio = generar_estudio(medico, paciente)
+
+    archivo = estudio_models.Archivo(contenido=pdf_minimo(), content_type='application/pdf', encoding='base64')
+    archivo.save()
+
+    estado = estudio_models.EsperandoComprobanteDePago(comprobante=archivo, estudio=estudio, persona=empleado)
+    estado.save()
+
+
+
 def generar_estudio_de_muestra():
 
 
     empleado = persona_models.Persona.objects.all().first()
+
+    paciente = persona_models.Paciente.objects.first()
+    p = estudio_models.EsperandoComprobanteDePago()
+
+
 
     # p1 = persona_models.Paciente(nombre='Paciente', apellido='Cero', dni='000001', email='paciente@cero.com', telefono='221-1112233', fecha_nacimiento='1980-12-01')
     # p1.save()
@@ -79,8 +108,15 @@ class Ejemplos(APIView):
     permission_classes= [permissions.IsAdminUser]
 
     def get(self, request, format=None):
-        generar_estudio_de_muestra()
-        return Response({'status':'ejemplos generados'})
+
+        empleado = persona_models.Empleado.objects.first()
+        medico_derivante = persona_models.MedicoDerivante.objects.first()
+        paciente = persona_models.Paciente.objects.first()
+
+        generar_estudios_estado1(empleado, medico_derivante, paciente)
+
+
+        return Response({'status':'ejemplos de estudios generados'})
 
     def delete(self, request, format=None):
         return Response({'status':'ejemplos eliminados'})
