@@ -251,10 +251,21 @@ class VistaEstadoEstudio(viewsets.ModelViewSet):
 
         """ aca manejo comportamientos especiales de los estados """
         if clase_ultimo_estado == models.EsperandoComprobanteDePago:
-            archivo = models.Archivo.from_datauri(request.data['comprobante'])
-            archivo.save()
-            ultimo_estado.comprobante = archivo
-            ultimo_estado.save()
+
+            """ solo pueden darse 2 casos. 1 - comprobante de pago, 2 - anulado por falta de pago """
+
+            if 'comprobante' in request.data:
+                archivo = models.Archivo.from_datauri(request.data['comprobante'])
+                archivo.save()
+                ultimo_estado.comprobante = archivo
+                ultimo_estado.save()
+
+            if 'fecha_procesado' in request.data:
+                estado = models.AnuladorPorFaltaDePago(estudio=estudio, fecha_procesado=request.data['fecha_procesado'])
+                estado.save()
+                estudio.estados.add(estado)
+                serializador = SerializadorEstadoEstudioPolimorfico(ultimo_estado, context={'request': request})
+                return Response(serializador.data)
 
         elif clase_ultimo_estado == models.EsperandoConsentimientoInformado:
             archivo = models.Archivo.from_datauri(request.data['consentimiento'])
