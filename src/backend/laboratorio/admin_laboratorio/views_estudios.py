@@ -179,6 +179,7 @@ class Ejemplos(APIView):
         medico_derivante = persona_models.MedicoDerivante.objects.first()
         paciente = persona_models.Paciente.objects.first()
 
+        generar_estudio_anulado_por_falta_de_pago(empleado, medico_derivante, paciente)
         generar_estudios_estado1(empleado, medico_derivante, paciente)
         generar_estudios_estado2(empleado, medico_derivante, paciente)
         generar_estudios_estado3(empleado, medico_derivante, paciente)
