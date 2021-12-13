@@ -42,7 +42,7 @@ def generar_estudio_anulado_por_falta_de_pago(empleado, medico, paciente):
 
 def generar_estudios_estado1(empleado, medico, paciente):
     estudio = generar_estudio(medico, paciente)
-    estado = estudio_models.EsperandoComprobanteDePago(estudio=estudio, persona=empleado)
+    estado = estudio_models.EsperandoComprobanteDePago(estudio=estudio, persona=empleado, fecha=generar_fecha_now() - datetime.timedelta(days=45))
     estado.save()
     return estudio
 
