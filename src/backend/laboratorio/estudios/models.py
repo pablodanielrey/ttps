@@ -101,10 +101,12 @@ class Estudio(models.Model):
 
 from polymorphic.models import PolymorphicModel
 
+from django.utils.timezone import now
 class EstadoEstudio(PolymorphicModel):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     estudio = models.ForeignKey(Estudio, on_delete=models.CASCADE, related_name='estados')
-    fecha = models.DateTimeField(auto_now=True)
+    # fecha = models.DateTimeField(auto_now=True)
+    fecha = models.DateTimeField(default=now)
     persona = models.ForeignKey(Persona, on_delete=models.CASCADE, null=True)
 
 # class EsperandoPresupuesto(EstadoEstudio):
