@@ -3,8 +3,8 @@
     <div>
       <ValidationObserver ref="detailMuestra">
         <b-card header="Ingrese los datos de toma de muestra">
-          <div class="counter">
-            Quedan 20 dias para cargar los datos de toma de muestra
+          <div class="counter" v-if="!pasoDiaTurno()">
+            Quedan {{ counter }}  dias para cargar los datos de toma de muestra
           </div>
           <br />
           <b-row>
@@ -92,15 +92,33 @@ export default {
       type: Object,
     },
   },
-  created() {},
+  created() {
+    console.log(this.estudio)
+     let fecha = new Date(this.estudio.ultimo_estado.turno.inicio);
+    this.counter = new Date();
+    this.counter= this.difference(fecha.getDate(),this.counter.getDate())
+  },
   data() {
     return {
       freezer: 1,
       mililitros: 5,
+      counter: 0,
     };
   },
 
   methods: {
+    difference(fechaAlta, diaHoy) {      
+      let xtotal=30
+    return xtotal - (diaHoy - fechaAlta)     
+    },
+    pasoDiaTurno(){
+      let fechaTurno = new Date(this.estudio.ultimo_estado.turno.inicio);
+      console.log(fechaTurno < new Date())
+      if (fechaTurno < new Date()){
+        return false
+      }
+      return true
+    },
     async guardarDatos() {
       try {
         let result = await this.$refs.detailMuestra.validate();

@@ -46,11 +46,20 @@
             </b-button>
           </div>
           <b-button
-            title="Anular estudio"
-            variant="outline-danger"
+            title="Anular estudio por falta de comprobante de pago"
+            variant="outline-white"
             v-if="checkComprobantePago(row.item)"
             @click="anularEstudioFaltaComprobante(row.item)"
-            >Anular
+            >
+             <b-icon icon="x-circle" fill variant="danger"> </b-icon>
+           
+          </b-button>
+           <b-button
+            title="Volver a seleccion de turno, falta de datos en la muestra"
+            variant="outline-white"
+            v-if="checkFaltaDatosMuestra(row.item)"
+            @click="anularEstudioFaltaDatosMuestra(row.item)"
+            ><b-icon icon="x-circle" fill variant="danger"> </b-icon>
           </b-button>
         </template>
       </b-table>
@@ -192,6 +201,23 @@ export default {
         return true;
       }
       return false;
+    },
+    checkFaltaDatosMuestra(estudio){
+      if (estudio.ultimo_estado.resourcetype != "EsperandoTomaDeMuestra") {
+        return false;
+      }
+      let hoy = new Date();
+      let fechaCreacioncomprobante = new Date(estudio.ultimo_estado.turno.inicio);
+      let difference = Math.abs(hoy - fechaCreacioncomprobante);
+      let days = difference / (1000 * 3600 * 24);
+      console.log(days)
+      if (days > 30) {
+        return true;
+      }
+      return false;
+    },
+    anularEstudioFaltaDatosMuestra(estudio){
+      console.log(estudio)
     },
     async anularEstudioFaltaComprobante(estudio) {
       try {
