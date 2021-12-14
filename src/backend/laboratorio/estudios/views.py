@@ -152,10 +152,15 @@ class SerializadorEsperandoSeleccionDeTurnoParaExtraccion(serializers.ModelSeria
         model = models.EsperandoSeleccionDeTurnoParaExtraccion
         fields = ['id','fecha','turno']
 
+
+from turnos import views as turnos_views
 class SerializadorEsperandoTomaDeMuestra(serializers.ModelSerializer):
+
+    turno = turnos_views.SerializadorTurnosConfirmados()
+
     class Meta:
         model = models.EsperandoTomaDeMuestra
-        fields = ['id','fecha','fecha_muestra','mililitros','freezer','expirado']
+        fields = ['id','fecha','fecha_muestra','mililitros','freezer','expirado','turno']
 
 class SerializadorEsperandoRetiroDeExtaccion(serializers.ModelSerializer):
     class Meta:
@@ -290,6 +295,13 @@ class VistaEstadoEstudio(viewsets.ModelViewSet):
             """ actualizo el estado """
             ultimo_estado.turno = turno
             ultimo_estado.save()
+
+        elif clase_ultimo_estado == models.EsperandoTomaDeMuestra:
+
+            if 'expirado' in request.data:
+                pass
+            else:
+                pass    
 
         else:
             """ los casos normales de cambios de estado - se encarga el serializer """

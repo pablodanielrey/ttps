@@ -133,6 +133,10 @@ class EsperandoTomaDeMuestra(EstadoEstudio):
     freezer = models.CharField(max_length=500,null=True)
     expirado = models.BooleanField(default=False)
 
+    @property
+    def turno(self):
+        return self.estudio.estados.order_by('-fecha')[1].turno
+
 class EsperandoRetiroDeExtaccion(EstadoEstudio):
     extracionista = models.CharField(max_length=1024, null=True)
     fecha_retiro = models.DateTimeField(null=True)
