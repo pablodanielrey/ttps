@@ -249,6 +249,10 @@ class VistaEstadoEstudio(viewsets.ModelViewSet):
         logging.debug(ultimo_estado)
         clase_ultimo_estado = ultimo_estado.__class__
 
+        """ aca verifico estados finales """
+        if clase_ultimo_estado in [ models.AnuladorPorFaltaDePago, models.ResultadoDeEstudioEntregado ]:
+            return HttpResponseBadRequest('no se puede cambiar un estado final')
+
         """ aca manejo comportamientos especiales de los estados """
         if clase_ultimo_estado == models.EsperandoComprobanteDePago:
 
@@ -264,7 +268,7 @@ class VistaEstadoEstudio(viewsets.ModelViewSet):
                 estado = models.AnuladorPorFaltaDePago(estudio=estudio, fecha_procesado=request.data['fecha_procesado'])
                 estado.save()
                 estudio.estados.add(estado)
-                serializador = SerializadorEstadoEstudioPolimorfico(ultimo_estado, context={'request': request})
+                serializador = SerializadorEstadoEstudioPolimorfico(estado, context={'request': request})
                 return Response(serializador.data)
 
         elif clase_ultimo_estado == models.EsperandoConsentimientoInformado:
