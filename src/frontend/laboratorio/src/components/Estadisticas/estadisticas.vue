@@ -68,6 +68,7 @@ export default {
       try {
         let response = await EstudiosService.obtenerEstudiosPorTipo();
         this.armarDatosTipoEstudios(response.data.Estudios);
+         BarChart.value.chartInstance.zoom(1.01);
       } catch (error) {
         console.log(error);
       }

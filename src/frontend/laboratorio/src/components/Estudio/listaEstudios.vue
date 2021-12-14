@@ -20,7 +20,7 @@
         </b-input-group>
       </b-col>
       <b-table
-       show-empty
+        show-empty
         empty-text="El sistema no posee estudios cargados"
         :items="items"
         :fields="fields"
@@ -33,9 +33,6 @@
           {{ obtenerUltimoEstado(row.item) }}
         </template>
         <template v-slot:cell(acciones)="row">
-          <!--  <a title="Descargar Presupuesto" variant="outline-success" download="presupuesto.pdf" :href="row.item.presupuesto">
-                    <b-icon icon="download" variant="info"> </b-icon>
-                </a> -->
           <b-button @click="detalleEstudio(row.item)" variant="outline-white">
             <b-icon icon="file-earmark-person-fill" variant="info"> </b-icon>
           </b-button>
@@ -48,6 +45,13 @@
               <b-icon icon="arrow-right-square" variant="info"> </b-icon>
             </b-button>
           </div>
+          <b-button
+            title="Anular estudio"
+            variant="outline-danger"
+            v-if="checkComprobantePago(row.item)"
+            @click="anularEstudioFaltaComprobante(row.item)"
+            >Anular
+          </b-button>
         </template>
       </b-table>
 
@@ -71,7 +75,6 @@
         <br />
       </b-row>
     </div>
-    
   </b-container>
 </template>
 
@@ -170,13 +173,54 @@ export default {
       });
     },
     siguienteEstado(estudio) {
- 
       this.$router.push({
         name: estudio.ultimo_estado.resourcetype,
         params: {
           estudio: estudio,
         },
       });
+    },
+    checkComprobantePago(estudio) {
+      if (estudio.ultimo_estado.resourcetype != "EsperandoComprobanteDePago") {
+        return false;
+      }
+      let hoy = new Date();
+      let fechaCreacioncomprobante = new Date(estudio.ultimo_estado.fecha);
+      let difference = Math.abs(hoy - fechaCreacioncomprobante);
+      let days = difference / (1000 * 3600 * 24);
+      if (days > 30) {
+        return true;
+      }
+      return false;
+    },
+    async anularEstudioFaltaComprobante(estudio) {
+      try {
+        let datosComprobante = {
+          estudio_id: estudio.id,
+          fecha_procesado: new Date(),
+        };
+        await EstudiosService.actualizarUltimoEstado(datosComprobante);
+        this.$root.$bvToast.toast(
+          "Usted anulo el estudio por que no se subio el comprobante de pago,quedo inhabilitado para poder continuar",
+          {
+            title: "Atencion!",
+            toaster: "b-toaster-top-center",
+            solid: true,
+            variant: "success",
+          }
+        );
+        this.obtenerListaEstudios();
+      } catch (error) {
+        this.$root.$bvToast.toast(
+          "ocurrio un error mientras anulaba el estudio, por favor vuelva a intentar",
+          {
+            title: "Atencion!",
+            toaster: "b-toaster-top-center",
+            solid: true,
+            variant: "danger",
+          }
+        );
+      }
     },
   },
   mounted() {

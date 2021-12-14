@@ -65,32 +65,22 @@ export default {
   data() {
     return {
       file1: null,
-      counter: 30,
+      counter: 0,
       comprobantePago: null,
     };
   },
   created() {
     console.log(this.estudio);
-    let fecha = new Date(this.estudio.fecha_alta);
+    let fecha = new Date(this.estudio.ultimo_estado.fecha);
     this.counter = new Date();
-    this.counter = this.difference(fecha, this.counter);
-    this.counter = this.counter == 0 ? 30 : this.counter;
+    this.counter= this.difference(fecha.getDate(),this.counter.getDate())
+ 
   },
 
   methods: {
-    difference(date1, date2) {
-      let date1utc = Date.UTC(
-        date1.getFullYear(),
-        date1.getMonth(),
-        date1.getDate()
-      );
-      let date2utc = Date.UTC(
-        date2.getFullYear(),
-        date2.getMonth(),
-        date2.getDate()
-      );
-      let day = 1000 * 60 * 60 * 24;
-      return (date2utc - date1utc) / day;
+    difference(fechaAlta, diaHoy) {
+      let xtotal=30
+    return xtotal - (diaHoy - fechaAlta)     
     },
     obtenerPDF(event) {
       const file = event.target.files[0];
