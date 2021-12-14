@@ -42,9 +42,15 @@ def generar_usuarios_ejemplo():
                 'historia_clinica': ''
             }
         )
+    contador = 0
     for paciente in pacientes:
         try:
-            m.crearPaciente(**paciente)
+            contador += 1
+            paux = m.crearPaciente(**paciente)
+            if contador % 2 == 0:
+                ob = persona_models.ObraSocial.objects.first()
+                obp = persona_models.ObraSocialPersona(persona=paux, obra_social=ob, numero_afiliado=f'numero-{paux.id}')
+                obp.save()
         except IntegrityError as e:
             pass
 

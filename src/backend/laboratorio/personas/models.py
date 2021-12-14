@@ -30,7 +30,6 @@ class Persona(models.Model):
     def __str__(self):
         return f"{self.id} {self.nombre} {self.apellido}"
 
-
     NOMBRE_GRUPO = 'Pacientes'
 
     @classmethod
@@ -44,7 +43,8 @@ class Persona(models.Model):
 
 class ObraSocialPersona(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    persona = models.ForeignKey(Persona, on_delete=models.CASCADE, related_name='obra_social')
+    persona = models.OneToOneField(Persona, on_delete=models.CASCADE, related_name='obra_social') 
+    # models.ForeignKey(Persona, on_delete=models.CASCADE, related_name='obra_social')
     obra_social = models.ForeignKey(ObraSocial, on_delete=models.CASCADE)
     numero_afiliado = models.CharField(max_length=1024)
 
