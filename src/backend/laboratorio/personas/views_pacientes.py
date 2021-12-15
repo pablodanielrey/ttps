@@ -17,22 +17,27 @@ class SerializadorDePaciente(serializers.ModelSerializer):
     # obra_social = views_personas.SerializadorDeObraSocialPersona(required=False, many=True, read_only=False)
     # obra_social = serializers.CharField(source='obra_social.obra_social.id', required=False, read_only=False)
     # numero_afiliado = serializers.CharField(source='obra_social.numero_afiliado', required=False, read_only=False)
-    # historia_clinica = serializers.CharField(source='historia_clinica.historia_clinica', read_only=False)
+    historia_clinica = serializers.CharField(source='historia_clinica.historia_clinica', read_only=False)
 
     class Meta:
         model = models.Paciente
-        # fields = ['id','nombre','apellido','dni','email','fecha_nacimiento','telefono','direccion','historia_clinica','obra_social','numero_afiliado']
-        fields = ['id','nombre','apellido','dni','email','fecha_nacimiento','telefono','direccion']
+        # fields = ['id','nombre','apellido','dni','email','fecha_nacimiento','telefono','direccion',,'obra_social','numero_afiliado']
+        fields = ['id','nombre','apellido','dni','email','fecha_nacimiento','telefono','direccion', 'historia_clinica']
     
     def update(self, instance, validated_data):
         logging.info(validated_data)
         historia_clinica = validated_data.pop('historia_clinica')
-        if not instance.historia_clinica:
+        if models.HistoriaClinica.objects.filter(persona=instance).count() <= 0:
             hc = models.HistoriaClinica(persona=instance, historia_clinica=historia_clinica['historia_clinica'])
             hc.save()
+        else:
+            hc = instance.historia_clinica
+            hc.historia_clinica = historia_clinica['historia_clinica']
+            hc.save()
        
-        if instance.obra_social:
-            instance.obra_social.delete()
+        if models.ObraSocialPersona.objects.filter(persona=instance).count() > 0:
+            ob = instance.obra_social
+            ob.delete()
             instance.obra_social = None
             instance.save()
 
