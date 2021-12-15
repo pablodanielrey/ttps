@@ -187,6 +187,12 @@ class Ejemplos(APIView):
         generar_estudios_estado5(empleado, medico_derivante, paciente)
         generar_estudios_estado6(empleado, medico_derivante, paciente)
         generar_estudios_estado7(empleado, medico_derivante, paciente)
+
+
+        for _ in range(1,15):
+            generar_estudios_estado7(empleado, medico_derivante, paciente)
+
+
         generar_estudios_estado8(empleado, medico_derivante, paciente)
         generar_estudios_estado9(empleado, medico_derivante, paciente)
         generar_estudios_estado10(empleado, medico_derivante, paciente)
