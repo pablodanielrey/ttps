@@ -80,7 +80,7 @@ def generar_estudios_estado4(empleado, medico, paciente):
 def generar_estudios_estado5(empleado, medico, paciente):
     archivo = estudio_models.Archivo(contenido=pdf_minimo(), content_type='application/pdf', encoding='base64')
     archivo.save()
-    turno = turnos_models.TurnoConfirmado(persona=paciente, inicio=generar_fecha_now(), fin=generar_fecha_now() + datetime.timedelta(hours=1))
+    turno = turnos_models.TurnoConfirmado(persona=paciente, inicio=datetime.date(2021, 10, 19), fin=generar_fecha_now() + datetime.timedelta(hours=1))
     turno.save()
     estudio = generar_estudios_estado4(empleado, medico, paciente)
     estado = estudio.ultimo_estado
