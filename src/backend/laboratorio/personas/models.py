@@ -16,6 +16,9 @@ class ObraSocial(models.Model):
     def __str__(self):
         return f"{self.nombre} {self.email} {self.telefono}"
 
+
+
+
 class Persona(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     nombre = models.CharField(max_length=500)
@@ -49,8 +52,10 @@ class ObraSocialPersona(models.Model):
     numero_afiliado = models.CharField(max_length=1024)
 
 class HistoriaClinica(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     persona = models.OneToOneField(Persona, on_delete=models.CASCADE, related_name='historia_clinica')
     historia_clinica = models.CharField(max_length=9216, null=True)
+
 
 class Matricula(models.Model):
     persona = models.OneToOneField(Persona, on_delete=models.CASCADE, related_name='matricula')

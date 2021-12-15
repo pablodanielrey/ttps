@@ -27,11 +27,12 @@ class SerializadorDeHistoriaClinica(serializers.ModelSerializer):
         fields = ['historia_clinica']
 
 class SerializadorDePersona(serializers.HyperlinkedModelSerializer):
-    obra_social = SerializadorDeObraSocialPersona(required=False, many=True)
-    historia_clinica = SerializadorDeHistoriaClinica(required=False)
+    # obra_social = SerializadorDeObraSocialPersona(required=False, many=True)
+    # historia_clinica = SerializadorDeHistoriaClinica(required=False)
     class Meta:
         model = models.Persona
-        fields = ['id','nombre','apellido','email','dni','fecha_nacimiento','telefono','historia_clinica','obra_social']
+        # fields = ['id','nombre','apellido','email','dni','fecha_nacimiento','telefono','historia_clinica','obra_social']
+        fields = ['id','nombre','apellido','email','dni','fecha_nacimiento','telefono']
 
 
 class VistaPersona(viewsets.ModelViewSet):

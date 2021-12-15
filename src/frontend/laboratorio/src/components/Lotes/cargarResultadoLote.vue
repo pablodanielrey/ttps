@@ -42,6 +42,10 @@
       </div>
     <b-modal size="xl" ref="my-modal" title="Estudios del lote 1" ok-only>
       <b-table :items="itemsEst" :fields="fieldsEst"> </b-table>
+      <!-- cargar
+
+      -->
+
     </b-modal>
 
     <b-modal
@@ -137,6 +141,10 @@ export default {
     loteActual(item) {
       console.log(item);
       this.idLoteActual = item.id;
+    },
+
+    eliminarEstudio(item) {
+      this.itemEst.pop(item);
     },
    
     checkFormValidity() {

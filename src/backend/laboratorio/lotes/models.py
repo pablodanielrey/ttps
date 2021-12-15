@@ -3,6 +3,8 @@ from django.db import models
 
 
 import uuid
+import turnos
+from turnos.models import ParametroDeTurnos
 
 from estudios import models as estudio_models
 
@@ -82,4 +84,3 @@ class ModeloLotes:
             ultimo_estado.resultado_url = lote.resultado
             ultimo_estado.save()
             estudio_models.EsperandoInterpretacionDeResultados(estudio=estudio).save()
-
