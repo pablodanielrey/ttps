@@ -14,23 +14,12 @@ from . import models
 from rest_framework import serializers, views, viewsets, permissions
 from rest_framework.response import Response
 
+from . import serializers
 from estudios import views  as estudio_views
-
-class SerializadorDeEstudioDeLote(serializers.ModelSerializer):
-    estudio = estudio_views.SerializadorEstudios()
-    class Meta:
-        model = models.EstudioDeLote
-        fields = ['id', 'estudio']
-
-class SerializadorDeLote(serializers.ModelSerializer):
-    estudios = SerializadorDeEstudioDeLote(many=True)
-    class Meta:
-        model = models.Lote
-        fields = ['id', 'fecha', 'resultado','estudios']
 
 class VistaLotes(viewsets.ModelViewSet):
     queryset = models.Lote.all_pending()
-    serializer_class = SerializadorDeLote
+    serializer_class = serializers.SerializadorDeLote
     permission_classes = [ permissions.IsAuthenticated ]
 
     def create(self, request, *args, **kwargs):

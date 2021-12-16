@@ -25,40 +25,20 @@ from rest_framework import serializers, views, viewsets
 from rest_framework.response import Response
 from rest_framework.decorators import action
 
-from personas.views_personas import SerializadorDePersona
-from personas.views_medicos import SerializadorDeMedicoDerivante, SerializadorDeMedicoInformante
 
-from turnos import views as turnos_views
-
-
-class SerializadorArchivos(serializers.ModelSerializer):
-    class Meta:
-        model = models.Archivo
-        fields = ['id','content_type','encoding']
+from . import serializers
 
 class VistaArchivos(viewsets.ReadOnlyModelViewSet):
     queryset = models.Archivo.objects.all()
-    serializer_class = SerializadorArchivos
-
-class SerializadorTiposDeEstudio(serializers.HyperlinkedModelSerializer):
-    class Meta:
-        model = models.TiposDeEstudio
-        fields = ['id','nombre']
+    serializer_class = serializers.SerializadorArchivos
 
 class VistaEstadisticas(viewsets.ModelViewSet):
     queryset = models.TiposDeEstudio.objects.all()
-    serializer_class = SerializadorTiposDeEstudio
-
+    serializer_class = serializers.SerializadorTiposDeEstudio
     
-class SerializadorTemplateConsentimiento(serializers.ModelSerializer):
-    archivo = serializers.PrimaryKeyRelatedField(many=False, read_only=True)
-    class Meta:
-        model = models.TemplateConsentimiento
-        fields  = ['id','fecha','archivo','historico']
-
 class VistaTemplateConsentimiento(viewsets.ModelViewSet):
     queryset = models.TemplateConsentimiento.objects.all()
-    serializer_class = SerializadorTemplateConsentimiento
+    serializer_class = serializers.SerializadorTemplateConsentimiento
 
     def create(self, request, *args, **kwargs):
         datos = request.data['consentimiento']
@@ -92,130 +72,23 @@ class VistaTemplateConsentimiento(viewsets.ModelViewSet):
         
 
 
-class SerializadorTiposDeEstudio(serializers.HyperlinkedModelSerializer):
-    class Meta:
-        model = models.TiposDeEstudio
-        fields = ['id','nombre']
-
 class VistaTiposDeEstudio(viewsets.ModelViewSet):
     queryset = models.TiposDeEstudio.objects.all()
-    serializer_class = SerializadorTiposDeEstudio
+    serializer_class = serializers.SerializadorTiposDeEstudio
 
-class SerializadorDiagnostico(serializers.HyperlinkedModelSerializer):
-    class Meta:
-        model = models.Diagnostico
-        fields = ['id', 'nombre']
 
 class VistaDiagnostico(viewsets.ModelViewSet):
     queryset = models.Diagnostico.objects.all()
-    serializer_class = SerializadorDiagnostico
+    serializer_class = serializers.SerializadorDiagnostico
 
 
 """
     //////////// ESTADO DE ESTUDIOS ///////////////////
 """
 
-from rest_polymorphic.serializers import PolymorphicSerializer
-
-
-class SerializadorEstadoEstudio(serializers.ModelSerializer):
-    class Meta:
-        model = models.EstadoEstudio
-        fields = ['id','fecha']
-
-class SerializadorEsperandoComprobanteDePago(serializers.ModelSerializer):
-    class Meta:
-        model = models.EsperandoComprobanteDePago
-        fields = ['id','fecha','comprobante']
-
-
-class SerializadorAnuladorPorFaltaDePago(serializers.ModelSerializer):
-    class Meta:
-        model = models.AnuladorPorFaltaDePago
-        fields = ['id','fecha','fecha_procesado']
-
-
-class SerializadorEnviarConsentimientoInformado(serializers.ModelSerializer):
-    class Meta:
-        model = models.EnviarConsentimientoInformado
-        fields = ['id','fecha','fecha_enviado']
-
-class SerializadorEsperandoConsentimientoInformado(serializers.ModelSerializer):
-    class Meta:
-        model = models.EsperandoConsentimientoInformado
-        fields = ['id','fecha','consentimiento']
-        #fields = ['id','fecha']
-
-class SerializadorEsperandoSeleccionDeTurnoParaExtraccion(serializers.ModelSerializer):
-    turno = turnos_views.SerializadorTurnosConfirmados()
-    class Meta:
-        model = models.EsperandoSeleccionDeTurnoParaExtraccion
-        fields = ['id','fecha','turno']
-
-
-from turnos import views as turnos_views
-class SerializadorEsperandoTomaDeMuestra(serializers.ModelSerializer):
-
-    turno = turnos_views.SerializadorTurnosConfirmados()
-
-    class Meta:
-        model = models.EsperandoTomaDeMuestra
-        fields = ['id','fecha','fecha_muestra','mililitros','freezer','expirado','turno']
-
-class SerializadorEsperandoRetiroDeExtaccion(serializers.ModelSerializer):
-    class Meta:
-        model = models.EsperandoRetiroDeExtaccion
-        fields = ['id','fecha','extracionista','fecha_retiro']
-
-class SerializadorEsperandoLoteDeMuestraParaProcesamientoBiotecnologico(serializers.ModelSerializer):
-    class Meta:
-        model = models.EsperandoLoteDeMuestraParaProcesamientoBiotecnologico
-        fields = ['id','fecha','numero_lote']
-
-class SerializadorEsperandoProcesamientoDeLoteBiotecnologico(serializers.ModelSerializer):
-    class Meta:
-        model = models.EsperandoProcesamientoDeLoteBiotecnologico
-        fields = ['id','fecha','resultado_url','fecha_resultado']
-
-
-class SerializadorEsperandoInterpretacionDeResultados(serializers.ModelSerializer):
-    medico_informante = SerializadorDeMedicoInformante()
-    class Meta:
-        model = models.EsperandoInterpretacionDeResultados
-        fields = ['id','fecha','fecha_informe','medico_informante','informe','resultado']
-
-class SerializadorEsperandoEntregaAMedicoDerivante(serializers.ModelSerializer):
-    class Meta:
-        model = models.EsperandoEntregaAMedicoDerivante
-        fields = ['id','fecha','fecha_entrega']
-
-
-class SerializadorResultadoDeEstudioEntregado(serializers.ModelSerializer):
-    class Meta:
-        model = models.ResultadoDeEstudioEntregado
-        fields = ['id','fecha']
-
-class SerializadorEstadoEstudioPolimorfico(PolymorphicSerializer):
-    model_serializer_mapping = {
-        models.EstadoEstudio: SerializadorEstadoEstudio,
-        # models.EsperandoPresupuesto: SerializadorEsperandoPresupuesto,
-        models.EsperandoComprobanteDePago: SerializadorEsperandoComprobanteDePago,
-        models.AnuladorPorFaltaDePago: SerializadorAnuladorPorFaltaDePago,
-        models.EnviarConsentimientoInformado: SerializadorEnviarConsentimientoInformado,
-        models.EsperandoConsentimientoInformado: SerializadorEsperandoConsentimientoInformado,
-        models.EsperandoSeleccionDeTurnoParaExtraccion: SerializadorEsperandoSeleccionDeTurnoParaExtraccion,
-        models.EsperandoTomaDeMuestra: SerializadorEsperandoTomaDeMuestra,
-        models.EsperandoRetiroDeExtaccion: SerializadorEsperandoRetiroDeExtaccion,
-        models.EsperandoLoteDeMuestraParaProcesamientoBiotecnologico: SerializadorEsperandoLoteDeMuestraParaProcesamientoBiotecnologico,
-        models.EsperandoProcesamientoDeLoteBiotecnologico: SerializadorEsperandoProcesamientoDeLoteBiotecnologico,
-        models.EsperandoInterpretacionDeResultados: SerializadorEsperandoInterpretacionDeResultados,
-        models.EsperandoEntregaAMedicoDerivante: SerializadorEsperandoEntregaAMedicoDerivante,
-        models.ResultadoDeEstudioEntregado: SerializadorResultadoDeEstudioEntregado
-    }
-
 class VistaEstadoEstudio(viewsets.ModelViewSet):
     queryset = models.EstadoEstudio.objects.all()
-    serializer_class = SerializadorEstadoEstudioPolimorfico
+    serializer_class = serializers.SerializadorEstadoEstudioPolimorfico
 
     workflow = [
         models.EsperandoComprobanteDePago,
@@ -265,7 +138,7 @@ class VistaEstadoEstudio(viewsets.ModelViewSet):
                 estado = models.AnuladorPorFaltaDePago(estudio=estudio, fecha_procesado=request.data['fecha_procesado'])
                 estado.save()
                 estudio.estados.add(estado)
-                serializador = SerializadorEstadoEstudioPolimorfico(estado, context={'request': request})
+                serializador = serializers.SerializadorEstadoEstudioPolimorfico(estado, context={'request': request})
                 return Response(serializador.data)
 
             elif 'comprobante' in request.data:
@@ -305,7 +178,7 @@ class VistaEstadoEstudio(viewsets.ModelViewSet):
 
         else:
             """ los casos normales de cambios de estado - se encarga el serializer """
-            serializador = SerializadorEstadoEstudioPolimorfico.model_serializer_mapping[clase_ultimo_estado](instance=ultimo_estado, data=request.data)
+            serializador = serializers.SerializadorEstadoEstudioPolimorfico.model_serializer_mapping[clase_ultimo_estado](instance=ultimo_estado, data=request.data)
             if not serializador.is_valid():
                 return HttpResponseBadRequest(serializador.errors)
             if len(serializador.validated_data) <= 0:
@@ -328,56 +201,21 @@ class VistaEstadoEstudio(viewsets.ModelViewSet):
             pass
 
 
-        serializador = SerializadorEstadoEstudioPolimorfico(ultimo_estado, context={'request': request})
+        serializador = serializers.SerializadorEstadoEstudioPolimorfico(ultimo_estado, context={'request': request})
         return Response(serializador.data)
 
 """
     ///////////////////////////////////////////////
 """
-class SerializadorDePersonaResumido(serializers.ModelSerializer):
-    class Meta:
-        model = models.Persona
-        fields = ['id','nombre','apellido']
-
-
-
-
-class SerializadorEstudiosDetalle(serializers.HyperlinkedModelSerializer):
-    paciente = SerializadorDePersona()
-    medico_derivante = SerializadorDePersona()
-    tipo = SerializadorTiposDeEstudio()
-    diagnostico = SerializadorDiagnostico()
-    estados = SerializadorEstadoEstudioPolimorfico(many=True)
-    ultimo_estado = SerializadorEstadoEstudioPolimorfico()
-    presupuesto = serializers.PrimaryKeyRelatedField(many=False, read_only=True)
-
-    class Meta:
-        model = models.Estudio
-        fields = ['id', 'fecha_alta', 'diagnostico', 'paciente', 'medico_derivante', 'tipo', 'estados', 'ultimo_estado', 'presupuesto']
-
-
-class SerializadorEstudios(serializers.HyperlinkedModelSerializer):
-    paciente = SerializadorDePersonaResumido()
-    medico_derivante = SerializadorDePersonaResumido()
-    tipo = SerializadorTiposDeEstudio()
-    diagnostico = SerializadorDiagnostico()
-    # #estados = SerializadorEstadoEstudioPolimorfico(many=True)
-    ultimo_estado = SerializadorEstadoEstudioPolimorfico()
-    presupuesto = serializers.PrimaryKeyRelatedField(many=False, read_only=True)
-
-    class Meta:
-        model = models.Estudio
-        fields = ['id', 'fecha_alta', 'diagnostico', 'paciente', 'medico_derivante', 'tipo','ultimo_estado','presupuesto']
-
 
 
 class VistaEstudios(viewsets.ModelViewSet):
     queryset = models.Estudio.objects.all()
-    serializer_class = SerializadorEstudios
+    serializer_class = serializers.SerializadorEstudios
 
     custom_serializer_class = {
-        'retrieve': SerializadorEstudiosDetalle,
-        'list': SerializadorEstudios
+        'retrieve': serializers.SerializadorEstudiosDetalle,
+        'list': serializers.SerializadorEstudios
     }
 
     def get_serializer_class(self):
@@ -417,7 +255,7 @@ class VistaEstudios(viewsets.ModelViewSet):
         esperando_comprobante = estudio_models.EsperandoComprobanteDePago(estudio=estudio)
         esperando_comprobante.save()
 
-        serializer = SerializadorEstudios(estudio, context={'request': request})
+        serializer = serializers.SerializadorEstudios(estudio, context={'request': request})
         return Response(serializer.data)
 
     def modify(self, request, *args, **kwargs):
@@ -440,7 +278,7 @@ class VistaEstudios(viewsets.ModelViewSet):
                 ultimo_estado.save()
 
         """
-        serializer = SerializadorEstudios(estudio, context={'request': request})
+        serializer = serializers.SerializadorEstudios(estudio, context={'request': request})
         return Response(serializer.data)
         
     @action(detail=False, methods=['GET'])
@@ -450,7 +288,7 @@ class VistaEstudios(viewsets.ModelViewSet):
         logging.debug(f'buscando a : {q}  en estado : {e}')
 
         estudios = models.Estudio.buscar(q, e)
-        serializer = SerializadorEstudios(estudios, many=True, context={'request': request})
+        serializer = serializers.SerializadorEstudios(estudios, many=True, context={'request': request})
         return Response(serializer.data)
 
     @action(detail=True, methods=['GET'])
@@ -478,6 +316,12 @@ class VistaEstudios(viewsets.ModelViewSet):
             return HttpResponseBadRequest('no existe consentimiento para el estudio')
         return HttpResponse(base64.b64decode(datos.contenido), content_type='application/pdf')   
         
+
+
+    """
+        TODO: esto hace falta pasarlo a una api especifica de estadístinas y no en el estudio!
+    """
+
     @action(detail=False, methods=['GET'])
     def estudios_estadisitcas_mes(self, request):        
         cantidadPorMes = models.Estudio.objects.annotate(month=ExtractMonth('fecha_alta')).values('month').annotate(count=Count('id')).values('month', 'count')  
