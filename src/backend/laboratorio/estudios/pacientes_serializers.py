@@ -8,7 +8,6 @@ from . import serializers
 
 
 class EstadoVirtualL2e14EsperandoResultado:
-    
     class Meta:
         object_name: str
         def __init__(self, name):
@@ -19,12 +18,16 @@ class EstadoVirtualL2e14EsperandoResultado:
     def __init__(self, data):
         self.estados = data
 
-
-
 class SerializadorL2e14EsperandoResultado(rest_serializers.Serializer):
     estados = serializers.SerializadorEstadoEstudioPolimorfico(many=True)
 
-
+    def to_representation(self, instance):
+        rep = super().to_representation(instance)
+        estados = rep.pop('estados')
+        for e in estados:
+            rep.update(e)
+        rep.pop('id')
+        return rep
 
 class SerializadorListaDeEstadosPaciente(rest_serializers.ListSerializer):
 
@@ -97,6 +100,15 @@ class SerializadorEstadoEstudioPolimorfico(PolymorphicSerializer):
             return model_or_instance.__class__
         return model_or_instance
 
+    def __eliminar_campos_restringidos(self, datos):
+        datos.pop('resultado_url',None)
+        datos.pop('extraccionista',None)
+        datos.pop('freezer',None)
+
+    def to_representation(self, instance):
+        rep = super().to_representation(instance)
+        self.__eliminar_campos_restringidos(rep)
+        return rep
 
 class SerializadorEstudios(rest_serializers.HyperlinkedModelSerializer):
     paciente = serializers.SerializadorDePersona()
