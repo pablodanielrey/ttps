@@ -7,6 +7,56 @@ from . import models
 from . import serializers
 
 
+class L2e14Restricciones:
+
+    class AgruparEstadosPacienteIterador:
+        """
+            L2e14 - sirve para realizar la agrupación de los estados reales del estudio a los estados que ve el paciente.
+        """
+        finalizado = False
+
+        def __init__(self, restricciones, iterador):
+            self.restricciones = restricciones
+            self.iterador = iterador.__iter__()
+
+        def __iter__(self):
+            return self
+        
+        def __next__(self):
+            if self.finalizado:
+                raise StopIteration()
+            e = self.iterador.__next__()
+            if self.restricciones.es_elemento_a_agrupar(e):
+                grupo = [e]
+                while self.restricciones.es_elemento_a_agrupar(e):
+                    grupo.append(e)
+                    try:
+                        e = self.iterador.__next__()
+                    except StopIteration as e:
+                        self.finalizado = True
+                        return self.restricciones.agrupar_elementos(grupo)
+                return self.restricciones.agrupar_elementos(grupo)
+            else:
+                return e
+
+
+    clases_a_agrupar = [
+        models.EsperandoRetiroDeExtaccion,
+        models.EsperandoLoteDeMuestraParaProcesamientoBiotecnologico,
+        models.EsperandoProcesamientoDeLoteBiotecnologico,
+        models.EsperandoInterpretacionDeResultados,
+        models.EsperandoEntregaAMedicoDerivante
+    ]
+
+    def es_elemento_a_agrupar(self, e):
+        return e.__class__ in self.clases_a_agrupar
+
+    def agrupar_elementos(self, elementos:list):
+        return EstadoVirtualL2e14EsperandoResultado(elementos)
+
+    def agrupador(self, iterable):
+        return self.AgruparEstadosPacienteIterador(self, iterable)
+
 class EstadoVirtualL2e14EsperandoResultado:
     class Meta:
         object_name: str
@@ -31,55 +81,22 @@ class SerializadorL2e14EsperandoResultado(rest_serializers.Serializer):
 
 class SerializadorListaDeEstadosPaciente(rest_serializers.ListSerializer):
 
-    class AgruparEstadosPacienteIterador:
-        """
-            L2e14 - sirve para realizar la agrupación de los estados reales del estudio a los estados que ve el paciente.
-        """
-
-        clases_a_agrupar = [
-            models.EsperandoRetiroDeExtaccion,
-            models.EsperandoLoteDeMuestraParaProcesamientoBiotecnologico,
-            models.EsperandoProcesamientoDeLoteBiotecnologico,
-            models.EsperandoInterpretacionDeResultados,
-            models.EsperandoEntregaAMedicoDerivante
-        ]
-
-        finalizado = False
-
-        def __init__(self, iterador):
-            self.iterador = iterador.__iter__()
-
-        def __iter__(self):
-            return self
-        
-        def __next__(self):
-            if self.finalizado:
-                raise StopIteration()
-            e = self.iterador.__next__()
-            if e.__class__ in self.clases_a_agrupar:
-                grupo = [e]
-                while e.__class__ in self.clases_a_agrupar:
-                    grupo.append(e)
-                    try:
-                        e = self.iterador.__next__()
-                    except StopIteration as e:
-                        self.finalizado = True
-                        return EstadoVirtualL2e14EsperandoResultado(grupo)
-                return EstadoVirtualL2e14EsperandoResultado(grupo)
-            else:
-                return e
+    restricciones = L2e14Restricciones()
 
     def to_representation(self, data):
         iterable = data.all() if isinstance(data, django_models.Manager) else data
-        elementos = self.AgruparEstadosPacienteIterador(iterable)
+        elementos = self.restricciones.agrupador(iterable)
         datos = [
             self.child.to_representation(item) for item in elementos
         ]
         return datos
 
     
-
+import logging
 class SerializadorEstadoEstudioPolimorfico(PolymorphicSerializer):
+
+    restricciones = L2e14Restricciones()
+
     model_serializer_mapping = {
         models.EstadoEstudio: serializers.SerializadorEstadoEstudio,
         models.EsperandoComprobanteDePago: serializers.SerializadorEsperandoComprobanteDePago,
@@ -106,6 +123,9 @@ class SerializadorEstadoEstudioPolimorfico(PolymorphicSerializer):
         datos.pop('freezer',None)
 
     def to_representation(self, instance):
+        logging.debug(type(instance))
+        if self.restricciones.es_elemento_a_agrupar(instance):
+            instance = self.restricciones.agrupar_elementos([instance])
         rep = super().to_representation(instance)
         self.__eliminar_campos_restringidos(rep)
         return rep
