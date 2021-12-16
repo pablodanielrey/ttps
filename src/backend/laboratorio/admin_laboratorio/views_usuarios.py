@@ -39,7 +39,7 @@ def generar_usuarios_ejemplo():
                 'telefono': f'221 2222{i}',
                 'direccion': f'calle {i} la plata',
                 'fecha_nacimiento': f'2021-04-{ano}',
-                'historia_clinica': ''
+                'historia_clinica': f'algo de historia {ano}'
             }
         )
     contador = 0
@@ -49,10 +49,10 @@ def generar_usuarios_ejemplo():
             paux = m.crearPaciente(**paciente)
             if contador % 2 == 0:
                 ob = persona_models.ObraSocial.objects.first()
-                obp = persona_models.ObraSocialPersona(obra_social=ob, numero_afiliado=f'numero-{paux.id}')
+                obp = persona_models.ObraSocialPersona(persona=paux, obra_social=ob, numero_afiliado=f'numero-{paux.id}')
                 obp.save()
-                paux.obra_social = obp
-                paux.save()
+                # paux.obra_social = obp
+                # paux.save()
         except IntegrityError as e:
             pass
 

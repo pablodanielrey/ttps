@@ -90,10 +90,9 @@ class Paciente(Persona):
 
     NOMBRE_GRUPO = 'Pacientes'
 
-    @classmethod
-    def crear_obra_social(cls, id_obra_social, numero_afiliado):
+    def crear_obra_social(self, id_obra_social, numero_afiliado):
         os = ObraSocial.objects.get(id=id_obra_social)
-        osp = ObraSocialPersona(obra_social=os, numero_afiliado=numero_afiliado)
+        osp = ObraSocialPersona(persona=self, obra_social=os, numero_afiliado=numero_afiliado)
         return osp
 
 class MedicoInformante(Persona):

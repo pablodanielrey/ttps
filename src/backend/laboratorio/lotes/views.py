@@ -50,6 +50,10 @@ class VistaLotes(viewsets.ModelViewSet):
 
         fecha = parser.parse(request.data['fecha'])
         resultado = request.data['resultado']
+
+        "TODO: procesar estudios a cerrar"
+        ids_de_estudios = request.data['estudios']
+        "TODO: tengo que impementar el cerrar los estudios solos pasados por ahi y los demas volver a seleccionar el turno"
         models.ModeloLotes().cerrar_lote(lote, fecha, resultado)
 
         return Response({'status':200})

@@ -18,11 +18,12 @@ class SerializadorDePaciente(serializers.ModelSerializer):
     # obra_social = serializers.CharField(source='obra_social.obra_social.id', required=False, read_only=False)
     # numero_afiliado = serializers.CharField(source='obra_social.numero_afiliado', required=False, read_only=False)
     historia_clinica = serializers.CharField(source='historia_clinica.historia_clinica', read_only=False)
+    obra_social = views_personas.SerializadorDeObraSocialPersona(required=False, many=False)
 
     class Meta:
         model = models.Paciente
         # fields = ['id','nombre','apellido','dni','email','fecha_nacimiento','telefono','direccion',,'obra_social','numero_afiliado']
-        fields = ['id','nombre','apellido','dni','email','fecha_nacimiento','telefono','direccion', 'historia_clinica']
+        fields = ['id','nombre','apellido','dni','email','fecha_nacimiento','telefono','direccion', 'historia_clinica', 'obra_social']
     
     def update(self, instance, validated_data):
         logging.info(validated_data)

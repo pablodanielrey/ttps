@@ -1,5 +1,6 @@
 
 import logging
+from os import read
 
 from rest_framework import serializers, viewsets, views
 from rest_framework.permissions import DjangoModelPermissions
@@ -11,6 +12,12 @@ from django.contrib.auth import models as auth_models
 from . import models
 
 class SerializadorDeObraSocial(serializers.ModelSerializer):
+    """ 
+        Se redefine el campo para cuando se hace el post/put del id lo pueda obtener en el validated_data
+        sin esta redefinición los campos read_only son ignorados en validated_data
+        https://github.com/encode/django-rest-framework/issues/2320
+    """
+    id = serializers.UUIDField(read_only=False)
     class Meta:
         model = models.ObraSocial
         fields = ['id','nombre']
