@@ -1,6 +1,7 @@
 import logging
 
 from rest_framework import serializers
+from rest_framework.exceptions import ValidationError
 
 from . import models
 
@@ -53,14 +54,15 @@ class SerializadorDePaciente(serializers.ModelSerializer):
     def create(self, validated_data):
         fecha_nacimiento = validated_data.get('fecha_nacimiento')
         if 18 < self.__edad(fecha_nacimiento):
-            validated_data.get('telefono')
-            validated_data.get('direccion')
-            validated_data.get('email')
+            for v in ['telefono', 'direccion', 'email']:
+                if v not in validated_data:
+                    raise ValidationError({v:'requerido'})
 
             hc = validated_data.pop('historia_clinica',None)
 
             paciente = models.Paciente.objects.create(**validated_data)
-            models.HistoriaClinica.objects.create(persona=paciente, historia_clinica=hc['historia_clinica'])
+            if hc:
+                models.HistoriaClinica.objects.create(persona=paciente, historia_clinica=hc['historia_clinica'])
             return paciente
         else:
             raise NotImplemented()
