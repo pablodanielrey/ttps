@@ -30,6 +30,8 @@ class SerializadorDeObraSocialPersona(serializers.HyperlinkedModelSerializer):
         fields = ['obra_social','numero_afiliado']
         
 
+import datetime
+from zoneinfo import ZoneInfo
 class SerializadorDePaciente(serializers.ModelSerializer):
     historia_clinica = serializers.CharField(source='historia_clinica.historia_clinica', read_only=False, required=False)
     obra_social = SerializadorDeObraSocialPersona(required=False, many=False)
@@ -37,7 +39,34 @@ class SerializadorDePaciente(serializers.ModelSerializer):
     class Meta:
         model = models.Paciente
         fields = ['id','nombre','apellido','dni','email','fecha_nacimiento','telefono','direccion', 'historia_clinica', 'obra_social']
-    
+
+
+    def __edad(self, nacimiento):
+        logging.debug(f'verificando nacimiento : {nacimiento}')
+        ahora = datetime.datetime.now(tz=ZoneInfo('America/Argentina/Buenos_Aires'))
+        anos = ahora.year - nacimiento.year
+        if datetime.date(year=nacimiento.year, month=ahora.month, day=ahora.day) < nacimiento:
+            anos = anos - 1
+        return anos
+
+
+    def create(self, validated_data):
+        fecha_nacimiento = validated_data.get('fecha_nacimiento')
+        if 18 < self.__edad(fecha_nacimiento):
+            validated_data.get('telefono')
+            validated_data.get('direccion')
+            validated_data.get('email')
+
+            hc = validated_data.pop('historia_clinica',None)
+
+            paciente = models.Paciente.objects.create(**validated_data)
+            models.HistoriaClinica.objects.create(persona=paciente, historia_clinica=hc['historia_clinica'])
+            return paciente
+        else:
+            raise NotImplemented()
+
+        
+
     def update(self, instance, validated_data):
         logging.info(validated_data)
         historia_clinica = validated_data.pop('historia_clinica')
