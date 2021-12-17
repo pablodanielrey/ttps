@@ -125,7 +125,6 @@ class SerializadorResultadoDeEstudioEntregado(serializers.ModelSerializer):
 class SerializadorEstadoEstudioPolimorfico(PolymorphicSerializer):
     model_serializer_mapping = {
         models.EstadoEstudio: SerializadorEstadoEstudio,
-        # models.EsperandoPresupuesto: SerializadorEsperandoPresupuesto,
         models.EsperandoComprobanteDePago: SerializadorEsperandoComprobanteDePago,
         models.AnuladorPorFaltaDePago: SerializadorAnuladorPorFaltaDePago,
         models.EnviarConsentimientoInformado: SerializadorEnviarConsentimientoInformado,
