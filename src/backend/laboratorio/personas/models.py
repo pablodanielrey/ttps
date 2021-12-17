@@ -59,10 +59,10 @@ class HistoriaClinica(models.Model):
     persona = models.OneToOneField(Persona, on_delete=models.CASCADE, related_name='historia_clinica')
     historia_clinica = models.CharField(max_length=9216, null=True)
 
-
 class Matricula(models.Model):
     persona = models.OneToOneField(Persona, on_delete=models.CASCADE, related_name='matricula')
     numero = models.CharField(max_length=500)
+
 
 
 class Administrador(Persona):
@@ -98,13 +98,6 @@ class Paciente(Persona):
         osp = ObraSocialPersona(persona=self, obra_social=os, numero_afiliado=numero_afiliado)
         return osp
 
-class Tutor(Persona):
-    class Meta:
-        proxy = True
-
-    NOMBRE_GRUPO = 'Tutores'
-
-
 
 class MedicoInformante(Persona):
     class Meta:
@@ -120,3 +113,15 @@ class MedicoDerivante(Persona):
     NOMBRE_GRUPO = 'Médicos_Derivantes'
  
 
+class Tutor(Persona):
+    class Meta:
+        proxy = True
+
+    NOMBRE_GRUPO = 'Tutores'
+
+
+
+class TutorDePaciente(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    persona = models.OneToOneField(Persona, on_delete=models.CASCADE, related_name='tutores')
+    tutor = models.ForeignKey(Tutor, on_delete=models.CASCADE)

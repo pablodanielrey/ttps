@@ -9,79 +9,9 @@ from rest_framework.response import Response
 from rest_framework.decorators import action
 
 from . import models
-
 from . import views_personas
+from . import paciente_serializers
 
-
-class SerializadorDePaciente(serializers.ModelSerializer):
-    # obra_social = views_personas.SerializadorDeObraSocialPersona(required=False, many=True, read_only=False)
-    # obra_social = serializers.CharField(source='obra_social.obra_social.id', required=False, read_only=False)
-    # numero_afiliado = serializers.CharField(source='obra_social.numero_afiliado', required=False, read_only=False)
-    historia_clinica = serializers.CharField(source='historia_clinica.historia_clinica', read_only=False)
-    obra_social = views_personas.SerializadorDeObraSocialPersona(required=False, many=False)
-
-    class Meta:
-        model = models.Paciente
-        # fields = ['id','nombre','apellido','dni','email','fecha_nacimiento','telefono','direccion',,'obra_social','numero_afiliado']
-        fields = ['id','nombre','apellido','dni','email','fecha_nacimiento','telefono','direccion', 'historia_clinica', 'obra_social']
-    
-    def update(self, instance, validated_data):
-        logging.info(validated_data)
-        historia_clinica = validated_data.pop('historia_clinica')
-        if models.HistoriaClinica.objects.filter(persona=instance).count() <= 0:
-            hc = models.HistoriaClinica(persona=instance, historia_clinica=historia_clinica['historia_clinica'])
-            hc.save()
-        else:
-            hc = instance.historia_clinica
-            hc.historia_clinica = historia_clinica['historia_clinica']
-            hc.save()
-       
-        if models.ObraSocialPersona.objects.filter(persona=instance).count() > 0:
-            ob = instance.obra_social
-            ob.delete()
-            instance.obra_social = None
-            instance.save()
-
-        #TODO: corregir este codigo porque no me está trayendo los datos el serializer
-        if 'obra_social' in validated_data:
-            obra_social = validated_data.pop('obra_social')
-            logging.info(obra_social)
-
-            id_obra_social = obra_social['obra_social']['id']
-            numero_afiliado = obra_social['numero_afiliado']
-
-            # for obp in instance.obra_social.all():
-            #     obp.delete()
-
-            obp = instance.crear_obra_social(id_obra_social, numero_afiliado)
-            # obp.persona = instance
-            obp.save()
-            instance.obra_social = obp
-            instance.save()
-            #obp.persona = instance
-            #obp.save()
-
-        return super().update(instance, validated_data)
-
-
-"""
-class SerializadorDePaciente(serializers.ModelSerializer):
-    obra_social = views_personas.SerializadorDeObraSocialPersona(required=False, many=True, read_only=True)
-    #obra_social = views_personas.SerializadorDeObraSocialPersona(source='obra_social.obraSocial', many=True, read_only=False)
-    historia_clinica = serializers.CharField(source='historia_clinica.historia_clinica', allow_null=True,read_only=True)
-
-    class Meta:
-        model = models.Paciente
-        fields = ['id','nombre','apellido','dni','email','fecha_nacimiento','telefono','direccion','historia_clinica','obra_social']
-
-    def update(self, instance, validated_data):
-        logging.info(validated_data)
-        historia_clinica = validated_data.pop('historia_clinica')
-        instance.historia_clinica.historia_clinica = historia_clinica
-        instance.historia_clinica.save()
-       
-        return super().update(instance, validated_data)    
-"""
 
 class VistaPaciente(viewsets.ModelViewSet):
     """
@@ -89,7 +19,7 @@ class VistaPaciente(viewsets.ModelViewSet):
         https://www.django-rest-framework.org/api-guide/serializers/#dealing-with-nested-objects
     """
     queryset = models.Paciente.all()
-    serializer_class = SerializadorDePaciente
+    serializer_class = paciente_serializers.SerializadorDePaciente
     #permission_classes = [ DjangoModelPermissions ]
     #permission_classes = [ IsAdminUser ]
 
@@ -117,7 +47,7 @@ class VistaPaciente(viewsets.ModelViewSet):
             )
             pacienteObraSocial.save()
 
-        serializer = SerializadorDePaciente(paciente, context={'request': request})
+        serializer = paciente_serializers.SerializadorDePaciente(paciente, context={'request': request})
         return Response(serializer.data)
 
     @action(detail=False, methods=['GET'])
@@ -126,5 +56,10 @@ class VistaPaciente(viewsets.ModelViewSet):
         logging.debug(f'buscando a : {q}')
 
         personas = models.Paciente.buscar(q)
-        serializer = SerializadorDePaciente(personas, many=True, context={'request': request})
+        serializer = paciente_serializers.SerializadorDePaciente(personas, many=True, context={'request': request})
         return Response(serializer.data)        
+
+class VistaPaciente2(viewsets.ModelViewSet):
+    queryset = models.Paciente.all()
+    serializer_class = paciente_serializers.SerializadorDePaciente
+

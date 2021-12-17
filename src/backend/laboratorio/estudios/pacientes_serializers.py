@@ -5,7 +5,7 @@ from django.db import models as django_models
 
 from . import models
 from . import serializers
-
+from personas import paciente_serializers
 
 class L2e14Restricciones:
 
@@ -130,8 +130,8 @@ class SerializadorEstadoEstudioPolimorfico(PolymorphicSerializer):
         return rep
 
 class SerializadorEstudios(rest_serializers.HyperlinkedModelSerializer):
-    paciente = serializers.SerializadorDePersona()
-    medico_derivante = serializers.SerializadorDePersona()
+    paciente = paciente_serializers.SerializadorDePaciente()
+    medico_derivante = serializers.SerializadorDeMedicoDerivante()
     tipo = serializers.SerializadorTiposDeEstudio()
     diagnostico = serializers.SerializadorDiagnostico()
     ultimo_estado = SerializadorEstadoEstudioPolimorfico()
@@ -143,8 +143,8 @@ class SerializadorEstudios(rest_serializers.HyperlinkedModelSerializer):
        
 
 class SerializadorEstudiosDetalle(rest_serializers.ModelSerializer):
-    paciente = serializers.SerializadorDePersona()
-    medico_derivante = serializers.SerializadorDePersona()
+    paciente = paciente_serializers.SerializadorDePaciente()
+    medico_derivante = serializers.SerializadorDeMedicoDerivante()
     tipo = serializers.SerializadorTiposDeEstudio()
     diagnostico = serializers.SerializadorDiagnostico()
     estados = SerializadorEstadoEstudioPolimorfico(many=True)

@@ -1,13 +1,12 @@
 
 from rest_framework import serializers
 
-from personas.views_personas import SerializadorDePersona
 from personas.views_medicos import SerializadorDeMedicoDerivante, SerializadorDeMedicoInformante
 
 from turnos import views as turnos_views
 
 from . import models
-
+from personas import paciente_serializers
 
 class SerializadorArchivos(serializers.ModelSerializer):
     class Meta:
@@ -80,7 +79,7 @@ class SerializadorEsperandoSeleccionDeTurnoParaExtraccion(serializers.ModelSeria
         fields = ['id','fecha','turno']
 
 
-from turnos import views as turnos_views
+
 class SerializadorEsperandoTomaDeMuestra(serializers.ModelSerializer):
 
     turno = turnos_views.SerializadorTurnosConfirmados()
@@ -152,11 +151,9 @@ class SerializadorDePersonaResumido(serializers.ModelSerializer):
         fields = ['id','nombre','apellido']
 
 
-
-
 class SerializadorEstudiosDetalle(serializers.HyperlinkedModelSerializer):
-    paciente = SerializadorDePersona()
-    medico_derivante = SerializadorDePersona()
+    paciente = paciente_serializers.SerializadorDePaciente()
+    medico_derivante = SerializadorDeMedicoDerivante()
     tipo = SerializadorTiposDeEstudio()
     diagnostico = SerializadorDiagnostico()
     estados = SerializadorEstadoEstudioPolimorfico(many=True)

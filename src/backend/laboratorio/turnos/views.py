@@ -3,13 +3,12 @@ from django.shortcuts import render
 import logging
 import datetime
 
-# Create your views here.
 from rest_framework import serializers, views, viewsets
 from rest_framework.response import Response
 
 
 from estudios import models as estudio_models
-from personas import views_personas
+from personas import paciente_serializers
 
 from . import models
 
@@ -70,7 +69,7 @@ class VistaTurnosDisponibles(viewsets.ModelViewSet):
 
 
 class SerializadorTurnosConfirmados(serializers.HyperlinkedModelSerializer):
-    persona = views_personas.SerializadorDePersona()
+    persona = paciente_serializers.SerializadorDePaciente()
     class Meta:
         model = models.TurnoConfirmado
         fields = ['id','persona','inicio','fin']

@@ -10,36 +10,7 @@ from rest_framework.decorators import action, permission_classes
 from django.contrib.auth import models as auth_models
 
 from . import models
-
-class SerializadorDeObraSocial(serializers.ModelSerializer):
-    """ 
-        Se redefine el campo para cuando se hace el post/put del id lo pueda obtener en el validated_data
-        sin esta redefinición los campos read_only son ignorados en validated_data
-        https://github.com/encode/django-rest-framework/issues/2320
-    """
-    id = serializers.UUIDField(read_only=False)
-    class Meta:
-        model = models.ObraSocial
-        fields = ['id','nombre']
-
-class SerializadorDeObraSocialPersona(serializers.HyperlinkedModelSerializer):
-    obra_social = SerializadorDeObraSocial()
-    class Meta:
-        model = models.ObraSocialPersona
-        fields = ['obra_social','numero_afiliado']
-        
-class SerializadorDeHistoriaClinica(serializers.ModelSerializer):
-    class Meta:
-        model = models.HistoriaClinica
-        fields = ['historia_clinica']
-
-class SerializadorDePersona(serializers.HyperlinkedModelSerializer):
-    # obra_social = SerializadorDeObraSocialPersona(required=False, many=True)
-    # historia_clinica = SerializadorDeHistoriaClinica(required=False)
-    class Meta:
-        model = models.Persona
-        # fields = ['id','nombre','apellido','email','dni','fecha_nacimiento','telefono','historia_clinica','obra_social']
-        fields = ['id','nombre','apellido','email','dni','fecha_nacimiento','telefono']
+from . import persona_serializers
 
 
 class VistaPersona(viewsets.ModelViewSet):
@@ -48,7 +19,7 @@ class VistaPersona(viewsets.ModelViewSet):
         https://www.django-rest-framework.org/api-guide/serializers/#dealing-with-nested-objects
     """
     queryset = models.Persona.objects.all()
-    serializer_class = SerializadorDePersona
+    serializer_class = persona_serializers.SerializadorDePersona
     #permission_classes = [ DjangoModelPermissions ]
 
     # def create(self, request, *args, **kwargs):
@@ -87,7 +58,7 @@ class VistaPersona(viewsets.ModelViewSet):
         logging.debug(f'buscando a : {q}')
 
         personas = models.Persona.buscar(q)
-        serializer = SerializadorDePersona(personas, many=True, context={'request': request})
+        serializer = persona_serializers.SerializadorDePersona(personas, many=True, context={'request': request})
         return Response(serializer.data)
         
 
