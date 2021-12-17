@@ -247,7 +247,6 @@ class VistaEstudios(viewsets.ModelViewSet):
             Aca se implementa la restricción de que el paciente solo puede ver sus estudios.
             Los demás perfiles ven todos los estudios.
         """
-        grupos = self.__obtener_grupos_usuario_logueado()
         usuario = self.request.user
         if personas_models.Paciente.usuario_es_tipo(usuario):
             paciente = personas_models.Paciente.obtener_persona_de_usuario(usuario)
