@@ -351,32 +351,3 @@ class VistaEstudios(viewsets.ModelViewSet):
         
 
 
-    """
-        TODO: esto hace falta pasarlo a una api especifica de estadístinas y no en el estudio!
-    """
-
-    @action(detail=False, methods=['GET'])
-    def estudios_estadisitcas_mes(self, request):        
-        cantidadPorMes = models.Estudio.objects.annotate(month=ExtractMonth('fecha_alta')).values('month').annotate(count=Count('id')).values('month', 'count')  
-        
-        
-        print(cantidadPorMes)
-        return Response({'Estudios': cantidadPorMes})
-
-    @action(detail=False, methods=['GET'])
-    def tipos_estudio(self, request):        
-        tipos={}
-        index=0
-        tipoEstudio = models.TiposDeEstudio.objects.all()
-        for tipo in tipoEstudio:  
-            tipos[index]=({
-                "tipo": tipo.nombre,
-                "cantidad": models.Estudio.objects.filter(tipo= tipo).count()
-            })
-            index=index +1 
-
-        return Response({'Estudios': tipos})
-    
-
-
-
