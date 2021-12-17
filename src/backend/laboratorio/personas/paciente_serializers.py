@@ -58,7 +58,6 @@ class SerializadorDePaciente(serializers.ModelSerializer):
             anos = anos - 1
         return anos
 
-
     def create(self, validated_data):
         fecha_nacimiento = validated_data.get('fecha_nacimiento')
         if 18 < self.__edad(fecha_nacimiento):
@@ -73,7 +72,6 @@ class SerializadorDePaciente(serializers.ModelSerializer):
             if hc:
                 models.HistoriaClinica.objects.create(persona=paciente, historia_clinica=hc['historia_clinica'])
             if obra_social:
-                logging.debug(obra_social)
                 id_obra_social = obra_social['obra_social']['id']
                 numero_afiliado = obra_social['numero_afiliado']
                 obp = paciente.crear_obra_social(id_obra_social, numero_afiliado)
@@ -85,40 +83,29 @@ class SerializadorDePaciente(serializers.ModelSerializer):
         
 
     def update(self, instance, validated_data):
-        logging.info(validated_data)
-        historia_clinica = validated_data.pop('historia_clinica')
-        if models.HistoriaClinica.objects.filter(persona=instance).count() <= 0:
-            hc = models.HistoriaClinica(persona=instance, historia_clinica=historia_clinica['historia_clinica'])
-            hc.save()
+        logging.debug(f'actualizando {instance}')
+        historia_clinica = validated_data.pop('historia_clinica', None)
+        if not historia_clinica:
+            if models.HistoriaClinica.objects.filter(persona=instance).count() > 0:
+                instance.historia_clinica.delete()
         else:
-            hc = instance.historia_clinica
-            hc.historia_clinica = historia_clinica['historia_clinica']
-            hc.save()
+            if models.HistoriaClinica.objects.filter(persona=instance).count() <= 0:
+                hc = models.HistoriaClinica(persona=instance, historia_clinica=historia_clinica['historia_clinica'])
+                hc.save()
+            else:
+                hc = instance.historia_clinica
+                hc.historia_clinica = historia_clinica['historia_clinica']
+                hc.save()
        
         if models.ObraSocialPersona.objects.filter(persona=instance).count() > 0:
-            ob = instance.obra_social
-            ob.delete()
-            instance.obra_social = None
-            instance.save()
-
-        #TODO: corregir este codigo porque no me está trayendo los datos el serializer
-        if 'obra_social' in validated_data:
-            obra_social = validated_data.pop('obra_social')
-            logging.info(obra_social)
-
+            instance.obra_social.delete()
+        obra_social = validated_data.pop('obra_social',None)
+        if obra_social:
             id_obra_social = obra_social['obra_social']['id']
             numero_afiliado = obra_social['numero_afiliado']
-
-            # for obp in instance.obra_social.all():
-            #     obp.delete()
-
             obp = instance.crear_obra_social(id_obra_social, numero_afiliado)
-            # obp.persona = instance
             obp.save()
-            instance.obra_social = obp
-            instance.save()
-            #obp.persona = instance
-            #obp.save()
 
+        instance.refresh_from_db()
         return super().update(instance, validated_data)
 
