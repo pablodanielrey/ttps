@@ -10,25 +10,24 @@ from rest_framework import authentication, permissions
 import logging
 import datetime
 from zoneinfo import ZoneInfo
+import random
 
 from personas import models as persona_models
 
 def generar_fecha_now():
     return datetime.datetime.now(tz=ZoneInfo('America/Argentina/Buenos_Aires'))
 
-
-def aca_podes_editar_lean():
-    m = persona_models.PersonasModel()
-    m.crearPaciente(nombre='Leandro', apellido='Bilbao', dni='32070891', email='leandrobilbao@gmail.com', telefono='2211234567', direccion='calle falsa 123', fecha_nacimiento='1995-06-02', historia_clinica='ufff por donde empiezo', )
-    m2 = persona_models.PersonasModel()
-    m2.crearPaciente(nombre='Leandro2', apellido='Bilbao2', dni='32070892', email='leandrobilbao2@gmail.com', telefono='2211234568', direccion='calle falsa 123bis', fecha_nacimiento='1995-06-03', historia_clinica='ufff por donde empiezo, mas atras', )
-
-
 def generar_usuarios_ejemplo():
     m = persona_models.PersonasModel()
 
+    try:
+        m.crearPaciente(nombre='Paciente',apellido='Cero',dni='11111111', historia_clinica='nada que contar')
+    except IntegrityError:
+        pass
+
+    inicio = random.randrange(0,100)
     pacientes = []
-    for i in range(0,10):
+    for i in range(inicio,inicio+10):
         ano = f'{i+1}'.zfill(2)
         pacientes.append(
             {
@@ -38,7 +37,7 @@ def generar_usuarios_ejemplo():
                 'email': f'email{i}@gmail.com',
                 'telefono': f'221 2222{i}',
                 'direccion': f'calle {i} la plata',
-                'fecha_nacimiento': f'2021-04-{ano}',
+                'fecha_nacimiento': f'2021-04-22',
                 'historia_clinica': f'algo de historia {ano}'
             }
         )
@@ -51,8 +50,6 @@ def generar_usuarios_ejemplo():
                 ob = persona_models.ObraSocial.objects.first()
                 obp = persona_models.ObraSocialPersona(persona=paux, obra_social=ob, numero_afiliado=f'numero-{paux.id}')
                 obp.save()
-                # paux.obra_social = obp
-                # paux.save()
         except IntegrityError as e:
             pass
 
@@ -109,7 +106,6 @@ class Ejemplos(APIView):
 
         generar_usuarios_ejemplo()
         generar_usuarios_de_sistema()
-        aca_podes_editar_lean()
 
         return Response({'status':'ejemplos generados'})
 

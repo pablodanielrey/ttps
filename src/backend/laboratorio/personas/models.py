@@ -46,8 +46,15 @@ class Persona(models.Model):
 
     @classmethod
     def usuario_es_tipo(cls, usuario_django):
+        if not usuario_django:
+            return False
         grupos = [g.name for g in usuario_django.groups.all()]
         return cls.NOMBRE_GRUPO in grupos
+
+
+    @classmethod
+    def obtener_persona_de_usuario(cls, usuario_django):
+        return cls.objects.get(usuario=usuario_django)
 
 class ObraSocialPersona(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
@@ -185,7 +192,7 @@ class PersonasModel:
         hc = HistoriaClinica(persona=paciente, historia_clinica=historia_clinica)
         hc.save()
 
-        u = self._generar_usuario_django(str(paciente.id), Paciente.NOMBRE_GRUPO)    
+        u = self._generar_usuario_django(paciente.dni.lower().strip(), Paciente.NOMBRE_GRUPO, clave=paciente.dni.lower().strip())    
         paciente.usuario = u
         paciente.save()
 

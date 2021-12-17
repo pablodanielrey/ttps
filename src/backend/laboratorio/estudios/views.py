@@ -241,6 +241,20 @@ class VistaEstudios(viewsets.ModelViewSet):
         return super().get_serializer_class()
 
 
+    def get_queryset(self):
+        """
+            L2V-P2 -
+            Aca se implementa la restricción de que el paciente solo puede ver sus estudios.
+            Los demás perfiles ven todos los estudios.
+        """
+        grupos = self.__obtener_grupos_usuario_logueado()
+        usuario = self.request.user
+        if personas_models.Paciente.usuario_es_tipo(usuario):
+            paciente = personas_models.Paciente.obtener_persona_de_usuario(usuario)
+            return models.Estudio.objects.filter(paciente=paciente)
+
+        return super().get_queryset()
+
 
 
 

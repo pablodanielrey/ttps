@@ -3,7 +3,6 @@ from django.urls import path, include
 from rest_framework import routers, viewsets
 
 from . import views
-from . import pacientes_views
 
 router = routers.DefaultRouter()
 router.register('tiposEstudio', views.VistaTiposDeEstudio)
@@ -13,7 +12,6 @@ router.register('estudios', views.VistaEstudios)
 router.register('estados', views.VistaEstadoEstudio)
 router.register('archivos', views.VistaArchivos)
 router.register('estadisticas', views.VistaEstadisticas)
-router.register('estudios_pacientes', pacientes_views.VistaEstudios)
 
 
 urlpatterns = router.urls
