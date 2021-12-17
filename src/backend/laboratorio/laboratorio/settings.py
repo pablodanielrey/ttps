@@ -45,7 +45,8 @@ INSTALLED_APPS = [
     'personas',
     'estudios',
     'lotes',
-    'turnos'
+    'turnos',
+    'reportes'
 ]
 
 MIDDLEWARE = [
