@@ -80,7 +80,7 @@ def generar_estudios_estado4(empleado, medico, paciente):
 def generar_estudios_estado5(empleado, medico, paciente):
     archivo = estudio_models.Archivo(contenido=pdf_minimo(), content_type='application/pdf', encoding='base64')
     archivo.save()
-    turno = turnos_models.TurnoConfirmado(persona=paciente, inicio=datetime.date(2021, 10, 19), fin=generar_fecha_now() + datetime.timedelta(hours=1))
+    turno = turnos_models.TurnoConfirmado(persona=paciente, inicio=generar_fecha_now().replace(month=5), fin=generar_fecha_now() + datetime.timedelta(hours=1))
     turno.save()
     estudio = generar_estudios_estado4(empleado, medico, paciente)
     estado = estudio.ultimo_estado
@@ -97,6 +97,36 @@ def generar_estudio_turno_expirado(empleado, medico, paciente):
     estado.save()
     estado = estudio_models.EsperandoSeleccionDeTurnoParaExtraccion(estudio=estudio, persona=empleado)
     estado.save()    
+
+def generar_estudio_turno_doblemente_expirado(empleado, medico, paciente):
+    estudio = generar_estudios_estado5(empleado, medico, paciente)
+    estado = estudio.ultimo_estado
+    estado.expirado = True
+    estado.save()
+    estado = estudio_models.EsperandoSeleccionDeTurnoParaExtraccion(estudio=estudio, persona=empleado)
+    turno = turnos_models.TurnoConfirmado(persona=paciente, inicio=generar_fecha_now().replace(month=6), fin=generar_fecha_now() + datetime.timedelta(hours=1))
+    turno.save()
+    estado.turno = turno
+    estado.save()
+    estado = estudio_models.EsperandoTomaDeMuestra(estudio=estudio, persona=empleado)
+    estado.expirado = True
+    estado.save()
+    estado = estudio_models.EsperandoSeleccionDeTurnoParaExtraccion(estudio=estudio, persona=empleado)
+    turno = turnos_models.TurnoConfirmado(persona=paciente, inicio=generar_fecha_now().replace(month=7), fin=generar_fecha_now() + datetime.timedelta(hours=1))
+    turno.save()
+    estado.turno = turno
+    estado.save()
+    estado = estudio_models.EsperandoTomaDeMuestra(estudio=estudio, persona=empleado)
+    estado.expirado = True
+    estado.save()
+    estado = estudio_models.EsperandoSeleccionDeTurnoParaExtraccion(estudio=estudio, persona=empleado)
+    turno = turnos_models.TurnoConfirmado(persona=paciente, inicio=generar_fecha_now().replace(month=8), fin=generar_fecha_now() + datetime.timedelta(hours=1))
+    turno.save()
+    estado.turno = turno
+    estado.save()
+    estado = estudio_models.EsperandoTomaDeMuestra(estudio=estudio, persona=empleado)
+    estado.save()
+
 
 def generar_estudios_estado6(empleado, medico, paciente):
     estudio = generar_estudios_estado5(empleado, medico, paciente)
@@ -203,6 +233,9 @@ class Ejemplos(APIView):
         generar_estudios_estado9(empleado, medico_derivante, self.__obtener_paciente_random())
         generar_estudios_estado10(empleado, medico_derivante, self.__obtener_paciente_random())
         generar_estudios_estado11(empleado, medico_derivante, self.__obtener_paciente_random())
+
+        generar_estudio_turno_expirado(empleado, medico_derivante, self.__obtener_paciente_random())
+        generar_estudio_turno_doblemente_expirado(empleado, medico_derivante, self.__obtener_paciente_random())
 
         return Response({'status':'ejemplos de estudios generados'})
 
