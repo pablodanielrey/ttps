@@ -5,13 +5,17 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework import views
 
+from . import models
 class Lve23ReporteCantidadDeEstudiosPorTipo(views.APIView):
 
     authentication_classes = [BasicAuthentication]
     permission_classes = [ IsAuthenticated ]
 
+    reportes = models.Reportes()
+
     def get(self, request, format=None):
-        return Response({'status':'ok'})
+        reporte = self.reportes.cantidad_de_estudios_por_tipo()
+        return Response(reporte)
 
 
 class Lve25ReporteCantidadDeEstudiosPorMesAno(views.APIView):
@@ -19,8 +23,11 @@ class Lve25ReporteCantidadDeEstudiosPorMesAno(views.APIView):
     authentication_classes = [BasicAuthentication]
     permission_classes = [ IsAuthenticated ]
 
+    reportes = models.Reportes()
+
     def get(self, request, format=None):
-        return Response({'status':'ok'})
+        reporte = self.reportes.cantidad_de_estudios_por_mes()
+        return Response(reporte)
 
 
 class Lve27ReporteDemoraDeEstudios(views.APIView):
@@ -28,5 +35,8 @@ class Lve27ReporteDemoraDeEstudios(views.APIView):
     authentication_classes = [BasicAuthentication]
     permission_classes = [ IsAuthenticated ]
 
+    reportes = models.Reportes()
+
     def get(self, request, format=None):
-        return Response({'status':'ok'})
+        reporte = self.reportes.demora_de_procesamiento_de_estudios()
+        return Response(reporte)
