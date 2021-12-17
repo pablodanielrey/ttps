@@ -4,7 +4,7 @@ from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 
 from . import models
-
+from . import persona_serializers
 
 class SerializadorDeHistoriaClinica(serializers.ModelSerializer):
     class Meta:
@@ -33,10 +33,18 @@ class SerializadorDeObraSocialPersona(serializers.HyperlinkedModelSerializer):
 
 import datetime
 from zoneinfo import ZoneInfo
+
+class SerializadorDeTutor(serializers.ModelSerializer):
+    tutor = persona_serializers.SerializadorDePersona()
+    class Meta:
+        model = models.TutorDePaciente
+        fields = ['tutor']
+
 class SerializadorDePaciente(serializers.ModelSerializer):
     historia_clinica = serializers.CharField(source='historia_clinica.historia_clinica', read_only=False, required=False)
-    obra_social = SerializadorDeObraSocialPersona(required=False, many=False)
-
+    obra_social = SerializadorDeObraSocialPersona(required=False, many=False, read_only=False)
+    # obra_social = serializers.RelatedField(source='obra_social.obra_social', read_only=False, required=False)
+    # numero_afiliado = serializers.CharField(source='obra_social.numero_afiliado', read_only=False, required=False)
     class Meta:
         model = models.Paciente
         fields = ['id','nombre','apellido','dni','email','fecha_nacimiento','telefono','direccion', 'historia_clinica', 'obra_social']
@@ -59,14 +67,21 @@ class SerializadorDePaciente(serializers.ModelSerializer):
                     raise ValidationError({v:'requerido'})
 
             hc = validated_data.pop('historia_clinica',None)
+            obra_social = validated_data.pop('obra_social',None)
 
             paciente = models.Paciente.objects.create(**validated_data)
             if hc:
                 models.HistoriaClinica.objects.create(persona=paciente, historia_clinica=hc['historia_clinica'])
+            if obra_social:
+                logging.debug(obra_social)
+                id_obra_social = obra_social['obra_social']['id']
+                numero_afiliado = obra_social['numero_afiliado']
+                obp = paciente.crear_obra_social(id_obra_social, numero_afiliado)
+                obp.save()
             return paciente
         else:
-            raise NotImplemented()
 
+            raise NotImplemented()
         
 
     def update(self, instance, validated_data):

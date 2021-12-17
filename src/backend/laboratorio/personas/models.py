@@ -123,5 +123,5 @@ class Tutor(Persona):
 
 class TutorDePaciente(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    persona = models.OneToOneField(Persona, on_delete=models.CASCADE, related_name='tutores')
+    persona = models.OneToOneField(Persona, on_delete=models.CASCADE, related_name='tutor')
     tutor = models.ForeignKey(Tutor, on_delete=models.CASCADE)
