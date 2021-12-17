@@ -1,7 +1,18 @@
+import datetime
+from zoneinfo import ZoneInfo
+
 from django.db import models
 
 from estudios import models
 class Reportes:
+
+    def __generar_fecha_now(self):
+        return datetime.datetime.now(tz=ZoneInfo('America/Argentina/Buenos_Aires'))
+
+    def __generar_cabecera_reporte(self):
+        return {
+            'fecha_de_reporte': self.__generar_fecha_now()
+        }
 
     """
         LV-E23
@@ -14,7 +25,10 @@ class Reportes:
             if tipo not in reporte:
                 reporte[tipo] = 0
             reporte[tipo] += 1
-        return reporte
+        return {
+            'reporte': self.__generar_cabecera_reporte(),
+            'datos': reporte
+        }
 
 
     """
@@ -28,7 +42,11 @@ class Reportes:
             if mes not in reporte:
                 reporte[mes] = 0
             reporte[mes] += 1
-        return reporte
+            
+        return {
+            'reporte': self.__generar_cabecera_reporte(),
+            'datos': reporte
+        }
 
 
     """
@@ -56,9 +74,12 @@ class Reportes:
             if mes not in reporte:
                 reporte[mes] = {
                     'procesados': 0,
-                    'tardanza': 0
+                    'tardanza_segundos': 0
                 }
-            reporte[mes]['tardanza'] += tardanza
+            reporte[mes]['tardanza_segundos'] += tardanza
             reporte[mes]['procesados'] += 1
 
-        return reporte
+        return {
+            'reporte': self.__generar_cabecera_reporte(),
+            'datos': reporte
+        }
