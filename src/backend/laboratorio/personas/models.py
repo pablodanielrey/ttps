@@ -19,7 +19,7 @@ class Persona(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     nombre = models.CharField(max_length=500)
     apellido = models.CharField(max_length=500)
-    email = models.EmailField()
+    email = models.EmailField(null=True)
     dni = models.CharField(max_length=50, null=True, unique=True)
     fecha_nacimiento = models.DateField(null=True)
     telefono = models.CharField(max_length=50, null=True)

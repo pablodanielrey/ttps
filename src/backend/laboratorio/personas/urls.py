@@ -16,6 +16,9 @@ router.register('configuradores', views_configuradores.VistaConfigurador)
 router.register('empleados', views_empleados.VistaEmpleado)
 router.register('personas', views_personas.VistaPersona)
 router.register('pacientes', views_pacientes.VistaPaciente)
+
+router.register('pacientes_v2', views_pacientes.VistaPaciente2)
+
 router.register('obras_sociales', views.VistaObraSocial)
 router.register('medicos_derivantes', views_medicos.VistaMedicoDerivante)
 router.register('medicos_informantes', views_medicos.VistaMedicoInformante)

@@ -31,7 +31,7 @@ class SerializadorDeObraSocialPersona(serializers.HyperlinkedModelSerializer):
         
 
 class SerializadorDePaciente(serializers.ModelSerializer):
-    historia_clinica = serializers.CharField(source='historia_clinica.historia_clinica', read_only=False)
+    historia_clinica = serializers.CharField(source='historia_clinica.historia_clinica', read_only=False, required=False)
     obra_social = SerializadorDeObraSocialPersona(required=False, many=False)
 
     class Meta:
