@@ -78,3 +78,4 @@ class PersonasModel:
         tutor = personas_models.Tutor(**kwargs)
         tutor.save()
         self.login_model.crear_usuario(tutor.id, str(tutor.id), personas_models.Tutor.NOMBRE_GRUPO, clave=str(tutor.id))
+        return tutor

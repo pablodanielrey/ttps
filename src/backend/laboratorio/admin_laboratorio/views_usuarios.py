@@ -63,15 +63,9 @@ def generar_pacientes_mayores():
 def generar_pacientes_menores():
     m = models.PersonasModel()
 
-    tutor1 = persona_models.Tutor(nombre='Un super tutor', apellido='ape', telefono='1112222tutor', email="tutor@gmail.com", direccion="calle tutorias numero tute")
-    tutor1.save()
-
-    tutor2 = persona_models.Tutor(nombre='Un super tutor2', apellido='ape', telefono='1', email="tutor2@gmail.com", direccion="calle tutorias numero tute")
-    tutor2.save()
-
-    tutor3 = persona_models.Tutor(nombre='Un super tutor3', apellido='ape', telefono='1112222tutor', email="tutor3@gmail.com", direccion="calle tutorias numero tute")
-    tutor3.save()
-
+    tutor1 = m.crearTutor(nombre='Un super tutor', apellido='ape', telefono='1112222tutor', email="tutor@gmail.com", direccion="calle tutorias numero tute")
+    tutor2 = m.crearTutor(nombre='Un super tutor2', apellido='ape', telefono='1', email="tutor2@gmail.com", direccion="calle tutorias numero tute")
+    tutor3 = m.crearTutor(nombre='Un super tutor3', apellido='ape', telefono='1112222tutor', email="tutor3@gmail.com", direccion="calle tutorias numero tute")
 
     pacientes = []
     for i in range(5,12):

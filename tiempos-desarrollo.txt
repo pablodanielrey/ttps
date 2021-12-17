@@ -2,7 +2,8 @@ pablo - 13/12/21 - 16:28 --> 17:50
 pablo - 13/12/21 - 20:17 --> 22:40 
 pablo - 15/12/21 - 18:00 --> 23:00
 pablo - 16/12/21 - 13:26 --> 23:59
-pablo - 17/12/21 - 11:20 --> 
+pablo - 17/12/21 - 11:20 --> 17:30
+pablo - 17/12/21 - 17:55 --> 
 
 
 
@@ -13,14 +14,3 @@ pablo - 17/12/21 - 11:20 -->
 
 
 
-
-
-
-aclaraciones de diseño:
-
-para permitir que un tutor tenga múltiples nombres de usuario y preparar el sistema para un mecanismo de autenticación como oauth,
-es necesario asociar múltiples identidades externas (usuarios/claves) con una persona (tutor) dentro de nuestro sistema.
-y mantener la sincronización de las claves de esos usuarios todas sincronizadas.
-eso daría la "ilusión" de que es la misma clave (clave del tutor) para distintos nombres de usuario (dnis de los pacientes)
-
-debido a esto tomamos la desición de diseño de generar múltiples usuarios django asociados a una persona.

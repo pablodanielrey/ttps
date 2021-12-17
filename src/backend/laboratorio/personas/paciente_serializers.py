@@ -8,6 +8,7 @@ from rest_framework.exceptions import ValidationError
 
 from . import models
 from . import persona_serializers
+from login import models as login_models
 
 class SerializadorDeHistoriaClinica(serializers.ModelSerializer):
     class Meta:
@@ -34,13 +35,13 @@ class SerializadorDeObraSocialPersona(serializers.HyperlinkedModelSerializer):
         fields = ['obra_social','numero_afiliado']
         
 
-class SeralizadorDeTutor(serializers.ModelSerializer):
+class SerializadorDeTutor(serializers.ModelSerializer):
     class Meta:
         model = models.Tutor
         fields = ['id','nombre','apellido','email','telefono','direccion']
 
 class SerializadorDeTutorPaciente(serializers.ModelSerializer):
-    tutor = SeralizadorDeTutor()
+    tutor = SerializadorDeTutor()
     class Meta:
         model = models.TutorDePaciente
         fields = ['id','tutor']
@@ -77,6 +78,7 @@ class SerializadorDePaciente(serializers.ModelSerializer):
         tutor = validated_data.pop('tutor',None)
 
         paciente = models.Paciente.objects.create(**validated_data)
+        login_models.LoginModel().crear_usuario(paciente.id, paciente.dni, models.Paciente.NOMBRE_GRUPO, clave=paciente.dni, email=validated_data.get('email',None))
         if hc:
             models.HistoriaClinica.objects.create(persona=paciente, historia_clinica=hc['historia_clinica'])
         if obra_social:
@@ -95,6 +97,7 @@ class SerializadorDePaciente(serializers.ModelSerializer):
             """
             if models.Tutor.objects.filter(email=email).count() <= 0:
                 tutor = models.Tutor.objects.create(**persona_tutor)
+                login_models.LoginModel().crear_usuario(tutor.id, tutor.id, models.Tutor.NOMBRE_GRUPO, clave=tutor.id, email=email)
             else:                       
                 tutor = models.Tutor.objects.filter(email=email).first()
             models.TutorDePaciente.objects.create(persona=paciente, tutor=tutor)
