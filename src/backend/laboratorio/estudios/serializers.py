@@ -1,12 +1,11 @@
 
 from rest_framework import serializers
 
-from personas.views_medicos import SerializadorDeMedicoDerivante, SerializadorDeMedicoInformante
-
 from turnos import views as turnos_views
 
 from . import models
 from personas import paciente_serializers
+from personas import medicos_serializers
 
 class SerializadorArchivos(serializers.ModelSerializer):
     class Meta:
@@ -105,7 +104,7 @@ class SerializadorEsperandoProcesamientoDeLoteBiotecnologico(serializers.ModelSe
 
 
 class SerializadorEsperandoInterpretacionDeResultados(serializers.ModelSerializer):
-    medico_informante = SerializadorDeMedicoInformante()
+    medico_informante = medicos_serializers.SerializadorDeMedicoInformante()
     class Meta:
         model = models.EsperandoInterpretacionDeResultados
         fields = ['id','fecha','fecha_informe','medico_informante','informe','resultado']
@@ -153,7 +152,7 @@ class SerializadorDePersonaResumido(serializers.ModelSerializer):
 
 class SerializadorEstudiosDetalle(serializers.HyperlinkedModelSerializer):
     paciente = paciente_serializers.SerializadorDePaciente()
-    medico_derivante = SerializadorDeMedicoDerivante()
+    medico_derivante = medicos_serializers.SerializadorDeMedicoDerivante()
     tipo = SerializadorTiposDeEstudio()
     diagnostico = SerializadorDiagnostico()
     estados = SerializadorEstadoEstudioPolimorfico(many=True)
