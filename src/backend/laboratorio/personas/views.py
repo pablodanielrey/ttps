@@ -39,3 +39,5 @@ class VistaObraSocial(viewsets.ModelViewSet):
         usuario = request.user
         r = usuario.has_perm('personas.view_obrasocial')
         return Response(r)
+
+

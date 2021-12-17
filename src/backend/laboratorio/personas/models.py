@@ -33,7 +33,7 @@ class Persona(models.Model):
     def __str__(self):
         return f"{self.id} {self.nombre} {self.apellido}"
 
-    NOMBRE_GRUPO = 'Pacientes'
+    NOMBRE_GRUPO = 'Personas'
 
     @classmethod
     def all(cls):
@@ -43,6 +43,11 @@ class Persona(models.Model):
     def buscar(cls, termino:str):
         return cls.all().filter(models.Q(nombre__icontains=termino) | models.Q(apellido__icontains=termino) | models.Q(dni__icontains=termino))
         
+
+    @classmethod
+    def usuario_es_tipo(cls, usuario_django):
+        grupos = [g.name for g in usuario_django.groups.all()]
+        return cls.NOMBRE_GRUPO in grupos
 
 class ObraSocialPersona(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)

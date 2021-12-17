@@ -123,7 +123,6 @@ class SerializadorEstadoEstudioPolimorfico(PolymorphicSerializer):
         datos.pop('freezer',None)
 
     def to_representation(self, instance):
-        logging.debug(type(instance))
         if self.restricciones.es_elemento_a_agrupar(instance):
             instance = self.restricciones.agrupar_elementos([instance])
         rep = super().to_representation(instance)

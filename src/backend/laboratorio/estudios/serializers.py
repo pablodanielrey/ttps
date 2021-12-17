@@ -182,3 +182,11 @@ class SerializadorEstudios(serializers.HyperlinkedModelSerializer):
         model = models.Estudio
         fields = ['id', 'fecha_alta', 'diagnostico', 'paciente', 'medico_derivante', 'tipo','ultimo_estado','presupuesto']
 
+class SerializadorEstudiosRestringido(serializers.ModelSerializer):
+    tipo = SerializadorTiposDeEstudio()
+    diagnostico = SerializadorDiagnostico()
+
+    class Meta:
+        model = models.Estudio
+        fields = ['id', 'fecha_alta', 'diagnostico', 'paciente', 'medico_derivante', 'tipo']
+

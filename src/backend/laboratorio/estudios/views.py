@@ -27,6 +27,7 @@ from rest_framework.decorators import action
 
 
 from . import serializers
+from . import pacientes_serializers
 
 class VistaArchivos(viewsets.ReadOnlyModelViewSet):
     queryset = models.Archivo.objects.all()
@@ -211,18 +212,37 @@ class VistaEstadoEstudio(viewsets.ModelViewSet):
 
 class VistaEstudios(viewsets.ModelViewSet):
     queryset = models.Estudio.objects.all()
-    serializer_class = serializers.SerializadorEstudios
+    serializer_class = serializers.SerializadorEstudiosRestringido
 
     custom_serializer_class = {
-        'retrieve': serializers.SerializadorEstudiosDetalle,
-        'list': serializers.SerializadorEstudios
+        personas_models.Empleado.NOMBRE_GRUPO: {
+            'retrieve': serializers.SerializadorEstudiosDetalle,
+            'list':serializers.SerializadorEstudios
+        },
+        personas_models.Paciente.NOMBRE_GRUPO: {
+            'retrieve': pacientes_serializers.SerializadorEstudiosDetalle,
+            'list': pacientes_serializers.SerializadorEstudios
+        }
     }
 
+    def __obtener_grupos_usuario_logueado(self):
+        usuario = self.request.user
+        grupos = [g.name for g in usuario.groups.all()]
+        return grupos
+
     def get_serializer_class(self):
+        grupos = self.__obtener_grupos_usuario_logueado()
         try:
-            return self.custom_serializer_class[self.action]
+            for k,v in self.custom_serializer_class.items():
+                if k in grupos:
+                    return v[self.action]
         except (KeyError, AttributeError) as e:
-            return super().get_serializer_class()
+            pass
+        return super().get_serializer_class()
+
+
+
+
 
     def create(self, request, *args, **kwargs):
         """
