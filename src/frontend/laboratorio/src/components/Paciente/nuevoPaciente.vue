@@ -346,6 +346,9 @@ export default {
       required:''
     };
   },
+  created (){
+    console.log(this.paciente)
+  },
 
   methods: {
     cambioOs(){

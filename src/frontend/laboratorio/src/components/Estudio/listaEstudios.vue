@@ -218,6 +218,7 @@ export default {
     },
     anularEstudioFaltaDatosMuestra(estudio){
       console.log(estudio)
+      "enviar expirado en 1 "
     },
     async anularEstudioFaltaComprobante(estudio) {
       try {

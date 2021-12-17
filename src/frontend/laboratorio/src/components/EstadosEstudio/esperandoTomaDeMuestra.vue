@@ -128,6 +128,7 @@ export default {
             freezer: this.freezer,
             mililitros: this.mililitros,
             fecha_muestra: new Date(),
+            expirado:false
           };
           console.log(datosMuestra);
           let response = await EstudiosService.actualizarUltimoEstado(

@@ -6,6 +6,8 @@ Vue.use(Router)
 import container from '@/components/Home/Container.vue'
 
 import Login from '@/components/Login/Login.vue'
+import Registrar from '@/components/Login/Registrar.vue'
+
 import Paciente from '@/components/Paciente/nuevoPaciente.vue'
 import ListaPacientes from '@/components/Paciente/listaPacientes.vue'
 import ListaEstudios from '@/components/Estudio/listaEstudios.vue'
@@ -122,6 +124,9 @@ const router = new Router({
     },
     {
      path: '/login', component: Login, name:'Login'},
+     {
+      path: '/registrar', component: Registrar, name:'registrar'},
+     
     ],
 })
 router.beforeEach((to, from, next) => {

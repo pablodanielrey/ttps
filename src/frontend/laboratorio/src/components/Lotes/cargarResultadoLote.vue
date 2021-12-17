@@ -11,13 +11,13 @@
         empty-text="Todavia no hay lotes para que se cargen los resultados"
       >
         <template v-slot:cell(acciones)="item">
-          <b-button
+      <!--     <b-button
             title="Ver estudios"
             variant="outline-primary"
             @click="verEstudios(item.item)"
           >
             Estudios
-          </b-button>
+          </b-button>  -->
           <b-button
             title="URL"
             variant="outline-success"
@@ -42,9 +42,7 @@
       </div>
     <b-modal size="xl" ref="my-modal" title="Estudios del lote 1" ok-only>
       <b-table :items="itemsEst" :fields="fieldsEst"> </b-table>
-      <!-- cargar
-
-      -->
+      
 
     </b-modal>
 
@@ -54,8 +52,22 @@
       title="Resultado"
       @show="resetModal"
       @hidden="resetModal"
+      size="xl"
       @ok="handleOk"
     >
+       <b-table :items="itemsEst" :fields="fieldsEst"> 
+   <template v-slot:cell(acciones)="row">
+     <b-button
+            title="Anular estudio por muestra insuficiente"
+            variant="outline-white"            
+            @click="anularEstudioMuestraInsuficiente(row.item.estudio)"
+            >
+             <b-icon icon="x-circle" fill variant="danger"> </b-icon>
+           
+          </b-button>
+   </template>
+
+       </b-table>
       <form ref="form" @submit.stop.prevent="handleSubmit">
         <b-form-group
           label="Url del resultado"
@@ -121,6 +133,11 @@ export default {
           label: "Diagnostico",
           class: "text-center p2",
         },
+         {
+          key: "acciones",
+          label: "Acciones",
+          class: "text-center p2",
+        },
       ],
       pageOptions: [4, 10, 15],
       filter: null,
@@ -141,6 +158,7 @@ export default {
     loteActual(item) {
       console.log(item);
       this.idLoteActual = item.id;
+      this.itemsEst = item.estudios;
     },
 
     eliminarEstudio(item) {
@@ -167,9 +185,9 @@ export default {
         if (!this.checkFormValidity()) {
           return;
         }
-        let datos = { fecha: new Date(), resultado: this.urlResultado };
+        let datos = { fecha: new Date(), resultado: this.urlResultado,estudios:this.getIdEstudios() };
         console.log(datos);
-        let response = await LotesService.cargarResultadoLote(
+        /* let response = await LotesService.cargarResultadoLote(
           this.idLoteActual,
           datos
         );
@@ -183,13 +201,20 @@ export default {
           solid: true,
           variant: "success",
         });
-        this.obtenerLotes();
+        this.obtenerLotes(); */
       } catch (error) {
         console.log(error);
       }
       if (!this.checkFormValidity()) {
         return;
       }
+    },
+    getIdEstudios(){
+      let idEstudios=[]
+      this.itemsEst.forEach(estudio => {
+          idEstudios.push(estudio.id)
+      });
+        return idEstudios
     },
 
     verEstudios(item) {    
@@ -209,6 +234,12 @@ export default {
         console.log(err);
       }
     },
+    anularEstudioMuestraInsuficiente(estudio){   
+      console.log(estudio)   
+      console.log(  this.itemsEst)
+      this.itemsEst =  this.itemsEst.filter(e => e.id != estudio.id);   
+      console.log(  this.itemsEst)   
+    }
   },
 
   computed: {},

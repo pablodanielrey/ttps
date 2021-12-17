@@ -4,97 +4,100 @@
       <b-spinner> </b-spinner>
     </div>
     <div v-else>
-      <br />
-      <h3>Detalle de un estudio</h3>
-      <br>
+      <b-row>
+        <b-col>
+          <h3>
+            {{ estudio.paciente.apellido }}
+            {{ estudio.paciente.nombre }} <br /></h3
+        ></b-col>
+            </b-row>  
+        <h2>Detalles del estudio</h2>
+        <b-col>
+          <h5>
+            <strong> Creado: </strong>{{ estudio.fecha_alta }} <br /></h5
+        ></b-col>
+
       <b-row>
         <b-col>
           <h5>
-            <strong> Paciente: </strong> {{ estudio.paciente.apellido }}
-            {{ estudio.paciente.nombre }} <br /></h5
+            <strong> Medico Derivante: </strong>
+            {{ estudio.medico_derivante.apellido }}
+            {{ estudio.medico_derivante.nombre }} <br /></h5
         ></b-col>
-        <b-col>
-           <h5>
-          <strong> Fecha de alta: </strong>{{ estudio.fecha_alta }} <br
-        />
-         </h5></b-col>
-      </b-row>
-      <b-row>
-        <b-col> <h5>
-          <strong> Medico Derivante: </strong>
-          {{ estudio.medico_derivante.apellido }}
-          {{ estudio.medico_derivante.nombre }} <br
-        /> </h5></b-col>
 
-        <b-col> <h5>
-          <strong> Diagnostico Presuntivo: </strong
-          >{{ estudio.diagnostico.nombre }} <br
-        /> </h5></b-col>
+        <b-col>
+          <h5>
+            <strong> Diagnostico Presuntivo: </strong
+            >{{ estudio.diagnostico.nombre }} <br /></h5
+        ></b-col>
       </b-row>
       <b-row>
         <h5>
-        <b-col> 
-          <strong> Tipo de estudio: </strong>{{ estudio.tipo.nombre }}</b-col
-        >
-        <b-col> <strong> Estado : </strong>{{ obtenerUltimoEstado() }}</b-col> </h5>
+          <b-col>
+            <strong> Tipo de estudio: </strong>{{ estudio.tipo.nombre }}</b-col
+          >
+          <b-col> <strong> Estado que se encuentra el estudio: </strong>{{ obtenerUltimoEstado() }}</b-col>
+        </h5>
       </b-row>
       <b-row>
         <b-col v-if="this.estudio.estados[3] != undefined">
-           <h5>
-          <div v-if="this.estudio.estados[3].turno != null">
-            <strong> Turno:</strong>
-            {{ mostrarFecha(this.estudio.estados[3].turno.inicio) }}
+          <h5>
+            <div v-if="this.estudio.estados[3].turno != null">
+              <strong> Turno:</strong>
+              {{ mostrarFecha(this.estudio.estados[3].turno.inicio) }}
 
-            <li>
-              Inicio
-              {{ mostrarminutos(this.estudio.estados[3].turno.inicio) }}
-            </li>
-            <li>
-              Fin: {{ mostrarminutos(this.estudio.estados[3].turno.fin) }}
-            </li>
-          </div>
-           </h5>
+              <li>
+                Inicio
+                {{ mostrarminutos(this.estudio.estados[3].turno.inicio) }}
+              </li>
+              <li>
+                Fin: {{ mostrarminutos(this.estudio.estados[3].turno.fin) }}
+              </li>
+            </div>
+          </h5>
         </b-col>
         <b-col v-if="this.estudio.estados[4] != undefined">
-           <h5>
-          <div v-if="this.estudio.estados[4].freezer != null">
-            <strong> Extraccion:</strong>
-            <li>Frezeer: {{ this.estudio.estados[4].freezer }}</li>
-            <li>Mililitros: {{ this.estudio.estados[4].mililitros }}</li>
-          </div> </h5></b-col
+          <h5>
+            <div v-if="this.estudio.estados[4].freezer != null">
+              <strong> Extraccion:</strong>
+              <li>Frezeer: {{ this.estudio.estados[4].freezer }}</li>
+              <li>Mililitros: {{ this.estudio.estados[4].mililitros }}</li>
+            </div>
+          </h5></b-col
         >
       </b-row>
       <b-row>
-         <h5>
-        <b-col v-if="this.estudio.estados[5] != undefined"
-          ><div v-if="this.estudio.estados[5].extracionista != null">
-            <strong> Persona que retiro la muestra: </strong
-            >{{ this.estudio.estados[5].extracionista }}
-          </div> </b-col
-        ></h5>
+        <h5>
+          <b-col v-if="this.estudio.estados[5] != undefined"
+            ><div v-if="this.estudio.estados[5].extracionista != null">
+              <strong> Persona que retiro la muestra: </strong
+              >{{ this.estudio.estados[5].extracionista }}
+            </div>
+          </b-col>
+        </h5>
       </b-row>
       <b-row>
         <h5>
-        <b-col v-if="this.estudio.estados[6] != undefined"
-          > <div v-if="this.estudio.estados[6].numero_lote != null">
-            <strong> Procesado en lote: </strong
-            >{{ this.estudio.estados[6].numero_lote }}
-          </div></b-col
-        >
-         </h5>
+          <b-col v-if="this.estudio.estados[6] != undefined">
+            <div v-if="this.estudio.estados[6].numero_lote != null">
+              <strong> Procesado en lote: </strong
+              >{{ this.estudio.estados[6].numero_lote }}
+            </div></b-col
+          >
+        </h5>
       </b-row>
       <b-row>
         <h5>
-        <b-col v-if="this.estudio.estados[7] != undefined"
-          > <div v-if="this.estudio.estados[7].numero_lote != null">
-            <strong> Informe redactado por: </strong
-            >{{ this.estudio.estados[7].numero_lote }}
-          </div></b-col
-        > </h5>
+          <b-col v-if="this.estudio.estados[7] != undefined">
+            <div v-if="this.estudio.estados[7].numero_lote != null">
+              <strong> Informe redactado por: </strong
+              >{{ this.estudio.estados[7].numero_lote }}
+            </div></b-col
+          >
+        </h5>
       </b-row>
       <b-row>
-        
-        <b-col v-if="this.estudio.paciente.historia_clinica != null"> 
+        <b-col v-if="this.estudio.paciente.historia_clinica != null">
           <p><strong> Historia clinica: </strong></p>
           <a
             @click="verHistoria()"
@@ -102,7 +105,7 @@
             variant="outline-success"
           >
             <b-icon icon="eye" variant="info"> </b-icon
-          ></a> 
+          ></a>
         </b-col>
         <b-col>
           <p>Presupuesto:</p>

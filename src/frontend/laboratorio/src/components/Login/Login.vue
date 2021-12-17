@@ -54,14 +54,14 @@
                   ></b-spinner>
                 </div>
               </b-form-group>
-              <!--  <b-form-group class="text-center">
+               <b-form-group class="text-center">
         <b-button
           block
           @click="$router.push('registrar')"
           variant="outline-light"
           >Crear cuenta
         </b-button>
-      </b-form-group> -->
+      </b-form-group> 
               <div class="text-center"></div>
             </b-form>
           </div>
