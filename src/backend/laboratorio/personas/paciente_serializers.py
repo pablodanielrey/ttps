@@ -43,7 +43,7 @@ class SerializadorDeTutorPaciente(serializers.ModelSerializer):
     tutor = SeralizadorDeTutor()
     class Meta:
         model = models.TutorDePaciente
-        fields = ['tutor']
+        fields = ['id','tutor']
 
 class SerializadorDePaciente(serializers.ModelSerializer):
     historia_clinica = serializers.CharField(source='historia_clinica.historia_clinica', read_only=False, required=False)
@@ -68,22 +68,39 @@ class SerializadorDePaciente(serializers.ModelSerializer):
             for v in ['telefono', 'direccion', 'email']:
                 if v not in validated_data:
                     raise ValidationError({v:'requerido'})
-
-            hc = validated_data.pop('historia_clinica',None)
-            obra_social = validated_data.pop('obra_social',None)
-
-            paciente = models.Paciente.objects.create(**validated_data)
-            if hc:
-                models.HistoriaClinica.objects.create(persona=paciente, historia_clinica=hc['historia_clinica'])
-            if obra_social:
-                id_obra_social = obra_social['obra_social']['id']
-                numero_afiliado = obra_social['numero_afiliado']
-                obp = paciente.crear_obra_social(id_obra_social, numero_afiliado)
-                obp.save()
-            return paciente
         else:
+            if 'tutor' not in validated_data:
+                raise ValidationError({'tutor':'requerido'})
 
-            raise NotImplemented()
+        hc = validated_data.pop('historia_clinica',None)
+        obra_social = validated_data.pop('obra_social',None)
+        tutor = validated_data.pop('tutor',None)
+
+        paciente = models.Paciente.objects.create(**validated_data)
+        if hc:
+            models.HistoriaClinica.objects.create(persona=paciente, historia_clinica=hc['historia_clinica'])
+        if obra_social:
+            id_obra_social = obra_social['obra_social']['id']
+            numero_afiliado = obra_social['numero_afiliado']
+            obp = paciente.crear_obra_social(id_obra_social, numero_afiliado)
+            obp.save()
+
+        if tutor:
+            logging.debug(tutor)
+            persona_tutor = tutor['tutor']
+            email = persona_tutor['email']
+            """ 
+                la unicidad al tutor la damos por email ya que es un sistema muy básico 
+                tomo el primero que tenga ese correo.
+            """
+            if models.Tutor.objects.filter(email=email).count() <= 0:
+                tutor = models.Tutor.objects.create(**persona_tutor)
+            else:                       
+                tutor = models.Tutor.objects.filter(email=email).first()
+            models.TutorDePaciente.objects.create(persona=paciente, tutor=tutor)
+
+        paciente.refresh_from_db()
+        return paciente
         
 
     def update(self, instance, validated_data):
