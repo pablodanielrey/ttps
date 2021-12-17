@@ -65,11 +65,12 @@ class PersonasModel:
         hc.save()
 
         dni = paciente.dni.lower().strip()
+        self.login_model.crear_usuario(paciente.id, dni, personas_models.Paciente.NOMBRE_GRUPO, clave=dni)
+
         ahora = self.__generar_fecha_now()
-        if 18 < self.__edad(paciente.fecha_nacimiento, ahora):    
-            self.login_model.crear_usuario(paciente.id, dni, personas_models.Paciente.NOMBRE_GRUPO, clave=dni)
-        else:
-            raise NotImplemented()
+        if 18 > self.__edad(paciente.fecha_nacimiento, ahora):    
+            personas_models.TutorDePaciente.objects.create(persona=paciente, tutor=tutor)
+
 
         return paciente
     

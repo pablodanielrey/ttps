@@ -1,5 +1,8 @@
 import logging
 
+import datetime
+from zoneinfo import ZoneInfo
+
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 
@@ -31,11 +34,13 @@ class SerializadorDeObraSocialPersona(serializers.HyperlinkedModelSerializer):
         fields = ['obra_social','numero_afiliado']
         
 
-import datetime
-from zoneinfo import ZoneInfo
+class SeralizadorDeTutor(serializers.ModelSerializer):
+    class Meta:
+        model = models.Tutor
+        fields = ['id','nombre','apellido','email','telefono','direccion']
 
-class SerializadorDeTutor(serializers.ModelSerializer):
-    tutor = persona_serializers.SerializadorDePersona()
+class SerializadorDeTutorPaciente(serializers.ModelSerializer):
+    tutor = SeralizadorDeTutor()
     class Meta:
         model = models.TutorDePaciente
         fields = ['tutor']
@@ -43,11 +48,10 @@ class SerializadorDeTutor(serializers.ModelSerializer):
 class SerializadorDePaciente(serializers.ModelSerializer):
     historia_clinica = serializers.CharField(source='historia_clinica.historia_clinica', read_only=False, required=False)
     obra_social = SerializadorDeObraSocialPersona(required=False, many=False, read_only=False)
-    # obra_social = serializers.RelatedField(source='obra_social.obra_social', read_only=False, required=False)
-    # numero_afiliado = serializers.CharField(source='obra_social.numero_afiliado', read_only=False, required=False)
+    tutor = SerializadorDeTutorPaciente(required=False, many=False, read_only=False)
     class Meta:
         model = models.Paciente
-        fields = ['id','nombre','apellido','dni','email','fecha_nacimiento','telefono','direccion', 'historia_clinica', 'obra_social']
+        fields = ['id','nombre','apellido','dni','email','fecha_nacimiento','telefono','direccion', 'historia_clinica', 'obra_social', 'tutor']
 
 
     def __edad(self, nacimiento):

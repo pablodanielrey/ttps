@@ -60,6 +60,45 @@ def generar_pacientes_mayores():
         except IntegrityError as e:
             pass
 
+def generar_pacientes_menores():
+    m = models.PersonasModel()
+
+    tutor1 = persona_models.Tutor(nombre='Un super tutor', apellido='ape', telefono='1112222tutor', email="tutor@gmail.com", direccion="calle tutorias numero tute")
+    tutor1.save()
+
+    tutor2 = persona_models.Tutor(nombre='Un super tutor2', apellido='ape', telefono='1', email="tutor2@gmail.com", direccion="calle tutorias numero tute")
+    tutor2.save()
+
+    tutor3 = persona_models.Tutor(nombre='Un super tutor3', apellido='ape', telefono='1112222tutor', email="tutor3@gmail.com", direccion="calle tutorias numero tute")
+    tutor3.save()
+
+
+    pacientes = []
+    for i in range(5,12):
+        pacientes.append(
+            {
+                'nombre': f'Paciente {i}',
+                'apellido': f'Cero {i}',
+                'dni':f'{i}',
+                'email': f'email{i}@gmail.com',
+                'telefono': f'221 2222{i}',
+                'direccion': f'calle {i} la plata',
+                'fecha_nacimiento': fecha_de_nac_menor(),
+                'historia_clinica': f'algo de historia'
+            }
+        )
+    contador = 0
+    for paciente in pacientes:
+        try:
+            contador += 1
+            paux = m.crearPaciente(tutor=tutor1, **paciente)
+            if contador % 2 == 0:
+                ob = persona_models.ObraSocial.objects.first()
+                obp = persona_models.ObraSocialPersona(persona=paux, obra_social=ob, numero_afiliado=f'numero-{paux.id}')
+                obp.save()
+        except IntegrityError as e:
+            pass
+
 
 def crear_medicos_derivantes():
     m = models.PersonasModel()
@@ -128,6 +167,7 @@ class Ejemplos(APIView):
         crear_medicos_derivantes()
         generar_usuarios_de_sistema()
         generar_pacientes_mayores()
+        generar_pacientes_menores()
         
 
         return Response({'status':'ejemplos generados'})
