@@ -168,35 +168,41 @@ def eliminar_estudios():
     for e in estudio_models.Estudio.objects.all():
         e.delete()
 
+import random
 
 class Ejemplos(APIView):
     
     permission_classes= [permissions.IsAdminUser]
 
+    def __obtener_paciente_random(self):
+        dni = str(random.randrange(1,5,1))
+        paciente = persona_models.Paciente.objects.get(dni=dni)
+        return paciente
+
     def get(self, request, format=None):
 
         empleado = persona_models.Empleado.objects.first()
         medico_derivante = persona_models.MedicoDerivante.objects.first()
-        paciente = persona_models.Paciente.objects.get(dni='11111111')
 
-        generar_estudio_anulado_por_falta_de_pago(empleado, medico_derivante, paciente)
-        generar_estudios_estado1(empleado, medico_derivante, paciente)
-        generar_estudios_estado2(empleado, medico_derivante, paciente)
-        generar_estudios_estado3(empleado, medico_derivante, paciente)
-        generar_estudios_estado4(empleado, medico_derivante, paciente)
-        generar_estudios_estado5(empleado, medico_derivante, paciente)
-        generar_estudios_estado6(empleado, medico_derivante, paciente)
-        generar_estudios_estado7(empleado, medico_derivante, paciente)
+
+        generar_estudio_anulado_por_falta_de_pago(empleado, medico_derivante, self.__obtener_paciente_random())
+        generar_estudios_estado1(empleado, medico_derivante, self.__obtener_paciente_random())
+        generar_estudios_estado2(empleado, medico_derivante, self.__obtener_paciente_random())
+        generar_estudios_estado3(empleado, medico_derivante, self.__obtener_paciente_random())
+        generar_estudios_estado4(empleado, medico_derivante, self.__obtener_paciente_random())
+        generar_estudios_estado5(empleado, medico_derivante, self.__obtener_paciente_random())
+        generar_estudios_estado6(empleado, medico_derivante, self.__obtener_paciente_random())
+        generar_estudios_estado7(empleado, medico_derivante, self.__obtener_paciente_random())
 
 
         for _ in range(1,15):
-            generar_estudios_estado7(empleado, medico_derivante, paciente)
+            generar_estudios_estado7(empleado, medico_derivante, self.__obtener_paciente_random())
 
 
-        generar_estudios_estado8(empleado, medico_derivante, paciente)
-        generar_estudios_estado9(empleado, medico_derivante, paciente)
-        generar_estudios_estado10(empleado, medico_derivante, paciente)
-        generar_estudios_estado11(empleado, medico_derivante, paciente)
+        generar_estudios_estado8(empleado, medico_derivante, self.__obtener_paciente_random())
+        generar_estudios_estado9(empleado, medico_derivante, self.__obtener_paciente_random())
+        generar_estudios_estado10(empleado, medico_derivante, self.__obtener_paciente_random())
+        generar_estudios_estado11(empleado, medico_derivante, self.__obtener_paciente_random())
 
         return Response({'status':'ejemplos de estudios generados'})
 

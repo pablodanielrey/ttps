@@ -12,33 +12,40 @@ import datetime
 from zoneinfo import ZoneInfo
 import random
 
+from . import models
 from personas import models as persona_models
 
 def generar_fecha_now():
     return datetime.datetime.now(tz=ZoneInfo('America/Argentina/Buenos_Aires'))
 
-def generar_usuarios_ejemplo():
-    m = persona_models.PersonasModel()
+def fecha_de_nac_menor():
+    ano = random.randrange(2004,2020,1)
+    mes = random.randrange(1,12,1)
+    dia = random.randrange(1,27,1)
+    return datetime.date(year=ano, month=mes, day=dia)
 
-    try:
-        m.crearPaciente(nombre='Paciente',apellido='Cero',dni='11111111', historia_clinica='nada que contar')
-    except IntegrityError:
-        pass
+def fecha_de_nac_mayor():
+    ano = random.randrange(1940,2000,1)
+    mes = random.randrange(1,12,1)
+    dia = random.randrange(1,27,1)
+    return datetime.date(year=ano, month=mes, day=dia)
 
-    inicio = random.randrange(0,100)
+
+def generar_pacientes_mayores():
+    m = models.PersonasModel()
+
     pacientes = []
-    for i in range(inicio,inicio+10):
-        ano = f'{i+1}'.zfill(2)
+    for i in range(1,5):
         pacientes.append(
             {
-                'nombre': f'nombre{i}',
-                'apellido': f'apellido{i}',
+                'nombre': f'Paciente {i}',
+                'apellido': f'Cero {i}',
                 'dni':f'{i}',
                 'email': f'email{i}@gmail.com',
                 'telefono': f'221 2222{i}',
                 'direccion': f'calle {i} la plata',
-                'fecha_nacimiento': f'2021-04-22',
-                'historia_clinica': f'algo de historia {ano}'
+                'fecha_nacimiento': fecha_de_nac_mayor(),
+                'historia_clinica': f'algo de historia'
             }
         )
     contador = 0
@@ -54,6 +61,8 @@ def generar_usuarios_ejemplo():
             pass
 
 
+def crear_medicos_derivantes():
+    m = models.PersonasModel()
     try:
         m.crearMedicoDerivante(nombre='Medico1', apellido="derivante", email='medico2@simed.com', matricula='122223er')
     except IntegrityError as e:
@@ -69,21 +78,39 @@ def generar_usuarios_ejemplo():
     except IntegrityError as e:
         pass
 
+
+def generar_usuarios_de_sistema():
+    m = models.PersonasModel()
     try:
-        m.crearMedicoInformante(nombre='Medico', apellido="informante", email='medico1@simed.com', matricula='123er', usuario='medico2', clave='informante2')
+        m.crearAdministrador("Super","Admin", "administrador", "ttp")
     except IntegrityError as e:
         pass
 
-def generar_usuarios_de_sistema():
-    m = persona_models.PersonasModel()
     try:
-        m.crearAdministrador("Super","Admin", "administrador", "ttp")
         m.crearConfigurador("Configurador","sistema", "configurador", "ttp")
-        m.crearEmpleado("Empleado1", "Apellido1", "empleado", "ttp")
-        m.crearEmpleado("Empleado2", "Apellido2", "empleado2", "ttp")
+    except IntegrityError as e:
+        pass
+
+    try:
+        m.crearEmpleado("Empleado1", "Apellido1", "empleo1@gmail.com", "empleado", "ttp")
+    except IntegrityError as e:
+        pass
+
+    try:
+        m.crearEmpleado("Empleado2", "Apellido2", "empleo2@gmail.com", "empleado2", "ttp")
+    except IntegrityError as e:
+        pass
+
+    try:
         m.crearMedicoInformante("Medico","Informante","medico@simed.com", "matricula_de_informante1", "medicoinf", "ttp")
     except IntegrityError as e:
         pass
+
+    try:
+        m.crearMedicoInformante("Medico2","Informante2","medico2@simed.com", "matricula_de_informante2", "medicoinf2", "ttp")
+    except IntegrityError as e:
+        pass
+    
 
 class Ejemplos(APIView):
     
@@ -98,14 +125,10 @@ class Ejemplos(APIView):
         persona_models.ObraSocial(nombre='IOMA', telefono='221-4237467', email='consultas@ioma.gob.ar').save()
         persona_models.ObraSocial(nombre='OSFATUN', telefono='221-4237469', email='consultas@osfatun.com.ar').save()
 
-        p1 = persona_models.Persona(nombre='Pablo', apellido='Marmol', dni='10561134', email='pablo@roca.com', telefono='2211234567', fecha_nacimiento='1980-12-01').save()
-        persona_models.Persona(nombre='Leonardo', apellido='Da vinci', dni='6345345', email='leo@diflorencia.com', telefono='2211112233', fecha_nacimiento='1981-02-03').save()
-        persona_models.Persona(nombre='Nicolas', apellido='Otamendi', dni='35123456', email='nico@afa.com.ar', telefono='2211112233', fecha_nacimiento='2004-05-04').save()
-
-        mm = persona_models.Persona(nombre='Nick', apellido='Riviera', dni='22123123', email='barat@operation.com', telefono='2211112233', fecha_nacimiento='1995-06-02').save()
-
-        generar_usuarios_ejemplo()
+        crear_medicos_derivantes()
         generar_usuarios_de_sistema()
+        generar_pacientes_mayores()
+        
 
         return Response({'status':'ejemplos generados'})
 

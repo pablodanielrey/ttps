@@ -21,11 +21,10 @@ class VistaConfigurador(viewsets.ModelViewSet):
     queryset = models.Configurador.all()
     serializer_class = SerializadorDeConfigurador
 
-    model = models.PersonasModel()
-
     def create(self, request):
-        configurador = self.model.crearConfigurador(**request.data)
-        serializador = self.serializer_class(instance=configurador, context={'request':request})
+        serializador = self.serializer_class(data=request.data)
+        serializador.is_valid()
+        serializador.save()        
         return Response(serializador.data)
 
     @action(detail=False, methods=['GET'])

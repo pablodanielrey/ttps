@@ -21,11 +21,12 @@ class VistaEmpleado(viewsets.ModelViewSet):
     queryset = models.Empleado.all()
     serializer_class = SerializadorDeEmpleado
 
-    model = models.PersonasModel()
-
     def create(self, request):
-        configurador = self.model.crearEmpleado(**request.data)
-        serializador = self.serializer_class(instance=configurador, context={'request':request})
+        serializador = self.serializer_class(data=request.data)
+        serializador.is_valid()
+        serializador.save()
+        # configurador = self.model.crearEmpleado(**request.data)
+        # serializador = self.serializer_class(instance=configurador, context={'request':request})
         return Response(serializador.data)
 
     @action(detail=False, methods=['GET'])

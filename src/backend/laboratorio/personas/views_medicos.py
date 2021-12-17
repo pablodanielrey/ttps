@@ -30,11 +30,12 @@ class VistaMedicoDerivante(viewsets.ModelViewSet):
     queryset = models.MedicoDerivante.all()
     serializer_class = SerializadorDeMedicoDerivante
 
-    model = models.PersonasModel()
-
     def create(self, request):
-        medico = self.model.crearMedicoDerivante(**request.data)
-        serializador = SerializadorDeMedicoDerivante(instance=medico, context={'request':request})
+        # medico = self.model.crearMedicoDerivante(**request.data)
+        # serializador = SerializadorDeMedicoDerivante(data=request.data, context={'request':request})
+        serializador = SerializadorDeMedicoDerivante(data=request.data)
+        serializador.is_valid()
+        serializador.save()
         return Response(serializador.data)
 
     @action(detail=False, methods=['GET'])
@@ -49,12 +50,12 @@ class VistaMedicoDerivante(viewsets.ModelViewSet):
 
 
 class SerializadorDeMedicoInformante(serializers.ModelSerializer):
-    usuario = serializers.CharField(source='usuario.username', read_only=True)
-    clave = serializers.CharField(source='usuario.password', read_only=False)
+    # usuario = serializers.CharField(source='usuario.usuario.username', read_only=True)
+    # clave = serializers.CharField(source='usuario.usuario.password', read_only=False)
     matricula = serializers.CharField(source='matricula.numero', read_only=False)
     class Meta:
         model = models.MedicoInformante
-        fields = ['id','nombre','apellido','email','matricula','usuario','clave']
+        fields = ['id','nombre','apellido','email','matricula']
 
     def update(self, instance, validated_data):
         logging.info(validated_data)
@@ -74,11 +75,11 @@ class VistaMedicoInformante(viewsets.ModelViewSet):
     queryset = models.MedicoInformante.all()
     serializer_class = SerializadorDeMedicoInformante
 
-    model = models.PersonasModel()
-
     def create(self, request):
-        medico = self.model.crearMedicoInformante(**request.data)
-        serializador = self.serializer_class(instance=medico, context={'request':request})
+        # serializador = self.serializer_class(instance=medico, context={'request':request})
+        serializador = self.serializer_class(data=request.data)
+        serializador.is_valid()
+        serializador.save()
         return Response(serializador.data)
 
     @action(detail=False, methods=['GET'])

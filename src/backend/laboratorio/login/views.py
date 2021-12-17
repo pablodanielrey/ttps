@@ -31,7 +31,7 @@ class VistaToken(views.APIView):
         logging.debug(f'usuario logueado : {usuario}')
 
         try:
-            persona = persona_models.Persona.objects.get(usuario=usuario)
+            persona = persona_models.Persona.objects.get(usuario__usuario=usuario)
             serializador = views_personas.SerializadorDePersona(instance=persona)
         except persona_models.Persona.DoesNotExist as e:
             serializador = None

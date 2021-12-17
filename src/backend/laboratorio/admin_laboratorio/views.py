@@ -62,7 +62,8 @@ def generar_grupos_iniciales():
             persona_models.Empleado, 
             persona_models.MedicoDerivante, 
             persona_models.MedicoInformante, 
-            persona_models.Paciente ]:
+            persona_models.Paciente,
+            persona_models.Tutor ]:
         try:
             g = django_auth_models.Group(name=rol.NOMBRE_GRUPO)
             g.save()

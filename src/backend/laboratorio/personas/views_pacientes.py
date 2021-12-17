@@ -93,8 +93,6 @@ class VistaPaciente(viewsets.ModelViewSet):
     #permission_classes = [ DjangoModelPermissions ]
     #permission_classes = [ IsAdminUser ]
 
-    model = models.PersonasModel()
-
     def create(self, request, *args, **kwargs):
         datos_persona = request.data
 
@@ -106,7 +104,8 @@ class VistaPaciente(viewsets.ModelViewSet):
             if obra_social:
                 afiliado = request.data.pop("numero_afiliado")
 
-        paciente = self.model.crearPaciente(**request.data)
+        # paciente = self.model.crearPaciente(**request.data)
+        paciente = None
 
         if obra_social:
             obraSocial = models.ObraSocial.objects.get(id=obra_social)
