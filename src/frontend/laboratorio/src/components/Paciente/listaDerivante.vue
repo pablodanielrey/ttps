@@ -102,13 +102,6 @@ export default {
         },
                 { key: "email", label: "E-mail", class: "text-center p2" },
                 { key: "matricula", label: "Matricula", class: "text-center p2" },
-
-        {
-          key: "usuario",
-          label: "Usuario",
-          class: "text-center p2",
-        },
-
         { key: "acciones", label: "Acciones", class: "text-center p2" },
       ],
       items: [],
