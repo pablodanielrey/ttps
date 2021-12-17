@@ -23,3 +23,8 @@ class VistaPaciente(viewsets.ModelViewSet):
         personas = models.Paciente.buscar(q)
         serializer = paciente_serializers.SerializadorDePaciente(personas, many=True, context={'request': request})
         return Response(serializer.data)        
+
+    @action(detail=False, methods=['POST'])
+    def registrar(self, request):
+        logging.debug('aca va el registro')
+        return Response({'ok':'ok'})
