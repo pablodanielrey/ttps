@@ -1,12 +1,13 @@
 import Api from "@/services/Api"
+import axios from 'axios'
 
 const API_USER = ''
 const API_URL = '/personas_api/'
 
 export default {
     registrarPaciente(usuario){
-        console.log(API_URL + API_USER + "registro/", usuario)
-        return Api().post(API_URL + API_USER + "registro/", usuario);
+        console.log(process.env.VUE_APP_API_URL + API_URL  + "registro/", usuario)
+        return axios.post(process.env.VUE_APP_API_URL + API_URL  + "registro/", usuario);
     },
     obtenerMedicosInformantes() {
         return Api().get(API_URL + API_USER + "medicos_informantes/")

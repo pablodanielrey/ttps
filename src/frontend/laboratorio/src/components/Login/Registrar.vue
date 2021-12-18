@@ -1,14 +1,24 @@
 <template>
-  <b-container class="bv-example-row">
+  <div class="bv-example-row">
     <br /><br />
-    <div id="container">
+    <div>
       <b-row>
-        <b-col cols="2"> </b-col>
+        <br />
+        <b-col id="columnaImg" cols="5">
+          <div>
+          <img
+            src="@/assets/lab1.png"
+
+            class="rounded"
+            alt="..."
+            id="imgLaboratorio"
+        /></div></b-col>
         <b-col>
           <b-form action class="form" v-if="show" @submit.prevent="onSubmit">
             <hr />
-            <p class="title h3 mt-2 text-center">
-              <small>Completa los datos para registrarte</small>
+            <p class="title mt-2" id="textoRegistro">
+              <b> Completa los datos para registrarte</b><br />
+              <small> Recorda que si sos menor tendras un tutor a cargo</small>
             </p>
             <br />
             <b-row>
@@ -62,7 +72,7 @@
               <b-col lg="4">
                 <b-form-group
                   id="input-group-n"
-                  label="Numero de documento:"
+                  label="DNI:"
                   label-for="input-n"
                 >
                   <b-form-input
@@ -147,9 +157,9 @@
               </b-row>
             </div>
             <div v-else class="rounded">
-              <h5>
+              <h7>
                 <b> Datos del tutor </b>
-              </h5>
+              </h7>
               <hr />
               <br />
               <b-row
@@ -157,7 +167,7 @@
                 <b-col lg="6">
                   <b-form-group label="Nombre del tutor :">
                     <b-form-input
-                      v-model="usuario.tutor.nombre"
+                      v-model="usuario.tutor.tutor.nombre"
                       type="text"
                       placeholder="Ingrese Nombre del tutor"
                       required
@@ -171,7 +181,7 @@
                     label-for="input-2"
                   >
                     <b-form-input
-                      v-model="usuario.tutor.apellido"
+                      v-model="usuario.tutor.tutor.apellido"
                       placeholder="Ingrese apellido del tutor"
                       required
                     ></b-form-input>
@@ -187,7 +197,7 @@
                   >
                     <b-form-input
                       type="number"
-                      v-model="usuario.tutor.telefono"
+                      v-model="usuario.tutor.tutor.telefono"
                       placeholder="Ingrese Telefono del tutor"
                       required
                     ></b-form-input>
@@ -200,7 +210,7 @@
                     label-for="input-2"
                   >
                     <b-form-input
-                      v-model="usuario.tutor.email"
+                      v-model="usuario.tutor.tutor.email"
                       placeholder="Ingrese Email del tutor"
                       required
                     ></b-form-input>
@@ -216,7 +226,7 @@
                     label-for="input-2"
                   >
                     <b-form-input
-                      v-model="usuario.tutor.calle"
+                      v-model="usuario.tutor.tutor.calle"
                       placeholder="Ingrese Calle"
                       required
                     ></b-form-input>
@@ -229,7 +239,7 @@
                     label-for="input-2"
                   >
                     <b-form-input
-                      v-model="usuario.tutor.numero"
+                      v-model="usuario.tutor.tutor.numero"
                       placeholder="Ingrese numero"
                       required
                     ></b-form-input>
@@ -242,7 +252,7 @@
                     label-for="input-2"
                   >
                     <b-form-input
-                      v-model="usuario.tutor.piso"
+                      v-model="usuario.tutor.tutor.piso"
                       placeholder="Ingrese Piso"
                       required
                     ></b-form-input>
@@ -255,19 +265,25 @@
               <b-row class="pb-2">
                 <b-col class="text-center pt-3">
                   <b-button
-                    style="width: 200px"
+                    style="width: 250px"
                     type="submit"
                     variant="outline-primary"
                     >Crear</b-button
                   >
                 </b-col>
               </b-row>
+              <b-col class="text-left">
+                <router-link to="/login"
+                  ><b-icon icon="arrow-left-circle"></b-icon
+                ></router-link>
+              </b-col>
             </div>
           </b-form>
         </b-col>
+        <b-col cols="2"></b-col>
       </b-row>
     </div>
-  </b-container>
+  </div>
 </template>
 
 <script>
@@ -293,11 +309,13 @@ export default {
         direccion: null,
         fecha_nacimiento: new Date().format("dd-mm-yyyy"),
         tutor: {
-          nombre: null,
-          apellido: null,
-          email: null,
-          telefono: null,
-          direccion: null,
+          tutor: {
+            nombre: null,
+            apellido: null,
+            email: null,
+            telefono: null,
+            direccion: null,
+          },
         },
       },
     };
@@ -316,17 +334,18 @@ export default {
     },
     async onSubmit() {
       try {
+        this.armarDireccion();
         console.log(this.usuario);
-        this.armarDireccion()
-        let response = await PacientesService.registrarPaciente(this.usuario)
-        console.log(response)
+        let response = await PacientesService.registrarPaciente(this.usuario);
+        console.log(response);
       } catch (error) {
         console.log(error);
       }
     },
-    armarDireccion(){
-      this.usuario.direccion= this.usuario.calle + this.usuario.numero + this.usuario.piso
-    }
+    armarDireccion() {
+      this.usuario.direccion =
+        this.usuario.calle + this.usuario.numero + this.usuario.piso;
+    },
   },
   computed: {},
 
@@ -336,6 +355,11 @@ export default {
 
 
 <style>
+@media (max-width: 600px) {
+#columnaImg{
+ visibility: hidden;
+}
+}
 @import url("https://fonts.googleapis.com/css?family=Montserrat&display=swap");
 p,
 b,
@@ -348,4 +372,11 @@ body {
   background-color: #f2f2f2;
   padding: 20px;
 }
+#textoRegistro {
+  text-align: left;
+}
+#imgLaboratorio{
+width: 100%; height: 80%; 
+}
+
 </style>

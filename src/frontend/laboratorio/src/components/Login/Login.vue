@@ -58,7 +58,7 @@
         <b-button
           block
           @click="$router.push('registrar')"
-          variant="outline-light"
+          variant="outline-info"
           >Crear cuenta
         </b-button>
       </b-form-group> 
