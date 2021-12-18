@@ -20,6 +20,7 @@
           </b-input-group-append>
         </b-input-group>
       </b-col>
+      
       <b-table
         show-empty
         empty-text="Todavia no hay medicos informantes"
@@ -101,7 +102,9 @@ export default {
         { key: "usuario", label: "Usuario", class: "text-center p2" },
         { key: "acciones", label: "Acciones", class: "text-center p2" },
       ],
-      items: [],    
+      items: [
+        {nombre: this.nombre, apellido: this.apellido, email: this.email, matricula: this.matricula, usuario: this.usuario.usuario['username']}
+      ],    
     };
   },
 
