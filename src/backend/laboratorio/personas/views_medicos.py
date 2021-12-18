@@ -13,14 +13,6 @@ class VistaMedicoDerivante(viewsets.ModelViewSet):
     queryset = models.MedicoDerivante.all()
     serializer_class = medicos_serializers.SerializadorDeMedicoDerivante
 
-    def create(self, request):
-        # medico = self.model.crearMedicoDerivante(**request.data)
-        # serializador = SerializadorDeMedicoDerivante(data=request.data, context={'request':request})
-        serializador = medicos_serializers.SerializadorDeMedicoDerivante(data=request.data)
-        serializador.is_valid()
-        serializador.save()
-        return Response(serializador.data)
-
     @action(detail=False, methods=['GET'])
     def buscar(self, request):
         q = request.query_params.get('q')

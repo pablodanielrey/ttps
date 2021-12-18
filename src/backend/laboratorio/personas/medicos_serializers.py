@@ -49,7 +49,7 @@ class SerializadorDeMedicoInformante(rest_serializers.ModelSerializer):
         usuario = validated_data.pop('usuario')
         usuario = login_models.LoginModel().crear_usuario(usuario['username'], models.MedicoInformante.NOMBRE_GRUPO, clave=usuario['password'], email=validated_data.get('email',None))
 
-        numero_matricula = validated_data.pop('matricula')
+        numero_matricula = validated_data.pop('matricula')['numero']
 
         medico = models.MedicoInformante.objects.create(usuario=usuario, **validated_data)
         models.Matricula.objects.create(persona=medico, numero=numero_matricula)
@@ -69,4 +69,8 @@ class SerializadorDeMedicoInformante(rest_serializers.ModelSerializer):
         usuario_django.password = make_password(credenciales['password'])
         usuario_django.save()
 
-        return super().update(instance, validated_data)
+        instance.nombre = validated_data.get('nombre', instance.nombre)
+        instance.apellido = validated_data.get('apellido', instance.apellido)
+        instance.email = validated_data.get('email', instance.email)
+        instance.save()
+        return instance
