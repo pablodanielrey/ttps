@@ -39,7 +39,6 @@ class Persona(models.Model):
     def buscar(cls, termino:str):
         return cls.all().filter(models.Q(nombre__icontains=termino) | models.Q(apellido__icontains=termino) | models.Q(dni__icontains=termino))
         
-
     @classmethod
     def usuario_es_tipo(cls, usuario_django):
         if not usuario_django:

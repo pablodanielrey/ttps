@@ -1,16 +1,29 @@
+import logging
+from dateutil import parser
 
 from rest_framework import serializers
+from rest_framework.exceptions import ValidationError
 
 from turnos import views as turnos_views
 
 from . import models
+from turnos import models as turnos_models
+from personas import models as personas_models
 from personas import paciente_serializers
 from personas import medicos_serializers
 
 class SerializadorArchivos(serializers.ModelSerializer):
+    content_type = serializers.CharField(required=False, read_only=True)
+    encoding = serializers.CharField(required=False, read_only=True)
+    contenido = serializers.CharField(required=True, read_only=False)
     class Meta:
         model = models.Archivo
-        fields = ['id','content_type','encoding']
+        fields = ['id','content_type','encoding', 'contenido']
+
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+        data['contenido'] = ''
+        return data
 
 class SerializadorTiposDeEstudio(serializers.HyperlinkedModelSerializer):
     class Meta:
@@ -49,27 +62,76 @@ class SerializadorEstadoEstudio(serializers.ModelSerializer):
         fields = ['id','fecha']
 
 class SerializadorEsperandoComprobanteDePago(serializers.ModelSerializer):
+    fecha_procesado = serializers.DateTimeField(required=False, read_only=False)
+    comprobante = SerializadorArchivos(required=False, read_only=False)
     class Meta:
         model = models.EsperandoComprobanteDePago
-        fields = ['id','fecha','comprobante']
+        fields = ['id','fecha','comprobante','fecha_procesado']
 
+    def update(self, instance, validated_data):
+        estudio = instance.estudio
+
+        fecha_procesado = validated_data.pop('fecha_procesado',None)
+        if fecha_procesado:
+            """ se anula el comprobante por falta de pago, es necesario pasar el estudio a AnuladoPorFaltaDePago """
+            logging.debug('anulando el estudio por falta de pago')    
+            estado = models.AnuladorPorFaltaDePago(estudio=estudio, fecha_procesado=fecha_procesado)
+            estado.save()
+            return estado
+
+        logging.debug('actualizando el estado con el comprobante')
+        comprobante = validated_data.get('comprobante')
+        archivo = models.Archivo.from_datauri(comprobante['contenido'])
+        archivo.save()
+        instance.comprobante = archivo
+        instance.save()
+
+        logging.debug('pasando al siguiente estado')
+        estado = models.EnviarConsentimientoInformado(estudio=estudio)
+        estado.save()
+        return estado
 
 class SerializadorAnuladorPorFaltaDePago(serializers.ModelSerializer):
     class Meta:
         model = models.AnuladorPorFaltaDePago
         fields = ['id','fecha','fecha_procesado']
 
+    def update(self, instance, validated_data):
+        return instance
 
 class SerializadorEnviarConsentimientoInformado(serializers.ModelSerializer):
     class Meta:
         model = models.EnviarConsentimientoInformado
         fields = ['id','fecha','fecha_enviado']
 
+    def update(self, instance, validated_data):
+        super().update(instance, validated_data)
+
+        estudio = instance.estudio
+        estado = models.EsperandoConsentimientoInformado(estudio=estudio)
+        estado.save()
+        return estado
+
 class SerializadorEsperandoConsentimientoInformado(serializers.ModelSerializer):
+    consentimiento = SerializadorArchivos(required=False, read_only=False)
     class Meta:
         model = models.EsperandoConsentimientoInformado
         fields = ['id','fecha','consentimiento']
-        #fields = ['id','fecha']
+
+    def update(self, instance, validated_data):
+        estudio = instance.estudio
+
+        logging.debug('actualizando el documento de consentimiento')
+        comprobante = validated_data.get('consentimiento')
+        archivo = models.Archivo.from_datauri(comprobante['contenido'])
+        archivo.save()
+        instance.consentimiento = archivo
+        instance.save()
+
+        logging.debug('pasando al siguiente estado')
+        estado = models.EsperandoSeleccionDeTurnoParaExtraccion(estudio=estudio)
+        estado.save()
+        return estado
 
 class SerializadorEsperandoSeleccionDeTurnoParaExtraccion(serializers.ModelSerializer):
     turno = turnos_views.SerializadorTurnosConfirmados()
@@ -77,48 +139,130 @@ class SerializadorEsperandoSeleccionDeTurnoParaExtraccion(serializers.ModelSeria
         model = models.EsperandoSeleccionDeTurnoParaExtraccion
         fields = ['id','fecha','turno']
 
+    def update(self, instance, validated_data):
+        estudio = instance.estudio
 
+        turno = validated_data.get('turno')
+        logging.debug(f'generando turno {turno}')
+        paciente = personas_models.Persona.objects.get(id=estudio.paciente.id)
+        # inicio = parser.parse(turno['inicio'])
+        # fin = parser.parse(turno['fin'])
+        inicio = turno['inicio']
+        fin = turno['fin']
+        turno = turnos_models.TurnoConfirmado(persona=paciente,inicio=inicio, fin=fin)
+        turno.save()
+        instance.turno = turno
+        instance.save()
+
+        estado = models.EsperandoTomaDeMuestra(estudio=estudio)
+        estado.save()
+        return estado
 
 class SerializadorEsperandoTomaDeMuestra(serializers.ModelSerializer):
 
-    turno = turnos_views.SerializadorTurnosConfirmados()
+    turno = turnos_views.SerializadorTurnosConfirmados(required=False, read_only=True)
+    expirado = serializers.BooleanField(required=False, read_only=False)
 
     class Meta:
         model = models.EsperandoTomaDeMuestra
         fields = ['id','fecha','fecha_muestra','mililitros','freezer','expirado','turno']
+
+    def update(self, instance, validated_data):
+        super().update(instance, validated_data)
+
+        estudio = instance.estudio
+        expirado = validated_data.get('expirado',False)
+        if expirado:
+            """ vuelve a seleccionar un turno para extracción """
+            estado = models.EsperandoSeleccionDeTurnoParaExtraccion(estudio=estudio)
+        else:
+            estado = models.EsperandoRetiroDeExtaccion(estudio=estudio)
+        estado.save()
+        return estado
+        
 
 class SerializadorEsperandoRetiroDeExtaccion(serializers.ModelSerializer):
     class Meta:
         model = models.EsperandoRetiroDeExtaccion
         fields = ['id','fecha','extracionista','fecha_retiro']
 
+    def update(self, instance, validated_data):
+        super().update(instance, validated_data)
+        estudio = instance.estudio
+        estado = models.EsperandoLoteDeMuestraParaProcesamientoBiotecnologico(estudio=estudio)
+        estado.save()
+        return estado
+
 class SerializadorEsperandoLoteDeMuestraParaProcesamientoBiotecnologico(serializers.ModelSerializer):
     class Meta:
         model = models.EsperandoLoteDeMuestraParaProcesamientoBiotecnologico
         fields = ['id','fecha','numero_lote']
+
+    def update(self, instance, validated_data):
+        super().update(instance, validated_data)
+        estudio = instance.estudio
+        estado = models.EsperandoProcesamientoDeLoteBiotecnologico(estudio=estudio)
+        estado.save()
+        return estado
 
 class SerializadorEsperandoProcesamientoDeLoteBiotecnologico(serializers.ModelSerializer):
     class Meta:
         model = models.EsperandoProcesamientoDeLoteBiotecnologico
         fields = ['id','fecha','resultado_url','fecha_resultado']
 
+    def update(self, instance, validated_data):
+        super().update(instance, validated_data)
+        estudio = instance.estudio
+        estado = models.EsperandoInterpretacionDeResultados(estudio=estudio)
+        estado.save()
+        return estado
 
+from login import models as login_models
 class SerializadorEsperandoInterpretacionDeResultados(serializers.ModelSerializer):
-    medico_informante = medicos_serializers.SerializadorDeMedicoInformante()
+    medico_informante = medicos_serializers.SerializadorDeMedicoInformante(required=False, read_only=True)
     class Meta:
         model = models.EsperandoInterpretacionDeResultados
         fields = ['id','fecha','fecha_informe','medico_informante','informe','resultado']
+
+    def update(self, instance, validated_data):
+
+        usuario_django = self.context.get('request').user
+        if not personas_models.MedicoInformante.usuario_es_tipo(usuario_django):
+            raise ValidationError({'medico_informante':'la persona logueada no es un médico informante'})
+
+        persona_logueada = login_models.LoginModel().obtener_persona_del_usuario(usuario_django)
+            
+        """ reemplazo el medico_informante """
+        validated_data.pop('medico_informante',None)
+        validated_data['medico_informante'] = persona_logueada
+
+        super().update(instance, validated_data)
+        estudio = instance.estudio
+        estado = models.EsperandoEntregaAMedicoDerivante(estudio=estudio)
+        estado.save()
+        return estado
+        
 
 class SerializadorEsperandoEntregaAMedicoDerivante(serializers.ModelSerializer):
     class Meta:
         model = models.EsperandoEntregaAMedicoDerivante
         fields = ['id','fecha','fecha_entrega']
 
+    def update(self, instance, validated_data):
+        super().update(instance, validated_data)
+        estudio = instance.estudio
+        estado = models.ResultadoDeEstudioEntregado(estudio=estudio)
+        estado.save()
+        return estado
+
 
 class SerializadorResultadoDeEstudioEntregado(serializers.ModelSerializer):
     class Meta:
         model = models.ResultadoDeEstudioEntregado
         fields = ['id','fecha']
+
+    def update(self, instance, validated_data):
+        return instance
 
 class SerializadorEstadoEstudioPolimorfico(PolymorphicSerializer):
     model_serializer_mapping = {

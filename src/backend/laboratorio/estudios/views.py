@@ -90,6 +90,7 @@ class VistaDiagnostico(viewsets.ModelViewSet):
 class VistaEstadoEstudio(viewsets.ModelViewSet):
     queryset = models.EstadoEstudio.objects.all()
     serializer_class = serializers.SerializadorEstadoEstudioPolimorfico
+    http_method_names = ['put']
 
     workflow = [
         models.EsperandoComprobanteDePago,
@@ -104,106 +105,109 @@ class VistaEstadoEstudio(viewsets.ModelViewSet):
         models.ResultadoDeEstudioEntregado
     ]
 
+    def get_serializer_context(self):
+        context = super().get_serializer_context()
+        context.update({'request':self.request})
+        return context
 
-    def create(self, request, *args, **kwargs):
-        """
-            En nuestro caso los creates no se realizan extrictamente cumpliendo REST.
-            Los create para las interfaces son modify de los estados actuales y se ejecuta el workflow.
-        """
+    # def create(self, request, *args, **kwargs):
+    #     """
+    #         En nuestro caso los creates no se realizan extrictamente cumpliendo REST.
+    #         Los create para las interfaces son modify de los estados actuales y se ejecuta el workflow.
+    #     """
+    #     estudio_id = request.data.pop('estudio_id')
+    #     estudio = estudio_models.Estudio.objects.get(id=estudio_id)
 
-        estudio_id = request.data.pop('estudio_id')
-        estudio = estudio_models.Estudio.objects.get(id=estudio_id)
+    #     """
+    #         TODO: debemos estar seguros de que no actualizamos ningún dato sensible desde afuera.
+    #     """
+    #     for campo_solo_lectura in ['id','fecha']:
+    #         try:
+    #             request.data.pop(campo_solo_lectura)
+    #         except KeyError as e:
+    #             pass
 
-        """
-            TODO: debemos estar seguros de que no actualizamos ningún dato sensible desde afuera.
-        """
-        for campo_solo_lectura in ['id','fecha']:
-            try:
-                request.data.pop(campo_solo_lectura)
-            except KeyError as e:
-                pass
-
-        ultimo_estado = estudio.ultimo_estado
+    #     ultimo_estado = estudio.ultimo_estado
         
-        logging.debug(ultimo_estado)
-        clase_ultimo_estado = ultimo_estado.__class__
+    #     logging.debug(ultimo_estado)
+    #     clase_ultimo_estado = ultimo_estado.__class__
 
-        """ aca verifico estados finales """
-        if clase_ultimo_estado in [ models.AnuladorPorFaltaDePago, models.ResultadoDeEstudioEntregado ]:
-            return HttpResponseBadRequest('no se puede cambiar un estado final')
+    #     """ aca verifico estados finales """
+    #     if clase_ultimo_estado in [ models.AnuladorPorFaltaDePago, models.ResultadoDeEstudioEntregado ]:
+    #         return HttpResponseBadRequest('no se puede cambiar un estado final')
 
-        """ aca manejo comportamientos especiales de los estados """
-        if clase_ultimo_estado == models.EsperandoComprobanteDePago:
-            """ solo pueden darse 2 casos. 1 - comprobante de pago, 2 - anulado por falta de pago """
-            if 'fecha_procesado' in request.data:
-                estado = models.AnuladorPorFaltaDePago(estudio=estudio, fecha_procesado=request.data['fecha_procesado'])
-                estado.save()
-                estudio.estados.add(estado)
-                serializador = serializers.SerializadorEstadoEstudioPolimorfico(estado, context={'request': request})
-                return Response(serializador.data)
+    #     """ aca manejo comportamientos especiales de los estados """
+    #     if clase_ultimo_estado == models.EsperandoComprobanteDePago:
+    #         """ solo pueden darse 2 casos. 1 - comprobante de pago, 2 - anulado por falta de pago """
+    #         if 'fecha_procesado' in request.data:
+    #             estado = models.AnuladorPorFaltaDePago(estudio=estudio, fecha_procesado=request.data['fecha_procesado'])
+    #             estado.save()
+    #             estudio.estados.add(estado)
+    #             serializador = serializers.SerializadorEstadoEstudioPolimorfico(estado, context={'request': request})
+    #             return Response(serializador.data)
 
-            elif 'comprobante' in request.data:
-                archivo = models.Archivo.from_datauri(request.data['comprobante'])
-                archivo.save()
-                ultimo_estado.comprobante = archivo
-                ultimo_estado.save()
+    #         elif 'comprobante' in request.data:
+    #             archivo = models.Archivo.from_datauri(request.data['comprobante'])
+    #             archivo.save()
+    #             ultimo_estado.comprobante = archivo
+    #             ultimo_estado.save()
 
-            else:
-                return HttpResponseBadRequest()
+    #         else:
+    #             return HttpResponseBadRequest()
 
-        elif clase_ultimo_estado == models.EsperandoConsentimientoInformado:
-            archivo = models.Archivo.from_datauri(request.data['consentimiento'])
-            archivo.save()
-            ultimo_estado.consentimiento = archivo
-            ultimo_estado.save()
+    #     elif clase_ultimo_estado == models.EsperandoConsentimientoInformado:
+    #         archivo = models.Archivo.from_datauri(request.data['consentimiento'])
+    #         archivo.save()
+    #         ultimo_estado.consentimiento = archivo
+    #         ultimo_estado.save()
 
-        elif clase_ultimo_estado == models.EsperandoSeleccionDeTurnoParaExtraccion:
-            """ genero un turno """
-            paciente = personas_models.Persona.objects.get(id=estudio.paciente.id)
-            inicio = parser.parse(request.data['inicio'])
-            fin = parser.parse(request.data['fin'])
-            turno = turnos_models.TurnoConfirmado(persona=paciente,inicio=inicio, fin=fin)
-            turno.save()
-            logging.debug(f'turno generado {turno.id}')
+    #     elif clase_ultimo_estado == models.EsperandoSeleccionDeTurnoParaExtraccion:
+    #         """ genero un turno """
+    #         paciente = personas_models.Persona.objects.get(id=estudio.paciente.id)
+    #         inicio = parser.parse(request.data['inicio'])
+    #         fin = parser.parse(request.data['fin'])
+    #         turno = turnos_models.TurnoConfirmado(persona=paciente,inicio=inicio, fin=fin)
+    #         turno.save()
+    #         logging.debug(f'turno generado {turno.id}')
 
-            """ actualizo el estado """
-            ultimo_estado.turno = turno
-            ultimo_estado.save()
+    #         """ actualizo el estado """
+    #         ultimo_estado.turno = turno
+    #         ultimo_estado.save()
 
-        elif clase_ultimo_estado == models.EsperandoTomaDeMuestra:
+    #     elif clase_ultimo_estado == models.EsperandoTomaDeMuestra:
 
-            if 'expirado' in request.data:
-                pass
-            else:
-                pass    
+    #         if 'expirado' in request.data:
+    #             pass
+    #         else:
+    #             pass    
 
-        else:
-            """ los casos normales de cambios de estado - se encarga el serializer """
-            serializador = serializers.SerializadorEstadoEstudioPolimorfico.model_serializer_mapping[clase_ultimo_estado](instance=ultimo_estado, data=request.data)
-            if not serializador.is_valid():
-                return HttpResponseBadRequest(serializador.errors)
-            if len(serializador.validated_data) <= 0:
-                """ no existen datos enviados para actualizar el nuevo estado """
-                return HttpResponseBadRequest()
+    #     else:
+    #         """ los casos normales de cambios de estado - se encarga el serializer """
+    #         serializador = serializers.SerializadorEstadoEstudioPolimorfico.model_serializer_mapping[clase_ultimo_estado](instance=ultimo_estado, data=request.data)
+    #         if not serializador.is_valid():
+    #             return HttpResponseBadRequest(serializador.errors)
+    #         if len(serializador.validated_data) <= 0:
+    #             """ no existen datos enviados para actualizar el nuevo estado """
+    #             return HttpResponseBadRequest()
 
-            serializador.save()
+    #         serializador.save()
 
-        """
-            Ahora paso al nuevo estado de acuerdo al workflow.
-        """
-        try:
-            indice = self.workflow.index(clase_ultimo_estado)
-            if indice+1 < len(self.workflow):
-                clase_siguiente_estado = self.workflow[indice+1]
-                siguiente_estado = clase_siguiente_estado(estudio=estudio)
-                siguiente_estado.save()
+    #     """
+    #         Ahora paso al nuevo estado de acuerdo al workflow.
+    #     """
+    #     try:
+    #         indice = self.workflow.index(clase_ultimo_estado)
+    #         if indice+1 < len(self.workflow):
+    #             clase_siguiente_estado = self.workflow[indice+1]
+    #             siguiente_estado = clase_siguiente_estado(estudio=estudio)
+    #             siguiente_estado.save()
 
-        except ValueError as e:
-            pass
+    #     except ValueError as e:
+    #         pass
 
 
-        serializador = serializers.SerializadorEstadoEstudioPolimorfico(ultimo_estado, context={'request': request})
-        return Response(serializador.data)
+    #     serializador = serializers.SerializadorEstadoEstudioPolimorfico(ultimo_estado, context={'request': request})
+    #     return Response(serializador.data)
 
 """
     ///////////////////////////////////////////////
