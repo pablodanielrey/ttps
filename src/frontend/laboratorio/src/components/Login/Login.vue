@@ -1,8 +1,18 @@
 <template>
-  <div class="contenedor1"><br><br><br>
+  <div class="contenedor1">
+    <br />
     <div class="wrapper1">
       <b-row class="h-100 justify-content-center align-items-center">
-        <b-col sm="10" md="8" xl="4" class="base-box m-2">
+        <b-col id="columnaImgLogin" cols="7">
+          <div>
+            <img
+              src="@/assets/lablogin.png"
+              class="rounded"
+              alt="..."
+              id="imgLaboratorio"
+            /></div
+        ></b-col>
+        <b-col sm="10" md="8" xl="4" class="base-box m-2" >
           <div class="">
             <div class="text-center">
               <p>¡Hola! Ingresá tu usuario y contraseña</p>
@@ -54,14 +64,14 @@
                   ></b-spinner>
                 </div>
               </b-form-group>
-               <b-form-group class="text-center">
-        <b-button
-          block
-          @click="$router.push('registrar')"
-          variant="outline-info"
-          >Crear cuenta
-        </b-button>
-      </b-form-group> 
+              <b-form-group class="text-center">
+                <b-button
+                  block
+                  @click="$router.push('registrar')"
+                  variant="outline-info"
+                  >Crear cuenta
+                </b-button>
+              </b-form-group>
               <div class="text-center"></div>
             </b-form>
           </div>
@@ -99,7 +109,7 @@ export default {
         let response = await LoginService.login_api(
           this.credenciales.usuario,
           this.credenciales.clave
-        );        
+        );
         console.log(response);
         this.$router.push({
           name: "home",
@@ -115,5 +125,10 @@ export default {
 </script>
 
 <style scoped>
+@media (max-width: 600px) {
+#columnaImgLogin{
+ visibility: hidden;
+}
+}
 </style>
 
