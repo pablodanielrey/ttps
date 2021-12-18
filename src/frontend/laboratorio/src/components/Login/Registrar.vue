@@ -1,20 +1,16 @@
 <template>
-  <div class="contenedor1">
-    <br /><br /><br />
-    <div class="wrapper1">
-      <b-row class="h-100 justify-content-center align-items-center">
-        
-        <br>
-      </b-row>
-      <br>
-      <b-container>
-        <br />
-        <b-form v-if="show">
-          <b-card
-            bg-variant="light"
-            header="Datos personales"
-            class="text-center"
-          >
+  <b-container class="bv-example-row">
+    <br /><br />
+    <div id="container">
+      <b-row>
+        <b-col cols="2"> </b-col>
+        <b-col>
+          <b-form action class="form" v-if="show" @submit.prevent="onSubmit">
+            <hr />
+            <p class="title h3 mt-2 text-center">
+              <small>Completa los datos para registrarte</small>
+            </p>
+            <br />
             <b-row>
               <b-col lg="6">
                 <b-form-group
@@ -23,8 +19,8 @@
                   label-for="input-1"
                 >
                   <b-form-input
-                    id="input-1"
-                    v-model="form.nombre"
+                    id="nombre-1"
+                    v-model="usuario.nombre"
                     type="text"
                     placeholder="Ingrese Nombre "
                     required
@@ -38,8 +34,8 @@
                   label-for="input-2"
                 >
                   <b-form-input
-                    id="input-2"
-                    v-model="form.apellido"
+                    id="apellido-2"
+                    v-model="usuario.apellido"
                     placeholder="Ingrese apellido"
                     required
                   ></b-form-input>
@@ -48,28 +44,29 @@
             </b-row>
 
             <b-row>
-              <b-col lg="4" class="my-1">
+              <b-col lg="4">
                 <b-form-group
                   id="input-group-n"
                   label="Fecha de Nacimiento:"
                   label-for="input-n"
                 >
-                  <b-form-datepicker
-                    id="input-n"
-                    v-model="form.nacimiento"
+                  <b-form-input
+                    @click="esMayor()"
+                    id="nacimiento-n"
+                    v-model="usuario.fecha_nacimiento"
                     required
-                  ></b-form-datepicker>
+                    type="date"
+                  ></b-form-input>
                 </b-form-group>
               </b-col>
-              <b-col lg="4" class="my-1">
+              <b-col lg="4">
                 <b-form-group
                   id="input-group-n"
                   label="Numero de documento:"
                   label-for="input-n"
                 >
                   <b-form-input
-                    id="input-n"
-                    v-model="form.DNI"
+                    v-model="usuario.dni"
                     type="number"
                     required
                     placeholder="Ingrese el numero de dni"
@@ -77,8 +74,7 @@
                 </b-form-group>
               </b-col>
             </b-row>
-
-            <div v-if="selected == 1">
+            <div v-if="esMayor()">
               <b-row>
                 <b-col lg="4">
                   <b-form-group
@@ -88,8 +84,7 @@
                   >
                     <b-form-input
                       type="number"
-                      id="input-2"
-                      v-model="form.Telefono"
+                      v-model="usuario.telefono"
                       placeholder="Ingrese Telefono"
                       required
                     ></b-form-input>
@@ -102,9 +97,153 @@
                     label-for="input-2"
                   >
                     <b-form-input
-                      id="input-2"
-                      v-model="form.Email"
+                      v-model="usuario.email"
                       placeholder="Ingrese Email"
+                      required
+                    ></b-form-input>
+                  </b-form-group>
+                </b-col>
+              </b-row>
+              <b-row>
+                <b-col>
+                  <b-form-group
+                    id="input-group-2"
+                    label="Calle:"
+                    label-for="input-2"
+                  >
+                    <b-form-input
+                      v-model="usuario.calle"
+                      placeholder="Ingrese Calle"
+                      required
+                    ></b-form-input>
+                  </b-form-group>
+                </b-col>
+                <b-col>
+                  <b-form-group
+                    id="input-group-2"
+                    label="Numero:"
+                    label-for="input-2"
+                  >
+                    <b-form-input
+                      v-model="usuario.numero"
+                      placeholder="Ingrese numero"
+                      required
+                    ></b-form-input>
+                  </b-form-group>
+                </b-col>
+                <b-col>
+                  <b-form-group
+                    id="input-group-2"
+                    label="Piso:"
+                    label-for="input-2"
+                  >
+                    <b-form-input
+                      v-model="usuario.piso"
+                      placeholder="Ingrese Piso"
+                      required
+                    ></b-form-input>
+                  </b-form-group>
+                </b-col>
+              </b-row>
+            </div>
+            <div v-else class="rounded">
+              <h5>
+                <b> Datos del tutor </b>
+              </h5>
+              <hr />
+              <br />
+              <b-row
+                ><br />
+                <b-col lg="6">
+                  <b-form-group label="Nombre del tutor :">
+                    <b-form-input
+                      v-model="usuario.tutor.nombre"
+                      type="text"
+                      placeholder="Ingrese Nombre del tutor"
+                      required
+                    ></b-form-input>
+                  </b-form-group>
+                </b-col>
+                <b-col lg="6">
+                  <b-form-group
+                    id="input-group-2"
+                    label="Apellido del tutor :"
+                    label-for="input-2"
+                  >
+                    <b-form-input
+                      v-model="usuario.tutor.apellido"
+                      placeholder="Ingrese apellido del tutor"
+                      required
+                    ></b-form-input>
+                  </b-form-group>
+                </b-col>
+              </b-row>
+              <b-row>
+                <b-col lg="4">
+                  <b-form-group
+                    id="input-group-2"
+                    label="Telefono deltutor:"
+                    label-for="input-2"
+                  >
+                    <b-form-input
+                      type="number"
+                      v-model="usuario.tutor.telefono"
+                      placeholder="Ingrese Telefono del tutor"
+                      required
+                    ></b-form-input>
+                  </b-form-group>
+                </b-col>
+                <b-col lg="4">
+                  <b-form-group
+                    id="input-group-2"
+                    label="Email del tutor:"
+                    label-for="input-2"
+                  >
+                    <b-form-input
+                      v-model="usuario.tutor.email"
+                      placeholder="Ingrese Email del tutor"
+                      required
+                    ></b-form-input>
+                  </b-form-group>
+                </b-col>
+              </b-row>
+
+              <b-row>
+                <b-col>
+                  <b-form-group
+                    id="input-group-2"
+                    label="Calle:"
+                    label-for="input-2"
+                  >
+                    <b-form-input
+                      v-model="usuario.tutor.calle"
+                      placeholder="Ingrese Calle"
+                      required
+                    ></b-form-input>
+                  </b-form-group>
+                </b-col>
+                <b-col>
+                  <b-form-group
+                    id="input-group-2"
+                    label="Numero:"
+                    label-for="input-2"
+                  >
+                    <b-form-input
+                      v-model="usuario.tutor.numero"
+                      placeholder="Ingrese numero"
+                      required
+                    ></b-form-input>
+                  </b-form-group>
+                </b-col>
+                <b-col>
+                  <b-form-group
+                    id="input-group-2"
+                    label="Piso:"
+                    label-for="input-2"
+                  >
+                    <b-form-input
+                      v-model="usuario.tutor.piso"
+                      placeholder="Ingrese Piso"
                       required
                     ></b-form-input>
                   </b-form-group>
@@ -112,194 +251,28 @@
               </b-row>
             </div>
 
-            <div v-if="selected == 1">
-              <b-card bg-variant="light" header="Direccion" class="text-center">
-                <br />
-                <b-row>
-                  <b-col>
-                    <b-form-group
-                      id="input-group-2"
-                      label="Calle:"
-                      label-for="input-2"
-                    >
-                      <b-form-input
-                        id="input-2"
-                        v-model="form.Calle"
-                        placeholder="Ingrese Calle"
-                        required
-                      ></b-form-input>
-                    </b-form-group>
-                  </b-col>
-                  <b-col>
-                    <b-form-group
-                      id="input-group-2"
-                      label="Numero:"
-                      label-for="input-2"
-                    >
-                      <b-form-input
-                        id="input-2"
-                        v-model="form.numero"
-                        placeholder="Ingrese numero"
-                        required
-                      ></b-form-input>
-                    </b-form-group>
-                  </b-col>
-                  <b-col>
-                    <b-form-group
-                      id="input-group-2"
-                      label="Piso:"
-                      label-for="input-2"
-                    >
-                      <b-form-input
-                        id="input-2"
-                        v-model="form.Piso"
-                        placeholder="Ingrese Piso"
-                        required
-                      ></b-form-input>
-                    </b-form-group>
-                  </b-col>
-                </b-row>
-              </b-card>
+            <div>
+              <b-row class="pb-2">
+                <b-col class="text-center pt-3">
+                  <b-button
+                    style="width: 200px"
+                    type="submit"
+                    variant="outline-primary"
+                    >Crear</b-button
+                  >
+                </b-col>
+              </b-row>
             </div>
-            <div v-if="selected == 2">
-              <b-card
-                bg-variant="light"
-                header="Datos del tutor"
-                class="text-center"
-              >
-                <b-row>
-                  <b-col class="my-1">
-                    <b-form-group
-                      id="input-group-1"
-                      label="Nombre del tutor :"
-                      label-for="input-1"
-                    >
-                      <b-form-input
-                        id="input-1"
-                        v-model="form.nombre"
-                        type="text"
-                        placeholder="Ingrese Nombre del tutor"
-                        required
-                      ></b-form-input>
-                    </b-form-group>
-                  </b-col>
-                  <b-col>
-                    <b-form-group
-                      id="input-group-2"
-                      label="Apellido del tutor :"
-                      label-for="input-2"
-                    >
-                      <b-form-input
-                        id="input-2"
-                        v-model="form.apellido"
-                        placeholder="Ingrese apellido del tutor"
-                        required
-                      ></b-form-input>
-                    </b-form-group>
-                  </b-col>
-                </b-row>
-                <b-row>
-                  <b-col lg="4">
-                    <b-form-group
-                      id="input-group-2"
-                      label="Telefono deltutor:"
-                      label-for="input-2"
-                    >
-                      <b-form-input
-                        type="number"
-                        id="input-2"
-                        v-model="form.Telefono"
-                        placeholder="Ingrese Telefono del tutor"
-                        required
-                      ></b-form-input>
-                    </b-form-group>
-                  </b-col>
-                  <b-col lg="4">
-                    <b-form-group
-                      id="input-group-2"
-                      label="Email del tutor:"
-                      label-for="input-2"
-                    >
-                      <b-form-input
-                        id="input-2"
-                        v-model="form.Email"
-                        placeholder="Ingrese Email del tutor"
-                        required
-                      ></b-form-input>
-                    </b-form-group>
-                  </b-col>
-                </b-row>
-                <b-card
-                  bg-variant="light"
-                  header="Direccion del tutor"
-                  class="text-center"
-                >
-                  <br />
-                  <b-row>
-                    <b-col>
-                      <b-form-group
-                        id="input-group-2"
-                        label="Calle:"
-                        label-for="input-2"
-                      >
-                        <b-form-input
-                          id="input-2"
-                          v-model="form.Calle"
-                          placeholder="Ingrese Calle"
-                          required
-                        ></b-form-input>
-                      </b-form-group>
-                    </b-col>
-                    <b-col>
-                      <b-form-group
-                        id="input-group-2"
-                        label="Numero:"
-                        label-for="input-2"
-                      >
-                        <b-form-input
-                          id="input-2"
-                          v-model="form.numero"
-                          placeholder="Ingrese numero"
-                          required
-                        ></b-form-input>
-                      </b-form-group>
-                    </b-col>
-                    <b-col>
-                      <b-form-group
-                        id="input-group-2"
-                        label="Piso:"
-                        label-for="input-2"
-                      >
-                        <b-form-input
-                          id="input-2"
-                          v-model="form.Piso"
-                          placeholder="Ingrese Piso"
-                          required
-                        ></b-form-input>
-                      </b-form-group>
-                    </b-col>
-                  </b-row>
-                </b-card>
-              </b-card>
-            </div>
-          </b-card>
-        </b-form>
-
-        <div>
-          <b-row class="pb-2">
-            <b-col class="text-center pt-3">
-              <b-button style="width: 165px" variant="outline-success"
-                >Guardar</b-button
-              >
-            </b-col>
-          </b-row>
-        </div>
-      </b-container>
+          </b-form>
+        </b-col>
+      </b-row>
     </div>
-  </div>
+  </b-container>
 </template>
 
 <script>
+import PacientesService from "@/services/PacientesService.js";
+
 export default {
   components: {},
 
@@ -307,18 +280,54 @@ export default {
 
   data() {
     return {
-      selected: 2, // Must be an array reference!
       show: true,
-      form: {},
-
-      options: [
-        { text: "Soy mayor de 18 años", value: 1 },
-        { text: "Soy menor de 18 años", value: 2 },
-      ],
+      usuario: {
+        nombre: null,
+        apellido: null,
+        dni: null,
+        email: null,
+        telefono: null,
+        calle: 1,
+        numero: 2,
+        piso: 3,
+        direccion: null,
+        fecha_nacimiento: new Date().format("dd-mm-yyyy"),
+        tutor: {
+          nombre: null,
+          apellido: null,
+          email: null,
+          telefono: null,
+          direccion: null,
+        },
+      },
     };
   },
 
-  methods: {},
+  methods: {
+    esMayor() {
+      let hoy = new Date();
+      let cumpleanos = new Date(this.usuario.fecha_nacimiento);
+      let edad = hoy.getFullYear() - cumpleanos.getFullYear();
+      let m = hoy.getMonth() - cumpleanos.getMonth();
+      if (m < 0 || (m === 0 && hoy.getDate() < cumpleanos.getDate())) {
+        edad--;
+      }
+      return edad > 17 ? true : false;
+    },
+    async onSubmit() {
+      try {
+        console.log(this.usuario);
+        this.armarDireccion()
+        let response = await PacientesService.registrarPaciente(this.usuario)
+        console.log(response)
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    armarDireccion(){
+      this.usuario.direccion= this.usuario.calle + this.usuario.numero + this.usuario.piso
+    }
+  },
   computed: {},
 
   mounted() {},
@@ -327,4 +336,16 @@ export default {
 
 
 <style>
+@import url("https://fonts.googleapis.com/css?family=Montserrat&display=swap");
+p,
+b,
+label,
+body {
+  font-family: "Roboto", sans-serif !important;
+}
+#container {
+  border-radius: 5px;
+  background-color: #f2f2f2;
+  padding: 20px;
+}
 </style>

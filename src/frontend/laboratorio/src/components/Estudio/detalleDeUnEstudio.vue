@@ -3,42 +3,35 @@
     <div v-if="loading">
       <b-spinner> </b-spinner>
     </div>
-    <div v-else>
-      <b-row>
-        <b-col>
-          <h3>
-            {{ estudio.paciente.apellido }}
-            {{ estudio.paciente.nombre }} <br /></h3
-        ></b-col>
-            </b-row>  
-        <h2>Detalles del estudio</h2>
-        <b-col>
-          <h5>
-            <strong> Creado: </strong>{{ estudio.fecha_alta }} <br /></h5
-        ></b-col>
+    <div v-else>    
 
-      <b-row>
-        <b-col>
-          <h5>
-            <strong> Medico Derivante: </strong>
-            {{ estudio.medico_derivante.apellido }}
-            {{ estudio.medico_derivante.nombre }} <br /></h5
-        ></b-col>
-
-        <b-col>
-          <h5>
-            <strong> Diagnostico Presuntivo: </strong
-            >{{ estudio.diagnostico.nombre }} <br /></h5
-        ></b-col>
-      </b-row>
-      <b-row>
-        <h5>
-          <b-col>
-            <strong> Tipo de estudio: </strong>{{ estudio.tipo.nombre }}</b-col
+      <b-card :header="estudio.paciente.apellido +' '+ estudio.paciente.nombre "  header-text-variant="white"
+        align="center" header-bg-variant="secondary" title="Datos del estudio" :sub-title="'Creado '+ estudio.fecha_alta  ">
+        <br>
+        <b-card-text>
+          <b-row>
+           
+            <b-col>
+              <b> Medico Derivante: </b>
+              {{ estudio.medico_derivante.apellido }}
+              {{ estudio.medico_derivante.nombre }} 
+            </b-col>
+            <b-col> <b> Tipo de estudio: </b>{{ estudio.tipo.nombre }} </b-col>
+          </b-row>
+          <br>
+          <b-row>
+            <b-col>
+              <b> Diagnostico Presuntivo: </b>{{ estudio.diagnostico.nombre }}
+              <br
+            /></b-col>
+            <b-col>
+            <strong> Estado actual: </strong
+            >{{ obtenerUltimoEstado() }}</b-col
           >
-          <b-col> <strong> Estado que se encuentra el estudio: </strong>{{ obtenerUltimoEstado() }}</b-col>
-        </h5>
-      </b-row>
+          </b-row>
+        </b-card-text>
+      </b-card>
+
       <b-row>
         <b-col v-if="this.estudio.estados[3] != undefined">
           <h5>

@@ -4,6 +4,10 @@ const API_USER = ''
 const API_URL = '/personas_api/'
 
 export default {
+    registrarPaciente(usuario){
+        console.log(API_URL + API_USER + "registro/", usuario)
+        return Api().post(API_URL + API_USER + "registro/", usuario);
+    },
     obtenerMedicosInformantes() {
         return Api().get(API_URL + API_USER + "medicos_informantes/")
     },
