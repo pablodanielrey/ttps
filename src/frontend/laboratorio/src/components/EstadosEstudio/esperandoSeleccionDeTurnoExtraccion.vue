@@ -109,9 +109,9 @@ export default {
       }
     },
     onEventClick(event, e) {
-      this.selectedEvent = event;  
-      if (this.selectedEvent.start < new Date()){
-         this.$root.$bvToast.toast(
+      this.selectedEvent = event;
+      if (this.selectedEvent.start < new Date()) {
+        this.$root.$bvToast.toast(
           "Esta seleccionando un turno con una fecha o hora que ya paso, por favor seleccione otro turno",
           {
             title: "Atencion!",
@@ -120,21 +120,23 @@ export default {
             variant: "danger",
           }
         );
-      }else{
+      } else {
         this.showDialog = true;
-      this.$refs["my-modal"].show();
-      e.stopPropagation();
+        this.$refs["my-modal"].show();
+        e.stopPropagation();
       }
-      
     },
     async confirmarTurno(inicio, fin) {
       try {
         let turnoEstudio = {
-          inicio: inicio.toISOString(),
-          fin: fin.toISOString(),
+          turno: { inicio: inicio.toISOString(), fin: fin.toISOString() },
           estudio_id: this.estudio.id,
+          resourcetype: this.estudio.ultimo_estado.resourcetype,
         };
-        await EstudiosService.actualizarUltimoEstado(turnoEstudio);
+        await EstudiosService.actualizarUltimoEstado(
+          turnoEstudio,
+          this.estudio.ultimo_estado.id
+        );
         this.$root.$bvToast.toast("Se selecciono el turno para el paciente ", {
           title: "Atencion!",
           toaster: "b-toaster-top-center",

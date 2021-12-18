@@ -33,11 +33,7 @@ body {
   width: auto !important;
   overflow-x: hidden !important;
 }
-@import url("https://fonts.googleapis.com/css?family=Montserrat&display=swap");
-body {
-  font-family: "Montserrat", sans-serif !important;
-  background-color: white;
-}
+
 .wrapper {
   min-height: calc(100vh - 60px);
   background-color: #ededed;

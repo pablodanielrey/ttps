@@ -128,11 +128,14 @@ export default {
             freezer: this.freezer,
             mililitros: this.mililitros,
             fecha_muestra: new Date(),
-            expirado:false
+            expirado:false,
+                      resourcetype: this.estudio.ultimo_estado.resourcetype,
+
           };
           console.log(datosMuestra);
           let response = await EstudiosService.actualizarUltimoEstado(
-            datosMuestra
+            datosMuestra,
+            this.estudio.ultimo_estado.id
           );
           console.log(response);
           this.$root.$bvToast.toast("Se ingresaron los datos de la muestra", {

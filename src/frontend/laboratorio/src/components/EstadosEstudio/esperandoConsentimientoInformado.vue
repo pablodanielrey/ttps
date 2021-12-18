@@ -5,10 +5,7 @@
         <b-row>
           <b-col class="text-center pt-3">
             <ValidationObserver ref="detailsConsentimiento">
-              <b-form-group
-                id="pdf-label"
-                label-for="pdf"
-              >
+              <b-form-group id="pdf-label" label-for="pdf">
                 <ValidationProvider
                   :rules="'required'"
                   :name="'consentimiento informado '"
@@ -76,18 +73,23 @@ export default {
         this.consentimiento = e.target.result;
       };
       reader.readAsDataURL(file);
-    },  
+    },
     async guardarConsentimiento() {
       try {
         let result = await this.$refs.detailsConsentimiento.validate();
         if (result) {
           let datosConsentimiento = {
             estudio_id: this.estudio.id,
-            consentimiento: this.consentimiento,
+            resourcetype: this.estudio.ultimo_estado.resourcetype,
+
+            consentimiento: {
+              contenido: this.consentimiento,
+            },
           };
           console.log(datosConsentimiento);
           let response = await EstudiosService.actualizarUltimoEstado(
-            datosConsentimiento
+            datosConsentimiento,
+            this.estudio.ultimo_estado.id
           );
           console.log(response);
           this.$root.$bvToast.toast("Se ingreso el consentimiento firmado", {
@@ -101,7 +103,7 @@ export default {
           });
         }
       } catch (error) {
-         console.log(error);
+        console.log(error);
         this.$root.$bvToast.toast(
           "Ocurrio un error mientras ingresaba el consentimiento firmado, por favor vuelva a intentar",
           {

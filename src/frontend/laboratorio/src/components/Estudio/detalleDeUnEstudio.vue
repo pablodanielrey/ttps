@@ -91,7 +91,7 @@
             </b-col>
             <b-col cols="12" md="auto">
               <b-card
-                v-if="estado.resourcetype == 'EnviarConsentimientoInformado'"
+                v-if="estado.resourcetype == 'EsperandoConsentimientoInformado'"
                 header="Consentimiento Informado"
                 header-text-variant="white"
                 align="center"
@@ -99,8 +99,8 @@
               >
                 <br />
                 <b-card-text>
-                  <strong> Fecha envio:</strong>
-                  {{ mostrarFecha(estado.fecha_enviado) }}
+                  <strong> Fecha :</strong>
+                  {{ mostrarFecha(estado.fecha) }}
                   <a
                     v-if="estado.consentimiento != null"
                     title="Descargar consentimiento firmado"
@@ -139,6 +139,9 @@
                       {{ mostrarminutos(estado.turno.inicio) }}
                     </li>
                     <li>Fin: {{ mostrarminutos(estado.turno.fin) }}</li>
+                  </div>
+                  <div v-else>
+                      <small> No selecciono turno</small>
                   </div>
                   <br />
                 </b-card-text>
