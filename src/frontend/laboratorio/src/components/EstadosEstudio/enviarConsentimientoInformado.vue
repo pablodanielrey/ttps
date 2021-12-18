@@ -50,6 +50,7 @@ export default {
       try {
         let datosConsentimiento = {
           estudio_id: this.estudio.id,
+          resourcetype: this.estudio.ultimo_estado.resourcetype,
           fecha_enviado: new Date(),
         };
         let response = await EstudiosService.actualizarUltimoEstado(
