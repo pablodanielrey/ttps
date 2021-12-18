@@ -249,7 +249,7 @@ class VistaEstudios(viewsets.ModelViewSet):
         """
         usuario = self.request.user
         if personas_models.Paciente.usuario_es_tipo(usuario):
-            paciente = personas_models.Paciente.obtener_persona_de_usuario(usuario)
+            paciente = personas_models.Paciente.objects.get(usuario=usuario)
             return models.Estudio.objects.filter(paciente=paciente)
 
         return super().get_queryset()
