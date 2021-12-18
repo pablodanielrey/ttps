@@ -14,7 +14,7 @@ from rest_framework.decorators import action
 from django.contrib.auth.models import User
 
 from personas import models as persona_models
-from personas import views_personas
+from personas import persona_serializers
 
 def obtener_roles(usuario):
     grupos = []
@@ -31,8 +31,8 @@ class VistaToken(views.APIView):
         logging.debug(f'usuario logueado : {usuario}')
 
         try:
-            persona = persona_models.Persona.objects.get(usuario__usuario=usuario)
-            serializador = views_personas.SerializadorDePersona(instance=persona)
+            persona = persona_models.Persona.objects.get(usuario=usuario)
+            serializador = persona_serializers.SerializadorDePersona(instance=persona)
         except persona_models.Persona.DoesNotExist as e:
             serializador = None
 
