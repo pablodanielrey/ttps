@@ -135,10 +135,10 @@ class EsperandoTomaDeMuestra(EstadoEstudio):
 
     @property
     def turno(self):
-        try:
-            return self.estudio.estados.order_by('-fecha')[1].turno
-        except AttributeError:
-            return None
+        for estado in self.estudio.estados.order_by('-fecha'):
+            if isinstance(estado, EsperandoSeleccionDeTurnoParaExtraccion):
+                return estado.turno
+        return None
 
 class EsperandoRetiroDeExtaccion(EstadoEstudio):
     extracionista = models.CharField(max_length=1024, null=True)
