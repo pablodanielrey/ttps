@@ -53,7 +53,8 @@ export default {
           fecha_enviado: new Date(),
         };
         let response = await EstudiosService.actualizarUltimoEstado(
-          datosConsentimiento
+          datosConsentimiento,
+           this.estudio.ultimo_estado.id
         );
         console.log(response);
         this.$router.push({
@@ -61,7 +62,7 @@ export default {
         });
       } catch (error) {
         console.log(error);
-        this.$root.$bvToast.toast("ocurrio un error mientras continuaba ", {
+        this.$root.$bvToast.toast("ocurrio un error mientras Continuaba al siguiente estado ", {
           title: "Atencion!",
           toaster: "b-toaster-top-center",
           solid: true,

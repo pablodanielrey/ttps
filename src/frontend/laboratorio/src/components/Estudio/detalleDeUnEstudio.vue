@@ -77,7 +77,7 @@
                   <strong> Fecha envio:</strong>
                   {{ mostrarFecha(estado.fecha) }}
                   <a
-                    v-if="estado.combrobante != null"
+                    v-if="estado.comprobante != null"
                     title="Descargar Comprobante de pago"
                     variant="outline-success"
                     download="pago.pdf"

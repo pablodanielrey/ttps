@@ -94,8 +94,7 @@ export default {
       reader.readAsDataURL(file);
     },
     async guardarComprobante() {
-      let result = await this.$refs.detailsComprobante.validate();
-      
+      let result = await this.$refs.detailsComprobante.validate();      
       if (result) {
         try {
           let datosComprobante = {
