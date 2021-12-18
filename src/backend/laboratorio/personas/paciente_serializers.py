@@ -69,6 +69,9 @@ class SerializadorDePaciente(serializers.ModelSerializer):
             for v in ['telefono', 'direccion', 'email']:
                 if v not in validated_data:
                     raise ValidationError({v:'requerido'})
+
+            """ TODO. solo para hacer mas simple la inteface elimino el tutor que manda nico desde el front. """
+            validated_data.pop('tutor',None)
         else:
             if 'tutor' not in validated_data:
                 raise ValidationError({'tutor':'requerido'})
