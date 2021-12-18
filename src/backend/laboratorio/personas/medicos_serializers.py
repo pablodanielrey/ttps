@@ -2,6 +2,9 @@ import logging
 import uuid
 
 from rest_framework import serializers as rest_serializers
+from rest_framework.exceptions import ValidationError
+
+from django.db.utils import IntegrityError
 
 from . import models
 from login import serializers as login_serializers
@@ -45,7 +48,13 @@ class SerializadorDeMedicoInformante(rest_serializers.ModelSerializer):
 
     def create(self, validated_data):
         usuario = validated_data.pop('usuario')
-        usuario = login_models.LoginModel().crear_usuario(usuario['username'], models.MedicoInformante.NOMBRE_GRUPO, clave=usuario['password'], email=validated_data.get('email',None))
+        for v in ['username', 'password']:
+            if v not in usuario:
+                raise ValidationError({v:'requerido'})
+        try:                
+            usuario = login_models.LoginModel().crear_usuario(usuario['username'], models.MedicoInformante.NOMBRE_GRUPO, clave=usuario['password'], email=validated_data.get('email',None))
+        except IntegrityError:
+            raise ValidationError({'usuario':'ya existente'})
 
         numero_matricula = validated_data.pop('matricula')['numero']
 
