@@ -3,7 +3,7 @@ import logging
 from rest_framework import serializers as rest_serializers
 
 from . import models
-from . import serializers
+from login import serializers as login_serializers
 
 
 class SerializadorDeMatricula(rest_serializers.ModelSerializer):
@@ -28,7 +28,7 @@ class SerializadorDeMedicoDerivante(rest_serializers.ModelSerializer):
 class SerializadorDeMedicoInformante(rest_serializers.ModelSerializer):
     # usuario = serializers.CharField(source='usuario.usuario.username', read_only=True)
     # clave = serializers.CharField(source='usuario.usuario.password', read_only=False)
-    usuario = serializers.UsuarioSerializer(read_only=False, many=False, required=True)
+    usuario = login_serializers.UsuarioSerializer(read_only=False, many=False, required=True)
     matricula = rest_serializers.CharField(source='matricula.numero', read_only=False)
     class Meta:
         model = models.MedicoInformante
