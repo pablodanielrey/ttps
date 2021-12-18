@@ -24,6 +24,7 @@ class Persona(models.Model):
     fecha_nacimiento = models.DateField(null=True)
     telefono = models.CharField(max_length=50, null=True)
     direccion = models.CharField(max_length=2096, null=True)
+    usuario = models.OneToOneField(User, on_delete=models.CASCADE)
 
     def __str__(self):
         return f"{self.id} {self.nombre} {self.apellido}"
@@ -32,7 +33,7 @@ class Persona(models.Model):
 
     @classmethod
     def all(cls):
-        return cls.objects.filter(usuario__usuario__groups__name=cls.NOMBRE_GRUPO)
+        return cls.objects.filter(usuario__groups__name=cls.NOMBRE_GRUPO)
 
     @classmethod
     def buscar(cls, termino:str):

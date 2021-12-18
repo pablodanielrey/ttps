@@ -4,6 +4,7 @@ from rest_framework import serializers as rest_serializers
 
 from . import models
 from login import serializers as login_serializers
+from login import models as login_models
 
 
 class SerializadorDeMatricula(rest_serializers.ModelSerializer):
@@ -33,6 +34,23 @@ class SerializadorDeMedicoInformante(rest_serializers.ModelSerializer):
     class Meta:
         model = models.MedicoInformante
         fields = ['id','nombre','apellido','email','matricula', 'usuario']
+
+    def create(self, validated_data):
+        logging.debug(validated_data)
+
+        usuario = validated_data.pop('usuario')
+        logging.debug(usuario)
+
+        numero_matricula = validated_data.pop('matricula')
+        medico = models.MedicoInformante.objects.create(**validated_data)
+        models.Matricula.objects.create(persona=medico, numero=numero_matricula)
+
+        django_usuario = usuario['usuario']
+        login_models.LoginModel().crear_usuario(medico.id, django_usuario['username'], models.MedicoInformante.NOMBRE_GRUPO, clave=django_usuario['password'], email=validated_data.get('email',None))
+
+        medico.refresh_from_db()
+        return medico
+
 
     def update(self, instance, validated_data):
         logging.info(validated_data)
