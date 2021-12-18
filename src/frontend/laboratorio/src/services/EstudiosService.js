@@ -30,6 +30,15 @@ export default {
         return Api().get(API_URL + API_USER + "estudios/")
     },
     actualizarUltimoEstado(datos){
+        /*
+                ACA HACE FAKTA CAMBIAR A ALGO PARECIDO A ESTO
+                return Api().put(API_URL + API_USER + "estados/" + id_ultimo_estado + "/", datos)        
+
+                el id_ultimo_estado sale de los datos del estudio.
+                estudio.ultimo_estado.id ---> id_ultimo_estado
+                
+        */
+
         return Api().post(API_URL + API_USER + "estados/",datos)
     },
     obtenerListaEstudiosParaInformes(){
