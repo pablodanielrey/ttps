@@ -100,9 +100,12 @@ export default {
         try {
           let datosComprobante = {
             estudio_id: this.estudio.id,
-            comprobante: this.comprobantePago,
+            resourcetype: this.estudio.ultimo_estado.resourcetype,
+            comprobante: {
+              contenido: this.comprobantePago,
+            }
           };         
-          await EstudiosService.actualizarUltimoEstado(datosComprobante,this.estudio.ultimo_estado.id);
+          await EstudiosService.actualizarUltimoEstado(datosComprobante, this.estudio.ultimo_estado.id);
           this.$root.$bvToast.toast("Se agrego el comprobante de pago", {
             title: "Atencion!",
             toaster: "b-toaster-top-center",
