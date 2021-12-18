@@ -46,6 +46,7 @@ class SerializadorDeTutorPaciente(serializers.ModelSerializer):
         model = models.TutorDePaciente
         fields = ['id','tutor']
 
+import uuid
 class SerializadorDePaciente(serializers.ModelSerializer):
     historia_clinica = serializers.CharField(source='historia_clinica.historia_clinica', read_only=False, required=False)
     obra_social = SerializadorDeObraSocialPersona(required=False, many=False, read_only=False)
@@ -101,8 +102,9 @@ class SerializadorDePaciente(serializers.ModelSerializer):
                 tomo el primero que tenga ese correo.
             """
             if models.Tutor.objects.filter(email=email).count() <= 0:
-                tutor = models.Tutor.objects.create(**persona_tutor)
-                login_models.LoginModel().crear_usuario(tutor.id, tutor.id, models.Tutor.NOMBRE_GRUPO, clave=tutor.id, email=email)
+                usr = str(uuid.uuid4())
+                django_tutor = login_models.LoginModel().crear_usuario(usr, models.Tutor.NOMBRE_GRUPO, clave=usr, email=email)
+                tutor = models.Tutor.objects.create(usuario=django_tutor, **persona_tutor)
             else:                       
                 tutor = models.Tutor.objects.filter(email=email).first()
             models.TutorDePaciente.objects.create(persona=paciente, tutor=tutor)
