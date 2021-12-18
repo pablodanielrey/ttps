@@ -91,6 +91,11 @@ class SerializadorListaDeEstadosPaciente(rest_serializers.ListSerializer):
         ]
         return datos
 
+    def create(self, validated_data):
+        logging.debug('create del estado virtual')
+        logging.debug(validated_data)
+        return super().create(validated_data)
+
     
 import logging
 class SerializadorEstadoEstudioPolimorfico(PolymorphicSerializer):
@@ -119,7 +124,7 @@ class SerializadorEstadoEstudioPolimorfico(PolymorphicSerializer):
 
     def __eliminar_campos_restringidos(self, datos):
         datos.pop('resultado_url',None)
-        datos.pop('extraccionista',None)
+        datos.pop('extracionista',None)
         datos.pop('freezer',None)
 
     def to_representation(self, instance):
