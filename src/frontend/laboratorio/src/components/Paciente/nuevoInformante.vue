@@ -129,7 +129,7 @@
               label-for="usuario"
             >
               <ValidationProvider
-                :name="'usuario '"
+                :name="'usuario'"
                 :rules="'required'"
                 v-slot="{ errors, valid }"
               >

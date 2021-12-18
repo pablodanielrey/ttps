@@ -5,6 +5,7 @@
 
       <h4>Listado de Medicos informantes</h4>
     </div>
+    
     <div v-else>
       <b-col lg="4" class="my-1">
         <b-input-group size="sm">
@@ -14,7 +15,6 @@
             type="search"
             placeholder="Buscar por nombre "
           ></b-form-input>
-
           <b-input-group-append>
             <b-button :disabled="!filter" @click="filter = ''">Buscar</b-button>
           </b-input-group-append>
@@ -95,23 +95,13 @@ export default {
       totalRows: 1,
       fields: [
         { key: "nombre", label: "Nombre", class: "text-center p2" },
-        {
-          key: "apellido",
-          label: "Apellido",
-          class: "text-center p2",
-        },
-                { key: "email", label: "E-mail", class: "text-center p2" },
-                { key: "matricula", label: "Matricula", class: "text-center p2" },
-
-        {
-          key: "usuario",
-          label: "Usuario",
-          class: "text-center p2",
-        },
-
+        { key: "apellido", label: "Apellido", class: "text-center p2" },
+        { key: "email", label: "E-mail", class: "text-center p2" },
+        { key: "matricula", label: "Matricula", class: "text-center p2" },
+        { key: "usuario", label: "Usuario", class: "text-center p2" },
         { key: "acciones", label: "Acciones", class: "text-center p2" },
       ],
-      items: [],
+      items: [],    
     };
   },
 
@@ -133,7 +123,7 @@ export default {
         this.obtenerMedicosInformantes();
       } catch (err) {
         console.log(err);
-        this.$root.$bvToast.toast("No se pudo eliminar el medico informante ", {
+        this.$root.$bvToast.toast("No se pudo eliminar el medico informante", {
           title: "Atencion!",
           toaster: "b-toaster-top-center",
           solid: true,
