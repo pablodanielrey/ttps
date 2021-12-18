@@ -1,4 +1,5 @@
 import logging
+import uuid
 
 from rest_framework import serializers as rest_serializers
 
@@ -15,8 +16,17 @@ class SerializadorDeMatricula(rest_serializers.ModelSerializer):
 class SerializadorDeMedicoDerivante(rest_serializers.ModelSerializer):
     matricula = rest_serializers.CharField(source='matricula.numero', read_only=False)
     class Meta:
-        model = models.Persona
+        model = models.MedicoDerivante
         fields = ['id','nombre','apellido','email','matricula']
+
+    def create(self, validated_data):
+        matricula = validated_data.pop('matricula')
+        usuario = login_models.LoginModel().crear_usuario(usuario=str(uuid.uuid4()), grupo=models.MedicoDerivante.NOMBRE_GRUPO, clave=str(uuid.uuid4()))
+        validated_data['usuario'] = usuario
+        medico = models.MedicoDerivante.objects.create(**validated_data)
+        models.Matricula.objects.create(persona=medico, numero=matricula['numero'])
+        medico.refresh_from_db()
+        return medico
 
     def update(self, instance, validated_data):
         matricula = validated_data.pop('matricula')
