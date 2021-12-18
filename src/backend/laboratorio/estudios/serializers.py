@@ -168,6 +168,11 @@ class SerializadorEsperandoTomaDeMuestra(serializers.ModelSerializer):
         fields = ['id','fecha','fecha_muestra','mililitros','freezer','expirado','turno']
 
     def update(self, instance, validated_data):
+        """
+            TODO: restringir la modificación de este estado por los perfiles correctos.
+            ej : empleado puede pero paciente no.
+            el paciente no 
+        """
         super().update(instance, validated_data)
 
         estudio = instance.estudio

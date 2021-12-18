@@ -79,6 +79,10 @@ class SerializadorL2e14EsperandoResultado(rest_serializers.Serializer):
         rep.pop('id')
         return rep
 
+    def update(self, instance, validated_data):
+        """ no se modifica nada ya que el paciente solo puede esperar a que pasen los demas estados del workflow real """
+        return instance
+
 class SerializadorListaDeEstadosPaciente(rest_serializers.ListSerializer):
 
     restricciones = L2e14Restricciones()
@@ -91,10 +95,6 @@ class SerializadorListaDeEstadosPaciente(rest_serializers.ListSerializer):
         ]
         return datos
 
-    def create(self, validated_data):
-        logging.debug('create del estado virtual')
-        logging.debug(validated_data)
-        return super().create(validated_data)
 
     
 import logging
