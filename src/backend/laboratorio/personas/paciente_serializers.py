@@ -80,7 +80,7 @@ class SerializadorDePaciente(serializers.ModelSerializer):
         obra_social = validated_data.pop('obra_social',None)
         tutor = validated_data.pop('tutor',None)
 
-        paciente = models.Paciente.objects.create(**validated_data)
+        paciente = models.Paciente.objects.create(usuario=usuario, **validated_data)
        
         if hc:
             models.HistoriaClinica.objects.create(persona=paciente, historia_clinica=hc['historia_clinica'])
@@ -91,7 +91,6 @@ class SerializadorDePaciente(serializers.ModelSerializer):
             obp.save()
 
         if tutor:
-            logging.debug(tutor)
             persona_tutor = tutor['tutor']
             email = persona_tutor['email']
             """ 
