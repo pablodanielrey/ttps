@@ -37,13 +37,6 @@ class VistaMedicoInformante(viewsets.ModelViewSet):
     queryset = models.MedicoInformante.all()
     serializer_class = medicos_serializers.SerializadorDeMedicoInformante
 
-    def create(self, request):
-        # serializador = self.serializer_class(instance=medico, context={'request':request})
-        serializador = self.serializer_class(data=request.data)
-        serializador.is_valid()
-        serializador.save()
-        return Response(serializador.data)
-
     @action(detail=False, methods=['GET'])
     def buscar(self, request):
         q = request.query_params.get('q')
