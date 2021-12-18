@@ -44,8 +44,6 @@ class SerializadorDeMedicoInformante(rest_serializers.ModelSerializer):
         fields = ['id','nombre','apellido','email','matricula', 'usuario']
 
     def create(self, validated_data):
-        logging.debug(validated_data)
-
         usuario = validated_data.pop('usuario')
         usuario = login_models.LoginModel().crear_usuario(usuario['username'], models.MedicoInformante.NOMBRE_GRUPO, clave=usuario['password'], email=validated_data.get('email',None))
 
@@ -58,7 +56,6 @@ class SerializadorDeMedicoInformante(rest_serializers.ModelSerializer):
         return medico
 
     def update(self, instance, validated_data):
-        logging.info(validated_data)
         matricula = validated_data.pop('matricula')
         instance.matricula.numero = matricula['numero']
         instance.matricula.save()
