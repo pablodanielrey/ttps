@@ -1,5 +1,7 @@
+import logging
 
 from rest_framework import serializers
+from rest_framework.exceptions import ValidationError
 
 from turnos import views as turnos_views
 
@@ -8,9 +10,17 @@ from personas import paciente_serializers
 from personas import medicos_serializers
 
 class SerializadorArchivos(serializers.ModelSerializer):
+    content_type = serializers.CharField(required=False, read_only=True)
+    encoding = serializers.CharField(required=False, read_only=True)
+    contenido = serializers.CharField(required=True, read_only=False)
     class Meta:
         model = models.Archivo
-        fields = ['id','content_type','encoding']
+        fields = ['id','content_type','encoding', 'contenido']
+
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+        data['contenido'] = ''
+        return data
 
 class SerializadorTiposDeEstudio(serializers.HyperlinkedModelSerializer):
     class Meta:
@@ -49,10 +59,34 @@ class SerializadorEstadoEstudio(serializers.ModelSerializer):
         fields = ['id','fecha']
 
 class SerializadorEsperandoComprobanteDePago(serializers.ModelSerializer):
+    fecha_procesado = serializers.DateTimeField(required=False, read_only=False)
+    comprobante = SerializadorArchivos(required=False, read_only=False)
     class Meta:
         model = models.EsperandoComprobanteDePago
-        fields = ['id','fecha','comprobante']
+        fields = ['id','fecha','comprobante','fecha_procesado']
 
+    def update(self, instance, validated_data):
+        estudio = instance.estudio
+
+        fecha_procesado = validated_data.pop('fecha_procesado',None)
+        if fecha_procesado:
+            """ se anula el comprobante por falta de pago, es necesario pasar el estudio a AnuladoPorFaltaDePago """
+            logging.debug('anulando el estudio por falta de pago')    
+            estado = models.AnuladorPorFaltaDePago(estudio=estudio, fecha_procesado=fecha_procesado)
+            estado.save()
+            return estado
+
+        logging.debug('actualizando el estado con el comprobante')
+        comprobante = validated_data.get('comprobante')
+        archivo = models.Archivo.from_datauri(comprobante['contenido'])
+        archivo.save()
+        instance.comprobante = archivo
+        instance.save()
+
+        logging.debug('pasando al siguiente estado')
+        estado = models.EnviarConsentimientoInformado(estudio=estudio)
+        estado.save()
+        return estado
 
 class SerializadorAnuladorPorFaltaDePago(serializers.ModelSerializer):
     class Meta:
