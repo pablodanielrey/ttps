@@ -96,6 +96,8 @@ class SerializadorAnuladorPorFaltaDePago(serializers.ModelSerializer):
         model = models.AnuladorPorFaltaDePago
         fields = ['id','fecha','fecha_procesado']
 
+    def update(self, instance, validated_data):
+        return instance
 
 class SerializadorEnviarConsentimientoInformado(serializers.ModelSerializer):
     class Meta:
@@ -215,13 +217,25 @@ class SerializadorEsperandoProcesamientoDeLoteBiotecnologico(serializers.ModelSe
         estado.save()
         return estado
 
+from login import models as login_models
 class SerializadorEsperandoInterpretacionDeResultados(serializers.ModelSerializer):
-    medico_informante = medicos_serializers.SerializadorDeMedicoInformante()
+    medico_informante = medicos_serializers.SerializadorDeMedicoInformante(required=False, read_only=True)
     class Meta:
         model = models.EsperandoInterpretacionDeResultados
         fields = ['id','fecha','fecha_informe','medico_informante','informe','resultado']
 
     def update(self, instance, validated_data):
+
+        usuario_django = self.context.get('request').user
+        if not personas_models.MedicoInformante.usuario_es_tipo(usuario_django):
+            raise ValidationError({'medico_informante':'la persona logueada no es un médico informante'})
+
+        persona_logueada = login_models.LoginModel().obtener_persona_del_usuario(usuario_django)
+            
+        """ reemplazo el medico_informante """
+        validated_data.pop('medico_informante',None)
+        validated_data['medico_informante'] = persona_logueada
+
         super().update(instance, validated_data)
         estudio = instance.estudio
         estado = models.EsperandoEntregaAMedicoDerivante(estudio=estudio)
@@ -246,6 +260,9 @@ class SerializadorResultadoDeEstudioEntregado(serializers.ModelSerializer):
     class Meta:
         model = models.ResultadoDeEstudioEntregado
         fields = ['id','fecha']
+
+    def update(self, instance, validated_data):
+        return instance
 
 class SerializadorEstadoEstudioPolimorfico(PolymorphicSerializer):
     model_serializer_mapping = {

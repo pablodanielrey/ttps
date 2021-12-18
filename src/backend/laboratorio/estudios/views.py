@@ -105,6 +105,10 @@ class VistaEstadoEstudio(viewsets.ModelViewSet):
         models.ResultadoDeEstudioEntregado
     ]
 
+    def get_serializer_context(self):
+        context = super().get_serializer_context()
+        context.update({'request':self.request})
+        return context
 
     # def create(self, request, *args, **kwargs):
     #     """

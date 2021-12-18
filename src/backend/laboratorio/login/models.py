@@ -9,7 +9,7 @@ from personas import models as personas_models
 class LoginModel:
 
     def obtener_persona_del_usuario(self, usuario):
-        pass
+        return personas_models.Persona.objects.get(usuario=usuario)
 
     def crear_usuario(self, usuario, grupo, clave=None, email=None):
         password = clave if clave else str(uuid.uuid4())

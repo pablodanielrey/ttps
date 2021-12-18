@@ -69,7 +69,7 @@ class VistaTurnosDisponibles(viewsets.ModelViewSet):
 
 
 class SerializadorTurnosConfirmados(serializers.HyperlinkedModelSerializer):
-    persona = paciente_serializers.SerializadorDePaciente()
+    persona = paciente_serializers.SerializadorDePaciente(required=False, read_only=True)
     class Meta:
         model = models.TurnoConfirmado
         fields = ['id','persona','inicio','fin']
