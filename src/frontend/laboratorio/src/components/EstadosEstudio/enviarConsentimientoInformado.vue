@@ -55,7 +55,6 @@ export default {
       try {
         let datosConsentimiento = {
           estudio_id: this.estudio.id,
-          resourcetype: this.estudio.ultimo_estado.resourcetype,
           fecha_enviado: new Date(),
           resourcetype: this.estudio.ultimo_estado.resourcetype,
         };
