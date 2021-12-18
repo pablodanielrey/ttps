@@ -2,6 +2,7 @@
   <div>
     <div class="wrapper">
       <Menu />
+ 
       <router-view />
     </div>
     <footer>

@@ -6,19 +6,23 @@
         <br />
         <b-col id="columnaImg" cols="5">
           <div>
-          <img
-            src="@/assets/lab1.png"
-
-            class="rounded"
-            alt="..."
-            id="imgLaboratorio"
-        /></div></b-col>
+            <img
+              src="@/assets/lab1.png"
+              class="rounded"
+              alt="..."
+              id="imgLaboratorio"
+            /></div
+        ></b-col>
         <b-col>
           <b-form action class="form" v-if="show" @submit.prevent="onSubmit">
             <hr />
             <p class="title mt-2" id="textoRegistro">
               <b> Completa los datos para registrarte</b><br />
               <small> Recorda que si sos menor tendras un tutor a cargo</small>
+              <b-alert v-if="this.showCreated" show variant="success"
+                >Su usuario se creo con exito, recorda que te enviamos un email
+                con los datos para poder ingresar en el sistema</b-alert
+              >
             </p>
             <br />
             <b-row>
@@ -157,9 +161,9 @@
               </b-row>
             </div>
             <div v-else class="rounded">
-              <h7>
+              <h6>
                 <b> Datos del tutor </b>
-              </h7>
+              </h6>
               <hr />
               <br />
               <b-row
@@ -297,6 +301,7 @@ export default {
   data() {
     return {
       show: true,
+      showCreated: false,
       usuario: {
         nombre: null,
         apellido: null,
@@ -338,6 +343,10 @@ export default {
         console.log(this.usuario);
         let response = await PacientesService.registrarPaciente(this.usuario);
         console.log(response);
+        if (response.status == 201) {
+          this.showCreated = true;
+          this.limpiarCampos();
+        }
       } catch (error) {
         console.log(error);
       }
@@ -345,6 +354,23 @@ export default {
     armarDireccion() {
       this.usuario.direccion =
         this.usuario.calle + this.usuario.numero + this.usuario.piso;
+    },
+    limpiarCampos() {
+      (this.usuario.nombre = null),
+        (this.usuario.apellido = null),
+        (this.usuario.dni = null),
+        (this.usuario.email = null),
+        (this.usuario.telefono = null),
+        (this.usuario.calle = null),
+        (this.usuario.numero = null),
+        (this.usuario.piso = null),
+        (this.usuario.direccion = null),
+        (this.usuario.fecha_nacimiento = new Date().format("dd-mm-yyyy")),
+        (this.usuario.tutor.tutor.nombre = null),
+        (this.usuario.tutor.tutor.apellido = null),
+        (this.usuario.tutor.tutor.email = null),
+        (this.usuario.tutor.tutor.telefono = null),
+        (this.usuario.tutor.tutor.direccion = null);
     },
   },
   computed: {},
@@ -356,9 +382,9 @@ export default {
 
 <style>
 @media (max-width: 600px) {
-#columnaImg{
- visibility: hidden;
-}
+  #columnaImg {
+    visibility: hidden;
+  }
 }
 @import url("https://fonts.googleapis.com/css?family=Montserrat&display=swap");
 p,
@@ -375,8 +401,8 @@ body {
 #textoRegistro {
   text-align: left;
 }
-#imgLaboratorio{
-width: 100%; height: 80%; 
+#imgLaboratorio {
+  width: 100%;
+  height: 80%;
 }
-
 </style>

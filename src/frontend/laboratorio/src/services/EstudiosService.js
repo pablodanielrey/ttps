@@ -29,7 +29,7 @@ export default {
     obtenerListaEstudios() {
         return Api().get(API_URL + API_USER + "estudios/")
     },
-    actualizarUltimoEstado(datos){
+    actualizarUltimoEstado(datos,id_ultimo_estado){
         /*
                 ACA HACE FAKTA CAMBIAR A ALGO PARECIDO A ESTO
                 return Api().put(API_URL + API_USER + "estados/" + id_ultimo_estado + "/", datos)        
@@ -38,8 +38,8 @@ export default {
                 estudio.ultimo_estado.id ---> id_ultimo_estado
                 
         */
-
-        return Api().post(API_URL + API_USER + "estados/",datos)
+            console.log(datos,id_ultimo_estado)
+        return Api().put(API_URL + API_USER + "estados/"+id_ultimo_estado +'/',datos)
     },
     obtenerListaEstudiosParaInformes(){
         return Api().get(API_URL + API_USER + "estudios/buscar/?e=EsperandoInterpretacionDeResultados")

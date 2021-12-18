@@ -95,13 +95,14 @@ export default {
     },
     async guardarComprobante() {
       let result = await this.$refs.detailsComprobante.validate();
+      
       if (result) {
         try {
           let datosComprobante = {
             estudio_id: this.estudio.id,
             comprobante: this.comprobantePago,
           };         
-          await EstudiosService.actualizarUltimoEstado(datosComprobante);
+          await EstudiosService.actualizarUltimoEstado(datosComprobante,this.estudio.ultimo_estado.id);
           this.$root.$bvToast.toast("Se agrego el comprobante de pago", {
             title: "Atencion!",
             toaster: "b-toaster-top-center",

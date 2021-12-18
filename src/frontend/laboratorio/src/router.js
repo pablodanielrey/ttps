@@ -4,7 +4,7 @@ import Router from 'vue-router'
 Vue.use(Router)
 //home
 import container from '@/components/Home/Container.vue'
-
+import home from '@/components/Home/Home.vue'
 import Login from '@/components/Login/Login.vue'
 import Registrar from '@/components/Login/Registrar.vue'
 
@@ -68,12 +68,14 @@ const router = new Router({
     base: process.env.BASE_URL,
     routes: [{
         path: '/',
-        name:'home',
+       
         component: container ,
         meta: { 
         requireAuth: true
         },
-        children: [    
+        children: [  
+          {
+            path: '/', name: 'home', component: home},  
             { path: '/paciente', component: Paciente, name: 'paciente', props: true },
             { path: '/configuradores', component: NuevoConfigurador ,name:'configuradores' , props: true},
             { path: '/listaConfiguradores', component: ListaConfiugradores ,name:'listaConfiguradores' },
