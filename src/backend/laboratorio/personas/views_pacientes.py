@@ -3,7 +3,7 @@ import logging
 
 
 from rest_framework import serializers, viewsets, views, mixins
-from rest_framework.permissions import DjangoModelPermissions, IsAdminUser
+from rest_framework.permissions import DjangoModelPermissions, IsAdminUser, AllowAny
 from rest_framework.response import Response
 
 from rest_framework.decorators import action
@@ -28,3 +28,4 @@ class VistaRegistro(viewsets.ModelViewSet):
     queryset = models.Paciente.all()
     serializer_class = paciente_serializers.SerializadorDePaciente
     http_method_names = ['post']
+    permission_classes = [ AllowAny ]
