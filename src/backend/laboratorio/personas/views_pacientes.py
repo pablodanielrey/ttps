@@ -2,7 +2,7 @@
 import logging
 
 
-from rest_framework import serializers, viewsets, views
+from rest_framework import serializers, viewsets, views, mixins
 from rest_framework.permissions import DjangoModelPermissions, IsAdminUser
 from rest_framework.response import Response
 
@@ -24,7 +24,7 @@ class VistaPaciente(viewsets.ModelViewSet):
         serializer = paciente_serializers.SerializadorDePaciente(personas, many=True, context={'request': request})
         return Response(serializer.data)        
 
-    @action(detail=False, methods=['POST'])
-    def registrar(self, request):
-        logging.debug('aca va el registro')
-        return Response({'ok':'ok'})
+class VistaRegistro(viewsets.ModelViewSet):
+    queryset = models.Paciente.all()
+    serializer_class = paciente_serializers.SerializadorDePaciente
+    http_method_names = ['post']

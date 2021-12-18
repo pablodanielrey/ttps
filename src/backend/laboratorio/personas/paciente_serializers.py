@@ -73,12 +73,15 @@ class SerializadorDePaciente(serializers.ModelSerializer):
             if 'tutor' not in validated_data:
                 raise ValidationError({'tutor':'requerido'})
 
+        dni = validated_data.get('dni')
+        usuario = login_models.LoginModel().crear_usuario(dni, models.Paciente.NOMBRE_GRUPO, clave=dni, email=validated_data.get('email',None))
+
         hc = validated_data.pop('historia_clinica',None)
         obra_social = validated_data.pop('obra_social',None)
         tutor = validated_data.pop('tutor',None)
 
         paciente = models.Paciente.objects.create(**validated_data)
-        login_models.LoginModel().crear_usuario(paciente.id, paciente.dni, models.Paciente.NOMBRE_GRUPO, clave=paciente.dni, email=validated_data.get('email',None))
+       
         if hc:
             models.HistoriaClinica.objects.create(persona=paciente, historia_clinica=hc['historia_clinica'])
         if obra_social:
