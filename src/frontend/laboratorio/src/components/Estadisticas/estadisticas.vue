@@ -123,6 +123,7 @@ export default {
     },
     armarDatosTiempo(datos) {    
       console.log( datos.datos[12].procesados)
+      
       let data = [0,0, 0, 0, 0, 0, 0, 0, 0, 0, 0, datos.datos[12].tardanza_segundos];
 
       this.dataDemoraTiempo.datasets.push({

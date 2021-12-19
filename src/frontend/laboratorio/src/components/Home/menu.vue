@@ -4,10 +4,12 @@
       <b-spinner> </b-spinner>
     </div>
     <div v-else>
-      <b-navbar type="dark" variant="dark">
+      <b-navbar  toggleable="lg" type="dark"  variant="dark">
+          <b-navbar-brand :to="{ name: '/' }">Home</b-navbar-brand>
+
+    <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
         <b-navbar-nav>
           <b-collapse class="ml-auto" id="nav-collapse" is-nav>
-            <b-nav-item :to="{ name: '' }">Home</b-nav-item>
             <b-nav-item-dropdown text="Pacientes" right v-if="this.permisos == 'Empleados' " >
               <b-dropdown-item :to="{ name: 'listaPacientes' }"
                 >Listar</b-dropdown-item
@@ -86,9 +88,14 @@
                 >Listar</b-dropdown-item
               >
             </b-nav-item-dropdown>
-             <b-nav-item-dropdown  text="Estadisticas" right>
-              <b-dropdown-item :to="{ name: 'estadisticas' }"
-                >Ver</b-dropdown-item
+              <b-nav-item  :to="{ name: 'estadisticas' }"
+                >Estadisticas</b-nav-item 
+              >
+
+
+            <b-nav-item-dropdown   v-if="this.permisos == 'Pacientes'" text="Estudios" right>
+              <b-dropdown-item :to="{ name: 'turnosOcupados' }"
+                >Mis estudios</b-dropdown-item
               >
             </b-nav-item-dropdown>
           <!--   <b-nav-item-dropdown   v-if="this.permisos == 'Configuradores'" text="Turnos " >
