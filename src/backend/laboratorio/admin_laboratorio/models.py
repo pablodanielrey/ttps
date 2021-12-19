@@ -24,7 +24,6 @@ class ModoOperacionAPIException(exceptions.APIException):
             self.status_code = status_code
 
 
-
 class Configuracion(models.Model):
 
     class ModoOperacion(models.TextChoices):

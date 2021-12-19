@@ -93,11 +93,9 @@
               >
 
 
-            <b-nav-item-dropdown   v-if="this.permisos == 'Pacientes'" text="Estudios" right>
-              <b-dropdown-item :to="{ name: 'turnosOcupados' }"
-                >Mis estudios</b-dropdown-item
-              >
-            </b-nav-item-dropdown>
+              <b-nav-item  :to="{ name: 'listaEstudios' }" v-if="this.permisos == 'Pacientes'" text="Estudios" right
+                >Mis estudios</b-nav-item>
+  
           <!--   <b-nav-item-dropdown   v-if="this.permisos == 'Configuradores'" text="Turnos " >
               <b-dropdown-item :to="{ name: 'configurarTurnos' }"
                 >Configurar turnos</b-dropdown-item
