@@ -4,9 +4,21 @@ from zoneinfo import ZoneInfo
 import uuid
 
 from django.db import models
+from django.utils.translation import gettext_lazy as _
 
 from personas import models as personas_models
 from login import models as login_models
+
+
+
+class Configuracion(models.Model):
+
+    class ModoOperacion(models.TextChoices):
+        PACIENTE_OBLIGADO = 'PO', _('Paciente_Obligado')
+        PACIENTE_NO_OBLIGADO = 'PNO', _('Paciente_No_Obligado')
+
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    modo_operacion = models.CharField(max_length=10, choices=ModoOperacion.choices, default=ModoOperacion.PACIENTE_NO_OBLIGADO)
 
 
         

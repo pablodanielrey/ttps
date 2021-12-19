@@ -14,6 +14,7 @@ from estudios import models as estudio_models
 from personas import models as persona_models
 from turnos import models as turnos_models
 
+from . import models
 
 def generar_fecha_now():
     return datetime.datetime.now(tz=ZoneInfo('America/Argentina/Buenos_Aires'))
@@ -70,20 +71,7 @@ def generar_grupos_iniciales():
         except IntegrityError as e:
             pass
 
-
-class InitSite(APIView):
-    
-    permission_classes= [permissions.IsAdminUser]
-
-    def get(self, request, format=None):
-
-
-        """
-            aca genero todos los datos del modelo necesarios para que el sistema esté inicializado
-        """
-        logging.debug('inicializando sistema')
-
-
+def generar_patologias():
         patologias = [
             "Acidez de estómago",
             "Acné",
@@ -437,6 +425,9 @@ class InitSite(APIView):
                 d = estudio_models.Diagnostico(nombre=p)
                 d.save()
 
+
+def generar_tipos_estudio():
+
         tipos_estudio = [
             'Exoma',
             'Genoma mitocondrial completo',
@@ -452,6 +443,26 @@ class InitSite(APIView):
                 logging.debug(f'agregando tipo de estudio {te}')
                 t = estudio_models.TiposDeEstudio(nombre=te)
                 t.save()
+
+def generar_config():
+    if models.Configuracion.objects.count() <= 0:
+        models.Configuracion.objects.create()
+
+class InitSite(APIView):
+    
+    permission_classes= [permissions.IsAdminUser]
+
+    def get(self, request, format=None):
+
+
+        """
+            aca genero todos los datos del modelo necesarios para que el sistema esté inicializado
+        """
+        logging.debug('inicializando sistema')
+
+        generar_config()
+        generar_patologias()
+        generar_tipos_estudio()
 
         generar_parametros_de_turnos_por_defecto()
 
