@@ -28,11 +28,17 @@ class Liquidaciones:
         return estudios_filtrados
 
     def obtener_estudios_liquidados(self):
-        liquidaciones = Liquidacion.objects.value('estudio').all()
-        return liquidaciones
+        liquidaciones = Liquidacion.objects.only('estudio').all()
+        estudios = (l.estudio for l in liquidaciones)
+        return estudios
 
     def liquidar_estudios(self, estudios):
+        liquidados = 0
+        for id in estudios:
+            Liquidacion.objects.create(estudio=estudio_models.Estudio.objects.get(id=id))
+            liquidados += 1
+
         resumen = {
-            'liquidados': 0
+            'liquidados': liquidados
         }
         return resumen
