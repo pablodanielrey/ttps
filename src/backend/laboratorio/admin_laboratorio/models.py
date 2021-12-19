@@ -36,12 +36,14 @@ class Configuracion(models.Model):
     fecha = models.DateTimeField(default=now)
 
     def obtener_modo_de_operacion(self):
-        return self.ModoOperacion[self.modo_operacion]
+        return self.ModoOperacion(self.modo_operacion)
 
     def verificar_modo_de_operacion(self, serializador):            
         modo_de_operacion = self.obtener_modo_de_operacion()
-        if  modo_de_operacion == self.ModoOperacion.PACIENTE_OBLIGADO:
+        logging.debug(f'Modo de operación del sistema {modo_de_operacion}')
+        if modo_de_operacion == self.ModoOperacion.PACIENTE_OBLIGADO:
             usuario_logueado = serializador.context.get('request').user
+            logging.debug(f'verificando si {usuario_logueado.username} es Paciente')
             if not personas_models.Paciente.usuario_es_tipo(usuario_logueado):
                 raise ModoOperacionAPIException(
                     {
