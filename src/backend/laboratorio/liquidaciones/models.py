@@ -1,6 +1,8 @@
 import uuid
 from django.db import models
 from django.utils.timezone import now
+from django.db.utils import IntegrityError
+from django.core.exceptions import ValidationError
 
 from estudios import models as estudio_models
 
@@ -22,7 +24,7 @@ class Liquidaciones:
         ]
 
     def obtener_estudios_a_liquidar(self):
-        liquidados = Liquidacion.objects.only('estudio').all()
+        liquidados = Liquidacion.objects.all().values('estudio_id')
         estudios = estudio_models.Estudio.objects.exclude(id__in=liquidados).all()
         estudios_filtrados = (e for e in estudios if e.ultimo_estado.__class__ not in self.estados_invalidos)
         return estudios_filtrados
@@ -35,8 +37,11 @@ class Liquidaciones:
     def liquidar_estudios(self, estudios):
         liquidados = 0
         for id in estudios:
-            Liquidacion.objects.create(estudio=estudio_models.Estudio.objects.get(id=id))
-            liquidados += 1
+            try:
+                Liquidacion.objects.create(estudio=estudio_models.Estudio.objects.get(id=id))
+                liquidados += 1
+            except (IntegrityError, ValidationError, estudio_models.Estudio.DoesNotExist):
+                pass
 
         resumen = {
             'liquidados': liquidados
