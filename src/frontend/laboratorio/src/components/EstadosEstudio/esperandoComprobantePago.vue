@@ -103,7 +103,8 @@ export default {
             comprobante: {
               contenido: this.comprobantePago,
             }
-          };         
+          };   
+          console.log(datosComprobante)      
           await EstudiosService.actualizarUltimoEstado(datosComprobante, this.estudio.ultimo_estado.id);
           this.$root.$bvToast.toast("Se agrego el comprobante de pago", {
             title: "Atencion!",

@@ -103,7 +103,6 @@ export default {
         { key: "acciones", label: "Acciones", class: "text-center p2" },
       ],
       items: [
-        {nombre: this.nombre, apellido: this.apellido, email: this.email, matricula: this.matricula, usuario: this.usuario.usuario['username']}
       ],    
     };
   },
@@ -138,6 +137,7 @@ export default {
       try {
         let response = await PacientesService.obtenerMedicosInformantes();
         this.items = response.data;
+      
         console.log(this.items);
       } catch (err) {
         console.log(err);

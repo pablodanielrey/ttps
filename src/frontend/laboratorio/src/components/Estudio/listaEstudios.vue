@@ -216,17 +216,47 @@ export default {
       }
       return false;
     },
-    anularEstudioFaltaDatosMuestra(estudio){
+   async anularEstudioFaltaDatosMuestra(estudio){
       console.log(estudio)
-      "enviar expirado en 1 "
+         try {
+        let datosComprobante = {
+          estudio_id: estudio.id,
+          expirado:true,
+          resourcetype: estudio.ultimo_estado.resourcetype,
+        };
+        await EstudiosService.actualizarUltimoEstado(datosComprobante,estudio.ultimo_estado.id);
+        this.$root.$bvToast.toast(
+          "Usted volvio a la seleccion de turno porque no cargo los datos",
+          {
+            title: "Atencion!",
+            toaster: "b-toaster-top-center",
+            solid: true,
+            variant: "success",
+          }
+        );
+        this.obtenerListaEstudios();
+      } catch (error) {
+
+        this.$root.$bvToast.toast(
+          "ocurrio un error mientras anulaba el estudio, por favor vuelva a intentar",
+          {
+            title: "Atencion!",
+            toaster: "b-toaster-top-center",
+            solid: true,
+            variant: "danger",
+          }
+        );
+      }
+
     },
     async anularEstudioFaltaComprobante(estudio) {
       try {
         let datosComprobante = {
           estudio_id: estudio.id,
           fecha_procesado: new Date(),
+          resourcetype: estudio.ultimo_estado.resourcetype,
         };
-        await EstudiosService.actualizarUltimoEstado(datosComprobante);
+        await EstudiosService.actualizarUltimoEstado(datosComprobante,estudio.ultimo_estado.id);
         this.$root.$bvToast.toast(
           "Usted anulo el estudio por que no se subio el comprobante de pago,quedo inhabilitado para poder continuar",
           {
@@ -238,6 +268,7 @@ export default {
         );
         this.obtenerListaEstudios();
       } catch (error) {
+
         this.$root.$bvToast.toast(
           "ocurrio un error mientras anulaba el estudio, por favor vuelva a intentar",
           {
