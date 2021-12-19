@@ -122,6 +122,33 @@
             </b-form-group>
           </b-col>
         </b-row>
+        <b-row>
+          <b-col  md="5">
+            <b-form-group
+              id="email-label"
+              label="email :"
+              label-for="email"
+            >
+              <ValidationProvider
+                :name="'email '"
+                :rules="'required'"
+                v-slot="{ errors, valid }"
+              >
+                <b-form-input
+                  placeholder="email"
+                  v-model="empleado.email"
+                  :state="errors[0] ? false : valid ? true : null"
+                ></b-form-input>
+                <b-form-invalid-feedback
+                  v-for="error in errors"
+                  :key="error.key"
+                >
+                  {{ error }}
+                </b-form-invalid-feedback>
+              </ValidationProvider>
+            </b-form-group>
+          </b-col>
+        </b-row>
       </b-card>
     </ValidationObserver>
 

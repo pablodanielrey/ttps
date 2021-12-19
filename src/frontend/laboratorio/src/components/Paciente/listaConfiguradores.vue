@@ -103,7 +103,12 @@ export default {
           class: "text-center p2",
         },
         {
-          key: "usuario",
+          key: "email",
+          label: "Email",
+          class: "text-center p2",
+        },
+        {
+          key: "usuario.username",
           label: "Usuario",
           class: "text-center p2",
         },

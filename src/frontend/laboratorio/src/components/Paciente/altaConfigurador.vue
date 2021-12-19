@@ -122,6 +122,33 @@
             </b-form-group>
           </b-col>
         </b-row>
+        <b-row>
+          <b-col lg="5" md="5">
+            <b-form-group
+              id="email-label"
+              label="email :"
+              label-for="email"
+            >
+              <ValidationProvider
+                :name="'email '"
+                :rules="'required'"
+                v-slot="{ errors, valid }"
+              >
+                <b-form-input
+                  placeholder="email"
+                  v-model="configurador.email"
+                  :state="errors[0] ? false : valid ? true : null"
+                ></b-form-input>
+                <b-form-invalid-feedback
+                  v-for="error in errors"
+                  :key="error.key"
+                >
+                  {{ error }}
+                </b-form-invalid-feedback>
+              </ValidationProvider>
+            </b-form-group>
+          </b-col>
+        </b-row>
       </b-card>
     </ValidationObserver>
 
@@ -153,7 +180,8 @@ export default {
           usuario: {
             username: null,
             password: null
-          }
+          },
+          email: null
         };
       },
     },
@@ -220,7 +248,7 @@ export default {
       } catch (error) {
         console.log(error);
         this.$root.$bvToast.toast(
-          "NO se pudo editar el configurador",
+          "No se pudo editar el configurador",
           {
             title: "Atencion!",
             toaster: "b-toaster-top-center",
