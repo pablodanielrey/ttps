@@ -360,7 +360,7 @@ export default {
         }
       } catch (error) {
         this.showError = true;
-        this.error= error.response.data
+        this.error= error.response.data.dni[0]
         console.log(error.response.data);
       }
     },
@@ -380,8 +380,7 @@ export default {
         return this.usuario;
       } else {
         let datos = {};
-        datos = {
-          usuario: {
+        datos = {         
             nombre: this.usuario.nombre,
             apellido: this.usuario.apellido,
             dni: this.usuario.dni,
@@ -402,7 +401,7 @@ export default {
                 ),
               },
             },
-          },
+          
         };
         return datos;
       }
