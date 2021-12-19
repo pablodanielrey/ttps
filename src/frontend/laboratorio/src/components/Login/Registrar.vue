@@ -23,7 +23,11 @@
                 >Su usuario se creo con exito, recorda que te enviamos un email
                 con los datos para poder ingresar en el sistema</b-alert
               >
+                <b-alert v-if="this.showError" show variant="danger"
+                >{{this.error}}</b-alert
+              >
             </p>
+            
             <br />
             <b-row>
               <b-col lg="6">
@@ -114,6 +118,7 @@
                       v-model="usuario.email"
                       placeholder="Ingrese Email"
                       required
+                      type="email"
                     ></b-form-input>
                   </b-form-group>
                 </b-col>
@@ -171,7 +176,7 @@
                 <b-col lg="6">
                   <b-form-group label="Nombre del tutor :">
                     <b-form-input
-                      v-model="usuario.tutor.tutor.nombre"
+                      v-model="tutor.tutor.nombre"
                       type="text"
                       placeholder="Ingrese Nombre del tutor"
                       required
@@ -185,7 +190,7 @@
                     label-for="input-2"
                   >
                     <b-form-input
-                      v-model="usuario.tutor.tutor.apellido"
+                      v-model="tutor.tutor.apellido"
                       placeholder="Ingrese apellido del tutor"
                       required
                     ></b-form-input>
@@ -201,7 +206,7 @@
                   >
                     <b-form-input
                       type="number"
-                      v-model="usuario.tutor.tutor.telefono"
+                      v-model="tutor.tutor.telefono"
                       placeholder="Ingrese Telefono del tutor"
                       required
                     ></b-form-input>
@@ -214,9 +219,10 @@
                     label-for="input-2"
                   >
                     <b-form-input
-                      v-model="usuario.tutor.tutor.email"
+                      v-model="tutor.tutor.email"
                       placeholder="Ingrese Email del tutor"
                       required
+                      type="email"
                     ></b-form-input>
                   </b-form-group>
                 </b-col>
@@ -230,7 +236,7 @@
                     label-for="input-2"
                   >
                     <b-form-input
-                      v-model="usuario.tutor.tutor.calle"
+                      v-model="tutor.tutor.calle"
                       placeholder="Ingrese Calle"
                       required
                     ></b-form-input>
@@ -243,9 +249,10 @@
                     label-for="input-2"
                   >
                     <b-form-input
-                      v-model="usuario.tutor.tutor.numero"
+                      v-model="tutor.tutor.numero"
                       placeholder="Ingrese numero"
                       required
+                      type="number"
                     ></b-form-input>
                   </b-form-group>
                 </b-col>
@@ -256,9 +263,10 @@
                     label-for="input-2"
                   >
                     <b-form-input
-                      v-model="usuario.tutor.tutor.piso"
+                      v-model="tutor.tutor.piso"
                       placeholder="Ingrese Piso"
                       required
+                      type="number"
                     ></b-form-input>
                   </b-form-group>
                 </b-col>
@@ -291,8 +299,8 @@
 </template>
 
 <script>
-import PacientesService from "@/services/PacientesService.js";
-
+ import PacientesService from "@/services/PacientesService.js";
+ 
 export default {
   components: {},
 
@@ -302,25 +310,27 @@ export default {
     return {
       show: true,
       showCreated: false,
+      showError:false,
+      error:null,
       usuario: {
         nombre: null,
         apellido: null,
         dni: null,
         email: null,
         telefono: null,
-        calle: 1,
-        numero: 2,
-        piso: 3,
+        calle: null,
+        numero: null,
+        piso: null,
         direccion: null,
         fecha_nacimiento: new Date().format("dd-mm-yyyy"),
+      },
+      tutor: {
         tutor: {
-          tutor: {
-            nombre: null,
-            apellido: null,
-            email: null,
-            telefono: null,
-            direccion: null,
-          },
+          nombre: null,
+          apellido: null,
+          email: null,
+          telefono: null,
+          direccion: null,
         },
       },
     };
@@ -340,20 +350,62 @@ export default {
     async onSubmit() {
       try {
         this.armarDireccion();
-        console.log(this.usuario);
-        let response = await PacientesService.registrarPaciente(this.usuario);
+        let datos = this.armarArray();
+        console.log(datos)
+        let response = await PacientesService.registrarPaciente(datos);
         console.log(response);
         if (response.status == 201) {
           this.showCreated = true;
           this.limpiarCampos();
         }
       } catch (error) {
-        console.log(error);
+        this.showError = true;
+        this.error= error.response.data
+        console.log(error.response.data);
       }
     },
     armarDireccion() {
       this.usuario.direccion =
-        this.usuario.calle + this.usuario.numero + this.usuario.piso;
+        this.usuario.calle +
+        " " +
+        this.usuario.numero +
+        " " +
+        this.usuario.piso;
+    },
+    armarDireccionTutor(calle, numero, piso) {
+      return calle + " " + numero + " " + piso;
+    },
+    armarArray() {
+      if (this.esMayor()) {
+        return this.usuario;
+      } else {
+        let datos = {};
+        datos = {
+          usuario: {
+            nombre: this.usuario.nombre,
+            apellido: this.usuario.apellido,
+            dni: this.usuario.dni,
+            fecha_nacimiento: this.usuario.fecha_nacimiento,
+            tutor: {
+              tutor: {
+                nombre: this.tutor.tutor.nombre,
+                apellido: this.tutor.tutor.apellido,
+                email: this.tutor.tutor.email,
+                telefono: this.tutor.tutor.telefono,
+                calle: this.tutor.tutor.calle,
+                numero: this.tutor.tutor.numero,
+                piso: this.tutor.tutor.piso,
+                direccion: this.armarDireccionTutor(
+                  this.tutor.tutor.calle,
+                  this.tutor.tutor.numero,
+                  this.tutor.tutor.piso
+                ),
+              },
+            },
+          },
+        };
+        return datos;
+      }
     },
     limpiarCampos() {
       (this.usuario.nombre = null),
@@ -366,11 +418,11 @@ export default {
         (this.usuario.piso = null),
         (this.usuario.direccion = null),
         (this.usuario.fecha_nacimiento = new Date().format("dd-mm-yyyy")),
-        (this.usuario.tutor.tutor.nombre = null),
-        (this.usuario.tutor.tutor.apellido = null),
-        (this.usuario.tutor.tutor.email = null),
-        (this.usuario.tutor.tutor.telefono = null),
-        (this.usuario.tutor.tutor.direccion = null);
+        (this.tutor.tutor.nombre = null),
+        (this.tutor.tutor.apellido = null),
+        (this.tutor.tutor.email = null),
+        (this.tutor.tutor.telefono = null),
+        (this.tutor.tutor.direccion = null);
     },
   },
   computed: {},
@@ -390,7 +442,8 @@ export default {
 p,
 b,
 label,
-body {
+body,
+a {
   font-family: "Roboto", sans-serif !important;
 }
 #container {
