@@ -135,7 +135,7 @@
               >
                 <b-form-input
                   placeholder="usuario"
-                  v-model="medicoInformante.usuario"
+                  v-model="medicoInformante.usuario.username"
                   :state="errors[0] ? false : valid ? true : null"
                 ></b-form-input>
                 <b-form-invalid-feedback
@@ -161,7 +161,7 @@
                 <b-form-input
                   type="password"
                   placeholder="contraseña"
-                  v-model="medicoInformante.clave"
+                  v-model="medicoInformante.usuario.password"
                   :state="errors[0] ? false : valid ? true : null"
                 ></b-form-input>
                 <b-form-invalid-feedback
@@ -204,8 +204,10 @@ export default {
           apellido: null,
           email:null,
           matricula:null,
-          usuario: null,
-          clave: null,
+          usuario: {
+            username: null,
+            password: null
+          }
         };
       },
     },
