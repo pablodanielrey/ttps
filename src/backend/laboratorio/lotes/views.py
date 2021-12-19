@@ -30,22 +30,21 @@ class VistaLotes(viewsets.ModelViewSet):
         serializador = self.serializer_class(instance=lote, context={'request': request})
         return Response(serializador.data)
 
+    # def update(self, request, pk):
+    #     lote = models.Lote.objects.get(id=pk)
+    #     # serializador = self.serializer_class(instance=lote, context={'request': request})
 
-    def update(self, request, pk):
-        lote = models.Lote.objects.get(id=pk)
-        # serializador = self.serializer_class(instance=lote, context={'request': request})
+    #     logging.debug(request.data)
 
-        logging.debug(request.data)
+    #     fecha = parser.parse(request.data['fecha'])
+    #     resultado = request.data['resultado']
 
-        fecha = parser.parse(request.data['fecha'])
-        resultado = request.data['resultado']
+    #     "TODO: procesar estudios a cerrar"
+    #     ids_de_estudios = request.data['estudios']
+    #     "TODO: tengo que impementar el cerrar los estudios solos pasados por ahi y los demas volver a seleccionar el turno"
+    #     models.ModeloLotes().cerrar_lote(lote, fecha, resultado)
 
-        "TODO: procesar estudios a cerrar"
-        ids_de_estudios = request.data['estudios']
-        "TODO: tengo que impementar el cerrar los estudios solos pasados por ahi y los demas volver a seleccionar el turno"
-        models.ModeloLotes().cerrar_lote(lote, fecha, resultado)
-
-        return Response({'status':200})
+    #     return Response({'status':200})
 
 class VistaEstudios(views.APIView):
 

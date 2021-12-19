@@ -342,3 +342,15 @@ class SerializadorEstudiosRestringido(serializers.ModelSerializer):
         model = models.Estudio
         fields = ['id', 'fecha_alta', 'diagnostico', 'paciente', 'medico_derivante', 'tipo']
 
+
+class SerializadorEstudiosMinimo(serializers.ModelSerializer):
+    id = serializers.UUIDField(read_only=False)
+    paciente = SerializadorDePersonaResumido(required=False)
+    medico_derivante = SerializadorDePersonaResumido(required=False)
+    tipo = SerializadorTiposDeEstudio(required=False)
+    diagnostico = SerializadorDiagnostico(required=False)
+
+    class Meta:
+        model = models.Estudio
+        fields = ['id', 'fecha_alta', 'diagnostico', 'paciente', 'medico_derivante', 'tipo']
+

@@ -212,7 +212,7 @@ export default {
     getIdEstudios(){
       let idEstudios=[]
       this.itemsEst.forEach(estudio => {
-          idEstudios.push(estudio.id)
+          idEstudios.push({estudio:{id:estudio.estudio.id}})
       });
         return idEstudios
     },
