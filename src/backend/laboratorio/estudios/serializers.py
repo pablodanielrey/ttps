@@ -112,6 +112,12 @@ class SerializadorEnviarConsentimientoInformado(serializers.ModelSerializer):
         fields = ['id','fecha','fecha_enviado']
 
     def update(self, instance, validated_data):
+
+        usuario_logueado = self.context.get('request').user
+        logging.debug(f'verificando si {usuario_logueado.username} es Empleado')
+        if not personas_models.Empleado.usuario_es_tipo(usuario_logueado):
+            raise login_models.PermisosAPIException("No tiene permisos para realizar esta acción")
+
         super().update(instance, validated_data)
 
         estudio = instance.estudio
