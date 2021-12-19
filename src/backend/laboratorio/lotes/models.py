@@ -12,6 +12,7 @@ class Lote(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     fecha = models.DateField()
     resultado = models.CharField(max_length=1024, null=True)
+    numero_lote = models.IntegerField(primary_key=False)
 
     @classmethod
     def all_pending(cls):
@@ -52,7 +53,8 @@ class ModeloLotes:
         if len(estudios_ids) != 10:
             raise Exception()
 
-        lote = Lote(fecha=generar_fecha_now().date())
+        cantidad = Lote.objects.all().count() + 1
+        lote = Lote(fecha=generar_fecha_now().date(), numero_lote=cantidad)
         lote.save()
 
         for eid in estudios_ids:
@@ -60,7 +62,7 @@ class ModeloLotes:
             
             """ actualizo el ultimo estado """
             ultimo_estado = estudio.ultimo_estado
-            ultimo_estado.numero_lote = str(lote.id)
+            ultimo_estado.numero_lote = str(lote.numero_lote)
             ultimo_estado.save()
 
             """ cambio de estado el estudio """
