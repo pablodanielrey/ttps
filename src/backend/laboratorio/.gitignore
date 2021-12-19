@@ -1,4 +1,8 @@
+admin_laboratorio/migrations
 estudios/migrations
-personas/migrations
+liquidaciones/migrations
+login/migrations
 lotes/migrations
+personas/migrations
+reportes/migrations
 turnos/migrations
