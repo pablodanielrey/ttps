@@ -1,41 +1,15 @@
 <template>
   <b-container>
     <div>
-      <b-card header="Template Consentimiento informado">
+      <b-card header="Modo de Trabajo">
         <div>
           <div>
-            <b-button variant="success" @click="verTemplate()"
-              >Descargar actual
-            </b-button>
-          </div>
-          <div>
-            <ValidationObserver ref="detailsTemplate">
-              <b-form-group
-                id="pdf-label"
-                label="Cargar nuevo:"
-                label-for="pdf"
-              >
-                <ValidationProvider :name="'pdf '" v-slot="{ errors }">
-                  <b-form-file
-                    v-model="file1"
-                    :state="Boolean(file1)"
-                    @change="obtenerPDF($event, file1)"
-                    accept="application/pdf"
-                    placeholder="Seleccione un nuevo Template para Consentimiento informado..."
-                    browse-text="Buscar"
-                  ></b-form-file>
-                  <b-form-invalid-feedback
-                    v-for="error in errors"
-                    :key="error.key"
-                  >
-                    {{ error }}
-                  </b-form-invalid-feedback>
-                </ValidationProvider>
-              </b-form-group>
-            </ValidationObserver>
-            <b-button variant="success" @click="guardarTemplate()"
-              >Guardar
-            </b-button>
+            <input type="radio" id="uno" value="Uno" v-model="picked">
+                <label for="uno">Uno</label>
+            <input type="radio" id="Dos" value="Dos" v-model="picked">
+                <label for="Dos">Dos</label>
+            <br>
+            <span>Eligió: {{ picked }}</span>
           </div>
         </div>
       </b-card>
