@@ -9,14 +9,7 @@ export default {
     },
     obtenerEstudio(id) {
         return Api().get(API_URL + API_USER + "estudios/" + id)
-    },
-    obtenerEstudiosPorMesAño(){
-        return Api().get(API_URL + API_USER + "estudios/estudios_estadisitcas_mes" )
-    },
-    obtenerEstudiosPorTipo(){
-        return Api().get(API_URL + API_USER + "estudios/tipos_estudio" )
-
-    },
+    },   
     obtenerTurnos() {
         return Api().get(API_URL + API_USER + "listaTurnos/")
     },
@@ -29,16 +22,7 @@ export default {
     obtenerListaEstudios() {
         return Api().get(API_URL + API_USER + "estudios/")
     },
-    actualizarUltimoEstado(datos,id_ultimo_estado){
-        /*
-                ACA HACE FAKTA CAMBIAR A ALGO PARECIDO A ESTO
-                return Api().put(API_URL + API_USER + "estados/" + id_ultimo_estado + "/", datos)        
-
-                el id_ultimo_estado sale de los datos del estudio.
-                estudio.ultimo_estado.id ---> id_ultimo_estado
-                
-        */
-            console.log(datos,id_ultimo_estado)
+    actualizarUltimoEstado(datos,id_ultimo_estado){           
         return Api().put(API_URL + API_USER + "estados/"+id_ultimo_estado +'/',datos)
     },
     obtenerListaEstudiosParaInformes(){

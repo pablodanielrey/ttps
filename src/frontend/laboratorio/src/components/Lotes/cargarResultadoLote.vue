@@ -135,7 +135,7 @@ export default {
         },
          {
           key: "acciones",
-          label: "Acciones",
+          label: "Anular",
           class: "text-center p2",
         },
       ],
@@ -187,7 +187,7 @@ export default {
         }
         let datos = { fecha: new Date(), resultado: this.urlResultado,estudios:this.getIdEstudios() };
         console.log(datos);
-        /* let response = await LotesService.cargarResultadoLote(
+        let response = await LotesService.cargarResultadoLote(
           this.idLoteActual,
           datos
         );
@@ -201,7 +201,7 @@ export default {
           solid: true,
           variant: "success",
         });
-        this.obtenerLotes(); */
+        this.obtenerLotes(); 
       } catch (error) {
         console.log(error);
       }
@@ -227,18 +227,15 @@ export default {
 
     async obtenerLotes() {
       try {
-        let response = await LotesService.obtenerLotes();
-        console.log(response);
+        let response = await LotesService.obtenerLotes();      
         this.items = response.data;
       } catch (err) {
         console.log(err);
       }
     },
-    anularEstudioMuestraInsuficiente(estudio){   
-      console.log(estudio)   
-      console.log(  this.itemsEst)
-      this.itemsEst =  this.itemsEst.filter(e => e.id != estudio.id);   
-      console.log(  this.itemsEst)   
+    anularEstudioMuestraInsuficiente(estudio){ 
+      this.itemsEst =  this.itemsEst.filter(e => e.estudio.id != estudio.id);   
+      
     }
   },
 

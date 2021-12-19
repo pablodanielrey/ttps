@@ -10,13 +10,18 @@
       :chartData="this.dataTipoEstudios"
       :options="this.chartOptions"
     />
+    <line-chart
+      v-if="loading"
+      :chartData="this.dataDemoraTiempo"
+      :options="this.chartOptions"
+    />
   </div>
 </template>
 
 <script>
 import LineChart from "@/services/estadisticasService/LineChart.js";
 import BarChart from "@/services/estadisticasService/BarChart.js";
-import EstudiosService from "@/services/EstudiosService.js";
+import ReportesService from "@/services/ReportesService.js";
 import axios from "axios";
 
 export default {
@@ -42,6 +47,21 @@ export default {
         ],
         datasets: [],
       },
+      dataDemoraTiempo: {
+        labels: [    "Enero",
+          "Febrero",
+          "Marzo",
+          "Abril",
+          "Mayo",
+          "Junio",
+          "Julio",
+          "Agosto",
+          "Septiembre",
+          "Octubre",
+          "Noviembre",
+          "Diciembre",],
+        datasets: [],
+      },
       dataTipoEstudios: {
         labels: [],
         datasets: [],
@@ -58,7 +78,8 @@ export default {
     },
     async obtenerEstudiosPorMesAño() {
       try {
-        let response = await EstudiosService.obtenerEstudiosPorMesAño();
+        let response = await ReportesService.obtenerEstudiosPorMesAño();
+        console.log(response)
         this.armarDatos(response.data);
       } catch (error) {
         console.log(error);
@@ -66,35 +87,55 @@ export default {
     },
     async obtenerEstudiosPorTipo() {
       try {
-        let response = await EstudiosService.obtenerEstudiosPorTipo();
-        this.armarDatosTipoEstudios(response.data.Estudios);
-         BarChart.value.chartInstance.zoom(1.01);
+        let response = await ReportesService.obtenerEstudiosPorTipo();
+        this.armarDatosTipoEstudios(response.data);
+        BarChart.value.chartInstance.zoom(1.01);
       } catch (error) {
         console.log(error);
       }
     },
-    armarDatosTipoEstudios(data) {      
-      let dataTipos=[]      
+    async demoraEstudiosProcesamiento() {
+      try {
+        let response = await ReportesService.demoraEstudiosProcesamiento();
+        console.log(response);
+        this.armarDatosTiempo(response.data)
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    armarDatosTipoEstudios(data) {
+      let dataTipos = [];
       for (let index = 0; index < Object.values(data).length; index++) {
         this.dataTipoEstudios.labels.push(data[index].tipo);
-        dataTipos.push(data[index].cantidad)        
+        dataTipos.push(data[index].cantidad);
       }
-       this.dataTipoEstudios.datasets.push({
+      this.dataTipoEstudios.datasets.push({
         label: "Tipos de estudio",
-        backgroundColor:  [
-            "#77CEFF",
-            "#0079AF",
-            "#123E6B",
-            "#97B0C4",
-            "#A5C8ED",
-          ],
+        backgroundColor: [
+          "#77CEFF",
+          "#0079AF",
+          "#123E6B",
+          "#97B0C4",
+          "#A5C8ED",
+        ],
         data: dataTipos,
+      });
+    },
+    armarDatosTiempo(datos) {    
+      console.log( datos.datos[12].procesados)
+      let data = [0,0, 0, 0, 0, 0, 0, 0, 0, 0, 0, datos.datos[12].tardanza_segundos];
+
+      this.dataDemoraTiempo.datasets.push({
+        label: "Tiempo demora estudios",
+        backgroundColor: " 	#6495ED ",
+        data: data
       });
     },
 
     armarDatos(datos) {
+      console.log(datos)
       let data = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-      datos.Estudios.forEach((e) => {
+      datos.forEach((e) => {
         data[e.month - 1] = e.count;
       });
       this.datacollection.datasets.push({
@@ -106,7 +147,11 @@ export default {
   },
   mounted() {
     axios
-      .all([this.obtenerEstudiosPorMesAño(), this.obtenerEstudiosPorTipo()])
+      .all([
+        this.obtenerEstudiosPorMesAño(),
+        this.obtenerEstudiosPorTipo(),
+        this.demoraEstudiosProcesamiento(),
+      ])
       .then(() => {
         this.loading = true;
       })

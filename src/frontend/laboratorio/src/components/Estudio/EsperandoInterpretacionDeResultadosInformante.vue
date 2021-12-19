@@ -121,16 +121,16 @@ export default {
       try {
         
         let result = await this.$refs.detailsResultado.validate();
-        console.log(result)
         if (result) {
           let datos = {
             estudio_id: this.estudio.id,
+            resourcetype: this.estudio.ultimo_estado.resourcetype,
             fecha_informe: new Date(),          
             resultado: this.resultado.resultado,
             informe: this.resultado.informe,
           };
            console.log(datos)
-          let response= await EstudiosService.actualizarUltimoEstado(datos);
+          let response= await EstudiosService.actualizarUltimoEstado(datos,this.estudio.ultimo_estado.id);
           console.log(response)
           this.$root.$bvToast.toast(
             "Se guardo de forma correcta el resultado del informe",

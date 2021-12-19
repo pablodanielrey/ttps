@@ -2,8 +2,10 @@ import datetime
 from zoneinfo import ZoneInfo
 
 from django.db import models
-
+from rest_framework.response import Response
 from estudios import models
+from django.db.models.functions import ExtractMonth
+from django.db.models import Count
 class Reportes:
 
     def __generar_fecha_now(self):
@@ -18,23 +20,23 @@ class Reportes:
         LV-E23
     """
     def cantidad_de_estudios_por_tipo(self):
-        estudios = models.Estudio.objects.all()
-        reporte = {}
-        for e in estudios:
-            tipo = e.tipo.nombre
-            if tipo not in reporte:
-                reporte[tipo] = 0
-            reporte[tipo] += 1
-        return {
-            'reporte': self.__generar_cabecera_reporte(),
-            'datos': reporte
-        }
+        tipos={}
+        index=0
+        tipoEstudio = models.TiposDeEstudio.objects.all()
+        for tipo in tipoEstudio:  
+            tipos[index]=({
+                "tipo": tipo.nombre,
+                "cantidad": models.Estudio.objects.filter(tipo= tipo).count()
+            })
+            index=index +1 
+        
+        return tipos
+
 
 
     """
-        LV-E25
-    """
-    def cantidad_de_estudios_por_mes(self):
+        LV-E25d
+        def cantidad_de_estudios_por_mes(self):
         estudios = models.Estudio.objects.all()
         reporte = {}
         for e in estudios:
@@ -48,6 +50,11 @@ class Reportes:
             'datos': reporte
         }
 
+    """
+    def cantidad_de_estudios_por_mes(self):
+        cantidadPorMes = models.Estudio.objects.annotate(month=ExtractMonth('fecha_alta')).values('month').annotate(count=Count('id')).values('month', 'count')  
+        return cantidadPorMes
+    
 
     """
         LV-E27
@@ -73,13 +80,14 @@ class Reportes:
             mes = e.fecha_alta.month
             if mes not in reporte:
                 reporte[mes] = {
-                    'procesados': 0,
-                    'tardanza_segundos': 0
+                    "procesados": 0,
+                    "tardanza_segundos": 0
                 }
             reporte[mes]['tardanza_segundos'] += tardanza
             reporte[mes]['procesados'] += 1
 
         return {
-            'reporte': self.__generar_cabecera_reporte(),
-            'datos': reporte
+            "reporte": self.__generar_cabecera_reporte(),
+            "datos": reporte
         }
+        

@@ -97,14 +97,16 @@ export default {
         let result = await this.$refs.detailsExtraccion.validate();
         if (result) {
           let retiroExtraccion = {
-
             estudio_id: this.estudio.id,
             extracionista: this.retiro,
             fecha_retiro: new Date(this.fecha_retiro),
+            resourcetype: this.estudio.ultimo_estado.resourcetype,
+
           };
           console.log(retiroExtraccion);
           let response = await EstudiosService.actualizarUltimoEstado(
-            retiroExtraccion
+            retiroExtraccion,
+             this.estudio.ultimo_estado.id
           );
           this.$root.$bvToast.toast(
             "Se ingresaron los datos del retiro de la extraccion",

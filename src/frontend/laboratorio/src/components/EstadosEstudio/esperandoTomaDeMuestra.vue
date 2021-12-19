@@ -4,7 +4,7 @@
       <ValidationObserver ref="detailMuestra">
         <b-card header="Ingrese los datos de toma de muestra">
           <div class="counter" v-if="!pasoDiaTurno()">
-            Quedan {{ counter }}  dias para cargar los datos de toma de muestra
+            Quedan {{ counter }} dias para cargar los datos de toma de muestra
           </div>
           <br />
           <b-row>
@@ -93,10 +93,10 @@ export default {
     },
   },
   created() {
-    console.log(this.estudio)
-     let fecha = new Date(this.estudio.ultimo_estado.turno.inicio);
+    console.log(this.estudio);
+    let fecha = new Date(this.estudio.ultimo_estado.turno.inicio);
     this.counter = new Date();
-    this.counter= this.difference(fecha.getDate(),this.counter.getDate())
+    this.counter = this.difference(fecha.getDate(), this.counter.getDate());
   },
   data() {
     return {
@@ -107,17 +107,17 @@ export default {
   },
 
   methods: {
-    difference(fechaAlta, diaHoy) {      
-      let xtotal=30
-    return xtotal - (diaHoy - fechaAlta)     
+    difference(fechaAlta, diaHoy) {
+      let xtotal = 30;
+      return xtotal - (diaHoy - fechaAlta);
     },
-    pasoDiaTurno(){
+    pasoDiaTurno() {
       let fechaTurno = new Date(this.estudio.ultimo_estado.turno.inicio);
-      console.log(fechaTurno < new Date())
-      if (fechaTurno < new Date()){
-        return false
+      console.log(fechaTurno < new Date());
+      if (fechaTurno < new Date()) {
+        return false;
       }
-      return true
+      return true;
     },
     async guardarDatos() {
       try {
@@ -128,9 +128,8 @@ export default {
             freezer: this.freezer,
             mililitros: this.mililitros,
             fecha_muestra: new Date(),
-            expirado:false,
-                      resourcetype: this.estudio.ultimo_estado.resourcetype,
-
+            expirado: false,
+            resourcetype: this.estudio.ultimo_estado.resourcetype,
           };
           console.log(datosMuestra);
           let response = await EstudiosService.actualizarUltimoEstado(
@@ -148,7 +147,6 @@ export default {
             name: "listaEstudios",
           });
         }
-        
       } catch (error) {
         console.log(error);
         this.$root.$bvToast.toast(

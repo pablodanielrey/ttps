@@ -58,167 +58,291 @@
           </b-row>
         </b-card-text>
       </b-card>
-      <b-row>
-        <div v-for="estado in estados" :key="estado.id">
-          
-          <b-row >
-             <b-card-group deck>
-            <b-col cols="10" md="auto" >
-              <b-card
-              deck
-                v-if="estado.resourcetype == 'EsperandoComprobanteDePago'"
-                header="Comprobante pago"
-                header-text-variant="white"
-                align="center"
-                header-bg-variant="secondary"
-              >
-                <br />
-                <b-card-text>
-                  <strong> Fecha envio:</strong>
-                  {{ mostrarFecha(estado.fecha) }}
-                  <a
-                    v-if="estado.comprobante != null"
-                    title="Descargar Comprobante de pago"
-                    variant="outline-success"
-                    download="pago.pdf"
-                    @click="bajarPago()"
-                    ><br />
-                    <b-icon icon="download" variant="info"> </b-icon
-                  ></a>
+      <b-container fluid class="text-center">
+     
+          <div v-for="estado in estados" :key="estado.id">
+   
+              <b-card-group deck>             
+                <b-card
+                
+                  v-if="estado.resourcetype == 'EsperandoComprobanteDePago'"
+                  header="Comprobante pago"
+                  header-text-variant="white"
+                  align="center"
+                  header-bg-variant="secondary"
+                >
+                  <b-card-text>
+                    <strong> Fecha envio:</strong>
+                    {{ mostrarFecha(estado.fecha) }}
+                    <a
+                      v-if="estado.comprobante != null"
+                      title="Descargar Comprobante de pago"
+                      variant="outline-success"
+                      download="pago.pdf"
+                      @click="bajarPago()"
+                      ><br />
+                      <b-icon icon="download" variant="info"> </b-icon
+                    ></a>
+                    <br />
+                  </b-card-text>
+                </b-card>
+            
+                <b-card
+                
+                  v-if="
+                    estado.resourcetype == 'EsperandoConsentimientoInformado'
+                  "
+                  header="Consentimiento Informado"
+                  header-text-variant="white"
+                  align="center"
+                  header-bg-variant="secondary"
+                >
+                  <b-card-text>
+                    <strong> Fecha :</strong>
+                    {{ mostrarFecha(estado.fecha) }}
+                    <a
+                      v-if="estado.consentimiento != null"
+                      title="Descargar consentimiento firmado"
+                      variant="outline-success"
+                      download="consentimiento.pdf"
+                      @click="bajarConsentimiento()"
+                      ><br />
+                      <b-icon icon="download" variant="info"> </b-icon
+                    ></a>
+                    <br />
+                  </b-card-text>
+                </b-card>
+         
+              </b-card-group>
+            <b-card-group deck>
+              <b-col>
+                <b-card
+                  deck
+                  v-if="
+                    estado.resourcetype ==
+                    'EsperandoSeleccionDeTurnoParaExtraccion'
+                  "
+                  header="Turnos"
+                  header-text-variant="white"
+                  align="center"
+                  header-bg-variant="secondary"
+                >
                   <br />
-                </b-card-text>
-              </b-card>
-            </b-col>
-            <b-col cols="12" md="auto">
-              <b-card
-                v-if="estado.resourcetype == 'EsperandoConsentimientoInformado'"
-                header="Consentimiento Informado"
-                header-text-variant="white"
-                align="center"
-                header-bg-variant="secondary"
-              >
-                <br />
-                <b-card-text>
-                  <strong> Fecha :</strong>
-                  {{ mostrarFecha(estado.fecha) }}
-                  <a
-                    v-if="estado.consentimiento != null"
-                    title="Descargar consentimiento firmado"
-                    variant="outline-success"
-                    download="consentimiento.pdf"
-                    @click="bajarConsentimiento()"
-                    ><br />
-                    <b-icon icon="download" variant="info"> </b-icon
-                  ></a>
-                  <br />
-                </b-card-text>
-              </b-card>
-            </b-col>
-             </b-card-group>
-          </b-row>
-          <b-row>
-            <b-col cols="12" md="auto">
-              <b-card
-                v-if="
-                  estado.resourcetype ==
-                  'EsperandoSeleccionDeTurnoParaExtraccion'
-                "
-                header="Turnos"
-                header-text-variant="white"
-                align="center"
-                header-bg-variant="secondary"
-              >
-                <br />
-                <b-card-text>
-                  <div v-if="estado.turno != null">
-                    <strong> Turno:</strong>
-                    {{ mostrarFecha(estado.turno.inicio) }}
+                  <b-card-text>
+                    <div v-if="estado.turno != null">
+                      <strong> Turno:</strong>
+                      {{ mostrarFecha(estado.turno.inicio) }}
 
-                    <li>
-                      Inicio
-                      {{ mostrarminutos(estado.turno.inicio) }}
-                    </li>
-                    <li>Fin: {{ mostrarminutos(estado.turno.fin) }}</li>
-                  </div>
-                  <div v-else>
+                      <li>
+                        Inicio
+                        {{ mostrarminutos(estado.turno.inicio) }}
+                      </li>
+                      <li>Fin: {{ mostrarminutos(estado.turno.fin) }}</li>
+                    </div>
+                    <div v-else>
                       <small> No selecciono turno</small>
-                  </div>
+                    </div>
+                    <br />
+                  </b-card-text>
+                </b-card>
+              </b-col>
+            </b-card-group>
+            <b-card-group deck>
+              <b-col>
+                <b-card
+                  deck
+                  v-if="estado.resourcetype == 'EsperandoTomaDeMuestra'"
+                  header="Toma de muestra"
+                  header-text-variant="white"
+                  align="center"
+                  header-bg-variant="secondary"
+                >
                   <br />
-                </b-card-text>
-              </b-card>
-            </b-col>
-          </b-row>
-          <b-card
-            v-if="estado.resourcetype == 'EsperandoTomaDeMuestra'"
-            header="Toma de muestra"
-            header-text-variant="white"
-            align="center"
-            header-bg-variant="secondary"
-          >
-            <br />
-            <b-card-text>
-              <div>
-                <strong> Fecha:</strong>
-                {{ mostrarFecha(estado.fecha_muestra) }}
+                  <b-card-text>
+                    <div v-if="estado.mililitros != null">
+                      <strong> Fecha:</strong>
+                      {{ mostrarFecha(estado.fecha_muestra) }}
 
-                <li>
-                  Frezeer:
-                  {{ estado.freezer }}
-                </li>
-                <li>Mililitros: {{ estado.mililitros }}</li>
-                <li>Expiro: {{ expiroToma(estado.expirado) }}</li>
-              </div>
-              <br />
-            </b-card-text>
-          </b-card>
-        </div>
+                      <li>
+                        Frezeer:
+                        {{ estado.freezer }}
+                      </li>
+                      <li>Mililitros: {{ estado.mililitros }}</li>
+                      <li>Expiro: {{ expiroToma(estado.expirado) }}</li>
+                    </div>
+                    <div v-else>
+                      <small> No se cargaron los datos de la muestra</small>
+                    </div>
+                    <br />
+                  </b-card-text>
+                </b-card>
+              </b-col>
+            </b-card-group>
+            <b-card-group deck>
+              <b-col>
+                <b-card
+                  deck
+                  v-if="estado.resourcetype == 'EsperandoRetiroDeExtaccion'"
+                  header="Retiro de la extraccion"
+                  header-text-variant="white"
+                  align="center"
+                  header-bg-variant="secondary"
+                >
+                  <br />
+                  <b-card-text v-if="estado.fecha_retiro != null">
+                    <div>
+                      <strong> Fecha de retiro:</strong>
+                      {{ mostrarFecha(estado.fecha_retiro) }}
+                      <br />
+                      <strong>Extraccionista:</strong>
+                      {{ estado.extracionista }}
+                    </div>
+                    <br />
+                  </b-card-text>
+                </b-card>
+              </b-col>
+            </b-card-group>
+            <b-card-group deck>
+              <b-col>
+                <b-card
+                  deck
+                  v-if="
+                    estado.resourcetype ==
+                    'EsperandoLoteDeMuestraParaProcesamientoBiotecnologico'
+                  "
+                  header="Retiro de la extraccion"
+                  header-text-variant="white"
+                  align="center"
+                  header-bg-variant="secondary"
+                >
+                  <br />
+                  <b-card-text>
+                    <div v-if="estado.numero_lote != null">
+                      <strong> Fecha :</strong>
+                      {{ mostrarFecha(estado.fecha) }}
+                      <br />
+                      <strong>Procesado en el lote:</strong>
+                      {{ estado.numero_lote }}
+                    </div>
+                    <div v-else>
+                      <small> El estudio no se proceso en ningun lote</small>
+                    </div>
+                    <br />
+                  </b-card-text>
+                </b-card>
+              </b-col>
+            </b-card-group>
+            <b-card-group deck>
+              <b-col>
+                <b-card
+                  deck
+                  v-if="
+                    estado.resourcetype ==
+                    'EsperandoProcesamientoDeLoteBiotecnologico'
+                  "
+                  header="Resultado del lote"
+                  header-text-variant="white"
+                  align="center"
+                  header-bg-variant="secondary"
+                >
+                  <br />
+                  <b-card-text>
+                    <div v-if="estado.fecha_resultado != null">
+                      <strong> Fecha :</strong>
+                      {{ mostrarFecha(estado.fecha_resultado) }}
+                      <br />
+                      <strong>Url:</strong>
+                      {{ estado.resultado_url }}
+                    </div>
+                    <div v-else>
+                      <small> No se cargo la url del resultado</small>
+                    </div>
+                    <br />
+                  </b-card-text>
+                </b-card>
+              </b-col>
+            </b-card-group>
+            <b-card-group deck>
+              <b-col>
+                <b-card
+                  deck
+                  v-if="
+                    estado.resourcetype == 'EsperandoInterpretacionDeResultados'
+                  "
+                  header="Resultado del medico informante"
+                  header-text-variant="white"
+                  align="center"
+                  header-bg-variant="secondary"
+                >
+                  <br />
+                  <b-card-text>
+                    <div v-if="estado.fecha_informe != null">
+                      <strong> Fecha :</strong>
+                      {{ mostrarFecha(estado.fecha_informe) }}
+                      <br />
+                      <strong>Resultado:</strong>
+                      {{ estado.resultado }}
+                      <br />
+                      <strong>Medico:</strong>
+                      {{ estado.medico_informante.nombre }}
+                      {{ estado.medico_informante.apellido }}
+                      <br />
+                      <p><strong>Informe: </strong></p>
+                      <a
+                        @click="verInforme(estado.informe)"
+                        title="ver Informe del resultado"
+                        variant="outline-success"
+                      >
+                        <b-icon icon="eye" variant="info"> </b-icon
+                      ></a>
+                    </div>
+                    <div v-else>
+                      <small>
+                        Esperando que el medico informante carge los
+                        datos</small
+                      >
+                    </div>
+                    <br />
+                  </b-card-text>
+                </b-card>
+              </b-col>
+            </b-card-group>
+            <b-card-group deck>
+              <b-col>
+                <b-card
+                  deck
+                  v-if="estado.resourcetype == 'ResultadoDeEstudioEntregado'"
+                  header="Estudio finalizado"
+                  header-text-variant="white"
+                  align="center"
+                  header-bg-variant="secondary"
+                >
+                  <br />
+                  <b-card-text>
+                    <div v-if="estado.fecha != null">
+                      <strong> Fecha :</strong>
+                      {{ mostrarFecha(estado.fecha) }}
+                      <br />
+                      Aca deberia descargar informe final
+                    </div>
 
-        <b-col v-if="this.estudio.estados[4] != undefined">
-          <h5>
-            <div v-if="this.estudio.estados[4].freezer != null">
-              <strong> Extraccion:</strong>
-              <li>Frezeer: {{ this.estudio.estados[4].freezer }}</li>
-              <li>Mililitros: {{ this.estudio.estados[4].mililitros }}</li>
-            </div>
-          </h5></b-col
-        >
-      </b-row>
-      <b-row>
-        <h5>
-          <b-col v-if="this.estudio.estados[5] != undefined"
-            ><div v-if="this.estudio.estados[5].extracionista != null">
-              <strong> Persona que retiro la muestra: </strong
-              >{{ this.estudio.estados[5].extracionista }}
-            </div>
-          </b-col>
-        </h5>
-      </b-row>
-      <b-row>
-        <h5>
-          <b-col v-if="this.estudio.estados[6] != undefined">
-            <div v-if="this.estudio.estados[6].numero_lote != null">
-              <strong> Procesado en lote: </strong
-              >{{ this.estudio.estados[6].numero_lote }}
-            </div></b-col
-          >
-        </h5>
-      </b-row>
-      <b-row>
-        <h5>
-          <b-col v-if="this.estudio.estados[7] != undefined">
-            <div v-if="this.estudio.estados[7].numero_lote != null">
-              <strong> Informe redactado por: </strong
-              >{{ this.estudio.estados[7].numero_lote }}
-            </div></b-col
-          >
-        </h5>
-      </b-row>
-
+                    <br />
+                  </b-card-text>
+                </b-card>
+              </b-col>
+            </b-card-group>
+          </div>
+      </b-container>
       <div v-if="this.estudio.paciente.historia_clinica != null">
         <b-modal ref="modalHistoriaCLinica" ok-only title="Historia clinica">
           <div
             v-html="this.estudio.paciente.historia_clinica.historia_clinica"
           ></div>
+        </b-modal>
+      </div>
+      <div v-if="this.informeVer != null">
+        <b-modal ref="modalInforme" ok-only title="Informe del resultado">
+          <div v-html="this.datosInforme"></div>
         </b-modal>
       </div>
     </div>
@@ -245,6 +369,8 @@ export default {
       ultimoEstado: null,
       itemsEst: [],
       alerts: [],
+      informeVer: false,
+      datosInforme: [],
       fieldsEst: [
         { key: "nombre", label: "Nombre", class: "text-center p2" },
 
@@ -301,7 +427,6 @@ export default {
         if (a.resourcetype < b.resourcetype) {
           return -1;
         }
-        // a must be equal to b
         return 0;
       });
       return estados;
@@ -320,6 +445,12 @@ export default {
     },
     verHistoria() {
       this.$refs["modalHistoriaCLinica"].show();
+    },
+    verInforme(informe) {
+      this.informeVer = true;
+      this.datosInforme = informe;
+      console.log(informe);
+      this.$refs["modalInforme"].show();
     },
     async bajarPresupuesto() {
       try {
