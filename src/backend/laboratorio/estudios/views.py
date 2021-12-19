@@ -353,5 +353,16 @@ class VistaEstudios(viewsets.ModelViewSet):
             return HttpResponseBadRequest('no existe consentimiento para el estudio')
         return HttpResponse(base64.b64decode(datos.contenido), content_type='application/pdf')   
         
+    @action(detail=True, methods=['GET'])
+    def informe_de_resultado(self, request, pk=None):
 
+        """
+            aca hay que generar un pdf con el informe.
+        """
+
+        estudio = self.get_object()
+        datos = estudio.consentimiento_informado
+        if not datos:
+            return HttpResponseBadRequest('no existe consentimiento para el estudio')
+        return HttpResponse(base64.b64decode(datos.contenido), content_type='application/pdf')   
 

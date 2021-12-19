@@ -107,6 +107,7 @@ class SerializadorAnuladorPorFaltaDePago(serializers.ModelSerializer):
         return instance
 
 class SerializadorEnviarConsentimientoInformado(serializers.ModelSerializer):
+    comprobante_invalido: serializers.BooleanField(required=False, read_only=False)
     class Meta:
         model = models.EnviarConsentimientoInformado
         fields = ['id','fecha','fecha_enviado']
@@ -117,6 +118,14 @@ class SerializadorEnviarConsentimientoInformado(serializers.ModelSerializer):
         logging.debug(f'verificando si {usuario_logueado.username} es Empleado')
         if not personas_models.Empleado.usuario_es_tipo(usuario_logueado):
             raise login_models.PermisosAPIException("No tiene permisos para realizar esta acción")
+
+
+        comporbante_invalido = validated_data.get('comprobante_invalido',False)
+        if comporbante_invalido:
+            """
+                Todo pasar el estsado a esperando comprobante.
+            """
+            pass
 
         super().update(instance, validated_data)
 
