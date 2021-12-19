@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'login',
     'personas',
     'estudios',
+    'liquidaciones',
     'lotes',
     'turnos',
     'reportes'
