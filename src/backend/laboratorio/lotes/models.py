@@ -12,7 +12,7 @@ class Lote(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     fecha = models.DateField()
     resultado = models.CharField(max_length=1024, null=True)
-    numero_lote = models.IntegerField(primary_key=False)
+    numero_lote = models.IntegerField(primary_key=False, default=0)
 
     @classmethod
     def all_pending(cls):
