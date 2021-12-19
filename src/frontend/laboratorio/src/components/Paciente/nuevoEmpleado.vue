@@ -83,7 +83,7 @@
               >
                 <b-form-input
                   placeholder="usuario"
-                  v-model="empleado.usuario"
+                  v-model="empleado.usuario.username"
                   :state="errors[0] ? false : valid ? true : null"
                 ></b-form-input>
                 <b-form-invalid-feedback
@@ -109,7 +109,7 @@
                 <b-form-input
                   type="password"
                   placeholder="contraseña"
-                  v-model="empleado.clave"
+                  v-model="empleado.usuario.password"
                   :state="errors[0] ? false : valid ? true : null"
                 ></b-form-input>
                 <b-form-invalid-feedback
@@ -150,8 +150,10 @@ export default {
         return {
           nombre: "",
           apellido: null,
-          usuario: null,
-          clave: null,
+          usuario: {
+            username: null,
+            password: null
+          }
         };
       },
     },

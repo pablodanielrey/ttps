@@ -19,9 +19,9 @@ class SerializadorDeEmpleado(serializers.ModelSerializer):
         usuario = validated_data.pop('usuario')
         username = usuario['username']
         clave = usuario['password']
-        try:
-            usuario_django = self._login_model.crear_usuario(username, models.Empleado.NOMBRE_GRUPO, clave, validated_data.get('email',None))
-        except IntegrityError:
-            raise ValidationError({'usuario':'ya existe'})
+        # try:
+        usuario_django = self._login_model.crear_usuario(username, models.Empleado.NOMBRE_GRUPO, clave, validated_data.get('email',None))
+        # except IntegrityError:
+        #     raise ValidationError({'usuario':'ya existe'})
         empleado = models.Empleado.objects.create(usuario=usuario_django, **validated_data)
         return empleado
