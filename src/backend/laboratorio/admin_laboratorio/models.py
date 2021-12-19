@@ -4,10 +4,24 @@ from zoneinfo import ZoneInfo
 import uuid
 
 from django.db import models
+from django.utils.timezone import now
 from django.utils.translation import gettext_lazy as _
 
 from personas import models as personas_models
 from login import models as login_models
+
+
+from rest_framework import exceptions
+from rest_framework import status
+
+class ModoOperacionAPIException(exceptions.APIException):
+    status_code = status.HTTP_403_FORBIDDEN
+    default_code = 'error'
+
+    def __init__(self, detail, status_code=None):
+        self.detail = detail
+        if status_code is not None:
+            self.status_code = status_code
 
 
 
@@ -19,9 +33,26 @@ class Configuracion(models.Model):
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     modo_operacion = models.CharField(max_length=10, choices=ModoOperacion.choices, default=ModoOperacion.PACIENTE_NO_OBLIGADO)
+    fecha = models.DateTimeField(default=now)
+
+    def obtener_modo_de_operacion(self):
+        return self.ModoOperacion[self.modo_operacion]
+
+    def verificar_modo_de_operacion(self, serializador):            
+        modo_de_operacion = self.obtener_modo_de_operacion()
+        if  modo_de_operacion == self.ModoOperacion.PACIENTE_OBLIGADO:
+            usuario_logueado = serializador.context.get('request').user
+            if not personas_models.Paciente.usuario_es_tipo(usuario_logueado):
+                raise ModoOperacionAPIException(
+                    {
+                        "usuario":usuario_logueado.username,
+                        "modo": modo_de_operacion
+                    }
+                )    
 
 
-        
+
+
 class PersonasModel:
 
     login_model = login_models.LoginModel()

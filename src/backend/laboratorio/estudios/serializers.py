@@ -61,6 +61,8 @@ class SerializadorEstadoEstudio(serializers.ModelSerializer):
         model = models.EstadoEstudio
         fields = ['id','fecha']
 
+
+from admin_laboratorio import models as admin_models
 class SerializadorEsperandoComprobanteDePago(serializers.ModelSerializer):
     fecha_procesado = serializers.DateTimeField(required=False, read_only=False)
     comprobante = SerializadorArchivos(required=False, read_only=False)
@@ -68,7 +70,12 @@ class SerializadorEsperandoComprobanteDePago(serializers.ModelSerializer):
         model = models.EsperandoComprobanteDePago
         fields = ['id','fecha','comprobante','fecha_procesado']
 
+
+
     def update(self, instance, validated_data):
+        config = admin_models.Configuracion.objects.order_by('fecha').last()
+        config.verificar_modo_de_operacion(self)
+
         estudio = instance.estudio
 
         fecha_procesado = validated_data.pop('fecha_procesado',None)
@@ -119,6 +126,9 @@ class SerializadorEsperandoConsentimientoInformado(serializers.ModelSerializer):
         fields = ['id','fecha','consentimiento']
 
     def update(self, instance, validated_data):
+        config = admin_models.Configuracion.objects.order_by('fecha').last()
+        config.verificar_modo_de_operacion(self)
+
         estudio = instance.estudio
 
         logging.debug('actualizando el documento de consentimiento')
@@ -140,6 +150,9 @@ class SerializadorEsperandoSeleccionDeTurnoParaExtraccion(serializers.ModelSeria
         fields = ['id','fecha','turno']
 
     def update(self, instance, validated_data):
+        config = admin_models.Configuracion.objects.order_by('fecha').last()
+        config.verificar_modo_de_operacion(self)
+
         estudio = instance.estudio
 
         turno = validated_data.get('turno')

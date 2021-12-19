@@ -4,6 +4,8 @@ import uuid
 import datetime
 import logging
 
+
+from django.utils.timezone import now
 from django.db.models.fields import related
 from django.contrib.contenttypes.models import ContentType
 
@@ -101,7 +103,6 @@ class Estudio(models.Model):
 
 from polymorphic.models import PolymorphicModel
 
-from django.utils.timezone import now
 class EstadoEstudio(PolymorphicModel):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     estudio = models.ForeignKey(Estudio, on_delete=models.CASCADE, related_name='estados')
