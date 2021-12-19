@@ -421,10 +421,10 @@ export default {
     },
     ordenarEstados(estados) {
       estados.sort(function (a, b) {
-        if (a.resourcetype > b.resourcetype) {
+        if (a.fecha > b.fecha) {
           return 1;
         }
-        if (a.resourcetype < b.resourcetype) {
+        if (a.fecha < b.fecha) {
           return -1;
         }
         return 0;

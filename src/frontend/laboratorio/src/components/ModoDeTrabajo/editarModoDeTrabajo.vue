@@ -22,14 +22,17 @@ export default {
   components: {},
   props: {
   },
+    data() {
+    return {
+    }
+    },
   created() {},
-  data() {},
 
   methods: {
     async verModo() {
       try {
         let response = await ModoDeTrabajoService.obtenerModo();
-        this.modo = response.modo_operacion
+        this.modo = response
         console.log(response);
       } catch (error) {
         console.log(error);
