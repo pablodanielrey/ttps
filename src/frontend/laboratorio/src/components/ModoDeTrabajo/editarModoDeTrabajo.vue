@@ -4,12 +4,11 @@
       <b-card header="Modo de Trabajo">
         <div>
           <div>
-            <input type="radio" id="uno" value="Uno" v-model="picked">
-                <label for="uno">Uno</label>
-            <input type="radio" id="Dos" value="Dos" v-model="picked">
-                <label for="Dos">Dos</label>
-            <br>
-            <span>Eligió: {{ picked }}</span>
+            <select v-model="selected">
+                <option selected="selected">Paciente Obligado a completar los datos</option>
+                <option>Paciente y Empleado pueden completar</option> 
+            </select>
+<span>Seleccionado: {{ selected }}</span>
           </div>
         </div>
       </b-card>
