@@ -81,14 +81,14 @@ class VistaCambiarClave(views.APIView):
         usuario = request.user
         clave_anterior = request.data.get('clave_anterior')
         if not usuario.check_password(clave_anterior):
-            return Response({'clave_anterior':'no es correcta'})
+            return Response({'clave anterior no es correcta'}, status=400)
         nueva_clave = request.data.get('clave_nueva')
 
         usuario.set_password(nueva_clave)
         usuario.save()
 
         return Response({
-            'status':'ok'
+            'Calve actualizada correctamente'
         })
 
 class VistaRoles(views.APIView):
