@@ -3,8 +3,12 @@
     <div>
       <b-card header="Modo de Trabajo">
         <div>
+          {{this.modo.modo_operacion}}
           <div>
-
+            <select name="modo_trabajo" @change="guardarModo()">
+              <option>Paciente obligado a completar</option>
+              <option>Paciente o Empleado pueden completar</option>
+            </select>
           </div>
         </div>
       </b-card>
@@ -15,31 +19,54 @@
 
 <script>
 import ModoDeTrabajoService from "@/services/ModoDeTrabajo.js";
+import axios from "axios";
+
 
 export default {
-  mounted() {},
+  name: "ModoDeTrabajo",
 
   components: {},
-  props: {
-  },
-    data() {
+  props: {},
+
+  data() { 
     return {
+      modos: null,
+      modo: null,
     }
-    },
+  },
   created() {},
 
   methods: {
-    async verModo() {
+    async obtenerHistorialModos() {
       try {
         let response = await ModoDeTrabajoService.obtenerModo();
-        this.modo = response
-        console.log(response);
-      } catch (error) {
-        console.log(error);
+        this.modos = response.data; 
+        console.log(this.modos)
+     
+      } catch (err) {
+        console.log(err);
+      }
+    },
+    async guardarModo() {
+      try {
+        let response = await ModoDeTrabajoService.guardarModo(this.modo);
+        console.log(response)
+      } catch (err) {
+        console.log(err);
       }
     },
   },
-  computed: {},
+  mounted() {
+    axios
+      .all([this.obtenerHistorialModos()])
+      .then(() => {
+        this.modo = this.modos.at(-1);
+        this.loading = false;
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  },
 };
 </script>
 

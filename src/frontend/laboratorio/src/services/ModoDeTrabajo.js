@@ -5,10 +5,12 @@ const API_URL = '/admin_api/'
 
 export default {
     obtenerModo() {
-        return Api().get(API_URL + API_USER + "configuracion/")
-        
+        return Api().get(API_URL + API_USER + "configuracion/");
     },
-    habilitarModo1() {
-        return Api().post(API_URL + API_USER + "modo/");
+    guardarModo(modo) {
+        if (modo == "PO")
+            return Api().post(API_URL + API_USER + "configuracion/", ({"modo_operacion": "PO"}))
+        else
+            return Api().post(API_URL + API_USER + "configuracion/", ({"modo_operacion": "PNO"}))
     },
 }
