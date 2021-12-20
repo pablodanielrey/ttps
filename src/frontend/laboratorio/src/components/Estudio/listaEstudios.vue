@@ -148,7 +148,6 @@ export default {
           key: "fecha",
           label: "Fecha",
           class: "text-center p2",
-          sortable: true,
         },
 
         {
@@ -181,10 +180,23 @@ export default {
     async obtenerListaEstudios() {
       try {
         let response = await EstudiosService.obtenerListaEstudios();
-        this.items = response.data;
+        this.items = this.ordenarEstudiosFecha(response.data);
       } catch (err) {
         console.log(err);
       }
+    },
+    ordenarEstudiosFecha(estudios){
+      estudios.sort(function (a, b) {
+        if (a.ultimo_estado.fecha < b.ultimo_estado.fecha) {
+          return 1;
+        }
+        if (a.ultimo_estado.fecha > b.ultimo_estado.fecha) {
+          return -1;
+        }
+        return 0;
+      });
+      return estudios;
+
     },
     onFiltered(filteredItems) {
       this.totalRows = filteredItems.length;
