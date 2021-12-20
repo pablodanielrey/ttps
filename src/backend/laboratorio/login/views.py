@@ -7,11 +7,13 @@ import datetime
 from zoneinfo import ZoneInfo
 
 from rest_framework import views
+from rest_framework import authentication
 from rest_framework.authentication import BasicAuthentication, TokenAuthentication
+from rest_framework.exceptions import ValidationError
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.authtoken.models import Token
 from rest_framework.response import Response
-from rest_framework.decorators import action
+from rest_framework.decorators import action, authentication_classes, permission_classes
 
 from django.contrib.auth.models import User
 
@@ -70,6 +72,24 @@ class VistaToken(views.APIView):
             }
         )
 
+
+class VistaCambiarClave(views.APIView):
+    authentication_classes = [BasicAuthentication]
+    permission_classes = [ IsAuthenticated ]
+
+    def post(self, request, format=None):
+        usuario = request.user
+        clave_anterior = request.data.get('clave_anterior')
+        if not usuario.check_password(clave_anterior):
+            return ValidationError({'clave_anterior':'no es correcta'})
+        nueva_clave = request.data.get('clave_nueva')
+
+        usuario.set_password(nueva_clave)
+        usuario.save()
+
+        return Response({
+            'status':'ok'
+        })
 
 class VistaRoles(views.APIView):
     authentication_classes = [BasicAuthentication]
