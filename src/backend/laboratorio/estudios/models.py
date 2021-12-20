@@ -166,6 +166,13 @@ class EsperandoInterpretacionDeResultados(EstadoEstudio):
     informe = models.TextField(null=True)
     resultado = models.CharField(max_length=500, null=True)
    
+    @property
+    def resultado_url(self):
+        for estado in self.estudio.estados.order_by('-fecha'):
+            if isinstance(estado, EsperandoProcesamientoDeLoteBiotecnologico):
+                return estado.resultado_url
+        return None
+
 class EsperandoEntregaAMedicoDerivante(EstadoEstudio):
     fecha_entrega = models.DateTimeField(null=True)
 

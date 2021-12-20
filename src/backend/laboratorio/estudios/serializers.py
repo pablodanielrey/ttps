@@ -248,9 +248,10 @@ class SerializadorEsperandoProcesamientoDeLoteBiotecnologico(serializers.ModelSe
 from login import models as login_models
 class SerializadorEsperandoInterpretacionDeResultados(serializers.ModelSerializer):
     medico_informante = medicos_serializers.SerializadorDeMedicoInformante(required=False, read_only=True)
+    resultado_url = serializers.CharField(required=False, read_only=True)
     class Meta:
         model = models.EsperandoInterpretacionDeResultados
-        fields = ['id','fecha','fecha_informe','medico_informante','informe','resultado']
+        fields = ['id','fecha','fecha_informe','medico_informante','informe','resultado','resultado_url']
 
     def update(self, instance, validated_data):
 
