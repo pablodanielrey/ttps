@@ -44,7 +44,14 @@ export default {
   },
   methods: {  
     async bajarInforme() {
-      console.log(this.estudio);     
+      console.log(this.estudio); 
+      try {
+         let response = await EstudiosService.descargarInformeDeResultado(this.estudio.id)
+         console.log(response)      
+        
+      } catch (error) {
+          console.log(error)
+      }    
     },
     async siguienteEstado() {
       try {

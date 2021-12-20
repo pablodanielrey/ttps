@@ -89,4 +89,23 @@ export default {
             link.click()
           })
     },
+    descargarInformeDeResultado(id){
+        let credenciales = JSON.parse(window.localStorage.getItem('credenciales'));       
+        axios({
+            method: 'get',
+            url: process.env.VUE_APP_API_URL + API_URL + API_USER + "estudios/" + id + "/informe_de_resultado/",
+            responseType: 'arraybuffer',
+            auth: {
+                'username': credenciales.usuario,
+                'password': credenciales.clave
+            }
+           
+          }).then(function(response) {
+            let blob = new Blob([response.data], { type: 'application/pdf' })
+            let link = document.createElement('a')
+            link.href = window.URL.createObjectURL(blob)
+            link.download = 'informe-final.pdf'
+            link.click()
+          })
+    }
 }

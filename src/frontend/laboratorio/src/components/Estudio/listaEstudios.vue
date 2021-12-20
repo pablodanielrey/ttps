@@ -28,10 +28,18 @@
         :current-page="currentPage"
         :per-page="perPage"
         @filtered="onFiltered"
+        :sort-by.sync="sortBy"
+      :sort-desc.sync="sortDesc"
       >
         <template v-slot:cell(estados)="row">
           {{ obtenerUltimoEstado(row.item) }}
         </template>
+        <template v-slot:cell(fecha)="row">
+          
+          {{ armarFecha(row.item) }}
+        </template>
+
+       
         <template v-slot:cell(acciones)="row">
           <b-button @click="detalleEstudio(row.item)" variant="outline-white">
             <b-icon icon="file-earmark-person-fill" variant="info"> </b-icon>
@@ -99,6 +107,8 @@ export default {
   data() {
     return {
       perPage: 30,
+              sortBy: 'fecha',
+        sortDesc: false,
       pageOptions: [30, 10, 15, 40],
       filter: null,
       currentPage: 1,
@@ -135,6 +145,11 @@ export default {
           label: "Estado",
           class: "text-center p2",
         },
+        {
+          key: "fecha",
+          label: "Fecha",
+          class: "text-center p2",
+        },
 
         {
           key: "acciones",
@@ -148,6 +163,9 @@ export default {
 
   created() {},
   methods: {
+    armarFecha(estado){       
+        return new Date(estado.ultimo_estado.fecha).format("DD-MM-YYYY HH:MM");
+    },
     obtenerUltimoEstado(estudio) {
       let nameEstado = estudio.ultimo_estado.resourcetype;
       nameEstado = nameEstado.replace(/([a-z])([A-Z])/g, "$1 $2");
@@ -163,7 +181,6 @@ export default {
     async obtenerListaEstudios() {
       try {
         let response = await EstudiosService.obtenerListaEstudios();
-        console.log(response);
         this.items = response.data;
       } catch (err) {
         console.log(err);
@@ -210,14 +227,12 @@ export default {
       let fechaCreacioncomprobante = new Date(estudio.ultimo_estado.turno.inicio);
       let difference = Math.abs(hoy - fechaCreacioncomprobante);
       let days = difference / (1000 * 3600 * 24);
-      console.log(days)
       if (days > 30) {
         return true;
       }
       return false;
     },
    async anularEstudioFaltaDatosMuestra(estudio){
-      console.log(estudio)
          try {
         let datosComprobante = {
           estudio_id: estudio.id,
