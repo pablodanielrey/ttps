@@ -81,7 +81,7 @@ class VistaCambiarClave(views.APIView):
         usuario = request.user
         clave_anterior = request.data.get('clave_anterior')
         if not usuario.check_password(clave_anterior):
-            return ValidationError({'clave_anterior':'no es correcta'})
+            return Response({'clave_anterior':'no es correcta'})
         nueva_clave = request.data.get('clave_nueva')
 
         usuario.set_password(nueva_clave)
