@@ -18,6 +18,10 @@ class SerializadorDeLote(serializers.ModelSerializer):
 
     def update(self, instance, validated_data):
         logging.debug(validated_data)
+
+        instance.resultado = validated_data.get('resultado', instance.resultado)
+        instance.fecha = validated_data.get('fecha', instance.fecha)
+
         estudios_ok = [e['estudio']['id'] for e in validated_data.get('estudios',[])]
         logging.debug(f'estudios correctos {estudios_ok}')
         estudios_de_lote = instance.estudios.all()
@@ -35,8 +39,6 @@ class SerializadorDeLote(serializers.ModelSerializer):
                 estudio_models.EsperandoSeleccionDeTurnoParaExtraccion.objects.create(estudio=estudio)
 
 
-        instance.resultado = validated_data.get('resultado', instance.resultado)
-        instance.fecha = validated_data.get('fecha', instance.fecha)
         instance.save()
 
         return instance
