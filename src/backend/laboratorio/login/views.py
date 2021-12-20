@@ -3,6 +3,8 @@ from django.shortcuts import render
 # Create your views here.
 
 import logging
+import datetime
+from zoneinfo import ZoneInfo
 
 from rest_framework import views
 from rest_framework.authentication import BasicAuthentication, TokenAuthentication
@@ -16,6 +18,10 @@ from django.contrib.auth.models import User
 from personas import models as persona_models
 from personas import persona_serializers
 
+
+def _generar_fecha_now():
+    return datetime.datetime.now(tz=ZoneInfo('America/Argentina/Buenos_Aires'))
+
 def obtener_roles(usuario):
     grupos = []
     for group in usuario.groups.all():
@@ -26,18 +32,23 @@ class VistaToken(views.APIView):
     authentication_classes = [BasicAuthentication]
     permission_classes = [ IsAuthenticated ]
 
-
-    # def __verificar_si_debe_cambiar_clave(self, usuario):
-    #     if persona_models.Paciente.usuario_es_tipo(usuario):
-    #         usuario.
-    #     return False
+    def __verificar_si_debe_cambiar_clave(self, usuario):
+        if persona_models.Paciente.usuario_es_tipo(usuario):
+            logging.debug(usuario.last_login)
+            logging.debug(usuario.date_joined)
+            if not usuario.last_login or usuario.last_login == usuario.date_joined:
+                return True
+        return False
 
     def get(self, request, format=None):
         usuario = request.user
         logging.debug(f'usuario logueado : {usuario}')
 
-        # cambiar_clave = self.__verificar_si_debe_cambiar_clave(usuario)
-        cambiar_clave = True
+        cambiar_clave = self.__verificar_si_debe_cambiar_clave(usuario)
+
+        usuario.last_login = _generar_fecha_now()
+        usuario.save()
+
         try:
             persona = persona_models.Persona.objects.get(usuario=usuario)
             serializador = persona_serializers.SerializadorDePersona(instance=persona)
