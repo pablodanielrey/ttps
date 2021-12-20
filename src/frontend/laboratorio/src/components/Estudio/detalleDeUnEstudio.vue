@@ -376,15 +376,11 @@
       <div v-if="this.estudio.paciente.historia_clinica != null">
         <b-modal ref="modalHistoriaCLinica" ok-only title="Historia clinica">
           <div
-            v-html="this.estudio.paciente.historia_clinica.historia_clinica"
+            v-html="this.estudio.paciente.historia_clinica"
           ></div>
         </b-modal>
       </div>
-      <div v-if="this.informeVer != null">
-        <b-modal ref="modalInforme" ok-only title="Informe del resultado">
-          <div v-html="this.datosInforme"></div>
-        </b-modal>
-      </div>
+   
     </div>
   </b-container>
 </template>
@@ -409,8 +405,7 @@ export default {
       ultimoEstado: null,
       itemsEst: [],
       alerts: [],
-      informeVer: false,
-      datosInforme: [],
+    
       fieldsEst: [
         { key: "nombre", label: "Nombre", class: "text-center p2" },
 
@@ -451,7 +446,7 @@ export default {
     async obtenerDetalleEstudio() {
       try {
         let response = await EstudiosService.obtenerEstudio(this.estudioId);
-        console.log(response);
+        console.log(this.estudio);
         this.estudio = response.data;
 
         this.estados = this.ordenarEstados(response.data.estados);

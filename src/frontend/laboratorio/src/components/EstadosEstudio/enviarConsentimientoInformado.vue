@@ -66,6 +66,17 @@ export default {
           this.estudio.ultimo_estado.id
         );
         console.log(response)
+        this.$root.$bvToast.toast("Se cancelo el comprobante de pago", {
+            title: "Atencion!",
+            toaster: "b-toaster-top-center",
+            solid: true,
+            variant: "success",
+          });
+        console.log(response);
+        this.$router.push({
+          name: "listaEstudios",
+        });
+
         
       } catch (error) {
           this.$root.$bvToast.toast(
