@@ -143,14 +143,14 @@
                   label-for="input-2"
                 >
                   <b-form-input
-                    type="number"
+                    type="text"
                     v-model="paciente.telefono"
                     placeholder="Ingrese Telefono"
                     required
                   ></b-form-input>
                 </b-form-group>
               </b-col>
-              <b-col lg="4">
+              <b-col lg="4" md="4">
                 <b-form-group
                   id="input-group-2"
                   label="Direccion de Email:"
@@ -166,41 +166,15 @@
               </b-col>
             </b-row>
             <b-row>
-              <b-col>
+              <b-col lg="8" md="4">
                 <b-form-group
                   id="input-group-2"
-                  label="Calle:"
+                  label="Direccion:"
                   label-for="input-2"
                 >
                   <b-form-input
-                    v-model="paciente.calle"
+                    v-model="paciente.direccion"
                     placeholder="Ingrese Calle"
-                    required
-                  ></b-form-input>
-                </b-form-group>
-              </b-col>
-              <b-col>
-                <b-form-group
-                  id="input-group-2"
-                  label="Numero:"
-                  label-for="input-2"
-                >
-                  <b-form-input
-                    v-model="paciente.numero"
-                    placeholder="Ingrese numero"
-                    required
-                  ></b-form-input>
-                </b-form-group>
-              </b-col>
-              <b-col>
-                <b-form-group
-                  id="input-group-2"
-                  label="Piso:"
-                  label-for="input-2"
-                >
-                  <b-form-input
-                    v-model="paciente.piso"
-                    placeholder="Ingrese Piso"
                     required
                   ></b-form-input>
                 </b-form-group>
@@ -247,7 +221,7 @@
                   label-for="input-2"
                 >
                   <b-form-input
-                    type="number"
+                    type="text"
                     v-model="paciente.tutor.tutor.telefono"
                     placeholder="Ingrese Telefono del tutor"
                     required
@@ -271,44 +245,16 @@
             </b-row>
 
             <b-row>
-              <b-col>
+              <b-col lg="8">
                 <b-form-group
                   id="input-group-2"
-                  label="Calle:"
+                  label="Direccion:"
                   label-for="input-2"
                 >
                   <b-form-input
-                    v-model="paciente.tutor.tutor.calle"
-                    placeholder="Ingrese Calle"
+                    v-model="paciente.tutor.tutor.direccion"
+                    placeholder="Ingrese la direccion"
                     required
-                  ></b-form-input>
-                </b-form-group>
-              </b-col>
-              <b-col>
-                <b-form-group
-                  id="input-group-2"
-                  label="Numero:"
-                  label-for="input-2"
-                >
-                  <b-form-input
-                    v-model="paciente.tutor.tutor.numero"
-                    placeholder="Ingrese numero"
-                    required
-                    type="number"
-                  ></b-form-input>
-                </b-form-group>
-              </b-col>
-              <b-col>
-                <b-form-group
-                  id="input-group-2"
-                  label="Piso:"
-                  label-for="input-2"
-                >
-                  <b-form-input
-                    v-model="paciente.tutor.tutor.piso"
-                    placeholder="Ingrese Piso"
-                    required
-                    type="number"
                   ></b-form-input>
                 </b-form-group>
               </b-col>
@@ -351,7 +297,7 @@
                 >
                   <b-form-input
                     placeholder="Numero de afiliado"
-                    type="number"
+                    type="text"
                     v-model="paciente.obra_social.numero_afiliado"
                     :state="errors[0] ? false : valid ? true : null"
                   ></b-form-input>
@@ -380,6 +326,7 @@
                   <vue-editor
                     :state="errors[0] ? false : valid ? true : null"
                     v-model="paciente.historia_clinica"
+                    required
                   ></vue-editor>
                   <b-form-invalid-feedback
                     v-for="error in errors"
@@ -434,6 +381,7 @@ export default {
           nombre: "",
           apellido: "",
           dni: null,
+          direccion: null,
           obra_social: {
             obra_social: {
               id: null,
@@ -473,10 +421,26 @@ export default {
     };
   },
   created() {
+    console.log("created");
+    if (this.editar) {
+      console.log("editar");
+      this.verificarSiTieneOS();
+    }
     console.log(this.paciente);
   },
 
   methods: {
+    verificarSiTieneOS() {
+      if (this.paciente.obra_social == null) {
+        this.paciente.obra_social = this.paciente.obra_social = {
+          obra_social: {
+            id: null,
+            nombre: "test",
+          },
+          numero_afiliado: null,
+        };
+      }
+    },
     cambioOs() {
       this.required = "required";
     },
@@ -495,7 +459,7 @@ export default {
       try {
         let result = await this.$refs.detailsPaciente.validate();
         if (result) {
-                    let datos = this.armarArray();
+          let datos = this.armarArray();
 
           let r = await PacientesService.editarPaciente(datos);
           if (r.status == 200) {
@@ -529,9 +493,10 @@ export default {
         let result = await this.$refs.detailsPaciente.validate();
         if (result) {
           let datos = this.armarArray();
+          console.log("datos");
           console.log(datos);
-          let r = await PacientesService.crearPaciente(datos);
-          console.log(r);
+            let r = await PacientesService.crearPaciente(datos);
+          console.log(r); 
 
           this.$root.$bvToast.toast("Se creo con exito el paciente", {
             title: "Atencion!",
@@ -545,52 +510,43 @@ export default {
         }
       } catch (error) {
         this.showError = true;
-        this.error = error.response.data.dni[0];
-        console.log(error.response.data);
+        this.error += error.response.data.email != null ? error.response.data.email : '';
+        this.error += error.response.data.dni  != null ? error.response.data.dni : '';
+        this.error += error.response.data.historia_clinica != null ? error.response.data.historia_clinica : '';
+        console.log(error.response);
       }
     },
 
     armarArray() {
+      let os = {};
+      let datos = {};
+      os = {
+        obra_social: {
+          obra_social: {
+            id: this.paciente.obra_social.obra_social.id,
+            nombre: "test",
+          },
+          numero_afiliado: this.paciente.obra_social.numero_afiliado,
+        },
+      };
       if (this.esMayor()) {
-        let datos = {};
         datos = {
           nombre: this.paciente.nombre,
           apellido: this.paciente.apellido,
           dni: this.paciente.dni,
           fecha_nacimiento: this.paciente.fecha_nacimiento,
-          direccion: this.armarDireccion(
-            this.paciente.calle,
-            this.paciente.numero,
-            this.paciente.piso
-          ),
-          obra_social: {
-            obra_social: {
-              id: this.paciente.obra_social.obra_social.id,
-              nombre: "test",
-            },
-            numero_afiliado: this.paciente.obra_social.numero_afiliado,
-          },
+          direccion: this.paciente.direccion,
           email: this.paciente.email,
           historia_clinica: this.paciente.historia_clinica,
           telefono: this.paciente.telefono,
         };
-        return datos;
       } else {
-        let datos = {};
         datos = {
           nombre: this.paciente.nombre,
           apellido: this.paciente.apellido,
           dni: this.paciente.dni,
           fecha_nacimiento: this.paciente.fecha_nacimiento,
           historia_clinica: this.paciente.historia_clinica,
-
-          obra_social: {
-            obra_social: {
-              id: this.paciente.obra_social.obra_social.id,
-              nombre: "test",
-            },
-            numero_afiliado: this.paciente.obra_social.numero_afiliado,
-          },
           tutor: {
             tutor: {
               nombre: this.paciente.tutor.tutor.nombre,
@@ -600,16 +556,18 @@ export default {
               calle: this.paciente.tutor.tutor.calle,
               numero: this.paciente.tutor.tutor.numero,
               piso: this.paciente.tutor.tutor.piso,
-              direccion: this.armarDireccion(
-                this.paciente.tutor.tutor.calle,
-                this.paciente.tutor.tutor.numero,
-                this.paciente.tutor.tutor.piso
-              ),
+              direccion: this.paciente.tutor.tutor.direccion,
             },
           },
         };
-        return datos;
       }
+      if (this.paciente.obra_social.numero_afiliado != null) {
+        datos = {
+          ...datos,
+          ...os,
+        };
+      }
+      return datos;
     },
     async obtenerObrasSociales() {
       try {
