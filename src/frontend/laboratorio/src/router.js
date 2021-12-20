@@ -7,6 +7,8 @@ import container from '@/components/Home/Container.vue'
 import home from '@/components/Home/Home.vue'
 import Login from '@/components/Login/Login.vue'
 import Registrar from '@/components/Login/Registrar.vue'
+import cambiarClave from '@/components/Login/cambiarClave.vue'
+
 
 import Paciente from '@/components/Paciente/nuevoPaciente.vue'
 import ListaPacientes from '@/components/Paciente/listaPacientes.vue'
@@ -50,6 +52,8 @@ import EsperandoInterpretacionDeResultados from '@/components/EstadosEstudio/Esp
 import EsperandoProcesamientoDeLoteBiotecnologico from '@/components/EstadosEstudio/EsperandoProcesamientoDeLoteBiotecnologico.vue'
 import EsperandoEntregaAMedicoDerivante from '@/components/EstadosEstudio/EsperandoEntregaAMedicoDerivante.vue'
 import ResultadoDeEstudioEntregado from '@/components/EstadosEstudio/ResultadoDeEstudioEntregado.vue'
+import EstadoVirtualEsperandoResultado from '@/components/EstadosEstudio/EstadoVirtualEsperandoResultado.vue'
+
 
 import EsperandoInterpretacionDeResultadosInformante from '@/components/Estudio/EsperandoInterpretacionDeResultadosInformante.vue'
 import listaEstudiosEsperandoInforme from '@/components/Estudio/listaEstudiosEsperandoInforme.vue'
@@ -80,6 +84,7 @@ const router = new Router({
         children: [  
           {
             path: '/', name: 'home', component: home},  
+
             { path: '/paciente', component: Paciente, name: 'paciente', props: true },
             { path: '/configuradores', component: NuevoConfigurador ,name:'configuradores' , props: true},
             { path: '/listaConfiguradores', component: ListaConfiugradores ,name:'listaConfiguradores' },
@@ -111,7 +116,9 @@ const router = new Router({
             { path: '/EsperandoInterpretacionDeResultados', component: EsperandoInterpretacionDeResultados , name:'EsperandoInterpretacionDeResultados',props:true },
             { path: '/EsperandoProcesamientoDeLoteBiotecnologico', component: EsperandoProcesamientoDeLoteBiotecnologico , name:'EsperandoProcesamientoDeLoteBiotecnologico',props:true },
             { path: '/EsperandoEntregaAMedicoDerivante', component: EsperandoEntregaAMedicoDerivante , name:'EsperandoEntregaAMedicoDerivante',props:true },
-           
+            { path: '/EstadoVirtualEsperandoResultado', component: EstadoVirtualEsperandoResultado , name:'EstadoVirtualEsperandoResultado',props:true },
+
+            
             { path: '/ResultadoDeEstudioEntregado', component: ResultadoDeEstudioEntregado , name:'ResultadoDeEstudioEntregado',props:true },
             
             
@@ -135,7 +142,8 @@ const router = new Router({
      path: '/login', component: Login, name:'Login'},
      {
       path: '/registrar', component: Registrar, name:'registrar'},
-     
+      { path: '/cambiarClave', component: cambiarClave, name: 'cambiarClave', props: true },
+
     ],
 })
 router.beforeEach((to, from, next) => {

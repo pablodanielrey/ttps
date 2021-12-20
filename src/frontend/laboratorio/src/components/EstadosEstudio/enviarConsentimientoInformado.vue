@@ -14,7 +14,7 @@
             <b-icon icon="cloud-download" variant="outline-primary"> </b-icon>
           </b-button>
 
-          <b-button variant="success" @click="siguienteEstado()"
+          <b-button variant="success" v-if="tienePermisos() == 'Empleados'" @click="siguienteEstado()"
             >Siguiente
           </b-button>
         </div>
@@ -45,7 +45,7 @@ export default {
     async verTemplate() {
       try {
         let response =
-          await TemplateConsentimientoService.obtenerTemplateConsentimiento();
+          await TemplateConsentimientoService.obtenerTemplateConsentimiento(this.estudio.id);
         console.log(response);
       } catch (error) {
         console.log(error);
@@ -73,9 +73,9 @@ export default {
           name: "listaEstudios",
         });
       } catch (error) {
-        console.log(error);
+        console.log(error.response.data.detail);
         this.$root.$bvToast.toast(
-          "ocurrio un error mientras Continuaba al siguiente estado ",
+          "ocurrio un error mientras continuaba con el siguiente estado.  "+error.response.data.detail,
           {
             title: "Atencion!",
             toaster: "b-toaster-top-center",
@@ -85,6 +85,11 @@ export default {
         );
       }
     },
+    tienePermisos(){      
+      this.permisos = window.localStorage.getItem("permisos");
+      return this.permisos
+    
+    }
   },
   computed: {},
 

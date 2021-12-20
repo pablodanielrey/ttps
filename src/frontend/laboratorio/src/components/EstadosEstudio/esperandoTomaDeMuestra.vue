@@ -3,9 +3,7 @@
     <div>
       <ValidationObserver ref="detailMuestra">
         <b-card header="Ingrese los datos de toma de muestra">
-          <div class="counter" v-if="!pasoDiaTurno()">
-            Quedan {{ counter }} dias para cargar los datos de toma de muestra
-          </div>
+      
           <br />
           <b-row>
             <b-col lg="5" md="5" sm="10">

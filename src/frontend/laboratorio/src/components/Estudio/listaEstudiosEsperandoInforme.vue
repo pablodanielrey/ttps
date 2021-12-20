@@ -121,6 +121,7 @@ export default {
       try {
         let response = await EstudiosService.obtenerListaEstudiosParaInformes();
         this.items = response.data;
+        console.log(response)
       } catch (err) {
         console.log(err);
       }
@@ -135,6 +136,7 @@ export default {
         name: "EsperandoInterpretacionDeResultadosInformante",
         params: {
           estudio: estudio,
+          urlResultado:estudio.ultimo_estado.resultado_url
         },
       });
     },

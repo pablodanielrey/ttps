@@ -12,7 +12,7 @@
               id="imgLaboratorio"
             /></div
         ></b-col>
-        <b-col sm="10" md="8" xl="4" class="base-box m-2" >
+        <b-col sm="10" md="8" xl="4" class="base-box m-2">
           <div class="">
             <div class="text-center">
               <p>¡Hola! Ingresá tu usuario y contraseña</p>
@@ -110,7 +110,14 @@ export default {
           this.credenciales.usuario,
           this.credenciales.clave
         );
-        console.log(response);
+        if (response.data.cambiar_clave) {
+          this.$router.push({
+            name: "cambiarClave",
+          });
+          return
+        }
+        console.log("rta");
+        console.log(response.data.cambiar_clave);
         this.$router.push({
           name: "home",
         });
@@ -126,9 +133,9 @@ export default {
 
 <style scoped>
 @media (max-width: 600px) {
-#columnaImgLogin{
- visibility: hidden;
-}
+  #columnaImgLogin {
+    visibility: hidden;
+  }
 }
 </style>
 

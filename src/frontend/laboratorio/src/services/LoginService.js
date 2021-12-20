@@ -13,6 +13,10 @@ export default {
       return Api().get(API_URL  + "login/", {params: { username:usuario, password: clave }});
 
     },
+    cambiarClave(contraseña){
+        return Api().post(API_URL  + "clave/", contraseña);
+
+    },
     getApiToken() {
         let credenciales = JSON.parse(window.localStorage.getItem('credenciales'));       
         return credenciales
@@ -26,7 +30,7 @@ export default {
                     'password': password
                 }
             })
-            let response = await instance.get(API_URL  + "login/");
+            let response = await instance.get(API_URL  + "login/");            
             // response.token
             // response.roles
             window.localStorage.setItem('credenciales', JSON.stringify({
@@ -34,6 +38,7 @@ export default {
                 'clave': password
             }));
             window.localStorage.setItem('permisos', response.data.roles )
+            return response
         } 
     },
     cerrarSesion(){

@@ -40,6 +40,9 @@
               </ValidationProvider>
             </b-form-group>
           </b-col>
+            <b-col lg="5" md="7" sm="10">
+            <button >Url del resultado</button>
+            </b-col>
         </b-row>
         <b-card header="Informe del resultado">
           <b-row>
@@ -93,6 +96,9 @@ export default {
     estudio: {
       type: Object,
     },
+     urlResultado: {
+      type: String,
+    },
   },
   data() {
     return {
@@ -108,6 +114,10 @@ export default {
   },
   created() {},
   methods: {
+    resultadoUrl(){
+      console.log(this.urlResultado)
+      return this.urlResultado
+    },
     async obtenerMedicosInformantes() {
       try {
         const response = await PacientesService.obtenerMedicosInformantes();
