@@ -16,6 +16,9 @@
       </b-col>
     </b-row>
  -->
+      <b-alert v-if="this.showError" show variant="danger">{{
+        this.error
+      }}</b-alert>
       <ValidationObserver ref="detailsPaciente">
         <b-form-group>
           <b-alert
@@ -29,7 +32,7 @@
         </b-form-group>
         <b-card header="Datos personales">
           <b-row>
-            <b-col lg="3" md="3">
+            <b-col lg="6" md="6">
               <b-form-group
                 id="Nombre-label"
                 label="Nombre :"
@@ -54,7 +57,7 @@
                 </ValidationProvider>
               </b-form-group>
             </b-col>
-            <b-col lg="3" md="3" sm="10">
+            <b-col lg="6" md="6" sm="10">
               <b-form-group
                 id="Apellido-label"
                 label="Apellido :"
@@ -79,7 +82,7 @@
                 </ValidationProvider>
               </b-form-group>
             </b-col>
-            <b-col lg="2" md="2">
+            <b-col lg="4" md="4">
               <b-form-group id="dni-label" label="DNI:" label-for="DNI">
                 <ValidationProvider
                   :name="'DNI '"
@@ -101,34 +104,6 @@
                 </ValidationProvider>
               </b-form-group>
             </b-col>
-            <b-col lg="3" md="3">
-              <b-form-group
-                id="Direccion-label"
-                label="Direccion :"
-                label-for="Direccion"
-              >
-                <ValidationProvider
-                  :name="'Direccion '"
-                  :rules="'required'"
-                  v-slot="{ errors, valid }"
-                >
-                  <b-form-input
-                    type="email"
-                    placeholder="Direccion del paciente"
-                    v-model="paciente.direccion"
-                    :state="errors[0] ? false : valid ? true : null"
-                  ></b-form-input>
-                  <b-form-invalid-feedback
-                    v-for="error in errors"
-                    :key="error.key"
-                  >
-                    {{ error }}
-                  </b-form-invalid-feedback>
-                </ValidationProvider>
-              </b-form-group>
-            </b-col>
-          </b-row>
-          <b-row>
             <b-col lg="3" md="2">
               <b-form-group
                 id="nacimiento-label"
@@ -141,63 +116,12 @@
                   v-slot="{ errors, valid }"
                 >
                   <b-form-input
-                    locale="es-AR"
-                    type="date"
+                    @click="esMayor()"
+                    id="nacimiento-n"
                     v-model="paciente.fecha_nacimiento"
-                    
+                    required
                     :state="errors[0] ? false : valid ? true : null"
-                  ></b-form-input>
-                  <b-form-invalid-feedback
-                    v-for="error in errors"
-                    :key="error.key"
-                  >
-                    {{ error }}
-                  </b-form-invalid-feedback>
-                </ValidationProvider>
-              </b-form-group>
-            </b-col>
-            <b-col lg="4" md="4">
-              <b-form-group
-                id="telefono-label"
-                label="Telefono:"
-                label-for="Telefono"
-              >
-                <ValidationProvider
-                  :name="'Telefono '"
-                  :rules="'required'"
-                  v-slot="{ errors, valid }"
-                >
-                  <b-form-input
-                    placeholder="Telefono"
-                    v-model="paciente.telefono"
-                    type="number"
-                    :state="errors[0] ? false : valid ? true : null"
-                  ></b-form-input>
-                  <b-form-invalid-feedback
-                    v-for="error in errors"
-                    :key="error.key"
-                  >
-                    {{ error }}
-                  </b-form-invalid-feedback>
-                </ValidationProvider>
-              </b-form-group>
-            </b-col>
-            <b-col lg="3" md="3">
-              <b-form-group
-                id="email-label"
-                label="Direccion de correo electronico:"
-                label-for="email"
-              >
-                <ValidationProvider
-                  :name="'email '"
-                  :rules="'required'"
-                  v-slot="{ errors, valid }"
-                >
-                  <b-form-input
-                    type="email"
-                    placeholder="Direccion de email"
-                    v-model="paciente.email"
-                    :state="errors[0] ? false : valid ? true : null"
+                    type="date"
                   ></b-form-input>
                   <b-form-invalid-feedback
                     v-for="error in errors"
@@ -209,8 +133,193 @@
               </b-form-group>
             </b-col>
           </b-row>
+
+          <div v-if="esMayor()">
+            <b-row>
+              <b-col lg="4">
+                <b-form-group
+                  id="input-group-2"
+                  label="Numero de Telefono:"
+                  label-for="input-2"
+                >
+                  <b-form-input
+                    type="number"
+                    v-model="paciente.telefono"
+                    placeholder="Ingrese Telefono"
+                    required
+                  ></b-form-input>
+                </b-form-group>
+              </b-col>
+              <b-col lg="4">
+                <b-form-group
+                  id="input-group-2"
+                  label="Direccion de Email:"
+                  label-for="input-2"
+                >
+                  <b-form-input
+                    v-model="paciente.email"
+                    placeholder="Ingrese Email"
+                    required
+                    type="email"
+                  ></b-form-input>
+                </b-form-group>
+              </b-col>
+            </b-row>
+            <b-row>
+              <b-col>
+                <b-form-group
+                  id="input-group-2"
+                  label="Calle:"
+                  label-for="input-2"
+                >
+                  <b-form-input
+                    v-model="paciente.calle"
+                    placeholder="Ingrese Calle"
+                    required
+                  ></b-form-input>
+                </b-form-group>
+              </b-col>
+              <b-col>
+                <b-form-group
+                  id="input-group-2"
+                  label="Numero:"
+                  label-for="input-2"
+                >
+                  <b-form-input
+                    v-model="paciente.numero"
+                    placeholder="Ingrese numero"
+                    required
+                  ></b-form-input>
+                </b-form-group>
+              </b-col>
+              <b-col>
+                <b-form-group
+                  id="input-group-2"
+                  label="Piso:"
+                  label-for="input-2"
+                >
+                  <b-form-input
+                    v-model="paciente.piso"
+                    placeholder="Ingrese Piso"
+                    required
+                  ></b-form-input>
+                </b-form-group>
+              </b-col>
+            </b-row>
+          </div>
+          <div v-else class="rounded">
+            <h6>
+              <b> Datos del tutor </b>
+            </h6>
+            <hr />
+            <br />
+            <b-row
+              ><br />
+              <b-col lg="6">
+                <b-form-group label="Nombre del tutor :">
+                  <b-form-input
+                    v-model="paciente.tutor.tutor.nombre"
+                    type="text"
+                    placeholder="Ingrese Nombre del tutor"
+                    required
+                  ></b-form-input>
+                </b-form-group>
+              </b-col>
+              <b-col lg="6">
+                <b-form-group
+                  id="input-group-2"
+                  label="Apellido del tutor :"
+                  label-for="input-2"
+                >
+                  <b-form-input
+                    v-model="paciente.tutor.tutor.apellido"
+                    placeholder="Ingrese apellido del tutor"
+                    required
+                  ></b-form-input>
+                </b-form-group>
+              </b-col>
+            </b-row>
+            <b-row>
+              <b-col lg="4">
+                <b-form-group
+                  id="input-group-2"
+                  label="Telefono deltutor:"
+                  label-for="input-2"
+                >
+                  <b-form-input
+                    type="number"
+                    v-model="paciente.tutor.tutor.telefono"
+                    placeholder="Ingrese Telefono del tutor"
+                    required
+                  ></b-form-input>
+                </b-form-group>
+              </b-col>
+              <b-col lg="4">
+                <b-form-group
+                  id="input-group-2"
+                  label="Email del tutor:"
+                  label-for="input-2"
+                >
+                  <b-form-input
+                    v-model="paciente.tutor.tutor.email"
+                    placeholder="Ingrese Email del tutor"
+                    required
+                    type="email"
+                  ></b-form-input>
+                </b-form-group>
+              </b-col>
+            </b-row>
+
+            <b-row>
+              <b-col>
+                <b-form-group
+                  id="input-group-2"
+                  label="Calle:"
+                  label-for="input-2"
+                >
+                  <b-form-input
+                    v-model="paciente.tutor.tutor.calle"
+                    placeholder="Ingrese Calle"
+                    required
+                  ></b-form-input>
+                </b-form-group>
+              </b-col>
+              <b-col>
+                <b-form-group
+                  id="input-group-2"
+                  label="Numero:"
+                  label-for="input-2"
+                >
+                  <b-form-input
+                    v-model="paciente.tutor.tutor.numero"
+                    placeholder="Ingrese numero"
+                    required
+                    type="number"
+                  ></b-form-input>
+                </b-form-group>
+              </b-col>
+              <b-col>
+                <b-form-group
+                  id="input-group-2"
+                  label="Piso:"
+                  label-for="input-2"
+                >
+                  <b-form-input
+                    v-model="paciente.tutor.tutor.piso"
+                    placeholder="Ingrese Piso"
+                    required
+                    type="number"
+                  ></b-form-input>
+                </b-form-group>
+              </b-col>
+            </b-row>
+          </div>
+          <h6>
+            <b> Datos de la obra social </b>
+          </h6>
+          <hr />
           <b-row>
-            <b-col lg="3" md="3">
+            <b-col lg="4" md="4">
               <b-form-group id="os-label" label="Obra Social:" label-for="os">
                 <ValidationProvider :name="'os '" v-slot="{ errors, valid }">
                   <b-form-select
@@ -229,7 +338,7 @@
               </b-form-group>
             </b-col>
 
-            <b-col lg="3" md="3">
+            <b-col lg="5" md="5">
               <b-form-group
                 id="numeroOS-label"
                 label="Numero de afiliado:"
@@ -324,14 +433,22 @@ export default {
         return {
           nombre: "",
           apellido: "",
-          tutor:null,
           dni: null,
           obra_social: {
             obra_social: {
               id: null,
               nombre: "test",
             },
-            numero_afiliado:null
+            numero_afiliado: null,
+          },
+          tutor: {
+            tutor: {
+              nombre: null,
+              apellido: null,
+              email: null,
+              telefono: null,
+              direccion: null,
+            },
           },
           email: null,
           fecha_nacimiento: null,
@@ -351,6 +468,8 @@ export default {
       loading: true,
       obras_sociales: [],
       required: "",
+      showError: false,
+      error: null,
     };
   },
   created() {
@@ -361,12 +480,24 @@ export default {
     cambioOs() {
       this.required = "required";
     },
+    esMayor() {
+      let hoy = new Date();
+      let cumpleanos = new Date(this.paciente.fecha_nacimiento);
+      let edad = hoy.getFullYear() - cumpleanos.getFullYear();
+      let m = hoy.getMonth() - cumpleanos.getMonth();
+      if (m < 0 || (m === 0 && hoy.getDate() < cumpleanos.getDate())) {
+        edad--;
+      }
+      return edad > 17 ? true : false;
+    },
 
     async editarPaciente() {
       try {
         let result = await this.$refs.detailsPaciente.validate();
         if (result) {
-          let r = await PacientesService.editarPaciente(this.paciente);
+                    let datos = this.armarArray();
+
+          let r = await PacientesService.editarPaciente(datos);
           if (r.status == 200) {
             this.$root.$bvToast.toast("Se edito con exito el paciente", {
               title: "Atencion!",
@@ -389,27 +520,95 @@ export default {
         });
       }
     },
+    armarDireccion(calle, numero, piso) {
+      return calle + " " + numero + " " + piso;
+    },
     async crearPaciente() {
       console.log(this.paciente);
       try {
         let result = await this.$refs.detailsPaciente.validate();
-        console.log(result);
         if (result) {
-          let r = await PacientesService.crearPaciente(this.paciente);
-          if (r.status == 200) {
-            this.$root.$bvToast.toast("Se creo con exito el paciente", {
-              title: "Atencion!",
-              toaster: "b-toaster-top-center",
-              solid: true,
-              variant: "success",
-            });
-            this.$router.push({
-              name: "listaPacientes",
-            });
-          }
+          let datos = this.armarArray();
+          console.log(datos);
+          let r = await PacientesService.crearPaciente(datos);
+          console.log(r);
+
+          this.$root.$bvToast.toast("Se creo con exito el paciente", {
+            title: "Atencion!",
+            toaster: "b-toaster-top-center",
+            solid: true,
+            variant: "success",
+          });
+          this.$router.push({
+            name: "listaPacientes",
+          });
         }
-      } catch (err) {
-        console.log(err);
+      } catch (error) {
+        this.showError = true;
+        this.error = error.response.data.dni[0];
+        console.log(error.response.data);
+      }
+    },
+
+    armarArray() {
+      if (this.esMayor()) {
+        let datos = {};
+        datos = {
+          nombre: this.paciente.nombre,
+          apellido: this.paciente.apellido,
+          dni: this.paciente.dni,
+          fecha_nacimiento: this.paciente.fecha_nacimiento,
+          direccion: this.armarDireccion(
+            this.paciente.calle,
+            this.paciente.numero,
+            this.paciente.piso
+          ),
+          obra_social: {
+            obra_social: {
+              id: this.paciente.obra_social.obra_social.id,
+              nombre: "test",
+            },
+            numero_afiliado: this.paciente.obra_social.numero_afiliado,
+          },
+          email: this.paciente.email,
+          historia_clinica: this.paciente.historia_clinica,
+          telefono: this.paciente.telefono,
+        };
+        return datos;
+      } else {
+        let datos = {};
+        datos = {
+          nombre: this.paciente.nombre,
+          apellido: this.paciente.apellido,
+          dni: this.paciente.dni,
+          fecha_nacimiento: this.paciente.fecha_nacimiento,
+          historia_clinica: this.paciente.historia_clinica,
+
+          obra_social: {
+            obra_social: {
+              id: this.paciente.obra_social.obra_social.id,
+              nombre: "test",
+            },
+            numero_afiliado: this.paciente.obra_social.numero_afiliado,
+          },
+          tutor: {
+            tutor: {
+              nombre: this.paciente.tutor.tutor.nombre,
+              apellido: this.paciente.tutor.tutor.apellido,
+              email: this.paciente.tutor.tutor.email,
+              telefono: this.paciente.tutor.tutor.telefono,
+              calle: this.paciente.tutor.tutor.calle,
+              numero: this.paciente.tutor.tutor.numero,
+              piso: this.paciente.tutor.tutor.piso,
+              direccion: this.armarDireccion(
+                this.paciente.tutor.tutor.calle,
+                this.paciente.tutor.tutor.numero,
+                this.paciente.tutor.tutor.piso
+              ),
+            },
+          },
+        };
+        return datos;
       }
     },
     async obtenerObrasSociales() {
