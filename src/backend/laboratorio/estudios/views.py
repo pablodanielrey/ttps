@@ -271,9 +271,8 @@ class VistaEstudios(viewsets.ModelViewSet):
         import io
         from xhtml2pdf import pisa
         buffer = io.BytesIO()
-
         pisa.CreatePDF(informe, dest=buffer)
-        
+        buffer.seek(0)
         # from weasyprint import HTML
         # HTML(string=informe).write(buffer)
 

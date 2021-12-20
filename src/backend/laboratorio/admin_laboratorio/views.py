@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.db import IntegrityError
 from django.contrib.auth import models as django_auth_models
+from rest_framework.decorators import permission_classes
 
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -482,3 +483,23 @@ class VistaConfiguracion(viewsets.ModelViewSet):
     queryset = models.Configuracion.objects.all()
     serializer_class = serializers.ConfiguracionSerializer
 
+
+from django.http.response import HttpResponse
+class Pdf(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request, format=None):
+
+        import io
+        from xhtml2pdf import pisa
+        buffer = io.BytesIO()
+
+        texto = "<p>lassadsdsd</p><p class=\"ql-align-center\">sdsadasdass</p><p class=\"ql-align-center\"><strong>asdsadsadasdad</strong></p>"
+        pisa.CreatePDF(texto, dest=buffer)
+
+        buffer.seek(0)
+        
+        # from weasyprint import HTML
+        # HTML(string=informe).write(buffer)
+
+        return HttpResponse(buffer,content_type='application/pdf')
