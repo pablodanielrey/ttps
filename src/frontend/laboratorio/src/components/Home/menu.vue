@@ -5,7 +5,7 @@
     </div>
     <div v-else>
       <b-navbar toggleable="lg" type="dark" variant="dark">
-        <b-navbar-brand :to="{ name: '/' }">Home</b-navbar-brand>
+        <b-navbar-brand>Home</b-navbar-brand>
 
         <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
         <b-navbar-nav>
@@ -138,7 +138,11 @@
                 >Listar</b-dropdown-item
               >
             </b-nav-item-dropdown>
-            <b-nav-item :to="{ name: 'estadisticas' }">Estadisticas</b-nav-item>
+            <b-nav-item
+              :to="{ name: 'estadisticas' }"
+              v-if="this.permisos == 'Empleados'"
+              >Estadisticas</b-nav-item
+            >
 
             <b-nav-item
               :to="{ name: 'listaEstudios' }"
@@ -146,8 +150,8 @@
               text="Estudios"
               right
               >Mis estudios</b-nav-item
-            >          
-             <b-nav-item-dropdown
+            >
+            <b-nav-item-dropdown
               v-if="this.permisos == 'Empleados'"
               text="Liquidaciones"
               right
