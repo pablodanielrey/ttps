@@ -119,13 +119,14 @@ class SerializadorEnviarConsentimientoInformado(serializers.ModelSerializer):
         if not personas_models.Empleado.usuario_es_tipo(usuario_logueado):
             raise login_models.PermisosAPIException("No tiene permisos para realizar esta acción")
 
+        estudio = instance.estudio
 
         comporbante_invalido = validated_data.get('comprobante_invalido',False)
         if comporbante_invalido:
-            """
-                Todo pasar el estsado a esperando comprobante.
-            """
-            pass
+            logging.debug('vuelvo el estudio atras por comprobante inválido')    
+            estado = models.EsperandoComprobanteDePago(estudio=estudio)
+            estado.save()
+            return estado
 
         super().update(instance, validated_data)
 
