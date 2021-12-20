@@ -76,6 +76,14 @@ class Estudio(models.Model):
                 return econsentimiento.consentimiento
         return None
 
+    @property
+    def informe_resultado(self):
+        resultados = self.estados.instance_of(EsperandoInterpretacionDeResultados)
+        for resultado in resultados:
+            if resultado.informe:
+                return resultado.informe
+        return None
+
 
     @classmethod
     def buscar(cls, termino:str, estado=None):

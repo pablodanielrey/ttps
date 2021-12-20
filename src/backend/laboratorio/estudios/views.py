@@ -110,104 +110,7 @@ class VistaEstadoEstudio(viewsets.ModelViewSet):
         context.update({'request':self.request})
         return context
 
-    # def create(self, request, *args, **kwargs):
-    #     """
-    #         En nuestro caso los creates no se realizan extrictamente cumpliendo REST.
-    #         Los create para las interfaces son modify de los estados actuales y se ejecuta el workflow.
-    #     """
-    #     estudio_id = request.data.pop('estudio_id')
-    #     estudio = estudio_models.Estudio.objects.get(id=estudio_id)
 
-    #     """
-    #         TODO: debemos estar seguros de que no actualizamos ningún dato sensible desde afuera.
-    #     """
-    #     for campo_solo_lectura in ['id','fecha']:
-    #         try:
-    #             request.data.pop(campo_solo_lectura)
-    #         except KeyError as e:
-    #             pass
-
-    #     ultimo_estado = estudio.ultimo_estado
-        
-    #     logging.debug(ultimo_estado)
-    #     clase_ultimo_estado = ultimo_estado.__class__
-
-    #     """ aca verifico estados finales """
-    #     if clase_ultimo_estado in [ models.AnuladorPorFaltaDePago, models.ResultadoDeEstudioEntregado ]:
-    #         return HttpResponseBadRequest('no se puede cambiar un estado final')
-
-    #     """ aca manejo comportamientos especiales de los estados """
-    #     if clase_ultimo_estado == models.EsperandoComprobanteDePago:
-    #         """ solo pueden darse 2 casos. 1 - comprobante de pago, 2 - anulado por falta de pago """
-    #         if 'fecha_procesado' in request.data:
-    #             estado = models.AnuladorPorFaltaDePago(estudio=estudio, fecha_procesado=request.data['fecha_procesado'])
-    #             estado.save()
-    #             estudio.estados.add(estado)
-    #             serializador = serializers.SerializadorEstadoEstudioPolimorfico(estado, context={'request': request})
-    #             return Response(serializador.data)
-
-    #         elif 'comprobante' in request.data:
-    #             archivo = models.Archivo.from_datauri(request.data['comprobante'])
-    #             archivo.save()
-    #             ultimo_estado.comprobante = archivo
-    #             ultimo_estado.save()
-
-    #         else:
-    #             return HttpResponseBadRequest()
-
-    #     elif clase_ultimo_estado == models.EsperandoConsentimientoInformado:
-    #         archivo = models.Archivo.from_datauri(request.data['consentimiento'])
-    #         archivo.save()
-    #         ultimo_estado.consentimiento = archivo
-    #         ultimo_estado.save()
-
-    #     elif clase_ultimo_estado == models.EsperandoSeleccionDeTurnoParaExtraccion:
-    #         """ genero un turno """
-    #         paciente = personas_models.Persona.objects.get(id=estudio.paciente.id)
-    #         inicio = parser.parse(request.data['inicio'])
-    #         fin = parser.parse(request.data['fin'])
-    #         turno = turnos_models.TurnoConfirmado(persona=paciente,inicio=inicio, fin=fin)
-    #         turno.save()
-    #         logging.debug(f'turno generado {turno.id}')
-
-    #         """ actualizo el estado """
-    #         ultimo_estado.turno = turno
-    #         ultimo_estado.save()
-
-    #     elif clase_ultimo_estado == models.EsperandoTomaDeMuestra:
-
-    #         if 'expirado' in request.data:
-    #             pass
-    #         else:
-    #             pass    
-
-    #     else:
-    #         """ los casos normales de cambios de estado - se encarga el serializer """
-    #         serializador = serializers.SerializadorEstadoEstudioPolimorfico.model_serializer_mapping[clase_ultimo_estado](instance=ultimo_estado, data=request.data)
-    #         if not serializador.is_valid():
-    #             return HttpResponseBadRequest(serializador.errors)
-    #         if len(serializador.validated_data) <= 0:
-    #             """ no existen datos enviados para actualizar el nuevo estado """
-    #             return HttpResponseBadRequest()
-
-    #         serializador.save()
-
-    #     """
-    #         Ahora paso al nuevo estado de acuerdo al workflow.
-    #     """
-    #     try:
-    #         indice = self.workflow.index(clase_ultimo_estado)
-    #         if indice+1 < len(self.workflow):
-    #             clase_siguiente_estado = self.workflow[indice+1]
-    #             siguiente_estado = clase_siguiente_estado(estudio=estudio)
-    #             siguiente_estado.save()
-
-    #     except ValueError as e:
-    #         pass
-
-
-    #     serializador = serializers.SerializadorEstadoEstudioPolimorfico(ultimo_estado, context={'request': request})
-    #     return Response(serializador.data)
 
 """
     ///////////////////////////////////////////////
@@ -361,8 +264,18 @@ class VistaEstudios(viewsets.ModelViewSet):
         """
 
         estudio = self.get_object()
-        datos = estudio.consentimiento_informado
-        if not datos:
-            return HttpResponseBadRequest('no existe consentimiento para el estudio')
-        return HttpResponse(base64.b64decode(datos.contenido), content_type='application/pdf')   
+        informe = estudio.informe_resultado
+        if not informe:
+            return HttpResponseBadRequest('no existe informe para el estudio')
+
+        import io
+        from xhtml2pdf import pisa
+        buffer = io.BytesIO()
+
+        pisa.CreatePDF(informe, dest=buffer)
+        
+        # from weasyprint import HTML
+        # HTML(string=informe).write(buffer)
+
+        return HttpResponse(buffer,content_type='application/pdf')
 

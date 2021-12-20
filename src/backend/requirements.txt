@@ -5,3 +5,5 @@ django-polymorphic
 django-rest-polymorphic
 dateutils
 psycopg2-binary
+weasyprint
+xhtml2pdf
