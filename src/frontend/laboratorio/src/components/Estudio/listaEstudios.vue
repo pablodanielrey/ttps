@@ -29,17 +29,15 @@
         :per-page="perPage"
         @filtered="onFiltered"
         :sort-by.sync="sortBy"
-      :sort-desc.sync="sortDesc"
+        :sort-desc.sync="sortDesc"
       >
         <template v-slot:cell(estados)="row">
           {{ obtenerUltimoEstado(row.item) }}
         </template>
         <template v-slot:cell(fecha)="row">
-          
           {{ armarFecha(row.item) }}
         </template>
 
-       
         <template v-slot:cell(acciones)="row">
           <b-button @click="detalleEstudio(row.item)" variant="outline-white">
             <b-icon icon="file-earmark-person-fill" variant="info"> </b-icon>
@@ -58,11 +56,10 @@
             variant="outline-white"
             v-if="checkComprobantePago(row.item)"
             @click="anularEstudioFaltaComprobante(row.item)"
-            >
-             <b-icon icon="x-circle" fill variant="danger"> </b-icon>
-           
+          >
+            <b-icon icon="x-circle" fill variant="danger"> </b-icon>
           </b-button>
-           <b-button
+          <b-button
             title="Volver a seleccion de turno, falta de datos en la muestra"
             variant="outline-white"
             v-if="checkFaltaDatosMuestra(row.item)"
@@ -107,8 +104,8 @@ export default {
   data() {
     return {
       perPage: 30,
-              sortBy: 'fecha',
-        sortDesc: false,
+      sortBy: "fecha",
+      sortDesc: false,
       pageOptions: [30, 10, 15, 40],
       filter: null,
       currentPage: 1,
@@ -124,11 +121,13 @@ export default {
           key: "paciente.apellido",
           label: "Apellido",
           class: "text-center p2",
+          sortable: true,
         },
         {
           key: "medico_derivante.apellido",
           label: "Medico derivante",
           class: "text-center p2",
+         
         },
         {
           key: "diagnostico.nombre",
@@ -149,6 +148,7 @@ export default {
           key: "fecha",
           label: "Fecha",
           class: "text-center p2",
+          sortable: true,
         },
 
         {
@@ -163,8 +163,8 @@ export default {
 
   created() {},
   methods: {
-    armarFecha(estado){       
-        return new Date(estado.ultimo_estado.fecha).format("DD-MM-YYYY HH:MM");
+    armarFecha(estado) {
+      return new Date(estado.ultimo_estado.fecha).format("DD-MM-YYYY HH:MM");
     },
     obtenerUltimoEstado(estudio) {
       let nameEstado = estudio.ultimo_estado.resourcetype;
@@ -219,12 +219,14 @@ export default {
       }
       return false;
     },
-    checkFaltaDatosMuestra(estudio){
+    checkFaltaDatosMuestra(estudio) {
       if (estudio.ultimo_estado.resourcetype != "EsperandoTomaDeMuestra") {
         return false;
       }
       let hoy = new Date();
-      let fechaCreacioncomprobante = new Date(estudio.ultimo_estado.turno.inicio);
+      let fechaCreacioncomprobante = new Date(
+        estudio.ultimo_estado.turno.inicio
+      );
       let difference = Math.abs(hoy - fechaCreacioncomprobante);
       let days = difference / (1000 * 3600 * 24);
       if (days > 30) {
@@ -232,14 +234,17 @@ export default {
       }
       return false;
     },
-   async anularEstudioFaltaDatosMuestra(estudio){
-         try {
+    async anularEstudioFaltaDatosMuestra(estudio) {
+      try {
         let datosComprobante = {
           estudio_id: estudio.id,
-          expirado:true,
+          expirado: true,
           resourcetype: estudio.ultimo_estado.resourcetype,
         };
-        await EstudiosService.actualizarUltimoEstado(datosComprobante,estudio.ultimo_estado.id);
+        await EstudiosService.actualizarUltimoEstado(
+          datosComprobante,
+          estudio.ultimo_estado.id
+        );
         this.$root.$bvToast.toast(
           "Usted volvio a la seleccion de turno porque no cargo los datos",
           {
@@ -251,7 +256,6 @@ export default {
         );
         this.obtenerListaEstudios();
       } catch (error) {
-
         this.$root.$bvToast.toast(
           "ocurrio un error mientras anulaba el estudio, por favor vuelva a intentar",
           {
@@ -262,7 +266,6 @@ export default {
           }
         );
       }
-
     },
     async anularEstudioFaltaComprobante(estudio) {
       try {
@@ -271,7 +274,10 @@ export default {
           fecha_procesado: new Date(),
           resourcetype: estudio.ultimo_estado.resourcetype,
         };
-        await EstudiosService.actualizarUltimoEstado(datosComprobante,estudio.ultimo_estado.id);
+        await EstudiosService.actualizarUltimoEstado(
+          datosComprobante,
+          estudio.ultimo_estado.id
+        );
         this.$root.$bvToast.toast(
           "Usted anulo el estudio por que no se subio el comprobante de pago,quedo inhabilitado para poder continuar",
           {
@@ -283,7 +289,6 @@ export default {
         );
         this.obtenerListaEstudios();
       } catch (error) {
-
         this.$root.$bvToast.toast(
           "ocurrio un error mientras anulaba el estudio, por favor vuelva a intentar",
           {

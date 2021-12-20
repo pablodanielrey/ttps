@@ -31,6 +31,13 @@
         <template v-slot:cell(estados)="row">
           {{ obtenerUltimoEstado(row.item) }}
         </template>
+        <template v-slot:cell(resultadoUrl)="row">
+          
+          <a :href="armarUrl(row.item)" target="_blank">
+            <b-icon icon="link" variant="info"> </b-icon>Click para Acceder!</a
+          >
+        </template>
+
         <template v-slot:cell(acciones)="row">
           <b-button
             @click="siguienteEstado(row.item)"
@@ -102,6 +109,7 @@ export default {
         },
         { key: "tipo.nombre", label: "Tipo Estudio", class: "text-center p2" },
         { key: "estados", label: "Estado", class: "text-center p2" },
+        { key: "resultadoUrl", label: "Resultado", class: "text-center p2" },
 
         { key: "acciones", label: "Acciones", class: "text-center p2" },
       ],
@@ -117,11 +125,15 @@ export default {
       nameEstado = nameEstado.replace(/([A-Z])([A-Z][a-z])/g, "$1 $2");
       return nameEstado;
     },
+    armarUrl(estudio) {
+      console.log(estudio);
+      return estudio.ultimo_estado.resultado_url;
+    },
     async obtenerListaEstudios() {
       try {
         let response = await EstudiosService.obtenerListaEstudiosParaInformes();
         this.items = response.data;
-        console.log(response)
+        console.log(response);
       } catch (err) {
         console.log(err);
       }
@@ -129,14 +141,14 @@ export default {
     onFiltered(filteredItems) {
       this.totalRows = filteredItems.length;
       this.currentPage = 1;
-    },   
+    },
     siguienteEstado(estudio) {
       //let ultimoEstado = estudio.estados[estudio.estados.length - 1];
       this.$router.push({
         name: "EsperandoInterpretacionDeResultadosInformante",
         params: {
           estudio: estudio,
-          urlResultado:estudio.ultimo_estado.resultado_url
+          urlResultado: estudio.ultimo_estado.resultado_url,
         },
       });
     },

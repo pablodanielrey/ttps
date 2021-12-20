@@ -1,8 +1,11 @@
 <template>
   <b-container>
-    <div v-if="loading"></div>
-    <div v-else>
+
+    <div>
       <h4>Resultados del informe</h4>
+      <b-col lg="5" md="7" sm="10">
+            <a :href="this.urlResultado "  target="_blank"> <b-icon icon="link" variant="info"> </b-icon>Click para Acceder a el informe!</a>
+            </b-col>
       <ValidationObserver ref="detailsResultado">
         <b-form-group>
           <b-alert
@@ -40,9 +43,7 @@
               </ValidationProvider>
             </b-form-group>
           </b-col>
-            <b-col lg="5" md="7" sm="10">
-            <button >Url del resultado</button>
-            </b-col>
+            
         </b-row>
         <b-card header="Informe del resultado">
           <b-row>
@@ -80,6 +81,11 @@
         </b-row>
       </ValidationObserver>
     </div>
+     <b-col class="text-left">
+                <router-link to="/listaEstudiosEsperandoInforme"
+                  ><b-icon icon="arrow-left-circle"></b-icon
+                ></router-link>
+              </b-col>
   </b-container>
 </template>
 
@@ -87,8 +93,6 @@
 <script>
 import { VueEditor } from "vue2-editor";
 import EstudiosService from "@/services/EstudiosService.js";
-import axios from "axios";
-import PacientesService from "@/services/PacientesService.js";
 
 export default {
   components: { VueEditor },
@@ -102,8 +106,6 @@ export default {
   },
   data() {
     return {
-      medicosInformantes: [],
-      loading: true,   
       alerts: [],
       resultado: {
         resultado: null,
@@ -112,21 +114,15 @@ export default {
       },
     };
   },
-  created() {},
+  created() {
+    console.log(this.urlResultado)
+  },
   methods: {
     resultadoUrl(){
       console.log(this.urlResultado)
       return this.urlResultado
     },
-    async obtenerMedicosInformantes() {
-      try {
-        const response = await PacientesService.obtenerMedicosInformantes();
-        this.medicosInformantes = response.data;
-        console.log(this.medicosInformantes);
-      } catch (err) {
-        console.log(err);
-      }
-    },
+  
     async guardarDatos() {
       try {
         
@@ -170,28 +166,10 @@ export default {
     },
   },
   computed: {
-    getMedicosInformantes() {
-      let medicos = this.medicosInformantes.map((e) => ({
-        value: e.id,
-        text: e.nombre,
-      }));
-      medicos.push({
-        value: null,
-        text: "-Seleccione un medico -",
-        disabled: true,
-      });
-      return medicos;
-    },
+  
   },
   mounted() {
-    axios
-      .all([this.obtenerMedicosInformantes()])
-      .then(() => {
-        this.loading = false;
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    
   },
 };
 </script>
