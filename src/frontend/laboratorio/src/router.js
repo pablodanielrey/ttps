@@ -18,6 +18,8 @@ import NuevoInformante from '@/components/Paciente/nuevoInformante.vue'
 import ListaDerivante from '@/components/Paciente/listaDerivante.vue'
 import NuevoDerivante from '@/components/Paciente/nuevoDerivante.vue'
 import Estadisticas from '@/components/Estadisticas/estadisticas.vue'
+import liquidacionesEstudios from '@/components/Liquidaciones/liquidacionesEstudios.vue'
+
 
 import ListaEmpleado from '@/components/Paciente/listaEmpleado.vue'
 import NuevoEmpleado from '@/components/Paciente/nuevoEmpleado.vue'
@@ -69,7 +71,7 @@ const router = new Router({
     base: process.env.BASE_URL,
     routes: [{
         path: '/',
-       
+        name: '/',
         component: container ,
         meta: { 
         requireAuth: true
@@ -91,7 +93,7 @@ const router = new Router({
             { path: '/listaObrasSociales', component: ListaObrasSociales ,name:'listaObrasSociales' },
             { path: '/templateConsentimiento', component: editarTemplateConsentimiento ,name:'editarTemplateConsentimiento' },
             { path: '/modoDeTrabajo', component: editarModoDeTrabajo ,name:'editarModoDeTrabajo' },
-            
+            { path: '/liquidacionesEstudios', component: liquidacionesEstudios ,name:'liquidacionesEstudios' },
             { path: '/estudio', component: NuevoEstudio , name:'nuevoEstudio'},
             { path: '/listaEstudios', component: ListaEstudios, name:'listaEstudios' },
             { path: '/esperandoFactura', component: EsperandoFactura },

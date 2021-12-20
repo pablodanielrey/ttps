@@ -4,13 +4,17 @@
       <b-spinner> </b-spinner>
     </div>
     <div v-else>
-      <b-navbar  toggleable="lg" type="dark"  variant="dark">
-          <b-navbar-brand :to="{ name: '/' }">Home</b-navbar-brand>
+      <b-navbar toggleable="lg" type="dark" variant="dark">
+        <b-navbar-brand :to="{ name: '/' }">Home</b-navbar-brand>
 
-    <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
+        <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
         <b-navbar-nav>
           <b-collapse class="ml-auto" id="nav-collapse" is-nav>
-            <b-nav-item-dropdown text="Pacientes" right v-if="this.permisos == 'Empleados' " >
+            <b-nav-item-dropdown
+              text="Pacientes"
+              right
+              v-if="this.permisos == 'Empleados'"
+            >
               <b-dropdown-item :to="{ name: 'listaPacientes' }"
                 >Listar</b-dropdown-item
               >
@@ -18,7 +22,11 @@
                 >nuevo</b-dropdown-item
               >
             </b-nav-item-dropdown>
-            <b-nav-item-dropdown text="Empleados" right v-if="this.permisos == 'Administradores'  " >
+            <b-nav-item-dropdown
+              text="Empleados"
+              right
+              v-if="this.permisos == 'Administradores'"
+            >
               <b-dropdown-item :to="{ name: 'listaEmpleado' }"
                 >Listar</b-dropdown-item
               >
@@ -26,17 +34,35 @@
                 >nuevo</b-dropdown-item
               >
             </b-nav-item-dropdown>
-             <b-nav-item-dropdown v-if="this.permisos == 'Configuradores' " text="Obra  Social" right>
+            <b-nav-item-dropdown
+              v-if="this.permisos == 'Configuradores'"
+              text="Obra  Social"
+              right
+            >
               <b-dropdown-item :to="{ name: 'listaObrasSociales' }"
                 >Listar</b-dropdown-item
               >
               <b-dropdown-item :to="{ name: 'obraSocial' }"
                 >nuevo</b-dropdown-item
               >
-              </b-nav-item-dropdown>
-            <b-nav-item v-if="this.permisos == 'Configuradores' " :to="{ name: 'editarTemplateConsentimiento' }" right>Template Consentimiento</b-nav-item>
-            <b-nav-item v-if="this.permisos == 'Configuradores' " :to="{ name: 'editarModoDeTrabajo' }" right>Modo de Trabajo</b-nav-item>
-            <b-nav-item-dropdown v-if="this.permisos == 'Administradores' " text="Configurador" right>
+            </b-nav-item-dropdown>
+            <b-nav-item
+              v-if="this.permisos == 'Configuradores'"
+              :to="{ name: 'editarTemplateConsentimiento' }"
+              right
+              >Template Consentimiento</b-nav-item
+            >
+            <b-nav-item
+              v-if="this.permisos == 'Configuradores'"
+              :to="{ name: 'editarModoDeTrabajo' }"
+              right
+              >Modo de Trabajo</b-nav-item
+            >
+            <b-nav-item-dropdown
+              v-if="this.permisos == 'Administradores'"
+              text="Configurador"
+              right
+            >
               <b-dropdown-item :to="{ name: 'listaConfiguradores' }"
                 >Listar</b-dropdown-item
               >
@@ -44,7 +70,11 @@
                 >nuevo</b-dropdown-item
               >
             </b-nav-item-dropdown>
-              <b-nav-item-dropdown v-if="this.permisos == 'Empleados' " text="Medicos informantes" right>
+            <b-nav-item-dropdown
+              v-if="this.permisos == 'Empleados'"
+              text="Medicos informantes"
+              right
+            >
               <b-dropdown-item :to="{ name: 'listaMedicoInformante' }"
                 >Listar</b-dropdown-item
               >
@@ -52,7 +82,11 @@
                 >nuevo</b-dropdown-item
               >
             </b-nav-item-dropdown>
-            <b-nav-item-dropdown v-if="this.permisos == 'Empleados' " text="Medicos derivantes" right>
+            <b-nav-item-dropdown
+              v-if="this.permisos == 'Empleados'"
+              text="Medicos derivantes"
+              right
+            >
               <b-dropdown-item :to="{ name: 'listaDerivante' }"
                 >Listar</b-dropdown-item
               >
@@ -60,14 +94,21 @@
                 >nuevo</b-dropdown-item
               >
             </b-nav-item-dropdown>
-             <b-nav-item-dropdown text="Resultados Informe" right v-if="this.permisos == 'Médicos_Informantes' ">
+            <b-nav-item-dropdown
+              text="Resultados Informe"
+              right
+              v-if="this.permisos == 'Médicos_Informantes'"
+            >
               <b-dropdown-item :to="{ name: 'listaEstudiosEsperandoInforme' }"
                 >Listar</b-dropdown-item
               >
-             
             </b-nav-item-dropdown>
 
-            <b-nav-item-dropdown  v-if="this.permisos == 'Empleados'"   text="Estudios" right>
+            <b-nav-item-dropdown
+              v-if="this.permisos == 'Empleados'"
+              text="Estudios"
+              right
+            >
               <b-dropdown-item :to="{ name: 'listaEstudios' }"
                 >Listar</b-dropdown-item
               >
@@ -76,7 +117,11 @@
               >
             </b-nav-item-dropdown>
 
-            <b-nav-item-dropdown  v-if="this.permisos == 'Empleados'" text="Lotes" right>
+            <b-nav-item-dropdown
+              v-if="this.permisos == 'Empleados'"
+              text="Lotes"
+              right
+            >
               <b-dropdown-item :to="{ name: 'cargarResultadoLote' }"
                 >Listar</b-dropdown-item
               >
@@ -84,20 +129,30 @@
                 >Nuevo</b-dropdown-item
               >
             </b-nav-item-dropdown>
-            <b-nav-item-dropdown   v-if="this.permisos == 'Empleados'" text="Turnos ocupados" right>
+            <b-nav-item-dropdown
+              v-if="this.permisos == 'Empleados'"
+              text="Turnos ocupados"
+              right
+            >
               <b-dropdown-item :to="{ name: 'turnosOcupados' }"
                 >Listar</b-dropdown-item
               >
             </b-nav-item-dropdown>
-              <b-nav-item  :to="{ name: 'estadisticas' }"
-                >Estadisticas</b-nav-item 
-              >
+            <b-nav-item :to="{ name: 'estadisticas' }">Estadisticas</b-nav-item>
 
+            <b-nav-item
+              :to="{ name: 'listaEstudios' }"
+              v-if="this.permisos == 'Pacientes'"
+              text="Estudios"
+              right
+              >Mis estudios</b-nav-item
+            >
 
-              <b-nav-item  :to="{ name: 'listaEstudios' }" v-if="this.permisos == 'Pacientes'" text="Estudios" right
-                >Mis estudios</b-nav-item>
-  
-          <!--   <b-nav-item-dropdown   v-if="this.permisos == 'Configuradores'" text="Turnos " >
+            <b-nav-item :to="{ name: 'liquidacionesEstudios' }"
+              >Liquidaciones</b-nav-item
+            >
+
+            <!--   <b-nav-item-dropdown   v-if="this.permisos == 'Configuradores'" text="Turnos " >
               <b-dropdown-item :to="{ name: 'configurarTurnos' }"
                 >Configurar turnos</b-dropdown-item
               >
@@ -126,7 +181,6 @@ export default {
   },
   computed: {},
   methods: {
-  
     cerarrSesion() {
       try {
         window.localStorage.removeItem("credenciales");
