@@ -2,14 +2,12 @@
   <b-container fluid>
     <div v-if="loading">
       <b-spinner> </b-spinner>
-      <h4>Liquidaciones de Estudios</h4>
+      <h4> Estudios liquidados</h4>
     </div>
     <div v-else>
-      <h4>Liquidaciones de Estudios</h4>
+      <h4>Estudios liquidados</h4>
       <br />
-      <b-button variant="outline-success" @click="liquidarEstudios()"
-        >Liquidar estudios</b-button
-      ><br />
+   <br />
       <b-table
         show-empty
         empty-text="El sistema no posee estudios a liquidar"
@@ -18,25 +16,12 @@
         :filter="filter"
         :current-page="currentPage"
         :per-page="perPage"
-        :select-mode="selectMode"
         responsive="sm"
-        ref="selectableTable"
-        selectable
-        @row-selected="onRowSelected"
       >
         <template v-slot:cell(estados)="row">
           {{ obtenerUltimoEstado(row.item) }}
         </template>
-        <template #cell(selected)="{ rowSelected }">
-          <template v-if="rowSelected">
-            <span aria-hidden="true">&check;</span>
-            <span class="sr-only">Selected</span>
-          </template>
-          <template v-else>
-            <span aria-hidden="true">&nbsp;</span>
-            <span class="sr-only">Not selected</span>
-          </template>
-        </template>
+     
       </b-table>
 
       <b-row>
@@ -68,7 +53,6 @@ import axios from "axios";
 export default {
   data() {
     return {
-      selectMode: "multi",
       perPage: 10,
       pageOptions: [10, 25, 40],
       filter: null,
@@ -102,48 +86,14 @@ export default {
           label: "Estado",
           class: "text-center p2",
         },
-        {
-          key: "selected",
-          label: "Seleccionado",
-          class: "text-center p2",
-        },
+     
       ],
       items: [],
-      liquidacionesSeleccionadas: [],
     };
   },
   methods: {
-    onRowSelected(items) {
-      console.log(items);
-      this.liquidacionesSeleccionadas = items;
-    },
-    async liquidarEstudios() {
-      try {
-        let estudios = this.armarRespuestaConId();
-        let data = {
-          estudios,
-        };
-        console.log(data);
-        let response = await LiquidacionesService.crearLiquidaciones(data);
-        console.log(response);
-        this.$root.$bvToast.toast("Los estudios fueron liquidados", {
-          title: "Atencion!",
-          toaster: "b-toaster-top-center",
-          solid: true,
-          variant: "success",
-        });
-        this.obtenerEstudiosLiquidar();
-      } catch (error) {
-        console.log(error);
-      }
-    },
-    armarRespuestaConId() {
-      let estudios = [];
-      this.liquidacionesSeleccionadas.forEach((estudio) => {
-        estudios.push(estudio.id);
-      });
-      return estudios;
-    },
+   
+
 
     obtenerUltimoEstado(estudio) {
       let nameEstado = estudio.ultimo_estado.resourcetype;
@@ -151,12 +101,11 @@ export default {
       nameEstado = nameEstado.replace(/([A-Z])([A-Z][a-z])/g, "$1 $2");
       return nameEstado;
     },
-    async obtenerEstudiosLiquidar() {
+    async obtenerEstudiosLiquidados() {
       try {
-        let response = await LiquidacionesService.obtenerEstudiosLiquidar();
-        console.log(response);
+        let response = await LiquidacionesService.obtenerEstudiosLiquidados();
         this.items = response.data;
-        this.totalRows = this.items.length;
+      
       } catch (err) {
         console.log(err);
       }
@@ -164,7 +113,7 @@ export default {
   },
   mounted() {
     axios
-      .all([this.obtenerEstudiosLiquidar()])
+      .all([this.obtenerEstudiosLiquidados()])
       .then(() => {
         this.totalRows = this.items.length;
         this.loading = false;

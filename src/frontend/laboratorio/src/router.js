@@ -19,6 +19,7 @@ import ListaDerivante from '@/components/Paciente/listaDerivante.vue'
 import NuevoDerivante from '@/components/Paciente/nuevoDerivante.vue'
 import Estadisticas from '@/components/Estadisticas/estadisticas.vue'
 import liquidacionesEstudios from '@/components/Liquidaciones/liquidacionesEstudios.vue'
+import liquidadoesEstudios from '@/components/Liquidaciones/liquidadoesEstudios.vue'
 
 
 import ListaEmpleado from '@/components/Paciente/listaEmpleado.vue'
@@ -94,6 +95,8 @@ const router = new Router({
             { path: '/templateConsentimiento', component: editarTemplateConsentimiento ,name:'editarTemplateConsentimiento' },
             { path: '/modoDeTrabajo', component: editarModoDeTrabajo ,name:'editarModoDeTrabajo' },
             { path: '/liquidacionesEstudios', component: liquidacionesEstudios ,name:'liquidacionesEstudios' },
+            { path: '/liquidadoesEstudios', component: liquidadoesEstudios ,name:'liquidadoesEstudios' },
+            
             { path: '/estudio', component: NuevoEstudio , name:'nuevoEstudio'},
             { path: '/listaEstudios', component: ListaEstudios, name:'listaEstudios' },
             { path: '/esperandoFactura', component: EsperandoFactura },

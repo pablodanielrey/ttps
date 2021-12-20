@@ -7,6 +7,12 @@ export default {
     obtenerEstudiosLiquidar() {
         return Api().get(API_URL + API_USER + "liquidaciones/")
     },
+    crearLiquidaciones(estudios){
+        return Api().post(API_URL  + "liquidaciones/", estudios);    
+    },
+    obtenerEstudiosLiquidados() {
+        return Api().get(API_URL + API_USER + "liquidados/")
+    },
  
     
   
