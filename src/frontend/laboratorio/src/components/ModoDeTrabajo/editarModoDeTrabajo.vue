@@ -29,7 +29,6 @@ export default {
 
   data() { 
     return {
-      modos: null,
       modo: null,
     }
   },
@@ -39,8 +38,8 @@ export default {
     async obtenerHistorialModos() {
       try {
         let response = await ModoDeTrabajoService.obtenerModo();
-        this.modos = response.data; 
-        console.log(this.modos)
+        this.modo = response.data.at(-1); 
+        console.log(this.modo)
      
       } catch (err) {
         console.log(err);
@@ -48,7 +47,6 @@ export default {
     },
     async guardarModo(event) {
       try {
-        //console.log(event.target.value);
         let response = await ModoDeTrabajoService.guardarModo(event.target.value);
         console.log(response)
       } catch (err) {
@@ -60,7 +58,6 @@ export default {
     axios
       .all([this.obtenerHistorialModos()])
       .then(() => {
-        this.modo = this.modos.at(-1);
         this.loading = false;
       })
       .catch((err) => {
