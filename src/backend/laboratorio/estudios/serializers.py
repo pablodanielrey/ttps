@@ -110,7 +110,7 @@ class SerializadorEnviarConsentimientoInformado(serializers.ModelSerializer):
     comprobante_invalido: serializers.BooleanField(required=False, read_only=False)
     class Meta:
         model = models.EnviarConsentimientoInformado
-        fields = ['id','fecha','fecha_enviado']
+        fields = ['id','fecha','fecha_enviado','comprobante_invalido']
 
     def update(self, instance, validated_data):
 
@@ -121,8 +121,8 @@ class SerializadorEnviarConsentimientoInformado(serializers.ModelSerializer):
 
         estudio = instance.estudio
 
-        comporbante_invalido = validated_data.get('comprobante_invalido',False)
-        if comporbante_invalido:
+        comprobante_invalido = validated_data.get('comprobante_invalido',False)
+        if comprobante_invalido:
             logging.debug('vuelvo el estudio atras por comprobante inválido')    
             estado = models.EsperandoComprobanteDePago(estudio=estudio)
             estado.save()

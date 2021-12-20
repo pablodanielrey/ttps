@@ -129,6 +129,7 @@ class AnuladorPorFaltaDePago(EstadoEstudio):
 
 class EnviarConsentimientoInformado(EstadoEstudio):
     fecha_enviado = models.DateTimeField(null=True)
+    comprobante_invalido = models.BooleanField(null=True)
 
 class EsperandoConsentimientoInformado(EstadoEstudio):
     consentimiento = models.ForeignKey(Archivo, on_delete=models.CASCADE, null=True)
