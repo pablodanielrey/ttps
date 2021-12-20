@@ -10,7 +10,7 @@ export default {
             'usuario': usuario,
             'clave': clave
         }));
-                return Api().get(API_URL  + "login/", {params: { username:usuario, password: clave }});
+      return Api().get(API_URL  + "login/", {params: { username:usuario, password: clave }});
 
     },
     getApiToken() {

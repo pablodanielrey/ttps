@@ -146,11 +146,19 @@
               text="Estudios"
               right
               >Mis estudios</b-nav-item
+            >          
+             <b-nav-item-dropdown
+              v-if="this.permisos == 'Empleados'"
+              text="Liquidaciones"
+              right
             >
-
-            <b-nav-item :to="{ name: 'liquidacionesEstudios' }"
-              >Liquidaciones</b-nav-item
-            >
+              <b-dropdown-item :to="{ name: 'liquidacionesEstudios' }"
+                >Nueva</b-dropdown-item
+              >
+              <b-dropdown-item :to="{ name: 'liquidadoesEstudios' }"
+                >Liquidados</b-dropdown-item
+              >
+            </b-nav-item-dropdown>
 
             <!--   <b-nav-item-dropdown   v-if="this.permisos == 'Configuradores'" text="Turnos " >
               <b-dropdown-item :to="{ name: 'configurarTurnos' }"
