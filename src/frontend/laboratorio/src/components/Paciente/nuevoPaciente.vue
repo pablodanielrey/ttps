@@ -144,6 +144,7 @@
                     locale="es-AR"
                     type="date"
                     v-model="paciente.fecha_nacimiento"
+                    
                     :state="errors[0] ? false : valid ? true : null"
                   ></b-form-input>
                   <b-form-invalid-feedback
@@ -169,7 +170,7 @@
                   <b-form-input
                     placeholder="Telefono"
                     v-model="paciente.telefono"
-                     type="number"
+                    type="number"
                     :state="errors[0] ? false : valid ? true : null"
                   ></b-form-input>
                   <b-form-invalid-feedback
@@ -215,7 +216,7 @@
                   <b-form-select
                     @change="cambioOs()"
                     :options="getObrasSociales"
-                    v-model="paciente.obra_social"
+                    v-model="paciente.obra_social.obra_social.id"
                     :state="errors[0] ? false : valid ? true : null"
                   ></b-form-select>
                   <b-form-invalid-feedback
@@ -235,14 +236,14 @@
                 label-for="numeroOS"
               >
                 <ValidationProvider
-                :rules="required"
+                  :rules="required"
                   :name="'numeroOS '"
                   v-slot="{ errors, valid }"
                 >
                   <b-form-input
                     placeholder="Numero de afiliado"
-                    type="number"                    
-                    v-model="paciente.numero_afiliado"
+                    type="number"
+                    v-model="paciente.obra_social.numero_afiliado"
                     :state="errors[0] ? false : valid ? true : null"
                   ></b-form-input>
                   <b-form-invalid-feedback
@@ -323,13 +324,19 @@ export default {
         return {
           nombre: "",
           apellido: "",
+          tutor:null,
           dni: null,
-          obra_social: null,
+          obra_social: {
+            obra_social: {
+              id: null,
+              nombre: "test",
+            },
+            numero_afiliado:null
+          },
           email: null,
           fecha_nacimiento: null,
           historia_clinica: null,
           telefono: null,
-
         };
       },
     },
@@ -337,28 +344,27 @@ export default {
       type: Boolean,
       return: false,
     },
-  },  
+  },
   data() {
     return {
       alerts: [],
       loading: true,
       obras_sociales: [],
-      required:''
+      required: "",
     };
   },
-  created (){
-    console.log(this.paciente)
+  created() {
+    console.log(this.paciente);
   },
 
   methods: {
-    cambioOs(){
-     this.required='required'
+    cambioOs() {
+      this.required = "required";
     },
-   
+
     async editarPaciente() {
-   
-       try {
-        let result = await this.$refs.detailsPaciente.validate();        
+      try {
+        let result = await this.$refs.detailsPaciente.validate();
         if (result) {
           let r = await PacientesService.editarPaciente(this.paciente);
           if (r.status == 200) {
@@ -375,15 +381,16 @@ export default {
         }
       } catch (err) {
         console.log(err);
-           this.$root.$bvToast.toast("No se pudo editar el paciente", {
-              title: "Atencion!",
-              toaster: "b-toaster-top-center",
-              solid: true,
-              variant: "danger",
-            });
+        this.$root.$bvToast.toast("No se pudo editar el paciente", {
+          title: "Atencion!",
+          toaster: "b-toaster-top-center",
+          solid: true,
+          variant: "danger",
+        });
       }
     },
     async crearPaciente() {
+      console.log(this.paciente);
       try {
         let result = await this.$refs.detailsPaciente.validate();
         console.log(result);

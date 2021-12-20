@@ -3,7 +3,12 @@
     <div v-if="loading">
       <b-spinner> </b-spinner>
     </div>
-    <div v-else>
+    <div v-else>    
+          <b-col class="text-left">
+                <router-link to="/listaEstudios"
+                  ><b-icon icon="arrow-left-circle"></b-icon
+                ></router-link>
+              </b-col>   
       <b-card
         :header="estudio.paciente.apellido + ' ' + estudio.paciente.nombre"
         header-text-variant="white"
@@ -382,6 +387,7 @@
       </div>
    
     </div>
+ 
   </b-container>
 </template>
 
