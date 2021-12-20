@@ -214,19 +214,19 @@ class SerializadorEsperandoTomaDeMuestra(serializers.ModelSerializer):
 
     def update(self, instance, validated_data):
         super().update(instance, validated_data)
-
         estudio = instance.estudio
         expirado = validated_data.get('expirado',False)
         if expirado:
+            logging.debug('acaaaa')
             """ vuelve a seleccionar un turno para extracción """
             turno = instance.turno
             turnos_models.ModeloTurnos().cancelar_turno(turno)
             estado = instance.cancelar_turno()
+            return estado if estado else instance
         else:
             estado = models.EsperandoRetiroDeExtaccion(estudio=estudio)
             estado.save()
-        return estado
-        
+            return estado        
 
 class SerializadorEsperandoRetiroDeExtaccion(serializers.ModelSerializer):
     class Meta:
