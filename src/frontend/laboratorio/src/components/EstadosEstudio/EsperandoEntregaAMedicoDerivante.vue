@@ -64,6 +64,12 @@ export default {
           datosFinales,
           this.estudio.ultimo_estado.id
         );
+          this.$root.$bvToast.toast("Se entrego el estudio al medico derivante y finalizo su ciclo", {
+            title: "Atencion!",
+            toaster: "b-toaster-top-center",
+            solid: true,
+            variant: "success",
+          });
         console.log(response);
         this.$router.push({
           name: "listaEstudios",

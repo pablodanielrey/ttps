@@ -111,6 +111,26 @@
             <b-col>
               <b-card
                 deck
+                v-if="estado.resourcetype == 'AnuladorPorFaltaDePago'"
+                header="Estudio anulado por falta de pago"
+                header-text-variant="white"
+                align="center"
+                header-bg-variant="danger"
+              >
+                <br />
+                <b-card-text>
+                  <b-alert show variant="danger"
+                    >Atencion! este estudio fue anulado por falta de
+                    pago</b-alert
+                  >
+                </b-card-text>
+              </b-card>
+            </b-col>
+          </b-card-group>
+          <b-card-group deck>
+            <b-col>
+              <b-card
+                deck
                 v-if="
                   estado.resourcetype ==
                   'EsperandoSeleccionDeTurnoParaExtraccion'
@@ -282,11 +302,11 @@
                     <br />
                     <p><strong>Informe: </strong></p>
                     <a
-                      @click="verInforme(estado.informe)"
+                      @click="bajarInforme()"
                       title="ver Informe del resultado"
                       variant="outline-success"
                     >
-                      <b-icon icon="eye" variant="info"> </b-icon
+                      <b-icon icon="download" variant="info"> </b-icon
                     ></a>
                   </div>
                   <div v-else>
@@ -304,10 +324,10 @@
               <b-card
                 deck
                 v-if="estado.resourcetype == 'ResultadoDeEstudioEntregado'"
-                header="Estudio finalizado"
+                header="Estudio entregado"
                 header-text-variant="white"
                 align="center"
-                header-bg-variant="secondary"
+                header-bg-variant="success"
               >
                 <br />
                 <b-card-text>
@@ -315,7 +335,6 @@
                     <strong> Fecha :</strong>
                     {{ mostrarFecha(estado.fecha) }}
                     <br />
-                    Aca deberia descargar informe final
                   </div>
 
                   <br />
@@ -328,7 +347,7 @@
               <b-card
                 deck
                 v-if="estado.resourcetype == 'EstadoVirtualEsperandoResultado'"
-                header="Resultados del estudio"
+                header="Entrega del estudio"
                 header-text-variant="white"
                 align="center"
                 header-bg-variant="secondary"
@@ -467,11 +486,16 @@ export default {
     verHistoria() {
       this.$refs["modalHistoriaCLinica"].show();
     },
-    verInforme(informe) {
-      this.informeVer = true;
-      this.datosInforme = informe;
-      console.log(informe);
-      this.$refs["modalInforme"].show();
+    async bajarInforme() {
+      console.log(this.estudio);
+      try {
+        let response = await EstudiosService.descargarInformeDeResultado(
+          this.estudio.id
+        );
+        console.log(response);
+      } catch (error) {
+        console.log(error);
+      }
     },
     async bajarPresupuesto() {
       try {

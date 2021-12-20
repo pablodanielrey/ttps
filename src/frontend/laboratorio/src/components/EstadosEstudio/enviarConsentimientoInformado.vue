@@ -5,6 +5,9 @@
         header="Descargar Template de consentimiento informado en formato pdf"
       >
         <div>
+           <b-button variant="danger" v-if="tienePermisos() == 'Empleados'" @click="volverComprobanteInvalido()"
+            >Comprobante invalido
+          </b-button>
           <b-button
             id="btnConsentimiento"
             variant="outline-primary"
@@ -49,6 +52,31 @@ export default {
         console.log(response);
       } catch (error) {
         console.log(error);
+      }
+    },
+    async volverComprobanteInvalido(){
+      try {
+         let datos = {
+          estudio_id: this.estudio.id,
+          comprobante_invalido: true,
+          resourcetype: this.estudio.ultimo_estado.resourcetype,
+        };
+        let response = await EstudiosService.actualizarUltimoEstado(
+          datos,
+          this.estudio.ultimo_estado.id
+        );
+        console.log(response)
+        
+      } catch (error) {
+          this.$root.$bvToast.toast(
+          "ocurrio un error mientras volvia atras el comprobante",
+          {
+            title: "Atencion!",
+            toaster: "b-toaster-top-center",
+            solid: true,
+            variant: "danger",
+          }
+        );
       }
     },
     async siguienteEstado() {
