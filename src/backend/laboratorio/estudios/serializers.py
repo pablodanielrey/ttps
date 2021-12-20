@@ -187,6 +187,22 @@ class SerializadorEsperandoSeleccionDeTurnoParaExtraccion(serializers.ModelSeria
         estado.save()
         return estado
 
+
+
+from rest_framework import exceptions
+from rest_framework import status
+
+class EstadoEstudioAPIException(exceptions.APIException):
+    status_code = status.HTTP_403_FORBIDDEN
+    default_code = 'error'
+
+    def __init__(self, detail, status_code=None):
+        self.detail = detail
+        if status_code is not None:
+            self.status_code = status_code
+
+from turnos import models as turnos_models
+
 class SerializadorEsperandoTomaDeMuestra(serializers.ModelSerializer):
 
     turno = turnos_views.SerializadorTurnosConfirmados(required=False, read_only=True)
@@ -198,20 +214,17 @@ class SerializadorEsperandoTomaDeMuestra(serializers.ModelSerializer):
 
     def update(self, instance, validated_data):
         super().update(instance, validated_data)
-        
-        """
-            TODO: debo cancelar el turno!!!!
-        """
-
 
         estudio = instance.estudio
         expirado = validated_data.get('expirado',False)
         if expirado:
             """ vuelve a seleccionar un turno para extracción """
-            estado = models.EsperandoSeleccionDeTurnoParaExtraccion(estudio=estudio)
+            turno = instance.turno
+            turnos_models.ModeloTurnos().cancelar_turno(turno)
+            estado = instance.cancelar_turno()
         else:
             estado = models.EsperandoRetiroDeExtaccion(estudio=estudio)
-        estado.save()
+            estado.save()
         return estado
         
 

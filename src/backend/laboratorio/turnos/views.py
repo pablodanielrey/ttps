@@ -70,28 +70,15 @@ class VistaTurnosDisponibles(viewsets.ModelViewSet):
 
 class SerializadorTurnosConfirmados(serializers.HyperlinkedModelSerializer):
     persona = paciente_serializers.SerializadorDePaciente(required=False, read_only=True)
+    cancelado = serializers.DateTimeField(required=False,read_only=False)
     class Meta:
         model = models.TurnoConfirmado
-        fields = ['id','persona','inicio','fin']
+        fields = ['id','persona','inicio','fin','cancelado']
 
 class VistaTurnosConfirmados(viewsets.ModelViewSet):
 
     queryset = models.TurnoConfirmado.objects.all()
     serializer_class = SerializadorTurnosConfirmados
-
-    """
-    def list(self, request, *args, **kwargs):
-        super(VistaListaTurnosConfirmados).list()
-        inicio = datetime.datetime.now().replace(tzinfo=ZoneInfo("America/Argentina/Buenos_Aires"))
-        inicio = inicio - datetime.timedelta(days=3)
-        fin = inicio + datetime.timedelta(days=15)
-
-        logging.debug(f'buscando turnos entre {inicio} y {fin}')
-
-        turnos = models.ModeloTurnos().obtener_turnos_confirmados(inicio,fin)
-
-        return Response(turnos)
-    """
 
     def create(self, request, *args, **kwargs):
         logging.debug(request.data)
@@ -115,5 +102,12 @@ class VistaTurnosConfirmados(viewsets.ModelViewSet):
         return Response(serializador.data)
 
 
-    def delete(self, request, pk, format=None):
-        return Response("llego")
+    def destroy(self, request, pk=None):
+        instance = self.get_object()
+        logging.debug(instance)
+
+        models.ModeloTurnos().cancelar_turno(instance)
+        estudio_models.EsperandoTomaDeMuestra.turno_cancelado(instance)
+
+        serializer = self.serializer_class(instance=instance, context={'request':request})
+        return Response(serializer.data)

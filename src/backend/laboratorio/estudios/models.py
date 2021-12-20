@@ -109,6 +109,8 @@ class Estudio(models.Model):
         return estudios
 
 
+
+
 from polymorphic.models import PolymorphicModel
 
 class EstadoEstudio(PolymorphicModel):
@@ -137,6 +139,8 @@ class EsperandoConsentimientoInformado(EstadoEstudio):
 class EsperandoSeleccionDeTurnoParaExtraccion(EstadoEstudio):
     turno = models.ForeignKey(turnos_models.TurnoConfirmado, on_delete=models.CASCADE, null=True)
 
+
+
 class EsperandoTomaDeMuestra(EstadoEstudio):
     fecha_muestra = models.DateTimeField(null=True)
     mililitros = models.FloatField(null=True)
@@ -149,6 +153,27 @@ class EsperandoTomaDeMuestra(EstadoEstudio):
             if isinstance(estado, EsperandoSeleccionDeTurnoParaExtraccion):
                 return estado.turno
         return None
+
+    def cancelar_turno(self):
+        estudio = self.estudio
+        if self == estudio.ultimo_estado:
+            nuevo_turno = EsperandoSeleccionDeTurnoParaExtraccion.objects.create(estudio=estudio)
+            nuevo_turno.save()
+            return nuevo_turno
+        return None
+
+    @classmethod
+    def turno_cancelado(cls, turno):
+        turnos = EsperandoSeleccionDeTurnoParaExtraccion.objects.filter(turno=turno).all()
+        for estado in turnos:
+            ultimo_estado = estado.estudio.ultimo_estado
+            if isinstance(ultimo_estado, cls):
+                nuevo_estado = ultimo_estado.cancelar_turno()
+                if nuevo_estado:
+                    return nuevo_estado
+        return None
+
+    
 
 class EsperandoRetiroDeExtaccion(EstadoEstudio):
     extracionista = models.CharField(max_length=1024, null=True)

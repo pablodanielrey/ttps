@@ -4,8 +4,12 @@ from django.db import models
 import uuid
 import logging
 import datetime
+from zoneinfo import ZoneInfo
 
-from personas.models import Persona, ObraSocial
+from personas.models import Persona
+
+def _generar_fecha_now():
+    return datetime.datetime.now(tz=ZoneInfo('America/Argentina/Buenos_Aires'))
 
 class ParametroDeTurnos(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
@@ -38,6 +42,7 @@ class TurnoConfirmado(models.Model):
     persona = models.ForeignKey(Persona, on_delete=models.CASCADE)
     inicio = models.DateTimeField()
     fin = models.DateTimeField()
+    cancelado = models.DateTimeField(null=True)
 
 # from dataclasses import dataclass
 # @dataclass
@@ -54,10 +59,16 @@ class ModeloTurnos:
         return self.obtener_turnos(hoy,al_infinito_y_mas_alla)
 
     def obtener_turnos_confirmados(self, desde:datetime.datetime, hasta:datetime.datetime):
-        confirmados = TurnoConfirmado.objects.filter(inicio__range=[desde, hasta])
+        confirmados = TurnoConfirmado.objects.filter(inicio__range=[desde, hasta], cancelado=None)
         return confirmados
 
-    def _eliminar_turnos_confirmados(self, turnos_confirmados, turnos):
+    def cancelar_turno(self, turno:TurnoConfirmado):
+        turno.cancelado = _generar_fecha_now()
+        turno.save()
+        return turno
+
+
+    def __eliminar_turnos_confirmados(self, turnos_confirmados, turnos):
         """ 
             TODO: totalmente ineficiente!!! se debe reemplazar por las clases correctas
             dataclasess, estructuras estilo set, binary search ,etc
@@ -118,7 +129,7 @@ class ModeloTurnos:
 
                 """ TODO: ver si no es mejor resolverlo de otra forma """
                 #turnos_del_dia_filtrados = turnos_del_dia
-                turnos_del_dia_filtrados = self._eliminar_turnos_confirmados(turnos_confirmados, turnos_del_dia)
+                turnos_del_dia_filtrados = self.__eliminar_turnos_confirmados(turnos_confirmados, turnos_del_dia)
 
                 turnos.extend(turnos_del_dia_filtrados)
                 turno_actual -= un_dia
