@@ -3,11 +3,10 @@
     <div>
       <b-card header="Modo de Trabajo">
         <div>
-          {{this.modo.modo_operacion}}
           <div>
-            <select name="modo_trabajo" @change="guardarModo()">
-              <option>Paciente obligado a completar</option>
-              <option>Paciente o Empleado pueden completar</option>
+            <select name="modo_trabajo" @change="guardarModo($event)">
+              <option value="PO" :selected="this.modo.modo_operacion=='PO'">Paciente obligado a completar</option>
+              <option value="PNO" :selected="this.modo.modo_operacion=='PNO'">Paciente o Empleado pueden completar</option>
             </select>
           </div>
         </div>
@@ -47,9 +46,10 @@ export default {
         console.log(err);
       }
     },
-    async guardarModo() {
+    async guardarModo(event) {
       try {
-        let response = await ModoDeTrabajoService.guardarModo(this.modo);
+        //console.log(event.target.value);
+        let response = await ModoDeTrabajoService.guardarModo(event.target.value);
         console.log(response)
       } catch (err) {
         console.log(err);
