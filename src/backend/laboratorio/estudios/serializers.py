@@ -198,6 +198,11 @@ class SerializadorEsperandoTomaDeMuestra(serializers.ModelSerializer):
 
     def update(self, instance, validated_data):
         super().update(instance, validated_data)
+        
+        """
+            TODO: debo cancelar el turno!!!!
+        """
+
 
         estudio = instance.estudio
         expirado = validated_data.get('expirado',False)

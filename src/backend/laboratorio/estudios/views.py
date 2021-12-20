@@ -272,4 +272,3 @@ class VistaEstudios(viewsets.ModelViewSet):
         buffer.seek(0)
 
         return HttpResponse(buffer,content_type='application/pdf')
-

@@ -113,3 +113,7 @@ class VistaTurnosConfirmados(viewsets.ModelViewSet):
 
         serializador = SerializadorTurnosConfirmados(turno, context={'request': request})
         return Response(serializador.data)
+
+
+    def delete(self, request, pk, format=None):
+        return Response("llego")
