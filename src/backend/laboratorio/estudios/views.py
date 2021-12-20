@@ -6,6 +6,9 @@ from django.http import HttpResponseBadRequest, HttpResponse
 from django.db.models import Count   
 from django.db.models.functions import ExtractMonth
 
+import io
+from xhtml2pdf import pisa
+
 
 import base64
 import logging
@@ -259,23 +262,14 @@ class VistaEstudios(viewsets.ModelViewSet):
     @action(detail=True, methods=['GET'])
     def informe_de_resultado(self, request, pk=None):
 
-        """
-            aca hay que generar un pdf con el informe.
-        """
-
         estudio = self.get_object()
         informe = estudio.informe_resultado
         if not informe:
             return HttpResponseBadRequest('no existe informe para el estudio')
 
-        import io
-        from xhtml2pdf import pisa
         buffer = io.BytesIO()
-
         pisa.CreatePDF(informe, dest=buffer)
-        
-        # from weasyprint import HTML
-        # HTML(string=informe).write(buffer)
+        buffer.seek(0)
 
         return HttpResponse(buffer,content_type='application/pdf')
 

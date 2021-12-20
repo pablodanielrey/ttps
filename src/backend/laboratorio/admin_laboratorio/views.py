@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.db import IntegrityError
 from django.contrib.auth import models as django_auth_models
+from rest_framework.decorators import permission_classes
 
 from rest_framework.views import APIView
 from rest_framework.response import Response
