@@ -26,10 +26,18 @@ class VistaToken(views.APIView):
     authentication_classes = [BasicAuthentication]
     permission_classes = [ IsAuthenticated ]
 
+
+    # def __verificar_si_debe_cambiar_clave(self, usuario):
+    #     if persona_models.Paciente.usuario_es_tipo(usuario):
+    #         usuario.
+    #     return False
+
     def get(self, request, format=None):
         usuario = request.user
         logging.debug(f'usuario logueado : {usuario}')
 
+        # cambiar_clave = self.__verificar_si_debe_cambiar_clave(usuario)
+        cambiar_clave = True
         try:
             persona = persona_models.Persona.objects.get(usuario=usuario)
             serializador = persona_serializers.SerializadorDePersona(instance=persona)
@@ -46,7 +54,8 @@ class VistaToken(views.APIView):
             {
                 'token':token.key,
                 'persona': serializador.data if serializador else '', 
-                'roles': grupos
+                'roles': grupos,
+                'cambiar_clave': cambiar_clave
             }
         )
 
