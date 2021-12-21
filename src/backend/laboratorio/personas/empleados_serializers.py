@@ -7,7 +7,7 @@ from login import models as login_models
 from . import models
 
 class SerializadorDeEmpleado(serializers.ModelSerializer):
-    usuario = login_serializers.UsuarioSerializer()
+    usuario = login_serializers.UsuarioSerializer(required=False, read_only=False)
     email = serializers.EmailField(required=True)
 
     class Meta:
@@ -32,9 +32,14 @@ class SerializadorDeEmpleado(serializers.ModelSerializer):
         if usuario:
             passwd = usuario.get('password')
             instance.usuario.set_password(passwd)
-            instance.usaurio.save()
+            instance.usuario.save()
         
-        return super().update(instance, validated_data)
+        instance.nombre = validated_data.get('nombre', instance.nombre)
+        instance.apellido = validated_data.get('apellido', instance.apellido)
+        instance.email = validated_data.get('email', instance.email)
+        instance.save()
+
+        return instance
 
 
 class SerializadorDeConfigurador(serializers.ModelSerializer):
