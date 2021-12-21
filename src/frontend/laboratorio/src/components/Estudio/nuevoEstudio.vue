@@ -28,6 +28,8 @@
           >
         </b-form-group>
         <b-card header="Datos Estudio">
+          
+            <b-alert v-if="this.errorHistoriaClinica" show variant="danger">La historia clinica no puede estar vacia, por favor vaya a la seccion de lista de pacientes y complete la historia clinica del paciente</b-alert>
           <b-row>
             <b-col lg="5" md="5" sm="10">
               <b-form-group
@@ -291,6 +293,7 @@ export default {
   data() {
     return {
       valid: null,
+      errorHistoriaClinica:false,
       pacienteSelected: null,
       medicoDerivanteSelected: null,
       diagnosticoSelected: null,
@@ -323,9 +326,15 @@ export default {
     },
     async crearEstudio() {
       try {
+
         let result = await this.$refs.detailsEstudio.validate();
         console.log(this.estudio);
         if (result) {
+          if (this.diagnostico_presuntivo == null){
+            this.errorHistoriaClinica=true
+            return
+          }
+          this.errorHistoriaClinica=false
           let r = await EstudiosService.crearEstudio(this.estudio);
           console.log(r.status);
           if (r.status == 200) {
@@ -341,7 +350,12 @@ export default {
           }
         }
       } catch (err) {
-        console.log(err);
+           this.$root.$bvToast.toast("Ocurrio un error al crear el estudio", {
+              title: "Atencion!",
+              toaster: "b-toaster-top-center",
+              solid: true,
+              variant: "danger",
+            });
       }
     },
     async obtenerObrasSociales() {
