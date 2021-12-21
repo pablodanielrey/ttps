@@ -20,7 +20,7 @@ class SerializadorDeMedicoDerivante(rest_serializers.ModelSerializer):
     matricula = rest_serializers.CharField(source='matricula.numero', read_only=False)
     class Meta:
         model = models.MedicoDerivante
-        fields = ['id','nombre','apellido','email','matricula','usuario']
+        fields = ['id','nombre','apellido','email','matricula']
 
     def create(self, validated_data):
         matricula = validated_data.pop('matricula')
