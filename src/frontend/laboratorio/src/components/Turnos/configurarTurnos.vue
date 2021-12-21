@@ -1,10 +1,27 @@
 <template>
   <b-container>
     <b-card header="Horarios de atencion-Rango de horario">
+      <b-alert show variant="danger" v-if="this.messageFechas"
+        >Verifique que la fecha de fin sea mayor a la de inicio</b-alert
+      >
+
       <b-form action class="form" @submit.prevent="onSubmit">
         <b-row>
           <b-col>
-            <b-calendar v-model="fechaSeleccionada" locale="en-US" required></b-calendar>
+            Fecha Inicio<br />
+            <b-calendar
+              v-model="fechaSeleccionada"
+              locale="en-US"
+              required
+            ></b-calendar>
+          </b-col>
+          <b-col>
+            Fecha Fin<br />
+            <b-calendar
+              v-model="fechaSeleccionadaFin"
+              locale="en-US"
+              required
+            ></b-calendar>
           </b-col>
         </b-row>
 
@@ -70,11 +87,11 @@
     </div>
     <b-row class="pb-2">
       <b-col class="text-center pt-3">
-        <b-button variant="success" @click="confirmarRangos()">Confirmar </b-button>
+        <b-button variant="success" @click="confirmarRangos()"
+          >Confirmar
+        </b-button>
       </b-col>
     </b-row>
-
-   
   </b-container>
 </template>
 
@@ -89,6 +106,8 @@ export default {
       hsInicio: null,
       frecuencia: null,
       fechaSeleccionada: new Date(),
+      fechaSeleccionadaFin: new Date(),
+      messageFechas: false,
       alerts: [],
       fields: [
         { key: "hora_inicio", label: "inicio", class: "text-center p2" },
@@ -99,27 +118,32 @@ export default {
     };
   },
   methods: {
-    onSubmit() {
-      this.items.push({
-        hora_inicio: this.hsInicio,
-        hora_fin: this.hsFin,
-        frecuencia: this.frecuencia,
-      });
-      console.log(this.hsInicio, this.hsFin, this.frecuencia);
-      console.log( this.items)
+    onSubmit() {    
+      if (new Date(this.fechaSeleccionadaFin) < new Date(this.fechaSeleccionada)) {
+        this.messageFechas = true;
+      } else {
+        this.items.push({
+          hora_inicio: this.hsInicio,
+          hora_fin: this.hsFin,
+          frecuencia: this.frecuencia,
+        });
+      }
     },
-    async confirmarRangos(){
+    async confirmarRangos() {
       try {
-       /*  { "fecha_valido": "2011-12-13T00:00:00-03:00",
-         "rangos": [ { "hora_inicio": 7, "hora_fin": 12, "frecuencia": 15 }, { "hora_inicio": 14, "hora_fin": 19, "frecuencia": 15 } ] } */
-       this.armarHoraEnteros()
-       let datos={
-            "fecha_valido":new Date(this.fechaSeleccionada),
-            "rangos": this.armarHoraEnteros()        
-        }    
-         await TurnosService.agregarRangoTurnos(datos)
-          this.$root.$bvToast.toast(
-          "Se configuraron los rangos de turnos para la fecha seleccionada " ,           
+        if (this.fechaSeleccionadaFin < this.fechaSeleccionada) {
+          this.messageFechas = true;
+        }
+
+        this.armarHoraEnteros();
+        let datos = {
+          fecha_valido: new Date(this.fechaSeleccionada),
+          fin:new Date(this.fechaSeleccionadaFin),
+          rangos: this.armarHoraEnteros(),
+        };
+        await TurnosService.agregarRangoTurnos(datos);
+        this.$root.$bvToast.toast(
+          "Se configuraron los rangos de turnos para la fecha seleccionada ",
           {
             title: "Atencion!",
             toaster: "b-toaster-top-center",
@@ -127,20 +151,17 @@ export default {
             variant: "info",
           }
         );
-     
-        
-
       } catch (error) {
-        console.log(error)
+        console.log(error);
       }
     },
-    armarHoraEnteros(){
-      this.items.forEach(elem => {
-        elem.hora_inicio =elem.hora_inicio.substr(0,2)
-        elem.hora_fin =elem.hora_fin.substr(0,2)
+    armarHoraEnteros() {
+      this.items.forEach((elem) => {
+        elem.hora_inicio = elem.hora_inicio.substr(0, 2);
+        elem.hora_fin = elem.hora_fin.substr(0, 2);
       });
-      return this.items
-    }
+      return this.items;
+    },
   },
 };
 </script>
