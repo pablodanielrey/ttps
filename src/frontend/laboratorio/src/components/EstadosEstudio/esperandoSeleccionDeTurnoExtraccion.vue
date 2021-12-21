@@ -147,9 +147,9 @@ export default {
           name: "listaEstudios",
         });
       } catch (err) {
-        console.log(err);
+  
         this.$root.$bvToast.toast(
-          "no se pudo seleccionar el turno para el paciente, por favor vuelva a intentar ",
+          "no se pudo seleccionar el turno para el paciente,verifique el modo de opreacion ",
           {
             title: "Atencion!",
             toaster: "b-toaster-top-center",

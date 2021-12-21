@@ -1,6 +1,15 @@
 <template>
   <b-container>
-       <b-alert show>El estudio está esperando que se completen 10 muestras dentro de un lote, para poder iniciar el procesamiento biotecnológico  </b-alert>
+       <b-alert show>Esperando que se complete el lote para poder iniciar el procesamiento biotecnológico  </b-alert>
+     <br>
+          <div>
+            <img
+              src="@/assets/esperandoLote.png"
+              class="rounded"
+              alt="..."
+              id="imgLaboratorio"
+              style="width:60%"
+            /></div>
   </b-container>
 </template>
 
