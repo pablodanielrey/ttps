@@ -11,16 +11,17 @@ from . import models
 """
     Las vistas de rest framework
 """
-from rest_framework import serializers, views, viewsets, permissions
+from rest_framework import serializers, views, viewsets
 from rest_framework.response import Response
 
 from . import serializers
+from . import permissions
 from estudios import views  as estudio_views
 
 class VistaLotes(viewsets.ModelViewSet):
     queryset = models.Lote.all_pending()
     serializer_class = serializers.SerializadorDeLote
-    permission_classes = [ permissions.IsAuthenticated ]
+    permission_classes = [ permissions.LotesPermisos ]
 
     def create(self, request, *args, **kwargs):
         logging.debug("entra aca")
@@ -50,7 +51,7 @@ class VistaEstudios(views.APIView):
 
     queryset = models.Lote.objects.none()
     modelo = models.ModeloLotes()
-    permission_classes = [ permissions.IsAuthenticated ]
+    permission_classes = [ permissions.LotesPermisos ]
     
     def get(self, request, format=None):
         estudios = self.modelo.obtener_estudios_para_lote()
