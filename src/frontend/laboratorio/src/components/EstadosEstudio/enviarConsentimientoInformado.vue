@@ -5,7 +5,7 @@
         header="Descargar Template de consentimiento informado en formato pdf"
       >
         <div>
-           <b-button variant="danger" v-if="tienePermisos() == 'Empleados'" @click="volverComprobanteInvalido()"
+           <b-button variant="danger" v-if=" hasRol('Empleados')" @click="volverComprobanteInvalido()"
             >Comprobante invalido
           </b-button>
           <b-button
@@ -17,7 +17,7 @@
             <b-icon icon="cloud-download" variant="outline-primary"> </b-icon>
           </b-button>
 
-          <b-button variant="success" v-if="tienePermisos() == 'Empleados'" @click="siguienteEstado()"
+          <b-button variant="success" v-if=" hasRol('Empleados')" @click="siguienteEstado()"
             >Siguiente
           </b-button>
         </div>
@@ -30,7 +30,7 @@
 <script>
 import EstudiosService from "@/services/EstudiosService.js";
 import TemplateConsentimientoService from "@/services/TemplateConsentimiento.js";
-
+import { mapGetters} from "vuex";
 export default {
   components: {},
 
@@ -130,8 +130,10 @@ export default {
     
     }
   },
-  computed: {},
+  computed: {
+    ...mapGetters(["hasRol"]),
 
+  },
   mounted() {},
 };
 </script>
