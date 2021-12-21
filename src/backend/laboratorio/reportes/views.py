@@ -9,8 +9,8 @@ from . import models
 from . import permissions
 class Lve23ReporteCantidadDeEstudiosPorTipo(views.APIView):
 
-    authentication_classes = [BasicAuthentication]
-    permission_classes = [ permissions.ReportePermisos ]
+    # authentication_classes = [BasicAuthentication]
+    permission_classes = [ IsAuthenticated ]
 
     reportes = models.Reportes()
 
@@ -21,8 +21,8 @@ class Lve23ReporteCantidadDeEstudiosPorTipo(views.APIView):
 
 class Lve25ReporteCantidadDeEstudiosPorMesAno(views.APIView):
 
-    authentication_classes = [BasicAuthentication]
-    permission_classes = [ permissions.ReportePermisos ]
+    # authentication_classes = [BasicAuthentication]
+    permission_classes = [ IsAuthenticated ]
 
     reportes = models.Reportes()
 
@@ -33,8 +33,8 @@ class Lve25ReporteCantidadDeEstudiosPorMesAno(views.APIView):
 
 class Lve27ReporteDemoraDeEstudios(views.APIView):
 
-    authentication_classes = [BasicAuthentication]
-    permission_classes = [ permissions.ReportePermisos ]
+    # authentication_classes = [BasicAuthentication]
+    permission_classes = [ IsAuthenticated ]
 
     reportes = models.Reportes()
 
