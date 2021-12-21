@@ -42,6 +42,9 @@ def obtener_permisos(usuario):
     return permisos
 
 
+
+def obtener_todos_los_permisos():
+    return [p.codename for p in django_models.Permission.objects.all()]
 class VistaToken(views.APIView):
     authentication_classes = [BasicAuthentication]
     permission_classes = [ IsAuthenticated ]
@@ -81,7 +84,8 @@ class VistaToken(views.APIView):
                 'persona': serializador.data if serializador else '', 
                 'roles': grupos,
                 'cambiar_clave': cambiar_clave,
-                'permisos': obtener_permisos(usuario)
+                'permisos': obtener_permisos(usuario),
+                'todos_los_permisos_se_BOORRAAA': obtener_todos_los_permisos()
             }
         )
 
