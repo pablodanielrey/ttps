@@ -11,13 +11,15 @@ from rest_framework.response import Response
 from estudios import models as estudio_models
 
 
+from . import permissions
 from . import models
 from . import serializers
+
 
 class VistaParametroTurnos(viewsets.ModelViewSet):
     queryset = models.ParametroDeTurnos.objects.all()
     serializer_class = serializers.SerializadorParametroTurnos
-
+    permission_classes = [ permissions.ParametroTurnosPermisos ]
 
 class VistaFechasSinTurno(viewsets.ModelViewSet):
     queryset = models.FechasSinTurno.objects.all()
@@ -25,6 +27,7 @@ class VistaFechasSinTurno(viewsets.ModelViewSet):
 
 
 from dateutil import parser
+
 
 
 class VistaTurnosDisponibles(viewsets.ModelViewSet):

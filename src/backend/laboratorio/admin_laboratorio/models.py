@@ -94,8 +94,6 @@ class PersonasModel:
 
     def __edad(self, nacimiento, ahora):
         logging.debug(f'verificando nacimiento : {nacimiento} {ahora}')
-
-
         anos = ahora.year - nacimiento.year
         if datetime.date(year=nacimiento.year, month=ahora.month, day=ahora.day) < nacimiento:
             anos = anos - 1
@@ -108,7 +106,7 @@ class PersonasModel:
 
 
     def crearConfigurador(self, nombre, apellido, usuario, clave):
-        u = self.login_model.crear_usuario(usuario, personas_models.Configurador.NOMBRE_GRUPO, clave=clave)
+        u = self.login_model.crear_usuario(usuario, personas_models.Configurador.NOMBRE_GRUPO, clave=clave) 
         config = personas_models.Configurador(nombre=nombre, apellido=apellido, usuario=u)
         config.save()
         

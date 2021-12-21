@@ -145,6 +145,23 @@ def generar_usuarios_de_sistema():
         pass
     
 
+from django.contrib.auth import models as django_auth_models
+
+def definir_permisos():
+    
+    def asociar_permiso_a_grupo(grupo, entidad, permisos=['add','change','delete','view']):
+        grupo = django_auth_models.Group.objects.get(name=grupo)
+        for permiso in permisos:
+            permission = django_auth_models.Permission.objects.get(codename=f'{permiso}_{entidad}')
+            grupo.permissions.add(permission)
+    
+    for p in django_auth_models.Permission.objects.all():
+        logging.debug(p.codename)
+
+    asociar_permiso_a_grupo(persona_models.Empleado.NOMBRE_GRUPO, 'parametrodeturnos')
+    # asociar_permiso_a_grupo(persona_models.Empleado.NOMBRE_GRUPO, 'parametrodeturnos')
+
+
 class Ejemplos(APIView):
     
     permission_classes= [permissions.IsAdminUser]
@@ -158,6 +175,7 @@ class Ejemplos(APIView):
         persona_models.ObraSocial(nombre='IOMA', telefono='221-4237467', email='consultas@ioma.gob.ar').save()
         persona_models.ObraSocial(nombre='OSFATUN', telefono='221-4237469', email='consultas@osfatun.com.ar').save()
 
+        definir_permisos()
         crear_medicos_derivantes()
         generar_usuarios_de_sistema()
         generar_pacientes_mayores()
