@@ -27,9 +27,14 @@ class SerializadorDeEmpleado(serializers.ModelSerializer):
         empleado = models.Empleado.objects.create(usuario=usuario_django, **validated_data)
         return empleado
 
-    # def update(self, instance, validated_data):
-
-    #     return super().update(instance, validated_data)
+    def update(self, instance, validated_data):
+        usuario = validated_data.get('usuario',None)
+        if usuario:
+            passwd = usuario.get('password')
+            instance.usuario.set_password(passwd)
+            instance.usaurio.save()
+        
+        return super().update(instance, validated_data)
 
 
 class SerializadorDeConfigurador(serializers.ModelSerializer):
