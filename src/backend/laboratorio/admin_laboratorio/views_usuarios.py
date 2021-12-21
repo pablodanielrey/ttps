@@ -214,6 +214,7 @@ def definir_permisos():
     asociar_permiso_a_grupo(persona_models.Paciente.NOMBRE_GRUPO, 'estadoestudio')
     asociar_permiso_a_grupo(persona_models.Paciente.NOMBRE_GRUPO, 'estudio', permisos=['view'])
     asociar_permiso_a_grupo(persona_models.Paciente.NOMBRE_GRUPO, 'templateconsentimiento', permisos=['view'])
+    asociar_permiso_a_grupo(persona_models.Paciente.NOMBRE_GRUPO, 'turnoconfirmado')
 
 
 
