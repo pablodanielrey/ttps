@@ -156,7 +156,9 @@
                       {{ mostrarminutos(estado.turno.inicio) }}
                     </li>
                     <li>Fin: {{ mostrarminutos(estado.turno.fin) }}</li>
-                  </div>
+                    <small v-if="estado.turno.cancelado != null" id="turnoCancelado">Este turno fue cancelado</small> 
+                    <b-button variant="outline-danger" @click="cancelarTurno(estado.turno.id)" v-if="verificarCancelar(estado)">Cancelar</b-button>
+                  </div>                  
                   <div v-else>
                     <small> No selecciono turno</small>
                   </div>
@@ -393,6 +395,7 @@
 
 <script>
 import EstudiosService from "@/services/EstudiosService.js";
+import TurnosService from "@/services/TurnosService.js";
 import axios from "axios";
 export default {
   name: "detalleDeEstudio",
@@ -443,18 +446,53 @@ export default {
       this.$router.push({
         name: "listaEstudios",
       });
-    } else {
-      console.log(this.estudioId);
-    }
+    } 
   },
 
   methods: {
+    verificarCancelar(estado){
+      console.log(estado.fecha_muestra)
+      return ((new Date(estado.turno.inicio) > new Date()) && (estado.turno.cancelado == null) && (estado.fecha_muestra == null))
+
+    },
+   async cancelarTurno(turno){
+      try {
+        console.log(turno)
+        let response = await TurnosService.cancelarTurno(turno);
+        console.log(response)
+        if (response.status == 200){
+          this.obtenerDetalleEstudio()
+            this.$root.$bvToast.toast(
+            "Usted cancelo el turno",
+            {
+              title: "Atencion!",
+              toaster: "b-toaster-top-center",
+              solid: true,
+              variant: "info",
+            }
+          );
+        }
+        
+
+      } catch (error) {
+        console.log(error)
+          this.$root.$bvToast.toast(
+            "No puede cancelar el turno ",
+            {
+              title: "Atencion!",
+              toaster: "b-toaster-top-center",
+              solid: true,
+              variant: "danger",
+            }
+          );
+      }
+
+    },
     async obtenerDetalleEstudio() {
       try {
-        let response = await EstudiosService.obtenerEstudio(this.estudioId);
-        console.log(this.estudio);
+        let response = await EstudiosService.obtenerEstudio(this.estudioId);  
         this.estudio = response.data;
-
+      console.log(this.estudio);
         this.estados = this.ordenarEstados(response.data.estados);
       } catch (error) {
         console.log(error);
@@ -547,5 +585,8 @@ export default {
 </script>
 
 <style>
+#turnoCancelado{
+ color: red;
+}
 </style>
 
