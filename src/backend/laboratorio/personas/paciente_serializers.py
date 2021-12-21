@@ -88,6 +88,8 @@ class SerializadorDePaciente(serializers.ModelSerializer):
 
         paciente = models.Paciente.objects.create(usuario=usuario, **validated_data)
        
+        if not hc:
+            models.HistoriaClinica.objects.create(persona=paciente, historia_clinica='')
         if hc:
             models.HistoriaClinica.objects.create(persona=paciente, historia_clinica=hc['historia_clinica'])
         if obra_social:
