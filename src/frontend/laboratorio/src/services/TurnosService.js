@@ -12,7 +12,9 @@ export default {
     },
     obtenerTurnosOcupados(){
         return Api().get(API_URL + API_USER + "turnos_confirmados/")
-
+    },
+    cancelarTurno(idTurno){
+        return Api().delete(API_URL + API_USER + "turnos_confirmados/" + idTurno);
     }
   
     
