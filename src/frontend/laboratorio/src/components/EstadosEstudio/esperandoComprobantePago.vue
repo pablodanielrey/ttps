@@ -116,9 +116,11 @@ export default {
             name: "listaEstudios",
           });
         } catch (err) {
-          console.log(err);
+          console.log("errors")
+          console.log(err.response);
+          
           this.$root.$bvToast.toast(
-            "ocurrio un error mientras agregaba el comprobante de pago",
+            "ocurrio un error mientras agregaba el comprobante de pago, verifique el modo de operacion ",
             {
               title: "Atencion!",
               toaster: "b-toaster-top-center",
