@@ -118,8 +118,9 @@
                 >nuevo</b-dropdown-item
               >
             </b-nav-item-dropdown>
-            <b-nav-item-dropdown text="Resultados Informe" right>
+            <b-nav-item-dropdown text="Resultados Informe" right    v-if="hasPermisos('add_estadoestudio')">
               <b-dropdown-item :to="{ name: 'listaEstudiosEsperandoInforme' }"
+               v-if="hasPermisos('add_estadoestudio')"
                 >Listar</b-dropdown-item
               >
             </b-nav-item-dropdown>
