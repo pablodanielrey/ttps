@@ -90,7 +90,6 @@ class SerializadorEsperandoComprobanteDePago(serializers.ModelSerializer):
             estado.save()
             return estado
 
-        logging.debug('actualizando el estado con el comprobante')
         config.verificar_modo_de_operacion(self)
         comprobante = validated_data.get('comprobante')
         archivo = models.Archivo.from_datauri(comprobante['contenido'])
@@ -98,15 +97,46 @@ class SerializadorEsperandoComprobanteDePago(serializers.ModelSerializer):
         instance.comprobante = archivo
         instance.save()
 
-        try:
+        logging.debug('pasando al siguiente estado')
+        estado = models.EnviarConsentimientoInformado(estudio=estudio)
+        estado.save()
+        return estado
+
+    def update(self, instance, validated_data):
+        """ 
+            aca se realizan distintas acciones 
+            1 - pasar al siguiente estado del workflow (empleado)
+            2 - cancelar este estado e anularlo por falta de pago (empleado)
+            3 - cargar el comprobante de pago (depende del modo)
+        """
+        config = admin_models.Configuracion.objects.order_by('fecha').last()
+        estudio = instance.estudio
+        fecha_procesado = validated_data.pop('fecha_procesado',None)
+        if fecha_procesado:
             config.verificar_empleado(self)
-            logging.debug('pasando al siguiente estado')
-            estado = models.EnviarConsentimientoInformado(estudio=estudio)
+            """ se anula el comprobante por falta de pago, es necesario pasar el estudio a AnuladoPorFaltaDePago """
+            logging.debug('anulando el estudio por falta de pago')    
+            estado = models.AnuladorPorFaltaDePago(estudio=estudio, fecha_procesado=fecha_procesado)
             estado.save()
             return estado
 
-        except Exception:
-            return instance
+        comprobante = validated_data.get('comprobante')
+        if comprobante:
+            logging.debug('actualizando el estado con el comprobante')
+            config.verificar_modo_de_operacion(self)
+            archivo = models.Archivo.from_datauri(comprobante['contenido'])
+            archivo.save()
+            instance.comprobante = archivo
+            instance.save()
+
+        """
+            si existe el comprobante puedo pasar al siguiente estado.
+        """
+        config.verificar_empleado(self)
+        logging.debug('pasando al siguiente estado')
+        estado = models.EnviarConsentimientoInformado(estudio=estudio)
+        estado.save()
+        return estado        
 
 class SerializadorAnuladorPorFaltaDePago(serializers.ModelSerializer):
     class Meta:
