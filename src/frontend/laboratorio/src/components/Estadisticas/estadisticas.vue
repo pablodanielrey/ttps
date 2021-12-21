@@ -79,7 +79,6 @@ export default {
     async obtenerEstudiosPorMesAño() {
       try {
         let response = await ReportesService.obtenerEstudiosPorMesAño();
-        console.log(response)
         this.armarDatos(response.data);
       } catch (error) {
         console.log(error);
@@ -122,10 +121,12 @@ export default {
       });
     },
     armarDatosTiempo(datos) {    
-      console.log( datos.datos[12].procesados)
+      console.log(    datos.datos)
       
-      let data = [0,0, 0, 0, 0, 0, 0, 0, 0, 0, 0, datos.datos[12].tardanza_segundos];
-
+      let data = [0,0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+      datos.datos.forEach((e) => {
+        data[e.mes] = e.tadanza_segundos;
+      });
       this.dataDemoraTiempo.datasets.push({
         label: "Tiempo demora estudios",
         backgroundColor: " 	#6495ED ",
@@ -134,7 +135,6 @@ export default {
     },
 
     armarDatos(datos) {
-      console.log(datos)
       let data = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
       datos.forEach((e) => {
         data[e.month - 1] = e.count;
