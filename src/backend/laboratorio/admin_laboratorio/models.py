@@ -37,22 +37,53 @@ class Configuracion(models.Model):
     def obtener_modo_de_operacion(self):
         return self.ModoOperacion(self.modo_operacion)
 
-    def verificar_modo_de_operacion(self, serializador):            
+    """
+        Tira una exception si es que no se tiene el perfil correcto para el modo de operación
+        en el que se encuentra el sistema.
+    """
+    def verificar_modo_de_operacion(self, serializador):
+        usuario_logueado = serializador.context.get('request').user
         modo_de_operacion = self.obtener_modo_de_operacion()
         logging.debug(f'Modo de operación del sistema {modo_de_operacion}')
-        if modo_de_operacion == self.ModoOperacion.PACIENTE_OBLIGADO:
-            usuario_logueado = serializador.context.get('request').user
-            logging.debug(f'verificando si {usuario_logueado.username} es Paciente')
-            if not personas_models.Paciente.usuario_es_tipo(usuario_logueado):
-                raise ModoOperacionAPIException(
-                    {
-                        "usuario":usuario_logueado.username,
-                        "modo": modo_de_operacion
-                    }
-                )    
+        if modo_de_operacion == self.ModoOperacion.PACIENTE_NO_OBLIGADO:
+            logging.debug(f'verificando si {usuario_logueado.username} es Empleado')
+            if personas_models.Empleado.usuario_es_tipo(usuario_logueado):
+                return True
 
+        # aca solo queda verificar si es paciente.                
+        # modo_de_operacion == self.ModoOperacion.PACIENTE_OBLIGADO
+        logging.debug(f'verificando si {usuario_logueado.username} es Paciente')
+        if personas_models.Paciente.usuario_es_tipo(usuario_logueado):
+            return True
 
+        raise ModoOperacionAPIException(
+            {
+                "usuario":usuario_logueado.username,
+                "modo": modo_de_operacion
+            }
+        )    
+        
+    def verificar_empleado(self, serializador):
+        usuario_logueado = serializador.context.get('request').user
+        if personas_models.Empleado.usuario_es_tipo(usuario_logueado):
+            return True        
+        raise ModoOperacionAPIException(
+            {
+                "usuario":usuario_logueado.username,
+                "error": 'perfil no permitido'
+            }
+        )    
 
+    def verificar_medico_informante(self, serializador):
+        usuario_logueado = serializador.context.get('request').user
+        if personas_models.MedicoInformante.usuario_es_tipo(usuario_logueado):
+            return True        
+        raise ModoOperacionAPIException(
+            {
+                "usuario":usuario_logueado.username,
+                "error": 'perfil no permitido'
+            }
+        ) 
 
 class PersonasModel:
 
