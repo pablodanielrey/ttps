@@ -126,7 +126,7 @@ const router = new Router({
             { path: '/cargarResultadoLote', component: CargarResultadoLote, name:'cargarResultadoLote'},
 
             { path: '/configurarTurnos', component: ConfigurarTurnos ,name:'configurarTurnos'},
-            { path: '/configurarFechasSinTurnos', component: ConfigurarFechasSinTurno },
+            { path: '/configurarFechasSinTurnos', component: ConfigurarFechasSinTurno,name:'configurarFechasSinTurnos' },
             { path: '/turnosOcupados', component: TurnosOcupados , name:'turnosOcupados'},
 
             { path: '/EsperandoInterpretacionDeResultadosInformante', component: EsperandoInterpretacionDeResultadosInformante , name:'EsperandoInterpretacionDeResultadosInformante',props:true },

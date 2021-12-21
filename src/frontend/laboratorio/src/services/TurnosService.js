@@ -15,6 +15,12 @@ export default {
     },
     cancelarTurno(idTurno){
         return Api().delete(API_URL + API_USER + "turnos_confirmados/" + idTurno);
+    },
+    fechaSinTurnos(fecha){
+        return Api().post(API_URL + API_USER + "fechas_sin_turnos/",fecha)
+    },
+    obtenerFechasSinTurnos(){
+        return Api().get(API_URL + API_USER + "fechas_sin_turnos/")
     }
   
     

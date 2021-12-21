@@ -164,11 +164,11 @@
               >
             </b-nav-item-dropdown>
 
-            <!--   <b-nav-item-dropdown   v-if="this.permisos == 'Configuradores'" text="Turnos " >
-              <b-dropdown-item :to="{ name: 'configurarTurnos' }"
+               <b-nav-item-dropdown   v-if="this.permisos == 'Configuradores'" text="Turnos " >
+              <b-dropdown-item :to="{ name: 'configurarFechasSinTurnos' }"
                 >Configurar turnos</b-dropdown-item
               >
-            </b-nav-item-dropdown> -->
+            </b-nav-item-dropdown> -
 
             <b-nav-item @click="cerarrSesion()" right>Cerrar sesion</b-nav-item>
           </b-collapse>
