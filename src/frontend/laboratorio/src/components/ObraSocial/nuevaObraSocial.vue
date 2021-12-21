@@ -51,12 +51,12 @@
               label-for="Telefono"
             >
               <ValidationProvider
-                :name="'Telefono '"
+                :name="'telefono'"
                 :rules="'required'"
                 v-slot="{ errors, valid }"
               >
                 <b-form-input
-                  type="number"
+                  type="tel"
                   placeholder="Telefono"
                   v-model="obraSocial.telefono"
                   :state="errors[0] ? false : valid ? true : null"
@@ -166,7 +166,7 @@ export default {
             });
       } catch (error) {
         console.log(error);
-        this.$root.$bvToast.toast("NO se pudo crear la obra social", {
+        this.$root.$bvToast.toast("No se pudo crear la obra social", {
           title: "Atencion!",
           toaster: "b-toaster-top-center",
           solid: true,
