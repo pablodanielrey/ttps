@@ -142,6 +142,8 @@ export default {
       hsFin: null,
       hsInicio: null,
       frecuencia: null,
+      fechaSeleccionada:null,
+      
       items: [
         { hora_inicio: "09:00", hora_fin: "13:00", frecuencia: "15 min", a_partir:"02/11/2021" },
         { hora_inicio: "14:00", hora_fin: "17:00", frecuencia: "20 min",a_partir:"02/01/2022"},

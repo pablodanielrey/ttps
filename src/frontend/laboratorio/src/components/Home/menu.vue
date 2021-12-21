@@ -137,7 +137,7 @@
               >
               <b-dropdown-item
                 :to="{ name: 'nuevoEstudio' }"
-                v-if="hasPermisos('add_estudio')  && hasRol('Pacientes')"
+                v-if="hasPermisos('add_estudio')  "
                 >Nuevo</b-dropdown-item
               >
             </b-nav-item-dropdown>
@@ -149,7 +149,7 @@
        
               <b-dropdown-item
                 :to="{ name: 'listaEstudios' }"
-                v-if="hasPermisos('view_estudio') "
+                v-if="hasPermisos('view_estudio') && hasRol('Pacientes') "
                 >Listar</b-dropdown-item
               >
            
