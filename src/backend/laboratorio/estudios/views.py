@@ -185,6 +185,8 @@ class VistaEstudios(viewsets.ModelViewSet):
         estudio.save()
 
         hc = personas_models.HistoriaClinica.objects.filter(persona=paciente).first()
+        if not hc:
+            hc = personas_models.HistoriaClinica.objects.create(persona=paciente)
         hc.historia_clinica = datos['diagnostico_presuntivo']
         hc.save()
 
