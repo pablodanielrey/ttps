@@ -264,7 +264,7 @@
 
       <b-row class="pb-2">
         <b-col class="text-center pt-3">
-          <b-button variant="success" @click="crearEstudio()"
+          <b-button variant="outline-success" @click="crearEstudio()" id="btnAgrandar"
             >Crear Estudio
           </b-button>
         </b-col>
@@ -469,3 +469,8 @@ export default {
   },
 };
 </script>
+<style scoped>
+#btnAgrandar{
+         width: 250px
+}
+</style>
