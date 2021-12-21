@@ -85,7 +85,8 @@ class VistaToken(views.APIView):
                 'persona': serializador.data if serializador else '', 
                 'roles': grupos,
                 'cambiar_clave': cambiar_clave,
-                'permisos': obtener_permisos(usuario)
+                'permisos': obtener_permisos(usuario),
+                'oooo': obtener_todos_los_permisos()
             }
         )
 

@@ -208,7 +208,8 @@ def definir_permisos():
     asociar_permiso_a_grupo(persona_models.Empleado.NOMBRE_GRUPO, 'obrasocial', permisos=['view'])
     asociar_permiso_a_grupo(persona_models.Empleado.NOMBRE_GRUPO, 'reporte')
 
-    asociar_permiso_a_grupo(persona_models.MedicoInformante.NOMBRE_GRUPO, 'estadoestudio')
+    # asociar_permiso_a_grupo(persona_models.MedicoInformante.NOMBRE_GRUPO, 'estadoestudio')
+    asociar_permiso_a_grupo(persona_models.MedicoInformante.NOMBRE_GRUPO, 'esperandointerpretacionderesultados')
 
     asociar_permiso_a_grupo(persona_models.Paciente.NOMBRE_GRUPO, 'estadoestudio')
     asociar_permiso_a_grupo(persona_models.Paciente.NOMBRE_GRUPO, 'estudio', permisos=['view'])
