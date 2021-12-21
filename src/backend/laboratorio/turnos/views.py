@@ -18,6 +18,7 @@ class VistaParametroTurnos(viewsets.ModelViewSet):
     queryset = models.ParametroDeTurnos.objects.all()
     serializer_class = serializers.SerializadorParametroTurnos
 
+
 class VistaFechasSinTurno(viewsets.ModelViewSet):
     queryset = models.FechasSinTurno.objects.all()
     serializer_class = serializers.SerializadorFechasSinTurno
