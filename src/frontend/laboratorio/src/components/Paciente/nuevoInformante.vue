@@ -8,7 +8,7 @@
         </p>
       </b-col>
     </b-row>
-
+      <b-card header="Datos del medico informante">
     <ValidationObserver ref="datosInformante">
       <b-form-group>
         <b-alert
@@ -20,7 +20,10 @@
           >{{ alert.message }}</b-alert
         >
       </b-form-group>
-      <b-card header="Datos del medico informante">
+
+         <b-alert v-if="this.showError" show variant="danger">{{
+          this.error
+        }}</b-alert>
         <b-row>
           <b-col lg="5" md="5">
             <b-form-group id="Nombre-label" label="Nombre :" label-for="Nombre">
@@ -174,17 +177,18 @@
             </b-form-group>
           </b-col>
         </b-row>
-      </b-card>
+  
     </ValidationObserver>
 
     <b-row class="pb-2">
       <b-col class="text-center pt-3">
-        <b-button variant="success" @click="crear()" v-if="!editar">Crear </b-button>
-         <b-button variant="success" @click="editarInformante()" v-if="editar"
+        <b-button variant="success" @click="crear()" v-if="!editar"    style="width: 250px">Crear </b-button>
+         <b-button variant="success" @click="editarInformante()" v-if="editar"    style="width: 250px"
           >Editar 
         </b-button>
       </b-col>
     </b-row>
+        </b-card>
   </b-container>
 </template>
 
@@ -219,6 +223,8 @@ export default {
   data() {
     return {
       alerts: [],
+        showError: false,
+      error: null,
     };
   },
   methods: {
@@ -241,16 +247,17 @@ export default {
           });
         }
       } catch (error) {
-        console.log(error);
-        this.$root.$bvToast.toast(
-          "No se pudo crear el medico informante, el usuario ya existe",
-          {
-            title: "Atencion!",
-            toaster: "b-toaster-top-center",
-            solid: true,
-            variant: "danger",
-          }
-        );
+        this.showError = true;
+        this.error = "";
+        this.error +=
+          error.response.data.email != null
+            ? "Email: " + error.response.data.email
+            : "";
+        this.error +=
+          error.response.data.usuario != null
+            ? "Usuario " + error.response.data.usuario
+            : "";
+      
       }
     },
     async editarInformante(){
@@ -272,16 +279,17 @@ export default {
           });
         }
       } catch (error) {
-        console.log(error);
-        this.$root.$bvToast.toast(
-          "No se pudo editar el medico informante",
-          {
-            title: "Atencion!",
-            toaster: "b-toaster-top-center",
-            solid: true,
-            variant: "danger",
-          }
-        );
+            this.showError = true;
+        this.error = "";
+        this.error +=
+          error.response.data.email != null
+            ? "Email: " + error.response.data.email
+            : "";
+        this.error +=
+          error.response.data.usuario != null
+            ? "Usuario " + error.response.data.usuario
+            : "";
+      
       }
 
     }

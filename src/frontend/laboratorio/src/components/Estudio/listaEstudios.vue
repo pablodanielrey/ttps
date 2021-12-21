@@ -20,6 +20,7 @@
         </b-input-group>
       </b-col>
       <b-table
+      responsive
         show-empty
         empty-text="El sistema no posee estudios cargados"
         :items="items"
@@ -72,14 +73,14 @@
       <b-row>
         <b-col>
           <b-form-select
-            style="width: 150px"
+            style="width: 100px"
             id="per-page-select"
             v-model="perPage"
             :options="pageOptions"
             size="sm"
           ></b-form-select>
         </b-col>
-        <b-col>
+        <b-col >
           <b-pagination
             v-model="currentPage"
             :total-rows="totalRows"

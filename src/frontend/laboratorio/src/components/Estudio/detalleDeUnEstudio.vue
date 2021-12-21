@@ -271,8 +271,8 @@
                     <strong> Fecha :</strong>
                     {{ mostrarFecha(estado.fecha_resultado) }}
                     <br />
-                    <strong>Url:</strong>
-                    {{ estado.resultado_url }}
+                    <strong>Url : </strong>                
+                     <a :href="estado.resultado_url "  target="_blank"> <b-icon icon="link" variant="info"> </b-icon>Click para Acceder a el informe!</a>
                   </div>
                   <div v-else>
                     <small> No se cargo la url del resultado</small>
@@ -365,11 +365,17 @@
                     <strong> Fecha :</strong>
                     {{ mostrarFecha(estado.fecha) }}
                     <br />
-                    <strong> Numero de lote :</strong>
+                    <strong v-if="estado.numero_lote  != null"> Numero de lote :</strong>
                     {{ estado.numero_lote }}
                     <br />
-                    <strong> Informe :</strong>
-                    {{ estado.informe }}
+                    <strong v-if="estado.informe  != null"> Informe :
+                   <a
+                      @click="bajarInforme()"
+                      title="ver Informe del resultado"
+                      variant="outline-success"
+                    >
+                      <b-icon icon="download" variant="info"> </b-icon
+                    ></a></strong>
                     <br />
                   </div>
 
@@ -450,16 +456,14 @@ export default {
   },
 
   methods: {
-    verificarCancelar(estado){
-      console.log(estado.fecha_muestra)
+    verificarCancelar(estado){     
       return ((new Date(estado.turno.inicio) > new Date()) && (estado.turno.cancelado == null) && (estado.fecha_muestra == null))
 
     },
    async cancelarTurno(turno){
       try {
-        console.log(turno)
-        let response = await TurnosService.cancelarTurno(turno);
-        console.log(response)
+       
+        let response = await TurnosService.cancelarTurno(turno);       
         if (response.status == 200){
           this.obtenerDetalleEstudio()
             this.$root.$bvToast.toast(

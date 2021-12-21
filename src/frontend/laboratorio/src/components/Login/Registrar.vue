@@ -201,7 +201,7 @@
                 <b-col lg="4">
                   <b-form-group
                     id="input-group-2"
-                    label="Telefono deltutor:"
+                    label="Telefono del tutor:"
                     label-for="input-2"
                   >
                     <b-form-input
