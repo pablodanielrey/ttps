@@ -158,8 +158,8 @@ def definir_permisos():
     for p in django_auth_models.Permission.objects.all():
         logging.debug(p.codename)
 
-    asociar_permiso_a_grupo(persona_models.Empleado.NOMBRE_GRUPO, 'parametrodeturnos')
-    # asociar_permiso_a_grupo(persona_models.Empleado.NOMBRE_GRUPO, 'parametrodeturnos')
+    asociar_permiso_a_grupo(persona_models.Configurador.NOMBRE_GRUPO, 'parametrodeturnos')
+    asociar_permiso_a_grupo(persona_models.Empleado.NOMBRE_GRUPO, 'turnoconfirmado')
 
 
 class Ejemplos(APIView):

@@ -4,6 +4,7 @@ import logging
 import datetime
 
 from rest_framework import serializers, views, viewsets
+from rest_framework.decorators import permission_classes
 from rest_framework.exceptions import ValidationError
 from rest_framework.response import Response
 
@@ -26,6 +27,7 @@ class VistaFechasSinTurno(viewsets.ModelViewSet):
     serializer_class = serializers.SerializadorFechasSinTurno
 
 
+
 from dateutil import parser
 
 
@@ -33,6 +35,7 @@ from dateutil import parser
 class VistaTurnosDisponibles(viewsets.ModelViewSet):
 
     queryset = models.ParametroDeTurnos.objects.none()
+    permission_classes = [ permissions.TurnosDisponiblesPermisos ]
 
     def list(self, request, *args, **kwargs):
         """
@@ -67,6 +70,7 @@ class VistaTurnosConfirmados(viewsets.ModelViewSet):
 
     queryset = models.TurnoConfirmado.objects.all()
     serializer_class = serializers.SerializadorTurnosConfirmados
+    permission_classes = [ permissions.TurnosConfirmadosPermisos ]
 
     def create(self, request, *args, **kwargs):
         logging.debug(request.data)

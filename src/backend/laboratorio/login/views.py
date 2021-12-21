@@ -15,7 +15,7 @@ from rest_framework.authtoken.models import Token
 from rest_framework.response import Response
 from rest_framework.decorators import action, authentication_classes, permission_classes
 
-from django.contrib.auth.models import User
+from django.contrib.auth import models as django_models
 
 
 from personas import models as persona_models
@@ -35,35 +35,12 @@ def obtener_roles(usuario):
 
 
 def obtener_permisos(usuario):
-    if persona_models.Empleado.usuario_es_tipo(usuario):
-        return [
-           'ALTA_PACIENTES',
-           'BAJA_PACIENTES',
-           'MODIFICACION_PACIENTES', 
-        ]
-    elif persona_models.Paciente.usuario_es_tipo(usuario):
-        return [
-            'LISTA_ESTUDIOS',
-            'DETALLE_ESTUDIO'
-        ]
-    elif persona_models.Configurador.usuario_es_tipo(usuario):
-        return [
-            ''
-        ]
-    elif persona_models.Administrador.usuario_es_tipo(usuario):
-        return [
-            'ALTA_EMPLEADO',
-            'BAJA_EMPLEADO',
-            'MODIFICACION_EMPLEADO',
-            'ALTA_CONFIGURADOR',
-            'BAJA_CONFIGURADOR',
-            'MODIFICACION_CONFIGURADOR'
-        ]
-    elif persona_models.MedicoInformante.usuario_es_tipo(usuario):
-        return [
-            'CARGA_INFORME_RESULTADO'
-        ]
-    return []
+    permisos = set()
+    for g in usuario.groups.all():
+        for p in g.permissions.all():
+            permisos.add(p.codename)
+    return permisos
+
 
 class VistaToken(views.APIView):
     authentication_classes = [BasicAuthentication]
@@ -103,7 +80,8 @@ class VistaToken(views.APIView):
                 'token':token.key,
                 'persona': serializador.data if serializador else '', 
                 'roles': grupos,
-                'cambiar_clave': cambiar_clave
+                'cambiar_clave': cambiar_clave,
+                'permisos': obtener_permisos(usuario)
             }
         )
 
