@@ -21,6 +21,10 @@ export default {
     },
     obtenerFechasSinTurnos(){
         return Api().get(API_URL + API_USER + "fechas_sin_turnos/")
+    },
+    eliminarFechaExcepcion(id){
+        return Api().delete(API_URL + API_USER + "fechas_sin_turnos/" + id);
+
     }
   
     
