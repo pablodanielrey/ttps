@@ -26,8 +26,15 @@ export default {
         return Api().delete(API_URL + API_USER + "fechas_sin_turnos/" + id);
     },
     agregarRangoTurnos(turnos){
-        return Api().post(API_URL + API_USER + "parametro_turnos/",turnos)
-        
+        return Api().post(API_URL + API_USER + "parametro_turnos/",turnos)        
+    },
+    obtenerRangos(){
+        return Api().get(API_URL + API_USER + "parametro_turnos/")
+
+    },
+    eliminarRango(id){
+        return Api().delete(API_URL + API_USER + "parametro_turnos/" + id);
+
     }
   
     
