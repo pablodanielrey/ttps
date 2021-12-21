@@ -208,6 +208,11 @@
                 v-if="hasPermisos('change_configuracion')"
                 >Configurar rango fechas</b-dropdown-item
               >
+                   <b-dropdown-item
+                :to="{ name: 'verRangosTurnos' }"
+                v-if="hasPermisos('change_configuracion')"
+                >Listado de  rango fechas</b-dropdown-item
+              >
             </b-nav-item-dropdown>
             -
 

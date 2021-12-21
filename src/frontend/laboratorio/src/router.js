@@ -67,6 +67,8 @@ import CargarResultadoLote from '@/components/Lotes/cargarResultadoLote.vue'
 // configurador
 import ConfigurarTurnos from '@/components/Turnos/configurarTurnos.vue'
 import ConfigurarFechasSinTurno from '@/components/Turnos/configurarFechasSinTurno.vue'
+import verRangosTurnos from '@/components/Turnos/verRangosTurnos.vue'
+
 
 //turnos
 import TurnosOcupados from '@/components/Turnos/turnosOcupados.vue'
@@ -128,7 +130,9 @@ const router = new Router({
             { path: '/configurarTurnos', component: ConfigurarTurnos ,name:'configurarTurnos'},
             { path: '/configurarFechasSinTurnos', component: ConfigurarFechasSinTurno,name:'configurarFechasSinTurnos' },
             { path: '/turnosOcupados', component: TurnosOcupados , name:'turnosOcupados'},
+            { path: '/verRangosTurnos', component: verRangosTurnos , name:'verRangosTurnos'},
 
+            
             { path: '/EsperandoInterpretacionDeResultadosInformante', component: EsperandoInterpretacionDeResultadosInformante , name:'EsperandoInterpretacionDeResultadosInformante',props:true },
             { path: '/listaEstudiosEsperandoInforme', component: listaEstudiosEsperandoInforme , name:'listaEstudiosEsperandoInforme',props:true },
 
