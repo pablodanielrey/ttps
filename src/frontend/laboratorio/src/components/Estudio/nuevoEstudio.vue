@@ -330,7 +330,7 @@ export default {
         let result = await this.$refs.detailsEstudio.validate();
         console.log(this.estudio);
         if (result) {
-          if (this.diagnostico_presuntivo == null){
+          if (this.estudio.diagnostico_presuntivo == null){
             this.errorHistoriaClinica=true
             return
           }
