@@ -138,6 +138,20 @@ class SerializadorDePaciente(serializers.ModelSerializer):
             obp = instance.crear_obra_social(id_obra_social, numero_afiliado)
             obp.save()
 
+
+        """
+        ['id','nombre','apellido','dni','email','fecha_nacimiento','telefono','direccion', 'historia_clinica', 'obra_social', 'tutor']
+        """
         instance.refresh_from_db()
-        return super().update(instance, validated_data)
+        instance.nombre = validated_data('nombre', instance.nombre)
+        instance.apellido = validated_data('apellido', instance.apellido)
+        instance.dni = validated_data('dni', instance.dni)
+        instance.email = validated_data('email', instance.email)
+        instance.fecha_nacimiento = validated_data('fecha_nacimiento', instance.fecha_nacimiento)
+        instance.telefono = validated_data('telefono', instance.telefono)
+        instance.direccion = validated_data('direccion', instance.direccion)
+        instance.save()
+
+        
+        return instance
 
