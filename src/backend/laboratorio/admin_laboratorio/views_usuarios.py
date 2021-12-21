@@ -159,7 +159,7 @@ def definir_permisos():
         logging.debug(p.codename)
 
     asociar_permiso_a_grupo(persona_models.Administrador.NOMBRE_GRUPO, 'configurador')
-    asociar_permiso_a_grupo(persona_models.Administrador.NOMBRE_GRUPO, 'admistrador')
+    asociar_permiso_a_grupo(persona_models.Administrador.NOMBRE_GRUPO, 'administrador')
     asociar_permiso_a_grupo(persona_models.Administrador.NOMBRE_GRUPO, 'empleado')
 
     asociar_permiso_a_grupo(persona_models.Configurador.NOMBRE_GRUPO, 'parametrodeturnos')
