@@ -112,11 +112,8 @@ class SerializadorEnviarConsentimientoInformado(serializers.ModelSerializer):
         fields = ['id','fecha','fecha_enviado','comprobante_invalido']
 
     def update(self, instance, validated_data):
-
-        usuario_logueado = self.context.get('request').user
-        logging.debug(f'verificando si {usuario_logueado.username} es Empleado')
-        if not personas_models.Empleado.usuario_es_tipo(usuario_logueado):
-            raise login_models.PermisosAPIException("No tiene permisos para realizar esta acción")
+        config = admin_models.Configuracion.objects.order_by('fecha').last()
+        config.verificar_empleado(self)
 
         estudio = instance.estudio
 
@@ -212,6 +209,9 @@ class SerializadorEsperandoTomaDeMuestra(serializers.ModelSerializer):
         fields = ['id','fecha','fecha_muestra','mililitros','freezer','expirado','turno']
 
     def update(self, instance, validated_data):
+        config = admin_models.Configuracion.objects.order_by('fecha').last()
+        config.verificar_modo_de_operacion(self)
+
         super().update(instance, validated_data)
         estudio = instance.estudio
         expirado = validated_data.get('expirado',False)
@@ -233,6 +233,9 @@ class SerializadorEsperandoRetiroDeExtaccion(serializers.ModelSerializer):
         fields = ['id','fecha','extracionista','fecha_retiro']
 
     def update(self, instance, validated_data):
+        config = admin_models.Configuracion.objects.order_by('fecha').last()
+        config.verificar_empleado(self)
+
         super().update(instance, validated_data)
         estudio = instance.estudio
         estado = models.EsperandoLoteDeMuestraParaProcesamientoBiotecnologico(estudio=estudio)
@@ -245,6 +248,9 @@ class SerializadorEsperandoLoteDeMuestraParaProcesamientoBiotecnologico(serializ
         fields = ['id','fecha','numero_lote']
 
     def update(self, instance, validated_data):
+        config = admin_models.Configuracion.objects.order_by('fecha').last()
+        config.verificar_empleado(self)
+
         super().update(instance, validated_data)
         estudio = instance.estudio
         estado = models.EsperandoProcesamientoDeLoteBiotecnologico(estudio=estudio)
@@ -257,6 +263,9 @@ class SerializadorEsperandoProcesamientoDeLoteBiotecnologico(serializers.ModelSe
         fields = ['id','fecha','resultado_url','fecha_resultado']
 
     def update(self, instance, validated_data):
+        config = admin_models.Configuracion.objects.order_by('fecha').last()
+        config.verificar_empleado(self)
+
         super().update(instance, validated_data)
         estudio = instance.estudio
         estado = models.EsperandoInterpretacionDeResultados(estudio=estudio)
@@ -272,12 +281,11 @@ class SerializadorEsperandoInterpretacionDeResultados(serializers.ModelSerialize
         fields = ['id','fecha','fecha_informe','medico_informante','informe','resultado','resultado_url']
 
     def update(self, instance, validated_data):
+        config = admin_models.Configuracion.objects.order_by('fecha').last()
+        config.verificar_medico_informante(self)
 
-        usuario_django = self.context.get('request').user
-        if not personas_models.MedicoInformante.usuario_es_tipo(usuario_django):
-            raise ValidationError({'medico_informante':'la persona logueada no es un médico informante'})
-
-        persona_logueada = login_models.LoginModel().obtener_persona_del_usuario(usuario_django)
+        usuario_logueado = self.context.get('request').user
+        persona_logueada = login_models.LoginModel().obtener_persona_del_usuario(usuario_logueado)
             
         """ reemplazo el medico_informante """
         validated_data.pop('medico_informante',None)
@@ -296,6 +304,9 @@ class SerializadorEsperandoEntregaAMedicoDerivante(serializers.ModelSerializer):
         fields = ['id','fecha','fecha_entrega']
 
     def update(self, instance, validated_data):
+        config = admin_models.Configuracion.objects.order_by('fecha').last()
+        config.verificar_empleado(self)
+
         super().update(instance, validated_data)
         estudio = instance.estudio
         estado = models.ResultadoDeEstudioEntregado(estudio=estudio)
