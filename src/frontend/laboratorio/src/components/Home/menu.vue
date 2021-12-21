@@ -142,7 +142,7 @@
               >
             </b-nav-item-dropdown>
              <b-nav-item-dropdown
-              v-if="hasPermisos('view_estudio') "
+              v-if="hasPermisos('view_estudio')&& hasRol('Pacientes') "
               text="Mis estudios"
               right
             >
