@@ -9,28 +9,22 @@
           <p class="h3 text-center"><strong> Paciente</strong></p>
         </b-col>
       </b-row>
+      <b-card header="Datos personales">
+        <b-alert v-if="this.showError" show variant="danger">{{
+          this.error
+        }}</b-alert>
+        <ValidationObserver ref="detailsPaciente">
+          <b-form-group>
+            <b-alert
+              v-for="alert in alerts"
+              dismissible
+              v-bind:key="alert.key"
+              show
+              :variant="alert.variant"
+              >{{ alert.message }}</b-alert
+            >
+          </b-form-group>
 
-      <!--     <b-row class="pb-2">
-      <b-col class="text-center pt-3">
-        <p class="h5"><strong>Usuario Logueado:</strong>{{ usuario }}</p>
-      </b-col>
-    </b-row>
- -->
-      <b-alert v-if="this.showError" show variant="danger">{{
-        this.error
-      }}</b-alert>
-      <ValidationObserver ref="detailsPaciente">
-        <b-form-group>
-          <b-alert
-            v-for="alert in alerts"
-            dismissible
-            v-bind:key="alert.key"
-            show
-            :variant="alert.variant"
-            >{{ alert.message }}</b-alert
-          >
-        </b-form-group>
-        <b-card header="Datos personales">
           <b-row>
             <b-col lg="6" md="6">
               <b-form-group
@@ -310,9 +304,12 @@
                 </ValidationProvider>
               </b-form-group>
             </b-col>
-          </b-row> </b-card
-        ><br />
-        <b-card header="Historia clinica">
+          </b-row>
+
+          <h6>
+            <b> Historia clinica del paciente </b>
+          </h6>
+            <hr />
           <b-row>
             <b-col>
               <b-form-group
@@ -338,25 +335,27 @@
               </b-form-group>
             </b-col>
           </b-row>
-        </b-card>
-      </ValidationObserver>
+        </ValidationObserver>
 
-      <b-row class="pb-2">
-        <b-col class="text-center pt-3">
-          <b-button
-            v-if="!this.editar"
-            variant="success"
-            @click="crearPaciente()"
-            >Crear Paciente
-          </b-button>
-          <b-button
-            v-if="this.editar"
-            variant="success"
-            @click="editarPaciente()"
-            >Editar Paciente
-          </b-button>
-        </b-col>
-      </b-row>
+        <b-row class="pb-2">
+          <b-col class="text-center pt-3">
+            <b-button
+              v-if="!this.editar"
+              style="width: 250px"
+              variant="success"
+              @click="crearPaciente()"
+              >Crear Paciente
+            </b-button>
+            <b-button
+              v-if="this.editar"
+              style="width: 250px"
+              variant="success"
+              @click="editarPaciente()"
+              >Editar Paciente
+            </b-button>
+          </b-col>
+        </b-row>
+      </b-card>
     </div>
   </b-container>
 </template>
@@ -421,10 +420,8 @@ export default {
       idPacienteEditar: null,
     };
   },
-  created() {
-    console.log("created");
-    if (this.editar) {
-      console.log("editar");
+  created() {   
+    if (this.editar) {      
       this.verificarSiTieneOS();
       this.idPacienteEditar = this.paciente.id;
     }
