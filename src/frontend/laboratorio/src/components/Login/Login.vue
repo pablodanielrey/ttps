@@ -101,7 +101,7 @@ export default {
   created() {},
   methods: {
      ...mapMutations([
-    
+       "setRol",
       "setPermisos",
     
     ]),
@@ -125,6 +125,7 @@ export default {
         console.log(response.data);
 
         this.setPermisos(response.data.permisos);
+        this.setRol(response.data.roles)
         this.$router.push({
           name: "home",
         });
