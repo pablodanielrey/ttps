@@ -418,6 +418,7 @@ export default {
       required: "",
       showError: false,
       error: null,
+      idPacienteEditar: null,
     };
   },
   created() {
@@ -425,8 +426,8 @@ export default {
     if (this.editar) {
       console.log("editar");
       this.verificarSiTieneOS();
+      this.idPacienteEditar = this.paciente.id;
     }
-    console.log(this.paciente);
   },
 
   methods: {
@@ -460,8 +461,10 @@ export default {
         let result = await this.$refs.detailsPaciente.validate();
         if (result) {
           let datos = this.armarArray();
-
-          let r = await PacientesService.editarPaciente(datos);
+          let r = await PacientesService.editarPaciente(
+            this.idPacienteEditar,
+            datos
+          );
           if (r.status == 200) {
             this.$root.$bvToast.toast("Se edito con exito el paciente", {
               title: "Atencion!",
@@ -474,14 +477,22 @@ export default {
             });
           }
         }
-      } catch (err) {
-        console.log(err);
-        this.$root.$bvToast.toast("No se pudo editar el paciente", {
-          title: "Atencion!",
-          toaster: "b-toaster-top-center",
-          solid: true,
-          variant: "danger",
-        });
+      } catch (error) {
+        this.showError = true;
+        this.error = "";
+        this.error +=
+          error.response.data.email != null
+            ? "Email: " + error.response.data.email
+            : "";
+        this.error +=
+          error.response.data.dni != null
+            ? "DNI " + error.response.data.dni
+            : "";
+        this.error +=
+          error.response.data.historia_clinica != null
+            ? "Historia clinica:" + error.response.data.historia_clinica
+            : "";
+        console.log(error.response);
       }
     },
     armarDireccion(calle, numero, piso) {
@@ -495,8 +506,8 @@ export default {
           let datos = this.armarArray();
           console.log("datos");
           console.log(datos);
-            let r = await PacientesService.crearPaciente(datos);
-          console.log(r); 
+          let r = await PacientesService.crearPaciente(datos);
+          console.log(r);
 
           this.$root.$bvToast.toast("Se creo con exito el paciente", {
             title: "Atencion!",
@@ -510,10 +521,19 @@ export default {
         }
       } catch (error) {
         this.showError = true;
-        this.error += error.response.data.email != null ? error.response.data.email : '';
-        this.error += error.response.data.dni  != null ? error.response.data.dni : '';
-        this.error += error.response.data.historia_clinica != null ? error.response.data.historia_clinica : '';
-        console.log(error.response);
+        this.error = "";
+        this.error +=
+          error.response.data.email != null
+            ? "Email: " + error.response.data.email
+            : "";
+        this.error +=
+          error.response.data.dni != null
+            ? "DNI " + error.response.data.dni
+            : "";
+        this.error +=
+          error.response.data.historia_clinica != null
+            ? "Historia clinica:" + error.response.data.historia_clinica
+            : "";
       }
     },
 

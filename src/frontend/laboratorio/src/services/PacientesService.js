@@ -76,8 +76,8 @@ export default {
     borrarPaciente(paciente) {
         return Api().delete(API_URL + API_USER + "pacientes/" + paciente.id);
     },
-    editarPaciente(paciente) {
-        return Api().put(API_URL + API_USER + "pacientes/" + paciente.id + '/', paciente)
+    editarPaciente(idPaciente,paciente) {
+        return Api().put(API_URL + API_USER + "pacientes/" + idPaciente + '/', paciente)
     },
     obtenerPaciente(id) {
         return Api().get(API_URL + API_USER + "pacientes/" + id)
