@@ -1,5 +1,5 @@
 
-
+from rest_framework import permissions as rpermissions
 from login import permissions
 
 class EstudioPermisos(permissions.PermisoBase):
@@ -20,7 +20,7 @@ class EstadoEstudioPermisos(permissions.PermisoBase):
         return ['estadoestudio', 'esperandointerpretacionderesultados']
 
     def has_object_permission(self, request, view, obj):
-        if request.method in permissions.SAFE_METHODS:
+        if request.method in rpermissions.SAFE_METHODS:
             for model in self.get_models():
                 if request.user.has_perm(f'{self.get_app()}.view_{model}'):
                     return True
@@ -32,7 +32,7 @@ class EstadoEstudioPermisos(permissions.PermisoBase):
         return False
 
     def has_permission(self, request, view):
-        if request.method in permissions.SAFE_METHODS:
+        if request.method in rpermissions.SAFE_METHODS:
             for model in self.get_model():
                 if request.user.has_perm(f'{self.get_app()}.view_{model}'):
                     return True
