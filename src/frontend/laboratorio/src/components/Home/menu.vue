@@ -118,15 +118,15 @@
                 >nuevo</b-dropdown-item
               >
             </b-nav-item-dropdown>
-            <b-nav-item-dropdown text="Resultados Informe" right    v-if="hasPermisos('add_estadoestudio')">
+            <b-nav-item-dropdown text="Resultados Informe" right     v-if="hasPermisos('view_esperandointerpretacionderesultados')">
               <b-dropdown-item :to="{ name: 'listaEstudiosEsperandoInforme' }"
-               v-if="hasPermisos('add_estadoestudio')"
+               v-if="hasPermisos('view_esperandointerpretacionderesultados')"
                 >Listar</b-dropdown-item
               >
             </b-nav-item-dropdown>
 
             <b-nav-item-dropdown
-              v-if="hasPermisos('view_estudio')"
+              v-if="hasPermisos('view_estudio') && hasRol('Empleados')"
               text="Estudios"
               right
             >
@@ -137,9 +137,22 @@
               >
               <b-dropdown-item
                 :to="{ name: 'nuevoEstudio' }"
-                v-if="hasPermisos('add_estudio')"
+                v-if="hasPermisos('add_estudio')  && hasRol('Pacientes')"
                 >Nuevo</b-dropdown-item
               >
+            </b-nav-item-dropdown>
+             <b-nav-item-dropdown
+              v-if="hasPermisos('view_estudio') "
+              text="Mis estudios"
+              right
+            >
+       
+              <b-dropdown-item
+                :to="{ name: 'listaEstudios' }"
+                v-if="hasPermisos('view_estudio') "
+                >Listar</b-dropdown-item
+              >
+           
             </b-nav-item-dropdown>
 
             <b-nav-item-dropdown
@@ -164,7 +177,7 @@
                 >Listar</b-dropdown-item
               >
             </b-nav-item-dropdown>
-            <b-nav-item :to="{ name: 'estadisticas' }">Estadisticas</b-nav-item>
+            <b-nav-item :to="{ name: 'estadisticas' }" v-if="hasRol('Empleados')">Estadisticas</b-nav-item>
 
             <b-nav-item-dropdown
               text="Liquidaciones"
@@ -214,7 +227,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(["hasPermisos"]),
+    ...mapGetters(["hasPermisos","hasRol"]),
 
   },
   methods: {
