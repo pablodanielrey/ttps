@@ -23,6 +23,7 @@ class SerializadorDeObraSocial(serializers.ModelSerializer):
         https://github.com/encode/django-rest-framework/issues/2320
     """
     id = serializers.UUIDField(read_only=False)
+    nombre = serializers.CharField(required=False, read_only=False)
     class Meta:
         model = models.ObraSocial
         fields = ['id','nombre']
