@@ -139,17 +139,14 @@ class SerializadorDePaciente(serializers.ModelSerializer):
             obp.save()
 
 
-        """
-        ['id','nombre','apellido','dni','email','fecha_nacimiento','telefono','direccion', 'historia_clinica', 'obra_social', 'tutor']
-        """
         instance.refresh_from_db()
-        instance.nombre = validated_data('nombre', instance.nombre)
-        instance.apellido = validated_data('apellido', instance.apellido)
-        instance.dni = validated_data('dni', instance.dni)
-        instance.email = validated_data('email', instance.email)
-        instance.fecha_nacimiento = validated_data('fecha_nacimiento', instance.fecha_nacimiento)
-        instance.telefono = validated_data('telefono', instance.telefono)
-        instance.direccion = validated_data('direccion', instance.direccion)
+        instance.nombre = validated_data.get('nombre', instance.nombre)
+        instance.apellido = validated_data.get('apellido', instance.apellido)
+        instance.dni = validated_data.get('dni', instance.dni)
+        instance.email = validated_data.get('email', instance.email)
+        instance.fecha_nacimiento = validated_data.get('fecha_nacimiento', instance.fecha_nacimiento)
+        instance.telefono = validated_data.get('telefono', instance.telefono)
+        instance.direccion = validated_data.get('direccion', instance.direccion)
         instance.save()
 
         
