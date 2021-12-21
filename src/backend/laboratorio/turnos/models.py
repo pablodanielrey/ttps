@@ -15,10 +15,6 @@ class ParametroDeTurnos(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     fecha_valido = models.DateTimeField()
 
-    def __str__(self):
-        rangos = " | ".join([r.__str__() for r in self.rangos.all() ])
-        return f"desde : {self.fecha_valido} rangos: [ {rangos} ]" 
-
 class RangoDeTurnos(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     parametros = models.ForeignKey(ParametroDeTurnos, on_delete=models.CASCADE, related_name='rangos')
@@ -32,9 +28,6 @@ class RangoDeTurnos(models.Model):
 class FechasSinTurno(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     fecha = models.DateField()
-
-    def __str__(self):
-        return self.fecha
 
 
 class TurnoConfirmado(models.Model):
