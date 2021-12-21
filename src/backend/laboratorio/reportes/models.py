@@ -86,8 +86,15 @@ class Reportes:
             reporte[mes]['tardanza_segundos'] += tardanza
             reporte[mes]['procesados'] += 1
 
+        reporte_formateado = [
+            {
+                'mes':k, 
+                'tadanza_segundos':v['tardanza_segundos'], 
+                'procesados':v['procesados']
+            } for k,v in reporte.items()
+        ]
         return {
             "reporte": self.__generar_cabecera_reporte(),
-            "datos": reporte
+            "datos": reporte_formateado
         }
         
