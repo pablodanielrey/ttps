@@ -163,7 +163,7 @@ def definir_permisos():
     asociar_permiso_a_grupo(persona_models.Empleado.NOMBRE_GRUPO, 'estadoestudio')
     asociar_permiso_a_grupo(persona_models.Empleado.NOMBRE_GRUPO, 'estudio')
     asociar_permiso_a_grupo(persona_models.Paciente.NOMBRE_GRUPO, 'estadoestudio')
-    asociar_permiso_a_grupo(persona_models.Paciente.NOMBRE_GRUPO, 'estudio')
+    asociar_permiso_a_grupo(persona_models.Paciente.NOMBRE_GRUPO, 'estudio', permisos=['view'])
 
 
 class Ejemplos(APIView):
