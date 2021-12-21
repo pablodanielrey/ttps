@@ -24,7 +24,10 @@ export default {
     },
     eliminarFechaExcepcion(id){
         return Api().delete(API_URL + API_USER + "fechas_sin_turnos/" + id);
-
+    },
+    agregarRangoTurnos(turnos){
+        return Api().post(API_URL + API_USER + "parametro_turnos/",turnos)
+        
     }
   
     
