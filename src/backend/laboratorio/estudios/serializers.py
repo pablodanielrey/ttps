@@ -8,6 +8,7 @@ from turnos import views as turnos_views
 
 from . import models
 from turnos import models as turnos_models
+from turnos import serializers as turnos_serializers
 from personas import models as personas_models
 from personas import paciente_serializers
 from personas import medicos_serializers
@@ -156,7 +157,7 @@ class SerializadorEsperandoConsentimientoInformado(serializers.ModelSerializer):
         return estado
 
 class SerializadorEsperandoSeleccionDeTurnoParaExtraccion(serializers.ModelSerializer):
-    turno = turnos_views.SerializadorTurnosConfirmados()
+    turno = turnos_serializers.SerializadorTurnosConfirmados()
     class Meta:
         model = models.EsperandoSeleccionDeTurnoParaExtraccion
         fields = ['id','fecha','turno']
@@ -201,7 +202,7 @@ from turnos import models as turnos_models
 
 class SerializadorEsperandoTomaDeMuestra(serializers.ModelSerializer):
 
-    turno = turnos_views.SerializadorTurnosConfirmados(required=False, read_only=True)
+    turno = turnos_serializers.SerializadorTurnosConfirmados(required=False, read_only=True)
     expirado = serializers.BooleanField(required=False, read_only=False)
 
     class Meta:

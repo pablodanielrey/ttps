@@ -4,40 +4,24 @@ import logging
 import datetime
 
 from rest_framework import serializers, views, viewsets
+from rest_framework.exceptions import ValidationError
 from rest_framework.response import Response
 
 
 from estudios import models as estudio_models
-from personas import paciente_serializers
+
 
 from . import models
-
-class SerializadorRangoTurnos(serializers.ModelSerializer):
-    class Meta:
-        model = models.RangoDeTurnos
-        fields = ['id', 'hora_inicio', 'hora_fin', 'frecuencia']
-
-class SerializadorParametroTurnos(serializers.ModelSerializer):
-
-    rangos = SerializadorRangoTurnos(many=True)
-    class Meta:
-        model = models.ParametroDeTurnos
-        fields = ['id','fecha_valido','rangos']
+from . import serializers
 
 
 class VistaParametroTurnos(viewsets.ModelViewSet):
     queryset = models.ParametroDeTurnos.objects.all()
-    serializer_class = SerializadorParametroTurnos
-
-
-class SerializadorFechasSinTurno(serializers.ModelSerializer):
-    class Meta:
-        model = models.FechasSinTurno
-        fields = ['id','fecha']
+    serializer_class = serializers.SerializadorParametroTurnos
 
 class VistaFechasSinTurno(viewsets.ModelViewSet):
     queryset = models.FechasSinTurno.objects.all()
-    serializer_class = SerializadorFechasSinTurno
+    serializer_class = serializers.SerializadorFechasSinTurno
 
 
 from dateutil import parser
@@ -56,6 +40,12 @@ class VistaTurnosDisponibles(viewsets.ModelViewSet):
         inicio = inicio.replace(hour=0)
         fin = inicio + datetime.timedelta(days=4)
         """
+        if not request.query_params.get('inicio',None):
+            raise ValidationError({'inicio':'requerido'})
+
+        if not request.query_params.get('fin',None):
+           raise ValidationError({'fin':'requerido'})
+
         inicio = parser.parse(request.query_params.get('inicio'))
         fin = parser.parse(request.query_params.get('fin')) + datetime.timedelta(seconds=1)
 
@@ -68,17 +58,12 @@ class VistaTurnosDisponibles(viewsets.ModelViewSet):
 
 
 
-class SerializadorTurnosConfirmados(serializers.HyperlinkedModelSerializer):
-    persona = paciente_serializers.SerializadorDePaciente(required=False, read_only=True)
-    cancelado = serializers.DateTimeField(required=False,read_only=False)
-    class Meta:
-        model = models.TurnoConfirmado
-        fields = ['id','persona','inicio','fin','cancelado']
+
 
 class VistaTurnosConfirmados(viewsets.ModelViewSet):
 
     queryset = models.TurnoConfirmado.objects.all()
-    serializer_class = SerializadorTurnosConfirmados
+    serializer_class = serializers.SerializadorTurnosConfirmados
 
     def create(self, request, *args, **kwargs):
         logging.debug(request.data)
@@ -98,7 +83,7 @@ class VistaTurnosConfirmados(viewsets.ModelViewSet):
         turno = models.TurnoConfirmado(persona=persona, inicio=inicio, fin=fin)
         turno.save()
 
-        serializador = SerializadorTurnosConfirmados(turno, context={'request': request})
+        serializador = serializers.SerializadorTurnosConfirmados(turno, context={'request': request})
         return Response(serializador.data)
 
 
