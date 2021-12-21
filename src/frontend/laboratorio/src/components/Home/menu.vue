@@ -67,7 +67,7 @@
             <b-nav-item
               :to="{ name: 'editarModoDeTrabajo' }"
               right
-              v-if="hasPermisos('view_modo')"
+              v-if="hasPermisos('view_configuracion')"
               >Modo de Trabajo</b-nav-item
             >
             <b-nav-item-dropdown
@@ -202,6 +202,11 @@
                 :to="{ name: 'configurarFechasSinTurnos' }"
                 v-if="hasPermisos('change_parametrodeturnos')"
                 >Configurar turnos</b-dropdown-item
+              >
+                  <b-dropdown-item
+                :to="{ name: 'configurarTurnos' }"
+                v-if="hasPermisos('change_configuracion')"
+                >Configurar rango fechas</b-dropdown-item
               >
             </b-nav-item-dropdown>
             -
