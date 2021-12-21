@@ -35,7 +35,7 @@ class SerializadorFechasSinTurno(serializers.ModelSerializer):
         model = models.FechasSinTurno
         fields = ['id','fecha']
 
-class VistaFechasSinTurno(viewsets.ViewSet):
+class VistaFechasSinTurno(viewsets.ModelViewSet):
     queryset = models.FechasSinTurno.objects.all()
     serializer_class = SerializadorFechasSinTurno
 

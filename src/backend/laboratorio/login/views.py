@@ -17,6 +17,7 @@ from rest_framework.decorators import action, authentication_classes, permission
 
 from django.contrib.auth.models import User
 
+
 from personas import models as persona_models
 from personas import persona_serializers
 
@@ -29,6 +30,40 @@ def obtener_roles(usuario):
     for group in usuario.groups.all():
         grupos.append(group.name)
     return grupos
+
+
+
+
+def obtener_permisos(usuario):
+    if persona_models.Empleado.usuario_es_tipo(usuario):
+        return [
+           'ALTA_PACIENTES',
+           'BAJA_PACIENTES',
+           'MODIFICACION_PACIENTES', 
+        ]
+    elif persona_models.Paciente.usuario_es_tipo(usuario):
+        return [
+            'LISTA_ESTUDIOS',
+            'DETALLE_ESTUDIO'
+        ]
+    elif persona_models.Configurador.usuario_es_tipo(usuario):
+        return [
+            ''
+        ]
+    elif persona_models.Administrador.usuario_es_tipo(usuario):
+        return [
+            'ALTA_EMPLEADO',
+            'BAJA_EMPLEADO',
+            'MODIFICACION_EMPLEADO',
+            'ALTA_CONFIGURADOR',
+            'BAJA_CONFIGURADOR',
+            'MODIFICACION_CONFIGURADOR'
+        ]
+    elif persona_models.MedicoInformante.usuario_es_tipo(usuario):
+        return [
+            'CARGA_INFORME_RESULTADO'
+        ]
+    return []
 
 class VistaToken(views.APIView):
     authentication_classes = [BasicAuthentication]
