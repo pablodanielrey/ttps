@@ -71,7 +71,6 @@ class SerializadorEsperandoComprobanteDePago(serializers.ModelSerializer):
         fields = ['id','fecha','comprobante','fecha_procesado']
 
 
-
     def update(self, instance, validated_data):
         config = admin_models.Configuracion.objects.order_by('fecha').last()
         config.verificar_modo_de_operacion(self)
