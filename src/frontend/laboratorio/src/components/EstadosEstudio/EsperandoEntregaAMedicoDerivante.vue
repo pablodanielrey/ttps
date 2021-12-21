@@ -18,6 +18,14 @@
         </b-button>
       </div>
       </b-card>
+      <div>
+            <img
+              src="@/assets/diagnostico.png"
+              class="rounded"
+              alt="..."
+              id="imgLaboratorio"
+              style="width:60%"
+            /></div>
     </div>
 
   </b-container>

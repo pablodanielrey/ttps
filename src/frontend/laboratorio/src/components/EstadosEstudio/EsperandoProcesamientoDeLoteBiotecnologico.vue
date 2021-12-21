@@ -4,7 +4,7 @@
            <br>
           <div>
             <img
-              src="@/assets/esperandoLote.png"
+              src="@/assets/cargandodatos.png"
               class="rounded"
               alt="..."
               id="imgLaboratorio"
