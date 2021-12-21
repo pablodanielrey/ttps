@@ -13,150 +13,166 @@
             <b-nav-item-dropdown
               text="Pacientes"
               right
-              v-if="this.permisos == 'Empleados'"
+              v-if="hasPermisos('add_paciente')"
             >
-              <b-dropdown-item :to="{ name: 'listaPacientes' }"
+              <b-dropdown-item
+                :to="{ name: 'listaPacientes' }"
+                v-if="hasPermisos('view_paciente')"
                 >Listar</b-dropdown-item
               >
-              <b-dropdown-item :to="{ name: 'paciente' }"
+              <b-dropdown-item
+                :to="{ name: 'paciente' }"
+                v-if="hasPermisos('add_paciente')"
                 >nuevo</b-dropdown-item
               >
             </b-nav-item-dropdown>
             <b-nav-item-dropdown
               text="Empleados"
               right
-              v-if="this.permisos == 'Administradores'"
+              v-if="hasPermisos('view_empleado')"
             >
-              <b-dropdown-item :to="{ name: 'listaEmpleado' }"
+              <b-dropdown-item
+                :to="{ name: 'listaEmpleado' }"
+                v-if="hasPermisos('view_empleado')"
                 >Listar</b-dropdown-item
               >
-              <b-dropdown-item :to="{ name: 'empleado' }"
+              <b-dropdown-item
+                :to="{ name: 'empleado' }"
+                v-if="hasPermisos('add_empleado')"
                 >nuevo</b-dropdown-item
               >
             </b-nav-item-dropdown>
             <b-nav-item-dropdown
-              v-if="this.permisos == 'Configuradores'"
               text="Obra  Social"
               right
+              v-if="hasPermisos('add_obrasocial')"
             >
-              <b-dropdown-item :to="{ name: 'listaObrasSociales' }"
+              <b-dropdown-item
+                :to="{ name: 'listaObrasSociales' }"
+                v-if="hasPermisos('view_obrasocial')"
                 >Listar</b-dropdown-item
               >
-              <b-dropdown-item :to="{ name: 'obraSocial' }"
+              <b-dropdown-item
+                :to="{ name: 'obraSocial' }"
+                v-if="hasPermisos('add_obrasocial')"
                 >nuevo</b-dropdown-item
               >
             </b-nav-item-dropdown>
             <b-nav-item
-              v-if="this.permisos == 'Configuradores'"
               :to="{ name: 'editarTemplateConsentimiento' }"
               right
+              v-if="hasPermisos('change_templateconsentimiento')"
               >Template Consentimiento</b-nav-item
             >
             <b-nav-item
-              v-if="this.permisos == 'Configuradores'"
               :to="{ name: 'editarModoDeTrabajo' }"
               right
+              v-if="hasPermisos('view_modo')"
               >Modo de Trabajo</b-nav-item
             >
             <b-nav-item-dropdown
-              v-if="this.permisos == 'Administradores'"
               text="Configurador"
               right
+              v-if="hasPermisos('add_configurador')"
             >
-              <b-dropdown-item :to="{ name: 'listaConfiguradores' }"
+              <b-dropdown-item
+                :to="{ name: 'listaConfiguradores' }"
+                v-if="hasPermisos('view_configurador')"
                 >Listar</b-dropdown-item
               >
-              <b-dropdown-item :to="{ name: 'configuradores' }"
+              <b-dropdown-item
+                :to="{ name: 'configuradores' }"
+                v-if="hasPermisos('add_configurador')"
                 >nuevo</b-dropdown-item
               >
             </b-nav-item-dropdown>
             <b-nav-item-dropdown
-              v-if="this.permisos == 'Empleados'"
               text="Medicos informantes"
               right
+              v-if="hasPermisos('add_medicoinformante')"
             >
-              <b-dropdown-item :to="{ name: 'listaMedicoInformante' }"
+              <b-dropdown-item
+                :to="{ name: 'listaMedicoInformante' }"
+                v-if="hasPermisos('view_medicoinformante')"
                 >Listar</b-dropdown-item
               >
-              <b-dropdown-item :to="{ name: 'medicoInformante' }"
+              <b-dropdown-item
+                :to="{ name: 'medicoInformante' }"
+                v-if="hasPermisos('add_medicoinformante')"
                 >nuevo</b-dropdown-item
               >
             </b-nav-item-dropdown>
             <b-nav-item-dropdown
-              v-if="this.permisos == 'Empleados'"
               text="Medicos derivantes"
               right
+              v-if="hasPermisos('view_medicoderivante')"
             >
-              <b-dropdown-item :to="{ name: 'listaDerivante' }"
+              <b-dropdown-item
+                :to="{ name: 'listaDerivante' }"
+                v-if="hasPermisos('view_medicoderivante')"
                 >Listar</b-dropdown-item
               >
-              <b-dropdown-item :to="{ name: 'medicoDerivante' }"
+              <b-dropdown-item
+                :to="{ name: 'medicoDerivante' }"
+                v-if="hasPermisos('add_medicoderivante')"
                 >nuevo</b-dropdown-item
               >
             </b-nav-item-dropdown>
-            <b-nav-item-dropdown
-              text="Resultados Informe"
-              right
-              v-if="this.permisos == 'Médicos_Informantes'"
-            >
+            <b-nav-item-dropdown text="Resultados Informe" right>
               <b-dropdown-item :to="{ name: 'listaEstudiosEsperandoInforme' }"
                 >Listar</b-dropdown-item
               >
             </b-nav-item-dropdown>
 
             <b-nav-item-dropdown
-              v-if="this.permisos == 'Empleados'"
+              v-if="hasPermisos('view_estudio')"
               text="Estudios"
               right
             >
-              <b-dropdown-item :to="{ name: 'listaEstudios' }"
+              <b-dropdown-item
+                :to="{ name: 'listaEstudios' }"
+                v-if="hasPermisos('view_estudio')"
                 >Listar</b-dropdown-item
               >
-              <b-dropdown-item :to="{ name: 'nuevoEstudio' }"
+              <b-dropdown-item
+                :to="{ name: 'nuevoEstudio' }"
+                v-if="hasPermisos('add_estudio')"
                 >Nuevo</b-dropdown-item
               >
             </b-nav-item-dropdown>
 
             <b-nav-item-dropdown
-              v-if="this.permisos == 'Empleados'"
               text="Lotes"
               right
+              v-if="hasPermisos('view_lote')"
             >
-              <b-dropdown-item :to="{ name: 'cargarResultadoLote' }"
+              <b-dropdown-item
+                :to="{ name: 'cargarResultadoLote' }"
+                v-if="hasPermisos('view_lote')"
                 >Listar</b-dropdown-item
               >
-              <b-dropdown-item :to="{ name: 'crearLote' }"
+              <b-dropdown-item
+                :to="{ name: 'crearLote' }"
+                v-if="hasPermisos('add_lote')"
                 >Nuevo</b-dropdown-item
               >
             </b-nav-item-dropdown>
-            <b-nav-item-dropdown
-              v-if="this.permisos == 'Empleados'"
-              text="Turnos ocupados"
-              right
-            >
+            <b-nav-item-dropdown text="Turnos ocupados" right  v-if="hasPermisos('view_turnoconfirmado')" >
               <b-dropdown-item :to="{ name: 'turnosOcupados' }"
+              v-if="hasPermisos('view_turnoconfirmado')"
                 >Listar</b-dropdown-item
               >
             </b-nav-item-dropdown>
-            <b-nav-item
-              :to="{ name: 'estadisticas' }"
-              v-if="this.permisos == 'Empleados'"
-              >Estadisticas</b-nav-item
-            >
+            <b-nav-item :to="{ name: 'estadisticas' }">Estadisticas</b-nav-item>
 
-            <b-nav-item
-              :to="{ name: 'listaEstudios' }"
-              v-if="this.permisos == 'Pacientes'"
-              text="Estudios"
-              right
-              >Mis estudios</b-nav-item
-            >
             <b-nav-item-dropdown
-              v-if="this.permisos == 'Empleados'"
               text="Liquidaciones"
+              v-if="hasPermisos('add_liquidacion')"
               right
             >
-              <b-dropdown-item :to="{ name: 'liquidacionesEstudios' }"
+              <b-dropdown-item
+                :to="{ name: 'liquidacionesEstudios' }"
+                v-if="hasPermisos('add_liquidacion')"
                 >Nueva</b-dropdown-item
               >
               <b-dropdown-item :to="{ name: 'liquidadoesEstudios' }"
@@ -164,11 +180,17 @@
               >
             </b-nav-item-dropdown>
 
-               <b-nav-item-dropdown   v-if="this.permisos == 'Configuradores'" text="Turnos " >
-              <b-dropdown-item :to="{ name: 'configurarFechasSinTurnos' }"
+            <b-nav-item-dropdown
+              text="Turnos "
+              v-if="hasPermisos('change_parametrodeturnos')"
+            >
+              <b-dropdown-item
+                :to="{ name: 'configurarFechasSinTurnos' }"
+                v-if="hasPermisos('change_parametrodeturnos')"
                 >Configurar turnos</b-dropdown-item
               >
-            </b-nav-item-dropdown> -
+            </b-nav-item-dropdown>
+            -
 
             <b-nav-item @click="cerarrSesion()" right>Cerrar sesion</b-nav-item>
           </b-collapse>
@@ -180,44 +202,34 @@
 </template>
 
 <script>
-import axios from "axios";
-
+import { mapGetters,mapActions} from "vuex";
 export default {
   components: {},
   props: {},
   data() {
     return {
-      loading: true,
-      permisos: null,
+      loading: false,
+    
     };
   },
-  computed: {},
+  computed: {
+    ...mapGetters(["hasPermisos"]),
+
+  },
   methods: {
+           ...mapActions( ["LOGOUT_REQUEST"]),
     cerarrSesion() {
-      try {
-        window.localStorage.removeItem("credenciales");
-        this.$router.push({
-          name: "Login",
-        });
-      } catch (error) {
-        console.log(error);
-      }
+       this.LOGOUT_REQUEST().then(() => {
+        this.$router.push({name: "Login"}).catch({});
+      });
+      location.reload();
+      
     },
-    obtenerPermisos() {
-      this.permisos = window.localStorage.getItem("permisos");
-      console.log(this.permisos);
-    },
+
   },
 
   mounted() {
-    axios
-      .all([this.obtenerPermisos()])
-      .then(() => {
-        this.loading = false;
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+
   },
 };
 </script>

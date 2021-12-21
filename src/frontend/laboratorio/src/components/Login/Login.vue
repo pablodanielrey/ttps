@@ -83,7 +83,7 @@
 
 <script>
 import LoginService from "@/services/LoginService";
-
+import { mapMutations } from "vuex";
 export default {
   name: "Login",
   props: {},
@@ -100,6 +100,11 @@ export default {
   },
   created() {},
   methods: {
+     ...mapMutations([
+    
+      "setPermisos",
+    
+    ]),
     home() {
       this.$router.push("/");
     },
@@ -118,6 +123,8 @@ export default {
         }
         console.log("rta");
         console.log(response.data.cambiar_clave);
+
+        this.setPermisos(response.data.permisos);
         this.$router.push({
           name: "home",
         });
