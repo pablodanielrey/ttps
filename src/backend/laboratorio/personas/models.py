@@ -14,7 +14,7 @@ class ObraSocial(models.Model):
     def __str__(self):
         return f"{self.nombre} {self.email} {self.telefono}"
 
-
+import logging
 class Persona(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     nombre = models.CharField(max_length=500)
@@ -44,6 +44,7 @@ class Persona(models.Model):
         if not usuario_django:
             return False
         grupos = [g.name for g in usuario_django.groups.all()]
+        logging.debug(f'verificando {cls.NOMBRE_GRUPO} en {grupos}')
         return cls.NOMBRE_GRUPO in grupos
 
 
