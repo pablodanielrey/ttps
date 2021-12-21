@@ -74,12 +74,11 @@ class SerializadorEsperandoComprobanteDePago(serializers.ModelSerializer):
 
     def update(self, instance, validated_data):
         config = admin_models.Configuracion.objects.order_by('fecha').last()
-        config.verificar_modo_de_operacion(self)
-
         estudio = instance.estudio
-
         fecha_procesado = validated_data.pop('fecha_procesado',None)
         if fecha_procesado:
+            config.verificar_empleado(self)
+            
             """ se anula el comprobante por falta de pago, es necesario pasar el estudio a AnuladoPorFaltaDePago """
             logging.debug('anulando el estudio por falta de pago')    
             estado = models.AnuladorPorFaltaDePago(estudio=estudio, fecha_procesado=fecha_procesado)
@@ -93,10 +92,17 @@ class SerializadorEsperandoComprobanteDePago(serializers.ModelSerializer):
         instance.comprobante = archivo
         instance.save()
 
-        logging.debug('pasando al siguiente estado')
-        estado = models.EnviarConsentimientoInformado(estudio=estudio)
-        estado.save()
-        return estado
+        try:
+            
+            config.verificar_modo_de_operacion(self)
+
+            logging.debug('pasando al siguiente estado')
+            estado = models.EnviarConsentimientoInformado(estudio=estudio)
+            estado.save()
+            return estado
+
+        except Exception:
+            return instance
 
 class SerializadorAnuladorPorFaltaDePago(serializers.ModelSerializer):
     class Meta:
