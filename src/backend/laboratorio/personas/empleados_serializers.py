@@ -43,7 +43,7 @@ class SerializadorDeEmpleado(serializers.ModelSerializer):
 
 
 class SerializadorDeConfigurador(serializers.ModelSerializer):
-    usuario = login_serializers.UsuarioSerializer()
+    usuario = login_serializers.UsuarioSerializer(required=False, read_only=False)
 
     class Meta:
         model = models.Empleado
@@ -61,3 +61,17 @@ class SerializadorDeConfigurador(serializers.ModelSerializer):
         #     raise ValidationError({'usuario':'ya existe'})
         empleado = models.Empleado.objects.create(usuario=usuario_django, **validated_data)
         return empleado
+
+    def update(self, instance, validated_data):
+        usuario = validated_data.get('usuario',None)
+        if usuario:
+            passwd = usuario.get('password')
+            instance.usuario.set_password(passwd)
+            instance.usuario.save()
+        
+        instance.nombre = validated_data.get('nombre', instance.nombre)
+        instance.apellido = validated_data.get('apellido', instance.apellido)
+        instance.email = validated_data.get('email', instance.email)
+        instance.save()
+
+        return instance        
