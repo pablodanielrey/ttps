@@ -184,15 +184,17 @@ class VistaEstudios(viewsets.ModelViewSet):
         )
         estudio.save()
 
+        esperando_comprobante = estudio_models.EsperandoComprobanteDePago(estudio=estudio)
+        esperando_comprobante.save()        
+
         hc = personas_models.HistoriaClinica.objects.filter(persona=paciente).first()
         if not hc:
             hc = personas_models.HistoriaClinica.objects.create(persona=paciente)
         hc.historia_clinica = datos['diagnostico_presuntivo']
         hc.save()
 
-        esperando_comprobante = estudio_models.EsperandoComprobanteDePago(estudio=estudio)
-        esperando_comprobante.save()
 
+        estudio.refresh_from_db()
         serializer = serializers.SerializadorEstudios(estudio, context={'request': request})
         return Response(serializer.data)
 
