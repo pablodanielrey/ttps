@@ -79,8 +79,8 @@ class SerializadorDePaciente(serializers.ModelSerializer):
         email = validated_data.get('email',None)
         usuario = login_models.LoginModel().crear_usuario(dni, models.Paciente.NOMBRE_GRUPO, clave=dni, email=email)
         
-        from django.core.mail import send_mail
-        send_mail('calveeee', 'envio de clave de registro', 'tu clave es tu dni', email, fail_silently=True,)
+        # from django.core.mail import send_mail
+        # send_mail('calveeee', 'envio de clave de registro', 'tu clave es tu dni', email, fail_silently=True,)
 
         hc = validated_data.pop('historia_clinica',None)
         obra_social = validated_data.pop('obra_social',None)
