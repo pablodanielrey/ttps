@@ -11,13 +11,13 @@ from estudios import serializers
 
 from . import models
 from . import serializers
-
+from . import permissions
 
 
 class Lve19LiquidacionesDeEstudios(views.APIView):
 
-    authentication_classes = [BasicAuthentication]
-    permission_classes = [ IsAuthenticated ]
+    # authentication_classes = [BasicAuthentication]
+    permission_classes = [ permissions.LiquidacionesPermisos ]
 
     liquidaciones = models.Liquidaciones()
 
@@ -36,8 +36,8 @@ class Lve19LiquidacionesDeEstudios(views.APIView):
 
 class Lve19EstudiosLiquidado(views.APIView):
 
-    authentication_classes = [BasicAuthentication]
-    permission_classes = [ IsAuthenticated ]
+    # authentication_classes = [BasicAuthentication]
+    permission_classes = [ permissions.LiquidacionesPermisos ]
 
     liquidaciones = models.Liquidaciones()
 
