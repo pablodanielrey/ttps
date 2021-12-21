@@ -160,6 +160,10 @@ def definir_permisos():
 
     asociar_permiso_a_grupo(persona_models.Configurador.NOMBRE_GRUPO, 'parametrodeturnos')
     asociar_permiso_a_grupo(persona_models.Empleado.NOMBRE_GRUPO, 'turnoconfirmado')
+    asociar_permiso_a_grupo(persona_models.Empleado.NOMBRE_GRUPO, 'estadoestudio')
+    asociar_permiso_a_grupo(persona_models.Empleado.NOMBRE_GRUPO, 'estudio')
+    asociar_permiso_a_grupo(persona_models.Paciente.NOMBRE_GRUPO, 'estadoestudio')
+    asociar_permiso_a_grupo(persona_models.Paciente.NOMBRE_GRUPO, 'estudio')
 
 
 class Ejemplos(APIView):

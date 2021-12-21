@@ -26,23 +26,25 @@ from turnos import models as turnos_models
 """
 from rest_framework import serializers, views, viewsets
 from rest_framework.response import Response
-from rest_framework.decorators import action
+from rest_framework.decorators import action, permission_classes
 
 
 from . import serializers
 from . import pacientes_serializers
+from . import permissions
 
 class VistaArchivos(viewsets.ReadOnlyModelViewSet):
     queryset = models.Archivo.objects.all()
     serializer_class = serializers.SerializadorArchivos
 
-class VistaEstadisticas(viewsets.ModelViewSet):
-    queryset = models.TiposDeEstudio.objects.all()
-    serializer_class = serializers.SerializadorTiposDeEstudio
+# class VistaEstadisticas(viewsets.ModelViewSet):
+#     queryset = models.TiposDeEstudio.objects.all()
+#     serializer_class = serializers.SerializadorTiposDeEstudio
     
 class VistaTemplateConsentimiento(viewsets.ModelViewSet):
     queryset = models.TemplateConsentimiento.objects.all()
     serializer_class = serializers.SerializadorTemplateConsentimiento
+    permission_classes = [ permissions.EstudioPermisos ]
 
     def create(self, request, *args, **kwargs):
         datos = request.data['consentimiento']
@@ -79,11 +81,13 @@ class VistaTemplateConsentimiento(viewsets.ModelViewSet):
 class VistaTiposDeEstudio(viewsets.ModelViewSet):
     queryset = models.TiposDeEstudio.objects.all()
     serializer_class = serializers.SerializadorTiposDeEstudio
+    permission_classes = [ permissions.EstudioPermisos ]
 
 
 class VistaDiagnostico(viewsets.ModelViewSet):
     queryset = models.Diagnostico.objects.all()
     serializer_class = serializers.SerializadorDiagnostico
+    permission_classes = [ permissions.EstudioPermisos ]
 
 
 """
@@ -94,19 +98,7 @@ class VistaEstadoEstudio(viewsets.ModelViewSet):
     queryset = models.EstadoEstudio.objects.all()
     serializer_class = serializers.SerializadorEstadoEstudioPolimorfico
     http_method_names = ['put']
-
-    workflow = [
-        models.EsperandoComprobanteDePago,
-        models.EnviarConsentimientoInformado,
-        models.EsperandoConsentimientoInformado,
-        models.EsperandoSeleccionDeTurnoParaExtraccion,
-        models.EsperandoTomaDeMuestra,
-        models.EsperandoRetiroDeExtaccion,
-        models.EsperandoLoteDeMuestraParaProcesamientoBiotecnologico,
-        models.EsperandoInterpretacionDeResultados,
-        models.EsperandoEntregaAMedicoDerivante,
-        models.ResultadoDeEstudioEntregado
-    ]
+    permission_classes = [ permissions.EstadoEstudioPermisos ]
 
     def get_serializer_context(self):
         context = super().get_serializer_context()
@@ -123,6 +115,7 @@ class VistaEstadoEstudio(viewsets.ModelViewSet):
 class VistaEstudios(viewsets.ModelViewSet):
     queryset = models.Estudio.objects.all()
     serializer_class = serializers.SerializadorEstudiosRestringido
+    permission_classes = [ permissions.EstudioPermisos ]
 
     custom_serializer_class = {
         personas_models.Empleado.NOMBRE_GRUPO: {
