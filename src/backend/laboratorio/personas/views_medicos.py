@@ -4,14 +4,16 @@ import logging
 from rest_framework import serializers, viewsets, views
 from rest_framework.response import Response
 
-from rest_framework.decorators import action
+from rest_framework.decorators import action, permission_classes
 
 from . import models
 from . import medicos_serializers
+from . import permissions
 
 class VistaMedicoDerivante(viewsets.ModelViewSet):
     queryset = models.MedicoDerivante.all()
     serializer_class = medicos_serializers.SerializadorDeMedicoDerivante
+    permission_classes = [ permissions.MedicoDerivantePermisos ]
 
     @action(detail=False, methods=['GET'])
     def buscar(self, request):
@@ -22,12 +24,10 @@ class VistaMedicoDerivante(viewsets.ModelViewSet):
         return Response(serializer.data)
 
 
-
-
-
 class VistaMedicoInformante(viewsets.ModelViewSet):
     queryset = models.MedicoInformante.all()
     serializer_class = medicos_serializers.SerializadorDeMedicoInformante
+    permission_classes = [ permissions.MedicoInformantePermisos ]
 
     @action(detail=False, methods=['GET'])
     def buscar(self, request):

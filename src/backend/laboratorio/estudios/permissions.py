@@ -18,3 +18,12 @@ class EstadoEstudioPermisos(permissions.PermisoBase):
 
     def get_model(self):
         return 'estadoestudio'
+
+
+class TemplateConsentimientoPermisos(permissions.PermisoBase):
+
+    def get_app(self):
+        return "estudios"
+
+    def get_model(self):
+        return 'templateconsentimiento'

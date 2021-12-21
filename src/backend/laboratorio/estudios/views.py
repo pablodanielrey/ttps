@@ -44,7 +44,7 @@ class VistaArchivos(viewsets.ReadOnlyModelViewSet):
 class VistaTemplateConsentimiento(viewsets.ModelViewSet):
     queryset = models.TemplateConsentimiento.objects.all()
     serializer_class = serializers.SerializadorTemplateConsentimiento
-    permission_classes = [ permissions.EstudioPermisos ]
+    permission_classes = [ permissions.TemplateConsentimientoPermisos ]
 
     def create(self, request, *args, **kwargs):
         datos = request.data['consentimiento']
@@ -199,21 +199,6 @@ class VistaEstudios(viewsets.ModelViewSet):
         estudio_id = request.data['estudio_id']
         estudio = models.Estudio.objects.get(estudio_id)
 
-        """
-        ultimo_estado = estudio.estados.all('fecha').last()
-        switch ultimo_estado.nombre:
-            'EspernadoComprobante':
-                comprobante_b64 = request.data['comprobante']
-                ultimo_estado.comprobante = comprobante_b64
-                ultimo_estado.save()
-            
-            'EsperandoPresupeusto':
-                comprobante_b64 = request.data['presupuesto']
-                ultimo_estado.presupuesto = comprobante_b64
-                ultimo_estado.fecha = request.data['fecha']
-                ultimo_estado.save()
-
-        """
         serializer = serializers.SerializadorEstudios(estudio, context={'request': request})
         return Response(serializer.data)
         

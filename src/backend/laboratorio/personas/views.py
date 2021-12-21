@@ -20,9 +20,9 @@ from . import models
 from rest_framework import serializers, viewsets, views
 from rest_framework.response import Response
 
-from rest_framework.decorators import action
+from rest_framework.decorators import action, permission_classes
 
-
+from . import permissions
 
 class SerializadorDeObraSocial(serializers.HyperlinkedModelSerializer):
     class Meta:
@@ -32,7 +32,8 @@ class SerializadorDeObraSocial(serializers.HyperlinkedModelSerializer):
 class VistaObraSocial(viewsets.ModelViewSet):
     queryset = models.ObraSocial.objects.all()
     serializer_class = SerializadorDeObraSocial
-    permission_classes = [ DjangoModelPermissions ]
+    permission_classes = [ permissions.ObraSocialPermisos ]
+    # permission_classes = [ DjangoModelPermissions ]
 
     @action(detail=False, methods=['GET'])
     def p(self, request):

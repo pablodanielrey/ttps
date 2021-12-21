@@ -6,14 +6,16 @@ from rest_framework import serializers, viewsets, views, mixins
 from rest_framework.permissions import DjangoModelPermissions, IsAdminUser, AllowAny
 from rest_framework.response import Response
 
-from rest_framework.decorators import action
+from rest_framework.decorators import action, permission_classes
 
 from . import models
 from . import paciente_serializers
+from . import permissions
 
 class VistaPaciente(viewsets.ModelViewSet):
     queryset = models.Paciente.all()
     serializer_class = paciente_serializers.SerializadorDePaciente
+    permission_classes = [ permissions.PacientePermisos ]
 
     @action(detail=False, methods=['GET'])
     def buscar(self, request):

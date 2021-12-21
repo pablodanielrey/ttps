@@ -20,37 +20,8 @@ class VistaPersona(viewsets.ModelViewSet):
     """
     queryset = models.Persona.objects.all()
     serializer_class = persona_serializers.SerializadorDePersona
-    #permission_classes = [ DjangoModelPermissions ]
+    # permission_classes = [ DjangoModelPermissions ]
 
-    # def create(self, request, *args, **kwargs):
-    #     datos_persona = request.data
-
-    #     logging.debug(datos_persona)
-
-    #     # persona = models.Persona(           
-    #     #     nombre=datos_persona['nombre'],
-    #     #     apellido=datos_persona['apellido'],
-    #     #     dni=datos_persona['dni'],
-    #     #     email=datos_persona['email'],
-    #     #     fecha_nacimiento=datos_persona['fecha_nacimiento'],
-    #     #     telefono=datos_persona['telefono'],
-    #     #     historia_clinica=datos_persona['historia_clinica']
-    #     # )
-    #     # persona.save()
-
-    #     # if 'obra_social' in datos_persona:
-    #     #     ob = datos_persona['obra_social']
-    #     #     obraSocial = models.ObraSocial.objects.get(id=ob)
-
-    #     #     pacienteObraSocial = models.ObraSocialPersona(
-    #     #         persona=persona,
-    #     #         obra_social=obraSocial,
-    #     #         numero_afiliado=datos_persona['numero_afiliado']
-    #     #     )
-    #     #     pacienteObraSocial.save()
-
-    #     # serializer = SerializadorDePersona(persona, context={'request': request})
-    #     # return Response(serializer.data)
 
     @action(detail=False, methods=['GET'])
     def buscar(self, request):

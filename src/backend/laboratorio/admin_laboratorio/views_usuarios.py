@@ -158,16 +158,28 @@ def definir_permisos():
     for p in django_auth_models.Permission.objects.all():
         logging.debug(p.codename)
 
+    asociar_permiso_a_grupo(persona_models.Administrador.NOMBRE_GRUPO, 'configurador')
+    asociar_permiso_a_grupo(persona_models.Administrador.NOMBRE_GRUPO, 'admistrador')
+    asociar_permiso_a_grupo(persona_models.Administrador.NOMBRE_GRUPO, 'empleado')
+
     asociar_permiso_a_grupo(persona_models.Configurador.NOMBRE_GRUPO, 'parametrodeturnos')
+    asociar_permiso_a_grupo(persona_models.Configurador.NOMBRE_GRUPO, 'obrasocial')
+    asociar_permiso_a_grupo(persona_models.Configurador.NOMBRE_GRUPO, 'templateconsentimiento')
 
     asociar_permiso_a_grupo(persona_models.Empleado.NOMBRE_GRUPO, 'turnoconfirmado')
     asociar_permiso_a_grupo(persona_models.Empleado.NOMBRE_GRUPO, 'estadoestudio')
     asociar_permiso_a_grupo(persona_models.Empleado.NOMBRE_GRUPO, 'estudio')
+    asociar_permiso_a_grupo(persona_models.Empleado.NOMBRE_GRUPO, 'templateconsentimiento', permisos=['view'])
     asociar_permiso_a_grupo(persona_models.Empleado.NOMBRE_GRUPO, 'liquidacion')
     asociar_permiso_a_grupo(persona_models.Empleado.NOMBRE_GRUPO, 'lote')
+    asociar_permiso_a_grupo(persona_models.Empleado.NOMBRE_GRUPO, 'paciente')
+    asociar_permiso_a_grupo(persona_models.Empleado.NOMBRE_GRUPO, 'medicoinformante')
+    asociar_permiso_a_grupo(persona_models.Empleado.NOMBRE_GRUPO, 'medicoderivante')
+    asociar_permiso_a_grupo(persona_models.Empleado.NOMBRE_GRUPO, 'obrasocial', permisos=['view'])
 
     asociar_permiso_a_grupo(persona_models.Paciente.NOMBRE_GRUPO, 'estadoestudio')
     asociar_permiso_a_grupo(persona_models.Paciente.NOMBRE_GRUPO, 'estudio', permisos=['view'])
+    asociar_permiso_a_grupo(persona_models.Paciente.NOMBRE_GRUPO, 'templateconsentimiento', permisos=['view'])
 
 
 class Ejemplos(APIView):

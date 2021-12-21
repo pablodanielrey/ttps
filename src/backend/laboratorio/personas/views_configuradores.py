@@ -8,10 +8,11 @@ from rest_framework.decorators import action
 
 from . import models
 from . import empleados_serializers
-
+from . import permissions
 class VistaConfigurador(viewsets.ModelViewSet):
     queryset = models.Configurador.all()
     serializer_class = empleados_serializers.SerializadorDeConfigurador
+    permission_classes = [ permissions.ConfiguradorPermisos ]
 
     @action(detail=False, methods=['GET'])
     def buscar(self, request):
