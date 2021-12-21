@@ -122,7 +122,7 @@ export default {
           return
         }
         console.log("rta");
-        console.log(response.data.cambiar_clave);
+        console.log(response.data);
 
         this.setPermisos(response.data.permisos);
         this.$router.push({
