@@ -212,7 +212,6 @@ class SerializadorEsperandoTomaDeMuestra(serializers.ModelSerializer):
         config = admin_models.Configuracion.objects.order_by('fecha').last()
         config.verificar_modo_de_operacion(self)
 
-        super().update(instance, validated_data)
         estudio = instance.estudio
         expirado = validated_data.get('expirado',False)
         if expirado:
@@ -222,10 +221,12 @@ class SerializadorEsperandoTomaDeMuestra(serializers.ModelSerializer):
             turnos_models.ModeloTurnos().cancelar_turno(turno)
             estado = instance.cancelar_turno()
             return estado if estado else instance
-        else:
-            estado = models.EsperandoRetiroDeExtaccion(estudio=estudio)
-            estado.save()
-            return estado        
+
+        config.verificar_empleado(self)
+        super().update(instance, validated_data)
+        estado = models.EsperandoRetiroDeExtaccion(estudio=estudio)
+        estado.save()
+        return estado        
 
 class SerializadorEsperandoRetiroDeExtaccion(serializers.ModelSerializer):
     class Meta:
