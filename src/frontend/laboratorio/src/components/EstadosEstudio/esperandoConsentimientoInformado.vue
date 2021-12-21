@@ -105,7 +105,7 @@ export default {
       } catch (error) {
         console.log(error);
         this.$root.$bvToast.toast(
-          "Ocurrio un error mientras ingresaba el consentimiento firmado, por favor vuelva a intentar",
+          "Ocurrio un error mientras ingresaba el consentimiento firmado,verifique el modo de operacion",
           {
             title: "Atencion!",
             toaster: "b-toaster-top-center",
