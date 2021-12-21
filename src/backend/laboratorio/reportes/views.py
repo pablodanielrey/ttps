@@ -6,10 +6,11 @@ from rest_framework.response import Response
 from rest_framework import views
 
 from . import models
+from . import permissions
 class Lve23ReporteCantidadDeEstudiosPorTipo(views.APIView):
 
     authentication_classes = [BasicAuthentication]
-    permission_classes = [ IsAuthenticated ]
+    permission_classes = [ permissions.ReportePermisos ]
 
     reportes = models.Reportes()
 
@@ -21,7 +22,7 @@ class Lve23ReporteCantidadDeEstudiosPorTipo(views.APIView):
 class Lve25ReporteCantidadDeEstudiosPorMesAno(views.APIView):
 
     authentication_classes = [BasicAuthentication]
-    permission_classes = [ IsAuthenticated ]
+    permission_classes = [ permissions.ReportePermisos ]
 
     reportes = models.Reportes()
 
@@ -33,7 +34,7 @@ class Lve25ReporteCantidadDeEstudiosPorMesAno(views.APIView):
 class Lve27ReporteDemoraDeEstudios(views.APIView):
 
     authentication_classes = [BasicAuthentication]
-    permission_classes = [ IsAuthenticated ]
+    permission_classes = [ permissions.ReportePermisos ]
 
     reportes = models.Reportes()
 
