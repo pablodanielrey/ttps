@@ -112,7 +112,6 @@ class SerializadorDePaciente(serializers.ModelSerializer):
         
 
     def update(self, instance, validated_data):
-        logging.debug(f'actualizando {instance}')
         historia_clinica = validated_data.pop('historia_clinica', None)
         if not historia_clinica:
             if models.HistoriaClinica.objects.filter(persona=instance).count() > 0:
