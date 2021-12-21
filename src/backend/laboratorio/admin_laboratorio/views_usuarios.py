@@ -147,7 +147,36 @@ def generar_usuarios_de_sistema():
 
 from django.contrib.auth import models as django_auth_models
 
+
+def crear_permisos_virtuales():
+
+    from django.contrib.auth.models import Permission
+    from django.contrib.contenttypes.models import ContentType
+    from django.db.utils import IntegrityError
+    class ReportePermisoVirtual(Permission):
+
+        class Meta:
+            proxy = True
+
+        def save(self, *args, **kwargs):
+            ct, created = ContentType.objects.get_or_create(model=self._meta.verbose_name, app_label=self._meta.app_label,)
+            self.content_type = ct
+            super(ReportePermisoVirtual, self).save(*args)
+
+
+    """ instalo el permiso dentro del sistema """
+    try:
+        ReportePermisoVirtual.objects.create(name='Can view reporte', codename='view_reporte')
+        ReportePermisoVirtual.objects.create(name='Can add reporte', codename='add_reporte')
+        ReportePermisoVirtual.objects.create(name='Can delete reporte', codename='delete_reporte')
+        ReportePermisoVirtual.objects.create(name='Can change reporte', codename='change_reporte')
+    except IntegrityError:
+        pass
+
+
 def definir_permisos():
+
+    crear_permisos_virtuales()
     
     def asociar_permiso_a_grupo(grupo, entidad, permisos=['add','change','delete','view']):
         grupo = django_auth_models.Group.objects.get(name=grupo)
@@ -162,6 +191,7 @@ def definir_permisos():
     asociar_permiso_a_grupo(persona_models.Administrador.NOMBRE_GRUPO, 'administrador')
     asociar_permiso_a_grupo(persona_models.Administrador.NOMBRE_GRUPO, 'empleado')
 
+    asociar_permiso_a_grupo(persona_models.Configurador.NOMBRE_GRUPO, 'configuracion')
     asociar_permiso_a_grupo(persona_models.Configurador.NOMBRE_GRUPO, 'parametrodeturnos')
     asociar_permiso_a_grupo(persona_models.Configurador.NOMBRE_GRUPO, 'obrasocial')
     asociar_permiso_a_grupo(persona_models.Configurador.NOMBRE_GRUPO, 'templateconsentimiento')
@@ -176,6 +206,7 @@ def definir_permisos():
     asociar_permiso_a_grupo(persona_models.Empleado.NOMBRE_GRUPO, 'medicoinformante')
     asociar_permiso_a_grupo(persona_models.Empleado.NOMBRE_GRUPO, 'medicoderivante')
     asociar_permiso_a_grupo(persona_models.Empleado.NOMBRE_GRUPO, 'obrasocial', permisos=['view'])
+    asociar_permiso_a_grupo(persona_models.Empleado.NOMBRE_GRUPO, 'reporte')
 
     asociar_permiso_a_grupo(persona_models.Paciente.NOMBRE_GRUPO, 'estadoestudio')
     asociar_permiso_a_grupo(persona_models.Paciente.NOMBRE_GRUPO, 'estudio', permisos=['view'])
