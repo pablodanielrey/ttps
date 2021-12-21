@@ -1,13 +1,13 @@
 from django.urls import path
 
 from . import views
-from . import views_usuarios, views_lotes, views_estudios
+from . import views_usuarios, views_lotes, views_estudios, views_configuracion
 
 
 from rest_framework import routers
 
 router = routers.DefaultRouter()
-router.register('configuracion', views.VistaConfiguracion)
+router.register('configuracion', views_configuracion.VistaConfiguracion)
 
 urlpatterns = [
     path('inicializar', views.InitSite.as_view()),

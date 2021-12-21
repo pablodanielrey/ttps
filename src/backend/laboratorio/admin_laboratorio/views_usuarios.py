@@ -191,6 +191,7 @@ def definir_permisos():
     asociar_permiso_a_grupo(persona_models.Administrador.NOMBRE_GRUPO, 'administrador')
     asociar_permiso_a_grupo(persona_models.Administrador.NOMBRE_GRUPO, 'empleado')
 
+    asociar_permiso_a_grupo(persona_models.Configurador.NOMBRE_GRUPO, 'configuracion')
     asociar_permiso_a_grupo(persona_models.Configurador.NOMBRE_GRUPO, 'parametrodeturnos')
     asociar_permiso_a_grupo(persona_models.Configurador.NOMBRE_GRUPO, 'obrasocial')
     asociar_permiso_a_grupo(persona_models.Configurador.NOMBRE_GRUPO, 'templateconsentimiento')
