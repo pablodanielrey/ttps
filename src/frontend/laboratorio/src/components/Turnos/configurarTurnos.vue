@@ -15,14 +15,6 @@
               required
             ></b-calendar>
           </b-col>
-          <b-col>
-            Fecha Fin<br />
-            <b-calendar
-              v-model="fechaSeleccionadaFin"
-              locale="en-US"
-              required
-            ></b-calendar>
-          </b-col>
         </b-row>
 
         <b-row>
@@ -106,7 +98,6 @@ export default {
       hsInicio: null,
       frecuencia: null,
       fechaSeleccionada: new Date(),
-      fechaSeleccionadaFin: new Date(),
       messageFechas: false,
       alerts: [],
       fields: [
@@ -118,27 +109,19 @@ export default {
     };
   },
   methods: {
-    onSubmit() {    
-      if (new Date(this.fechaSeleccionadaFin) < new Date(this.fechaSeleccionada)) {
-        this.messageFechas = true;
-      } else {
-        this.items.push({
-          hora_inicio: this.hsInicio,
-          hora_fin: this.hsFin,
-          frecuencia: this.frecuencia,
-        });
-      }
+    onSubmit() {
+      this.items.push({
+        hora_inicio: this.hsInicio,
+        hora_fin: this.hsFin,
+        frecuencia: this.frecuencia,
+      });
     },
     async confirmarRangos() {
       try {
-        if (this.fechaSeleccionadaFin < this.fechaSeleccionada) {
-          this.messageFechas = true;
-        }
-
         this.armarHoraEnteros();
         let datos = {
           fecha_valido: new Date(this.fechaSeleccionada),
-          fin:new Date(this.fechaSeleccionadaFin),
+
           rangos: this.armarHoraEnteros(),
         };
         await TurnosService.agregarRangoTurnos(datos);
