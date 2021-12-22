@@ -228,8 +228,7 @@
                 deck
                 v-if="
                   estado.resourcetype ==
-                  'EsperandoLoteDeMuestraParaProcesamientoBiotecnologico'
-                "
+                  'EsperandoLoteDeMuestraParaProcesamientoBiotecnologico'"
                 header="Retiro de la extraccion"
                 header-text-variant="white"
                 align="center"
@@ -401,7 +400,7 @@
 
 <script>
 import EstudiosService from "@/services/EstudiosService.js";
-import TurnosService from "@/services/TurnosService.js";
+ import TurnosService from "@/services/TurnosService.js"; 
 import axios from "axios";
 export default {
   name: "detalleDeEstudio",
@@ -436,6 +435,7 @@ export default {
       currentPage: 1,
       totalRows: 1,
       items: [],
+      noPuedeCancelarTurno:false,
       estados: [],
       fields: [
         { key: "id", label: "Numero", class: "text-center p2" },
@@ -456,13 +456,18 @@ export default {
   },
 
   methods: {
-    verificarCancelar(estado){     
+    verificarCancelar(estado){  
+     
+      if (this.noPuedeCancelarTurno)  {
+        return !this.noPuedeCancelarTurno
+      }
       return ((new Date(estado.turno.inicio) > new Date()) && (estado.turno.cancelado == null) && (estado.fecha_muestra == null))
+
 
     },
    async cancelarTurno(turno){
       try {
-       
+        
         let response = await TurnosService.cancelarTurno(turno);       
         if (response.status == 200){
           this.obtenerDetalleEstudio()
@@ -475,7 +480,7 @@ export default {
               variant: "info",
             }
           );
-        }
+        } 
         
 
       } catch (error) {
@@ -493,10 +498,13 @@ export default {
 
     },
     async obtenerDetalleEstudio() {
+     
       try {
         let response = await EstudiosService.obtenerEstudio(this.estudioId);  
         this.estudio = response.data;
-        this.estados = this.ordenarEstados(response.data.estados);
+       
+        this.estados = this.ordenarEstados(response.data.estados); 
+        console.log(     this.estudio )
       } catch (error) {
         console.log(error);
       }
@@ -517,6 +525,7 @@ export default {
       return new Date(fecha).formatTime();
     },
     mostrarFecha(fecha) {
+     
       return new Date(fecha).format("DD-MM-YYYY");
     },
     obtenerUltimoEstado() {
@@ -554,6 +563,7 @@ export default {
       }
     },
     expiroToma(toma) {
+       this.noPuedeCancelarTurno=true
       return toma == true ? "Si" : "No";
     },
     async bajarConsentimiento() {
