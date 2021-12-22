@@ -51,7 +51,6 @@ export default {
 
   methods: {
     async agregarFechaExcepcion() {
-      console.log(this.fechaSeleccionada);
       try {
         let datos = {
           fecha: this.fechaSeleccionada,

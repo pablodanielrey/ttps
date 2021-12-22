@@ -361,7 +361,6 @@ export default {
       } catch (error) {
         this.showError = true;
         this.error= error.response.data.dni[0]
-        console.log(error.response.data);
       }
     },
     armarDireccion() {

@@ -496,7 +496,6 @@ export default {
       try {
         let response = await EstudiosService.obtenerEstudio(this.estudioId);  
         this.estudio = response.data;
-      console.log(this.estudio);
         this.estados = this.ordenarEstados(response.data.estados);
       } catch (error) {
         console.log(error);
@@ -530,30 +529,26 @@ export default {
       this.$refs["modalHistoriaCLinica"].show();
     },
     async bajarInforme() {
-      console.log(this.estudio);
       try {
-        let response = await EstudiosService.descargarInformeDeResultado(
+     await EstudiosService.descargarInformeDeResultado(
           this.estudio.id
         );
-        console.log(response);
       } catch (error) {
         console.log(error);
       }
     },
     async bajarPresupuesto() {
       try {
-        let response = await EstudiosService.descargarPresupuesto(
+         await EstudiosService.descargarPresupuesto(
           this.estudioId
         );
-        console.log(response);
       } catch (error) {
         console.log(error);
       }
     },
     async bajarPago() {
       try {
-        let response = await EstudiosService.descargarPago(this.estudioId);
-        console.log(response);
+        await EstudiosService.descargarPago(this.estudioId);
       } catch (error) {
         console.log(error);
       }

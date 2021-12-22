@@ -210,15 +210,12 @@ export default {
     };
   },
 
-  created() {
-    console.log(this.paciente);
-  },
+
   methods: {
     async obtenerListaEstudios() {
       try {
         let response = await EstudiosService.obtenerListaEstudios();
         this.items = response.data;
-        console.log(this.items);
       } catch (err) {
         console.log(err);
       }

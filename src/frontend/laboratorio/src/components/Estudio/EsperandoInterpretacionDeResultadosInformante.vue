@@ -114,12 +114,9 @@ export default {
       },
     };
   },
-  created() {
-    console.log(this.urlResultado)
-  },
+
   methods: {
     resultadoUrl(){
-      console.log(this.urlResultado)
       return this.urlResultado
     },
   

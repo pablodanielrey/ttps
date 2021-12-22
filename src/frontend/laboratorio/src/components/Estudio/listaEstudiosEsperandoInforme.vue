@@ -126,14 +126,12 @@ export default {
       return nameEstado;
     },
     armarUrl(estudio) {
-      console.log(estudio);
       return estudio.ultimo_estado.resultado_url;
     },
     async obtenerListaEstudios() {
       try {
         let response = await EstudiosService.obtenerListaEstudiosParaInformes();
         this.items = response.data;
-        console.log(response);
       } catch (err) {
         console.log(err);
       }

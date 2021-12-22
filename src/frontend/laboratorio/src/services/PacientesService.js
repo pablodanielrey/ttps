@@ -6,11 +6,9 @@ const API_URL = '/personas_api/'
 
 export default {
     registrarPaciente(usuario){
-        console.log(process.env.VUE_APP_API_URL + API_URL  + "registro/", usuario)
         return axios.post(process.env.VUE_APP_API_URL + API_URL  + "registro/", usuario);
     },
     obtenerMedicosInformantes() {
-        console.log(process.env.VUE_APP_API_URL + API_URL  + "medicos_informantes/")
         return Api().get(API_URL + API_USER + "medicos_informantes/")
     },
     deleteMedicosInformantes(dato) {

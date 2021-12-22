@@ -328,7 +328,6 @@ export default {
       try {
 
         let result = await this.$refs.detailsEstudio.validate();
-        console.log(this.estudio);
         if (result) {
           if (this.estudio.diagnostico_presuntivo == null){
             this.errorHistoriaClinica=true
@@ -371,7 +370,6 @@ export default {
       try {
         let response = await PacientesService.obtenerMedicosDerivantes();
         this.medicosDerivantes = response.data;
-        console.log(this.medicosDerivantes);
       } catch (err) {
         console.log(err);
       }
@@ -385,7 +383,6 @@ export default {
       }
     },
     async obtenerHistoriaClinicaPaciente() {
-      console.log(this.estudio.paciente.id);
       try {
         let response = await PacientesService.obtenerPaciente(
           this.estudio.paciente.id

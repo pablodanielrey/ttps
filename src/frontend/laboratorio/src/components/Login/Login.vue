@@ -121,9 +121,6 @@ export default {
           });
           return
         }
-        console.log("rta");
-        console.log(response.data);
-
         this.setPermisos(response.data.permisos);
         this.setRol(response.data.roles)
         this.$router.push({

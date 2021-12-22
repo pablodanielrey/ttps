@@ -96,6 +96,7 @@
 <script>
 import EstudiosService from "@/services/EstudiosService.js";
 import axios from "axios";
+import { mapGetters} from "vuex";
 export default {
   name: "listaEstudios",
 
@@ -162,6 +163,10 @@ export default {
   },
 
   created() {},
+   computed: {
+    ...mapGetters(["hasRol"]),
+
+  },
   methods: {
     armarFecha(estado) {
       return new Date(estado.ultimo_estado.fecha).format("DD-MM-YYYY HH:MM");
@@ -187,6 +192,7 @@ export default {
       }
     },
     ordenarEstudiosFecha(estudios){
+      
       estudios.sort(function (a, b) {
         if (a.ultimo_estado.fecha < b.ultimo_estado.fecha) {
           return 1;
@@ -212,6 +218,18 @@ export default {
       });
     },
     siguienteEstado(estudio) {
+      if (estudio.ultimo_estado.resourcetype == 'EsperandoTomaDeMuestra' && this.hasRol('Pacientes')){
+              this.$root.$bvToast.toast(
+          "Aguarde que el empleado complete el estudio",
+          {
+            title: "Atencion!",
+            toaster: "b-toaster-top-center",
+            solid: true,
+            variant: "info",
+          }
+        );
+        return
+      }
       this.$router.push({
         name: estudio.ultimo_estado.resourcetype,
         params: {

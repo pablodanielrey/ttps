@@ -186,12 +186,10 @@ export default {
           return;
         }
         let datos = { fecha: new Date(), resultado: this.urlResultado,estudios:this.getIdEstudios() };
-        console.log(datos);
-        let response = await LotesService.cargarResultadoLote(
+         await LotesService.cargarResultadoLote(
           this.idLoteActual,
           datos
         );
-        console.log(response);
         this.$nextTick(() => {
           this.$bvModal.hide("modal-prevent-closing");
         });

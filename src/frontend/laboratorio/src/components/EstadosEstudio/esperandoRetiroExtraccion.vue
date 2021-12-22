@@ -103,7 +103,7 @@ export default {
             resourcetype: this.estudio.ultimo_estado.resourcetype,
 
           };
-          console.log(retiroExtraccion);
+      
           let response = await EstudiosService.actualizarUltimoEstado(
             retiroExtraccion,
              this.estudio.ultimo_estado.id
