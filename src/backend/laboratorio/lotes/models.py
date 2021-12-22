@@ -28,6 +28,8 @@ import logging
 import datetime
 from zoneinfo import ZoneInfo
 
+
+
 def generar_fecha_now():
     return datetime.datetime.now(tz=ZoneInfo('America/Argentina/Buenos_Aires'))
 
@@ -37,8 +39,10 @@ class ModeloLotes:
 
     def obtener_estudios_para_lote(self):
         def _fecha_de_extraccion(estudio):
-            retiro = sorted(estudio.estados.all(), key=lambda e: e.fecha)[-2]
-            return retiro.fecha_retiro
+            estados_ordenados = sorted(estudio.estados.all(), key=lambda e: e.fecha)
+            retiros = [e for e in estados_ordenados if isinstance(e, estudio_models.EsperandoRetiroDeExtaccion)]
+            ultimo_retiro = retiros[-1]
+            return ultimo_retiro.fecha_retiro
 
         """ obtengo los estudios que se encuentran esperando un lote ordenados por fecha de extracción """
         #estudio_models.Estudio.objects.filter()
