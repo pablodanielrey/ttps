@@ -86,7 +86,6 @@ export default {
               contenido: this.consentimiento,
             },
           };
-          console.log(datosConsentimiento);
           let response = await EstudiosService.actualizarUltimoEstado(
             datosConsentimiento,
             this.estudio.ultimo_estado.id

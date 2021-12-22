@@ -47,9 +47,9 @@ export default {
   methods: {
     async verTemplate() {
       try {
-        let response =
+    
           await TemplateConsentimientoService.obtenerTemplateConsentimiento(this.estudio.id);
-        console.log(response);
+        
       } catch (error) {
         console.log(error);
       }
@@ -61,18 +61,16 @@ export default {
           comprobante_invalido: true,
           resourcetype: this.estudio.ultimo_estado.resourcetype,
         };
-        let response = await EstudiosService.actualizarUltimoEstado(
+      await EstudiosService.actualizarUltimoEstado(
           datos,
           this.estudio.ultimo_estado.id
         );
-        console.log(response)
         this.$root.$bvToast.toast("Se cancelo el comprobante de pago", {
             title: "Atencion!",
             toaster: "b-toaster-top-center",
             solid: true,
             variant: "success",
           });
-        console.log(response);
         this.$router.push({
           name: "listaEstudios",
         });
@@ -112,7 +110,6 @@ export default {
           name: "listaEstudios",
         });
       } catch (error) {
-        console.log(error.response.data.detail);
         this.$root.$bvToast.toast(
           "ocurrio un error mientras continuaba con el siguiente estado.  "+error.response.data.detail,
           {

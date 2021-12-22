@@ -200,9 +200,9 @@ export default {
       try {
         let result = await this.$refs.datosConfigurador.validate();
         if (result) {
-          console.log(this.configurador);
-          let r = await PacientesService.crearConfigurador(this.configurador);
-          console.log(r);
+     
+          await PacientesService.crearConfigurador(this.configurador);
+    
 
           this.$root.$bvToast.toast("Se creo con exito el configurador", {
             title: "Atencion!",
@@ -231,7 +231,6 @@ export default {
           try {
         let result = await this.$refs.datosConfigurador.validate();
         if (result) {
-          console.log(this.configurador);
           let r = await PacientesService.editarConfigurador(this.configurador);
           console.log(r);
 

@@ -111,7 +111,7 @@ export default {
     },
     pasoDiaTurno() {
       let fechaTurno = new Date(this.estudio.ultimo_estado.turno.inicio);
-      console.log(fechaTurno < new Date());
+     
       if (fechaTurno < new Date()) {
         return false;
       }
@@ -129,12 +129,12 @@ export default {
             expirado: false,
             resourcetype: this.estudio.ultimo_estado.resourcetype,
           };
-          console.log(datosMuestra);
-          let response = await EstudiosService.actualizarUltimoEstado(
+         
+          await EstudiosService.actualizarUltimoEstado(
             datosMuestra,
             this.estudio.ultimo_estado.id
           );
-          console.log(response);
+      
           this.$root.$bvToast.toast("Se ingresaron los datos de la muestra", {
             title: "Atencion!",
             toaster: "b-toaster-top-center",

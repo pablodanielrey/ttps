@@ -96,7 +96,6 @@ export default {
     async demoraEstudiosProcesamiento() {
       try {
         let response = await ReportesService.demoraEstudiosProcesamiento();
-        console.log(response);
         this.armarDatosTiempo(response.data)
       } catch (error) {
         console.log(error);
@@ -120,9 +119,7 @@ export default {
         data: dataTipos,
       });
     },
-    armarDatosTiempo(datos) {    
-      console.log(    datos.datos)
-      
+    armarDatosTiempo(datos) {          
       let data = [0,0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
       datos.datos.forEach((e) => {
         data[e.mes] = e.tadanza_segundos;

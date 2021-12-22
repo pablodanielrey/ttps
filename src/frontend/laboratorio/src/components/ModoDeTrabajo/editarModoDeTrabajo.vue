@@ -39,7 +39,6 @@ export default {
       try {
         let response = await ModoDeTrabajoService.obtenerModo();
         this.modo = response.data.at(-1); 
-        console.log(this.modo)
      
       } catch (err) {
         console.log(err);

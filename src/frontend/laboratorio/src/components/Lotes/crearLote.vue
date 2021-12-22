@@ -86,14 +86,13 @@ export default {
           estudios.push(id);
         });
         objeto.estudios = estudios;
-        let response = await LotesService.crearLote(objeto);
+         await LotesService.crearLote(objeto);
         this.$root.$bvToast.toast("se creo con exito el lote", {
           title: "Atencion!",
           toaster: "b-toaster-top-center",
           solid: true,
           variant: "success",
         });
-        console.log(response);
         this.$router.push({
           name: "cargarResultadoLote",
         });

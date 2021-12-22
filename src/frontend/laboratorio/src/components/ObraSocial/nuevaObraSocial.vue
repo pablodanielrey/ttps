@@ -143,9 +143,7 @@ export default {
       
     };
   },
-  created (){
-    console.log(this.obraSocial)
-  },
+ 
   methods: {
     async crearObraSocial() {
       try {
@@ -179,9 +177,8 @@ export default {
        try {
         let result = await this.$refs.detalleObraSocial.validate();
         if (result) {
-          console.log(this.obraSocial);
-          let r = await ObrasSocialesService.editarObraSocial(this.obraSocial);
-          console.log(r);
+           await ObrasSocialesService.editarObraSocial(this.obraSocial);
+         
         }
         this.$root.$bvToast.toast("Se edito con exito la obra social", {
           title: "Atencion!",

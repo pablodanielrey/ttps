@@ -59,7 +59,6 @@ export default {
       return new Date(fecha.fecha_valido).format("DD-MM-YYYY");
     },
     verRangos(rangos){
-        console.log(rangos.rangos)
       this.rangos = rangos.rangos;
          this.$refs["modalRangos"].show();
     
@@ -75,8 +74,7 @@ export default {
     },
     async borrarRango(rango) {
       try {
-        console.log(rango);
-        let response = await TurnosService.eliminarRango(rango.id);
+         await TurnosService.eliminarRango(rango.id);
           this.$root.$bvToast.toast(
           "Se elimino el rango ",
           {
@@ -87,7 +85,6 @@ export default {
           }
         );
         this.obtenerRangos();
-        console.log(response);
       } catch (error) {
         console.log(error);
       }

@@ -102,7 +102,6 @@ export default {
     async obtenerTurnos() {
       try {
         let response = await TurnosService.obtenerTurnosOcupados();
-        console.log(response);
         this.turnos = response.data;
       } catch (err) {
         console.log(err);
